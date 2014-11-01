@@ -9,37 +9,49 @@
   <script src="js/vendor/jquery.js"></script>
   <script src="js/foundation.min.js"></script>
   </head>
-    <title></title>
+    <title>MedicalPictures - Admin View</title>
     <meta content="">
     <style></style>
   </head>
   <body>
     <br>
   <div class="row">
-      <div class="large-4 columns"><h3><b>MedicalPictures v.1.0</b></h3></div>
-      <div class="large-8 columns"></div>
+      <div class="large-4 columns"><h3><a href="">MedicalPictures v.1.0</a></h3></div>
+      <div class="large-8 columns">
+  <nav class="top-bar" data-topbar role="navigation">
+    <ul class="title-area">
+    <li class="name">
+      <h1><a href="#">Logged as: admin</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a> </li>
+    </ul>
+    <section class="top-bar-section">
+    <ul class="right">
+      <li class="active"><a href="#">Logout</a></li>
+    </ul>
+    <ul class="left">
+      <li><a href="#">Settings</a></li>
+    </ul>
+    </section>
+  </nav>
+      </div>
   </div>
-  <div class="icon-bar five-up">
+  <div class="icon-bar three-up">
   <a class="item">
-    <img src="../assets/img/images/fi-home.svg" >
-    <label>Home</label>
+    <img src="glyphicons/png/glyphicons_043_group.png" >
+    <label>Manage Users</label>
   </a>
   <a class="item">
-    <img src="../assets/img/images/fi-bookmark.svg" >
-    <label>Bookmark</label>
+    <img src="glyphicons/png/glyphicons_012_heart.png" >
+    <label>Manage body parts</label>
   </a>
   <a class="item">
-    <img src="../assets/img/images/fi-info.svg" >
-    <label>Info</label>
-  </a>
-  <a class="item">
-    <img src="../assets/img/images/fi-mail.svg" >
-    <label>Mail</label>
-  </a>
-  <a class="item">
-    <img src="../assets/img/images/fi-like.svg" >
-    <label>Like</label>
+    <img src="glyphicons/png/glyphicons_047_camera_small.png" >
+    <label>Manage picture types</label>
   </a>
 </div>
+  <script>
+  $(document).foundation();
+  </script>
 </body>
 </html>
