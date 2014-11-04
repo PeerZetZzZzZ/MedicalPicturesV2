@@ -1,12 +1,12 @@
-<?xml version='1.0' encoding='utf-8'?>
+<!--<?xml version='1.0' encoding='utf-8'?>
 
 <hibernate-configuration
     xmlns="http://www.hibernate.org/xsd/hibernate-configuration"
     xsi:schemaLocation="http://www.hibernate.org/xsd/hibernate-configuration hibernate-configuration-4.0.xsd"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <session-factory>
-        <!-- Database connection settings -->
+         Database connection settings 
         <property name="connection.datasource">NoweMysql</property>
         <property name="dialect"></property>
     </session-factory>
-</hibernate-configuration>
+</hibernate-configuration>-->

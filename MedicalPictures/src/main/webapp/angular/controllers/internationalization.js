@@ -21,7 +21,15 @@ MedicalPictures.config(function($translateProvider){
    'MARK_ALL':'Mark all',
    'UNMARK_ALL':'Unmark all',
    'ACCOUNT_TYPE':'Account type',
-   'BACK':'Go back'
+   'BACK':'Go back',
+   'CHANGE_YOUR_SETTINGS':'Change your settings',
+   'NAME':'Name',
+   'SURNAME':'Surname',
+   'YOUR_USERNAME':'Your username',
+   'YOUR_NAME':'Your name',
+   'YOUR_SURNAME':'Your surname',
+   'YOUR_PASSWORD':'Your password'
+
  });
  $translateProvider.translations('pl',{
    'LOGIN_VIEW_HEAD_NAME':'MedicalPictures Panel Logowania',
@@ -44,7 +52,14 @@ MedicalPictures.config(function($translateProvider){
    'MARK_ALL':'Zaznacz wszystkich',
    'UNMARK_ALL':'Odznacz wszytkich',
    'ACCOUNT_TYPE':'Typ konta',
-   'BACK':'Powrót'
+   'BACK':'Powrót',
+   'CHANGE_YOUR_SETTINGS':'Zmień swoje ustawienia',
+   'NAME':'Imię',
+   'SURNAME':'Nazwisko',
+   'YOUR_USERNAME':'Twoja nazwa użytkownika',
+   'YOUR_NAME':'Twoje imię',
+   'YOUR_SURNAME':'Twoje nazwisko',
+   'YOUR_PASSWORD':'Twoje hasło'
  });
- $translateProvider.preferredLanguage('en');
+ $translateProvider.preferredLanguage('pl');
 });
