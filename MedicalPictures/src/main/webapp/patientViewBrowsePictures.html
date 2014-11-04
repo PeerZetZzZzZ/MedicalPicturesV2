@@ -1,0 +1,113 @@
+<html ng-app="MedicalPictures">
+    <head>
+        <link rel="stylesheet" href="css/foundation.min.css">
+        <link rel="stylesheet" href="css/app.css">
+        <script src="js/vendor/modernizr.js"></script>
+      
+        <script src="angular/angular.js"></script>
+        <script src="angular/angular-translate.min.js"></script>
+        <script src="angular/controllers/controllers.js"></script>
+        <script src="angular/controllers/internationalization.js"></script>
+        
+    </head>
+    <title>{{'ADMIN_VIEW_HEAD_NAME' | translate}}</title>
+    <meta content="" charset="UTF-8">
+    <style type="text/css">
+		.example-orbit-content li div {
+		background: none repeat scroll 0 0 #2BA6CB;
+		color: #FFFFFF;
+		padding: 30px 40px;
+		}
+    </style>
+    <body ng-controller="AdminViewController">
+        <br>
+        <nav class="top-bar" data-topbar role="navigation">
+            <ul class="title-area">
+                <li class="name">
+                    <h1>{{appName}}</h1>
+                </li>
+                <li class="toggle-topbar menu-icon">
+                    <a href="#">{{'MENU' | translate}}</a>
+                </li>
+            </ul>
+            <section class="top-bar-section">
+                <ul class="right">
+                    <li>
+                      <a href="#">{{'SETTINGS' | translate}}</a>
+                    </li>
+                    <li class="active">
+                        <a href="#">{{'LOGOUT' | translate}}</a>
+                    </li>
+                </ul>
+            </section>
+        </nav>
+        <br>
+        <div class="row">
+          <div class="large-1 columns"><br></div>
+          <div class="large-10 columns">
+              <div class="icon-bar two-up">
+                  <a class="item" href="www.google.pl">
+                      <img src="glyphicons/png/glyphicons_024_parents.png" >
+                      <label>Browse Pictures</label>
+                  </a>
+                  <a class="item">
+                      <img src="glyphicons/png/glyphicons_012_heart.png" >
+                      <label>Browse diagnosis</label>
+                  </a>
+              </div>
+          </div>
+            <div class="large-1 columns"><br></div>
+        </div>
+        <br>
+		  <div class="row">
+		    <div class="large-1 columns"><br></div>
+            <div class="large-3 columns">
+			   <div class="panel">
+			   <h4> Picture info: </h4>
+				  <span class="label">Doctor: <i> Alfred Nastula </i></span> <br>
+				  <span class="label"> Capture datetime: <i> 22.10.2014 </i> </span> <br>
+				  <span class="label"> Body part: <i> arm </i> </span> <br>
+				  <span class="label"> Picture type: <i> rentgen </i> </span>
+			   </div>
+            </div>
+            <div class="large-7 columns">
+				<blockquote>Those people who think they know everything are a great annoyance to those of us who do.<cite>Isaac Asimov</cite></blockquote>
+			</div>
+			<div class="large-1 columns"><br></div>
+
+        </div>
+        <div class="row">
+          <div class="large-1 columns"><br></div>
+          <div class="large-10 columns">
+               <ul class="example-orbit" data-orbit>
+				  <li>
+					<img src="7.jpg" alt="slide 1" />
+					<div class="orbit-caption">
+					  Caption One.
+					</div>
+				  </li>
+				  <li class="active">
+					<img src="../assets/img/examples/andromeda-orbit.jpg" alt="slide 2" />
+					<div class="orbit-caption">
+					  Caption Two.
+					</div>
+				  </li>
+				  <li>
+					<img src="../assets/img/examples/launch-orbit.jpg" alt="slide 3" />
+					<div class="orbit-caption">
+					  Caption Three.
+					</div>
+				  </li>
+				</ul>
+				        </div>
+           <div class="large-1 columns"><br></div>
+		   </div>
+        <br>
+      
+		  <script src="js/vendor/jquery.js"></script>
+        <script src="js/foundation.min.js"></script>
+		<script>
+        $(document).foundation();
+        </script>
+    </body>
+</html>
