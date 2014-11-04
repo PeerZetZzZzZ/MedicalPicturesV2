@@ -7,14 +7,22 @@
         <script src="js/foundation.min.js"></script>
         <script src="angular/angular.js"></script>
         <script src="angular/angular-translate.min.js"></script>
-        <script src="configuration.js"></script>
-        <script src="angular/i18n/angular-locale_ak-gh.jss"></script>
         <script src="angular/controllers/controllers.js"></script>
+        <script src="angular/controllers/internationalization.js"></script>
         <title>{{'LOGIN_VIEW_HEAD_NAME' | translate}}</title>
         <meta content="" charset="UTF-8">
         <style>
             input.ng-invalid{
               border:2px solid red
+              }
+              .panel {
+                overflow: scroll;
+              max-height : 400px; }
+              .top-bar .name h1 a {
+              color:orange;
+              }
+              .top-bar .name h1  {
+              color:orange;
               }
         </style>
     </head>
@@ -23,7 +31,7 @@
         <nav class="top-bar" data-topbar role="navigation">
             <ul class="title-area">
                 <li class="name">
-                    <h1>{{GLOBAL_APP_NAME}}</h1>
+                    <h1>{{appName}}</h1>
                 </li>
             </ul>
         </nav>
@@ -37,7 +45,7 @@
             <div class="row">
                 <div class="large-2 columns"><br></div>
                 <div class="large-8 columns" align="center">
-                    <input type="email" name="usernameEmail"  ng-model="email" placeholder="{{'USERNAME' | translate}}" required title="{{'INCORRECT_EMAIL' | translate}}">
+                    <input type="email" name="username"  ng-model="username" placeholder="{{'USERNAME' | translate}}" required title="{{'INCORRECT_EMAIL' | translate}}">
                 </div>
                 <div class="large-2 columns"><br></div>
             </div>
@@ -58,7 +66,7 @@
             <br>
             <div class="row">
                 <div class="large-2 columns"><br></div>
-                <div class="large-8 columns" align="center"><input type="submit" id="submit" class="button" value="{{'LOG_IN' | translate}}"></div>
+                <div class="large-8 columns" align="center"><input type="submit" id="submit"  ng-click="loginClicked()" class="button" value="{{'LOG_IN' | translate}}"></div>
                 <div class="large-2 columns"></div>
             </div>
         </form>

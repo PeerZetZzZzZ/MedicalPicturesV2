@@ -10,15 +10,22 @@
         <script src="angular/controllers/controllers.js"></script>
         <script src="angular/controllers/internationalization.js"></script>
         <script>
-        $(document).foundation();
+            $(document).foundation();
         </script>
     </head>
-    <title>{{'ADMIN_VIEW_HEAD_NAME' | translate}}</title>
+    <title>{{'ADMIN_VIEW_HEAD_NAME'| translate}}</title>
     <meta content="" charset="UTF-8">
     <style type="text/css">
         .panel {
+            overflow: scroll;
+            max-height : 400px;
+        }
+        .panel {
           overflow: scroll;
-          max-height : 400px;
+        max-height : 400px;
+        }
+        .top-bar .name h1 a {
+        color:orange;
         }
     </style>
     <body ng-controller="AdminViewController">
@@ -29,65 +36,65 @@
                     <h1>{{appName}}</h1>
                 </li>
                 <li class="toggle-topbar menu-icon">
-                    <a href="#">{{'MENU' | translate}}</a>
+                    <a href="#">{{'MENU'| translate}}</a>
                 </li>
             </ul>
             <section class="top-bar-section">
                 <ul class="right">
                     <li>
-                      <a href="#">{{'SETTINGS' | translate}}</a>
+                        <a href="#">{{'SETTINGS'| translate}}</a>
                     </li>
                     <li class="active">
-                        <a href="#">{{'LOGOUT' | translate}}</a>
+                        <a href="#">{{'LOGOUT'| translate}}</a>
                     </li>
                 </ul>
             </section>
         </nav>
         <br>
         <div class="row">
-          <div class="large-1 columns"><br></div>
-          <div class="large-10 columns">
-              <div class="icon-bar three-up">
-                  <a class="item" href="www.google.pl">
-                      <img src="glyphicons/png/glyphicons_024_parents.png" >
-                      <label>{{'MANAGE_USERS' | translate}}</label>
-                  </a>
-                  <a class="item">
-                      <img src="glyphicons/png/glyphicons_012_heart.png" >
-                      <label>{{'MANAGE_BODY_PARTS' | translate}}</label>
-                  </a>
-                  <a class="item">
-                      <img src="glyphicons/png/glyphicons_047_camera_small.png" >
-                      <label>{{'MANAGE_PICTURE_TYPES' | translate}}</label>
-                  </a>
-              </div>
-          </div>
+            <div class="large-1 columns"><br></div>
+            <div class="large-10 columns">
+                <div class="icon-bar three-up">
+                    <a class="item" href="www.google.pl">
+                        <img src="glyphicons/png/glyphicons_024_parents.png" >
+                        <label>{{'MANAGE_USERS'| translate}}</label>
+                    </a>
+                    <a class="item">
+                        <img src="glyphicons/png/glyphicons_012_heart.png" >
+                        <label>{{'MANAGE_BODY_PARTS'| translate}}</label>
+                    </a>
+                    <a class="item">
+                        <img src="glyphicons/png/glyphicons_047_camera_small.png" >
+                        <label>{{'MANAGE_PICTURE_TYPES'| translate}}</label>
+                    </a>
+                </div>
+            </div>
             <div class="large-1 columns"><br></div>
         </div>
         <br>
         <div class="row">
-          <div class="large-2 columns"><br></div>
-          <div class="large-8 columns">
-              <div class="icon-bar four-up">
-                  <a class="item" href="www.google.pl">
-                      <img src="glyphicons/png/glyphicons_006_user_add.png" >
-                      <label>{{'ADD_NEW_USER' | translate}}</label>
-                  </a>
-                  <a class="item">
-                      <img src="glyphicons/png/glyphicons_007_user_remove.png" >
-                      <label>{{'DELETE_USER' | translate}}</label>
-                  </a>
-                  <a class="item">
-                      <img src="glyphicons/png/glyphicons_152_check.png" >
-                      <label>{{'MARK_ALL' | translate}}</label>
-                  </a>
-                  <a class="item">
-                      <img src="glyphicons/png/glyphicons_153_unchecked.png" >
-                      <label>{{'UNMARK_ALL' | translate}}</label>
-                  </a>
-              </div>
-           </div>
-           <div class="large-2 columns"><br></div>
+            <div class="large-2 columns"><br></div>
+            <div class="large-8 columns">
+                <div class="icon-bar four-up">
+                    <a class="item" href="www.google.pl">
+                        <img src="glyphicons/png/glyphicons_006_user_add.png" >
+                        <label>{{'ADD_NEW_USER'| translate}}</label>
+                    </a>
+                    <a class="item">
+                        <img src="glyphicons/png/glyphicons_007_user_remove.png" >
+                        <label>{{'DELETE_USER'| translate}}</label>
+                    </a>
+                    <a class="item">
+                        <img src="glyphicons/png/glyphicons_152_check.png" >
+                        <label>{{'MARK_ALL'| translate}}</label>
+                    </a>
+                    <a class="item">
+                        <img src="glyphicons/png/glyphicons_153_unchecked.png" >
+                        <label>{{'UNMARK_ALL'| translate}}</label>
+                    </a>
+                </div>
+            </div>
+            <div class="large-2 columns"><br></div>
         </div>
         <br>
         <div class="row">
@@ -97,9 +104,9 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>{{'USERNAME' | translate}}</th>
-                                <th>{{'PASSWORD' | translate}}</th>
-                                <th>{{'ACCOUNT_TYPE' | translate}}</th>
+                                <th>{{'USERNAME'| translate}}</th>
+                                <th>{{'PASSWORD'| translate}}</th>
+                                <th>{{'ACCOUNT_TYPE'| translate}}</th>
                                 <th> Cztery</th>
                             </tr>
                         </thead>

@@ -3,12 +3,12 @@
         <link rel="stylesheet" href="css/foundation.min.css">
         <link rel="stylesheet" href="css/app.css">
         <script src="js/vendor/modernizr.js"></script>
-      
+
         <script src="angular/angular.js"></script>
         <script src="angular/angular-translate.min.js"></script>
         <script src="angular/controllers/controllers.js"></script>
         <script src="angular/controllers/internationalization.js"></script>
-        
+
     </head>
     <title>{{'ADMIN_VIEW_HEAD_NAME' | translate}}</title>
     <meta content="" charset="UTF-8">
@@ -17,11 +17,17 @@
           overflow: scroll;
           max-height : 400px;
         }
-		.example-orbit-content li div {
-    background: none repeat scroll 0 0 #2BA6CB;
-    color: #FFFFFF;
-    padding: 30px 40px;
-}
+    		.example-orbit-content li div {
+        background: none repeat scroll 0 0 #2BA6CB;
+        color: #FFFFFF;
+        padding: 30px 40px;
+        }
+        .panel {
+          overflow: scroll;
+        max-height : 400px; }
+        .top-bar .name h1 a {
+        color:orange;
+        }
     </style>
     <body ng-controller="AdminViewController">
         <br>

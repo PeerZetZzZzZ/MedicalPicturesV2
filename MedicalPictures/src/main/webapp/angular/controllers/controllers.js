@@ -7,11 +7,23 @@
  });
 
  /* LoginView Controller */
- MedicalPictures.controller('LoginController',function($scope, MedicalPicturesGlobal){
+ MedicalPictures.controller('LoginController',  function($scope,$http, MedicalPicturesGlobal){
    $scope.appName=MedicalPicturesGlobal.GLOBAL_APP_NAME;
    $scope.minPasswordLength=MedicalPicturesGlobal.MIN_PASSWORD_LENGTH;
    $scope.maxPasswordLength=MedicalPicturesGlobal.MAX_PASSWORD_LENGTH;
+   $scope.password="";
+   $scope.username="";
+  $scope.loginClicked = function(){
+    $http.get('http://localhost:8080/MedicalPictures/adminViewVer1ManageUsers.html').success(function(data,status,header,config){
+   $scope.appName=data;
+   console.log(status);
+
+ }).error(function(response){
+
+   $scope.appName="dupa";
  });
+  };
+});
 
  /* AdminView Controller */
  MedicalPictures.controller('AdminViewController',function($scope, MedicalPicturesGlobal){
@@ -21,5 +33,5 @@
 /* UserSettings Controller */
 MedicalPictures.controller('UserSettingsController',function($scope,MedicalPicturesGlobal){
   $scope.appName=MedicalPicturesGlobal.GLOBAL_APP_NAME;
-  
+
 })
