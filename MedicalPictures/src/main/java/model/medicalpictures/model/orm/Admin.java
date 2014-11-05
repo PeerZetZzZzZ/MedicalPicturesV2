@@ -6,6 +6,7 @@
 package model.medicalpictures.model.orm;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -16,16 +17,19 @@ import javax.validation.constraints.NotNull;
  * @author PeerZet
  */
 @Entity
-@Table(name="Admin")
+@Table(name = "Admin")
 public class Admin implements Serializable {
 
     @Id
+    @Column(length = 100)
     private String username;
 
     @NotNull
+    @Column(length = 255)
     private String name;
 
     @NotNull
+    @Column(length = 255)
     private String surname;
 
     @NotNull
@@ -42,6 +46,7 @@ public class Admin implements Serializable {
         this.age = age;
 
     }
+
     public String getUsername() {
         return username;
     }

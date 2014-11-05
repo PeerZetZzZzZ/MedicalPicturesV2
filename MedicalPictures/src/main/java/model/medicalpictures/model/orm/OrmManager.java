@@ -40,7 +40,6 @@ public class OrmManager {
         em.close();
     }
 
-    @Schedule(hour = "*", minute = "*", second = "*/10")
     public void saveObject() {
         UsersDB admin = new UsersDB("userOrm2@gmail.com", "pass", "ADMIN");
         persistObject(admin);

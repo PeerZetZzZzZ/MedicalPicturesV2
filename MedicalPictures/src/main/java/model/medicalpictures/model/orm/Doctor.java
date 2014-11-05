@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -12,99 +13,90 @@ import javax.persistence.Id;
 @Entity
 public class Doctor implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    @Id
+    @Column(length = 100)
+    private String username;
 
-	@Id
-	@Column(length = 100)
-	private String username;
+    @NotNull
+    @Column(length = 255)
+    private String name;
 
-	@Column(length = 255)
-	private String name;
+    @NotNull
+    @Column(length = 255)
+    private String surname;
 
-	@Column(length = 255)
-	private String surname;
+    @NotNull
+    private int age;
 
-	@Column(length = 3)
-	private int age;
+    @Column(length = 100)
+    private String specialization;
 
-	@Column(length = 100)
-	private String specialization;
+    public String getName() {
+        return name;
+    }
 
-	public static long getSerialVersionUID() {
-		return serialVersionUID;
-	}
+    public String getSurname() {
+        return surname;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public int getAge() {
+        return age;
+    }
 
-	public String getSurname() {
-		return surname;
-	}
+    public String getSpecialization() {
+        return specialization;
+    }
 
-	public int getAge() {
-		return age;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getSpecialization() {
-		return specialization;
-	}
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setAge(int age) {
+        this.age = age;
+    }
 
-	public void setSurname(String surname) {
-		this.surname = surname;
-	}
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
+    }
 
-	public void setAge(int age) {
-		this.age = age;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public void setSpecialization(String specialization) {
-		this.specialization = specialization;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public Doctor(String username, String name, String surname, int age, String specialization) {
+        this.username = username;
+        this.name = name;
+        this.surname = surname;
+        this.age = age;
+        this.specialization = specialization;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (username != null ? username.hashCode() : 0);
+        return hash;
+    }
 
-	public Doctor(String username, String name, String surname, int age, String specialization) {
-		this.username = username;
-		this.name = name;
-		this.surname = surname;
-		this.age = age;
-		this.specialization = specialization;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (username != null ? username.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		// TODO: Warning - this method won't work in the case the id fields are not set
-		if (!(object instanceof Doctor)) {
-			return false;
-		}
-		Doctor other = (Doctor) object;
-		if ((this.username == null && other.username != null) || (this.username != null && !this.username.equals(other.username))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "model.medicalpictures.model.orm.Doctor[ id=" + username + " ]";
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Doctor)) {
+            return false;
+        }
+        Doctor other = (Doctor) object;
+        if ((this.username == null && other.username != null) || (this.username != null && !this.username.equals(other.username))) {
+            return false;
+        }
+        return true;
+    }
 
 }

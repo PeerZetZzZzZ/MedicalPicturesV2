@@ -8,14 +8,17 @@ package model.medicalpictures.model.login;
 import javax.ejb.Stateless;
 
 /**
+ * Validates the user if exists in UsersDB.
  *
  * @author PeerZet
  */
 @Stateless
 public class LoginValidator {
-    
+
+    public void validateUser(final String username, final String password) {
+
+    }
+
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-    
-    
 }

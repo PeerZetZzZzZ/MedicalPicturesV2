@@ -7,9 +7,8 @@ package peer.medicalpictures.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.text.ParseException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,8 +19,6 @@ import org.json.JSONObject;
  * @author PeerZet
  */
 public class LoginServlet extends HttpServlet {
-
-    @Inject
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -51,6 +48,12 @@ public class LoginServlet extends HttpServlet {
 
         JSONObject jsonObject = new JSONObject(jb.toString());
         System.out.println(jb);
+        Cookie cookie = new Cookie("ciastko", "mojeNoweCiastko");
+        response.addCookie(cookie);
+        Cookie[] cookies = request.getCookies();
+        for (Cookie c : cookies) {
+            System.out.println("Cookies" + c.getValue());
+        }
     }
 
     /**

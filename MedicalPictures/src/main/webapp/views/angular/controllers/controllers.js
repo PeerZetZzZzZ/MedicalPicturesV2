@@ -22,6 +22,7 @@ MedicalPictures.controller('LoginController', function ($scope, $http, $location
         }).
             success(function (data, status, header, config) {
                 console.log(status);
+                $scope.appName=data;
             }).error(function (response) {
                 console.log(status);
             });

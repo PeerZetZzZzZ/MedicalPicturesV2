@@ -5,6 +5,7 @@
  */
 package model.medicalpictures.model.orm;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -18,10 +19,13 @@ import javax.persistence.Table;
 public class UsersDB {
 
     @Id
+    @Column(length = 100)
     private String username;
 
+    @Column(length = 100, nullable = false)
     private String password;
 
+    @Column(length = 15)
     private String account_type;
 
     public UsersDB(String username, String password, String account_type) {
