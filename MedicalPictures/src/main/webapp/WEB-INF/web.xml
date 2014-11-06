@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-  
     <servlet>
-        <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>peer.medicalpictures.controller.LoginServlet</servlet-class>
+        <servlet-name>LoginView</servlet-name>
+        <servlet-class>peer.medicalpictures.controller.LoginView</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ManageUsers</servlet-name>
         <servlet-class>peer.medicalpictures.controller.admin.ManageUsers</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>LoginServlet</servlet-name>
-        <url-pattern>/LoginServlet</url-pattern>
+        <servlet-name>LoginView</servlet-name>
+        <url-pattern>/LoginView</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ManageUsers</servlet-name>
@@ -22,7 +21,7 @@
             30
         </session-timeout>
     </session-config>
-<!--    <security-constraint>
+    <!--    <security-constraint>
         <display-name>excluded</display-name>
         <web-resource-collection>
             <web-resource-name>No Access</web-resource-name>

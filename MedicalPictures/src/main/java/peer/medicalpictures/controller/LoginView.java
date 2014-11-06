@@ -18,7 +18,7 @@ import org.json.JSONObject;
  *
  * @author PeerZet
  */
-public class LoginServlet extends HttpServlet {
+public class LoginView extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -27,7 +27,7 @@ public class LoginServlet extends HttpServlet {
 		for (Cookie c : cookies) {
 			System.out.println("Cookies z get" + c.getValue());
 		}
-		request.getRequestDispatcher("/WEB-INF/patientView.html").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/LoginView.html").forward(request, response);
 	}
 
 	/**
@@ -59,8 +59,8 @@ public class LoginServlet extends HttpServlet {
 		for (Cookie c : cookies) {
 			System.out.println("Cookies" + c.getValue());
 		}
-		request.getRequestDispatcher("/MedicalPictures/views/LoginView.html").forward(request, response);
-
+		response.sendRedirect("/MedicalPictures/ManageUsers");
+		
 	}
 
 	/**
