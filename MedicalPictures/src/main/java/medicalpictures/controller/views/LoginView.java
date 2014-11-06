@@ -2,11 +2,16 @@ package medicalpictures.controller.views;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import medicalpictures.model.security.UserSessionManager;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.json.JSONObject;
 
 /**
@@ -14,6 +19,9 @@ import org.json.JSONObject;
  * @author PeerZet
  */
 public class LoginView extends HttpServlet {
+
+	@EJB
+	private UserSessionManager manager;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -54,8 +62,7 @@ public class LoginView extends HttpServlet {
 		for (Cookie c : cookies) {
 			System.out.println("Cookies" + c.getValue());
 		}
-		response.sendRedirect("/MedicalPictures/ManageUsers");
-
+		manager.registerUser("username", "pass");
 	}
 
 	/**
