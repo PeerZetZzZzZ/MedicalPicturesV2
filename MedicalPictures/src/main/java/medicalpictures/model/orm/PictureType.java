@@ -1,4 +1,4 @@
-package model.medicalpictures.model.orm;
+package medicalpictures.model.orm;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -13,29 +13,29 @@ import javax.persistence.Id;
  * @author Przemysław Thomann
  */
 @Entity
-public class PictureDescription implements Serializable {
+public class PictureType implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	private String id;
 
-	@Column(length = 500, unique = true)
-	private String description;
+	@Column(length = 100, unique = true)
+	private String pictureType;
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setPicturetype(String picturetype) {
+		this.pictureType = picturetype;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getPicturetype() {
+		return pictureType;
 	}
 
 	public String getId() {
 		return id;
 	}
 
-	public PictureDescription(String description) {
-		this.description = description;
+	public PictureType(String pictureType) {
+		this.pictureType = pictureType;
 		this.id = UUID.randomUUID().toString();
 	}
 
@@ -49,10 +49,10 @@ public class PictureDescription implements Serializable {
 	@Override
 	public boolean equals(Object object) {
 		// TODO: Warning - this method won't work in the case the id fields are not set
-		if (!(object instanceof PictureDescription)) {
+		if (!(object instanceof PictureType)) {
 			return false;
 		}
-		PictureDescription other = (PictureDescription) object;
+		PictureType other = (PictureType) object;
 		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
 			return false;
 		}
@@ -61,7 +61,7 @@ public class PictureDescription implements Serializable {
 
 	@Override
 	public String toString() {
-		return "model.medicalpictures.model.orm.PictureDescription[ id=" + id + " ]";
+		return "model.medicalpictures.model.orm.PictureType[ id=" + id + " ]";
 	}
 
 }

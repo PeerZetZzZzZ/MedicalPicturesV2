@@ -1,35 +1,29 @@
-package model.medicalpictures.model.orm;
+package medicalpictures.model.orm;
 
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
 
 /**
  *
  * @author Przemysław Thomann
  */
 @Entity
-public class Doctor implements Serializable {
+public class Technician implements Serializable {
 
     @Id
     @Column(length = 100)
     private String username;
 
-    @NotNull
     @Column(length = 255)
     private String name;
 
-    @NotNull
     @Column(length = 255)
     private String surname;
 
-    @NotNull
+    @Column(length = 3)
     private int age;
-
-    @Column(length = 100)
-    private String specialization;
 
     public String getName() {
         return name;
@@ -41,10 +35,6 @@ public class Doctor implements Serializable {
 
     public int getAge() {
         return age;
-    }
-
-    public String getSpecialization() {
-        return specialization;
     }
 
     public void setName(String name) {
@@ -59,10 +49,6 @@ public class Doctor implements Serializable {
         this.age = age;
     }
 
-    public void setSpecialization(String specialization) {
-        this.specialization = specialization;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -71,12 +57,11 @@ public class Doctor implements Serializable {
         this.username = username;
     }
 
-    public Doctor(String username, String name, String surname, int age, String specialization) {
+    public Technician(String username, String name, String surname, int age) {
         this.username = username;
         this.name = name;
         this.surname = surname;
         this.age = age;
-        this.specialization = specialization;
     }
 
     @Override
@@ -88,11 +73,10 @@ public class Doctor implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Doctor)) {
+        if (!(object instanceof Technician)) {
             return false;
         }
-        Doctor other = (Doctor) object;
+        Technician other = (Technician) object;
         if ((this.username == null && other.username != null) || (this.username != null && !this.username.equals(other.username))) {
             return false;
         }

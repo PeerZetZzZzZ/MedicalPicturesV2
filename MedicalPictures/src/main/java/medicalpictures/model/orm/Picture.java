@@ -1,4 +1,4 @@
-package model.medicalpictures.model.orm;
+package medicalpictures.model.orm;
 
 import java.io.Serializable;
 import java.util.Date;
