@@ -13,17 +13,17 @@
         <meta content="" charset="UTF-8">
         <style>
             input.ng-invalid{
-				border:2px solid red
-			}
-			.panel {
+                border:2px solid red
+            }
+            .panel {
                 overflow: scroll;
-				max-height : 400px; }
-			.top-bar .name h1 a {
-				color:orange;
-			}
-			.top-bar .name h1  {
-				color:orange;
-			}
+                max-height : 400px; }
+            .top-bar .name h1 a {
+                color:orange;
+            }
+            .top-bar .name h1  {
+                color:orange;
+            }
         </style>
     </head>
     <body ng-controller="LoginController">
@@ -52,10 +52,10 @@
             <div class="row">
                 <div class="large-2 columns"><br></div>
                 <div class="large-8 columns">
-					<input type="password" name="password" ng-model="password" placeholder="{{'PASSWORD'| translate}}"
-						   required
-						   ng-minlength={{minPasswordLength}}
-						   ng-maxlength={{maxPasswordLength}}>
+                    <input type="password" name="password" ng-model="password" placeholder="{{'PASSWORD'| translate}}"
+                           required
+                           ng-minlength={{minPasswordLength}}
+                           ng-maxlength={{maxPasswordLength}}>
                 </div>
                 <div class="large-2 columns">
                     <p ng-show="loginForm.password.$error.minlength" >{{'PASSWORD_TOO_SHORT '| translate}}</p>
@@ -66,12 +66,19 @@
             <br>
             <div class="row">
                 <div class="large-2 columns"><br></div>
+                <div class="large-8 columns" align="center">
+                    {{userAlreadyLogged}}
+                </div>
+                <div class="large-2 columns"></div>
+            </div>
+            <div class="row">
+                <div class="large-2 columns"><br></div>
                 <div class="large-8 columns" align="center"><input type="submit" id="submit"  ng-click="loginClicked()" class="button" value="{{'LOG_IN'| translate}}"></div>
                 <div class="large-2 columns"></div>
             </div>
         </form>
-		 <script>
-			$(document).foundation();
+        <script>
+            $(document).foundation();
         </script>
     </body>
 </html>

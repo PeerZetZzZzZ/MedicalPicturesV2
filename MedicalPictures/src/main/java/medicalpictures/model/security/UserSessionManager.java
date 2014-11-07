@@ -5,10 +5,11 @@
  */
 package medicalpictures.model.security;
 
-import java.util.HashMap;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
-import javax.ejb.Stateless;
+import medicalpictures.model.exception.UserAlreadyLoggedException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.config.IniSecurityManagerFactory;
@@ -18,41 +19,46 @@ import org.apache.shiro.util.Factory;
 import org.apache.shiro.mgt.SecurityManager;
 
 /**
+ * The class is responsible for validating user and logging him to application.
+ * It uses Apache Shiro as a SecurityProvider and validate user username and
+ * password with data in UsersDB table.
  *
  * @author Przemysław Thomann
  */
 @Stateful
 public class UserSessionManager {
 
-	private HashMap<String, Subject> loggedUsers = new HashMap<>();
-	private Subject currentUser;
-	private int i = 0;
+    private Subject currentUser;
 
-	@PostConstruct
-	public void initSecurityManager() {
-		Factory factory = new IniSecurityManagerFactory("classpath:shiro.ini");
-		SecurityManager securityManager = (SecurityManager) factory.getInstance();
-		SecurityUtils.setSecurityManager(securityManager);
-		System.out.println("Tworze sie 2 razy kurw");
-		System.out.println("I wynosi " + i);
-		i++;
-	}
+    /**
+     * Initializes the SecurityManager to use shiro:ini.
+     */
+    @PostConstruct
+    public void initSecurityManager() {
+        Factory factory = new IniSecurityManagerFactory("classpath:shiro.ini");
+        SecurityManager securityManager = (SecurityManager) factory.getInstance();
+        SecurityUtils.setSecurityManager(securityManager);
+    }
 
-	public void registerUser(String username, String password) {
-		currentUser = SecurityUtils.getSubject();
-		if (!currentUser.isAuthenticated()) {
-			Session session = currentUser.getSession();
-			session.setAttribute("username", username);
-			UsernamePasswordToken token = new UsernamePasswordToken("root", "secret");
-			token.setRememberMe(true);
-			currentUser.login(token);
-			loggedUsers.put("username", currentUser);
-			System.out.println("Dodalem usera");
-		} else {
-			System.out.println("On juz istnieje :D!");
-		}
-	}
+    /**
+     * Method registers the user = log the user to Application and handles it's
+     * connection.
+     *
+     * @param username Username defined in UsersDB
+     * @param password Password for username defined in UsersDB
+     */
+    public void registerUser(String username, String password) throws UserAlreadyLoggedException {
+        currentUser = SecurityUtils.getSubject();
+        if (!currentUser.isAuthenticated()) {
+            UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+            token.setRememberMe(true);
+            currentUser.login(token);
+            Session session = currentUser.getSession();
+            session.setAttribute("username", username);
+        } else {
+            throw new UserAlreadyLoggedException("User: " + username + "is already logged!");
+        }
 
-    // Add business logic below. (Right-click in editor and choose
-	// "Insert Code > Add Business Method")
+    }
+
 }

@@ -6,6 +6,7 @@
 package medicalpictures.model.login;
 
 import javax.ejb.Stateless;
+import org.json.JSONObject;
 
 /**
  * Validates the user if exists in UsersDB.
@@ -14,9 +15,17 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class LoginValidator {
-
-    public void validateUser(final String username, final String password) {
-
+    
+    /**
+     * Returns the json which informs that login is successful.
+     * @param username
+     * @return JSON which is sent as response from LoginView POST.
+     */
+    public String loginSucceed(String username) {
+        JSONObject user = new JSONObject();
+        user.put("username", "user");
+        user.put("status", "true");
+        return user.toString();
     }
 
     // Add business logic below. (Right-click in editor and choose

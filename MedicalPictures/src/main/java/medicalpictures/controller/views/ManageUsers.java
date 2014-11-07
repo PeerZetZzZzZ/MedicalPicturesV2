@@ -2,12 +2,15 @@ package medicalpictures.controller.views;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import medicalpictures.model.exception.UserAlreadyLoggedException;
 import medicalpictures.model.orm.OrmManager;
 import medicalpictures.model.security.UserSessionManager;
 
@@ -31,7 +34,7 @@ public class ManageUsers extends HttpServlet {
 	 * @throws IOException if an I/O error occurs
 	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException, UserAlreadyLoggedException {
 		response.setContentType("text/html;charset=UTF-8");
 		try (PrintWriter out = response.getWriter()) {
 			/* TODO output your page here. You may use following sample code. */
@@ -60,7 +63,11 @@ public class ManageUsers extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		processRequest(request, response);
+            try {
+                processRequest(request, response);
+            } catch (UserAlreadyLoggedException ex) {
+                Logger.getLogger(ManageUsers.class.getName()).log(Level.SEVERE, null, ex);
+            }
 	}
 
 	/**
