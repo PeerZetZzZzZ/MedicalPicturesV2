@@ -54,9 +54,13 @@ public class LoginView extends HttpServlet {
         String password = jsonObject.getString("password");
         try {
             manager.registerUser(username, password);
-            log.info("User: " + username + "has logged successfully");
-        } catch (UserAlreadyLoggedException ex) {
+            log.info("User: " + username + " has logged successfully");
             String message = loginValidator.loginSucceed(username);
+            System.out.println("Send response: "+message);
+            response.getWriter().write(message);
+        } catch (UserAlreadyLoggedException ex) {
+            String message = loginValidator.loginFailed(username);
+            System.out.println("Send response: "+message);
             response.getWriter().write(message);
             log.trace(ex);
         }

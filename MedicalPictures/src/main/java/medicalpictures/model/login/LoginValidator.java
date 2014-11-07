@@ -15,19 +15,30 @@ import org.json.JSONObject;
  */
 @Stateless
 public class LoginValidator {
-    
+
     /**
      * Returns the json which informs that login is successful.
+     *
      * @param username
      * @return JSON which is sent as response from LoginView POST.
      */
     public String loginSucceed(String username) {
         JSONObject user = new JSONObject();
-        user.put("username", "user");
+        user.put("username", username);
         user.put("status", "true");
         return user.toString();
     }
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    /**
+     * Returns the json which informs that login is not successful.
+     *
+     * @param username
+     * @return JSON which is sent as response from LoginView POST.
+     */
+    public String loginFailed(String username) {
+        JSONObject user = new JSONObject();
+        user.put("username", "user");
+        user.put("status", "false");
+        return user.toString();
+    }
 }

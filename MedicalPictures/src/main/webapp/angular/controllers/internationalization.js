@@ -28,7 +28,8 @@ MedicalPictures.config(function ($translateProvider) {
         'YOUR_USERNAME': 'Your username',
         'YOUR_NAME': 'Your name',
         'YOUR_SURNAME': 'Your surname',
-        'YOUR_PASSWORD': 'Your password'
+        'YOUR_PASSWORD': 'Your password',
+        'USER_ALREADY_LOGGED': 'The given user is already logged!'
 
     });
     $translateProvider.translations('pl', {
@@ -59,7 +60,8 @@ MedicalPictures.config(function ($translateProvider) {
         'YOUR_USERNAME': 'Twoja nazwa użytkownika',
         'YOUR_NAME': 'Twoje imię',
         'YOUR_SURNAME': 'Twoje nazwisko',
-        'YOUR_PASSWORD': 'Twoje hasło'
+        'YOUR_PASSWORD': 'Twoje hasło',
+        'USER_ALREADY_LOGGED': 'Podany użytkownik jest już zalogowany!'
     });
     $translateProvider.preferredLanguage('pl');
 });
