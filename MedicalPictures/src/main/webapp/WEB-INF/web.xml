@@ -8,16 +8,24 @@
         <servlet-class>medicalpictures.controller.views.common.LoginView</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ManageUsers</servlet-name>
-        <servlet-class>medicalpictures.controller.views.admin.ManageUsers</servlet-class>
+        <servlet-name>AdminViewManageUsers</servlet-name>
+        <servlet-class>medicalpictures.controller.views.admin.AdminViewManageUsers</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>medicalpictures.controller.views.common.Logout</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginView</servlet-name>
         <url-pattern>/LoginView</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ManageUsers</servlet-name>
-        <url-pattern>/ManageUsers</url-pattern>
+        <servlet-name>AdminViewManageUsers</servlet-name>
+        <url-pattern>/AdminViewManageUsers</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/Logout</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

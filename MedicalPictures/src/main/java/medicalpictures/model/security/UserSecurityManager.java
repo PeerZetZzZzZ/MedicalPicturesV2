@@ -7,6 +7,7 @@ package medicalpictures.model.security;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
+import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.UserAlreadyLoggedException;
 import medicalpictures.model.exception.UserDoesntExistException;
 import org.apache.shiro.SecurityUtils;
@@ -44,33 +45,69 @@ public class UserSecurityManager {
      *
      * @param username Username defined in UsersDB
      * @param password Password for username defined in UsersDB
-     * @throws medicalpictures.model.exception.UserAlreadyLoggedException When user is already logged in the system.
-     * @throws medicalpictures.model.exception.UserDoesntExistException When given credentials don't match any user.
+     * @throws medicalpictures.model.exception.UserAlreadyLoggedException When
+     * user is already logged in the system.
+     * @throws medicalpictures.model.exception.UserDoesntExistException When
+     * given credentials don't match any user.
      */
     public void registerUser(String username, String password) throws UserAlreadyLoggedException, UserDoesntExistException {
         Subject currentUser = SecurityUtils.getSubject();
         if (!currentUser.isAuthenticated()) {
             UsernamePasswordToken token = new UsernamePasswordToken(username, password);
             try {
+                Session session = currentUser.getSession();
+                session.setAttribute("username", username);
                 currentUser.login(token);
             } catch (AuthenticationException ex) {
                 throw new UserDoesntExistException(ex.getMessage());
             }
-            Session session = currentUser.getSession();
-            session.setAttribute("username", username);
         } else {
             String loggedUsername = currentUser.getSession().getAttribute("username").toString();
             throw new UserAlreadyLoggedException("User: " + loggedUsername + "is already logged!", loggedUsername);
         }
     }
+
     /**
-     * Checks if user has role requried role for this content.
-     * If not, page/content won't be showed for this user.
+     * Checks if user has role requried role for this content. If not,
+     * page/content won't be showed for this user.
+     *
      * @param requriedRole Requried role to show the content.
      */
-    public void checkUserPermissionToThisContent(final String requriedRole) {
+    public void checkUserPermissionToThisContent(final AccountType requriedRole) {
         Subject currentUser = SecurityUtils.getSubject();
-        currentUser.checkRole(requriedRole);
+        currentUser.checkRole(requriedRole.toString());
     }
 
+    /**
+     * Checks if user has content to any content.
+     *
+     * @return True - if has, false - if not.
+     */
+    public Boolean checkUserPermissionToAnyContent() {
+        Subject currentUser = SecurityUtils.getSubject();
+        for (AccountType accountType : AccountType.values()) {
+            if (currentUser.hasRole(accountType.toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Logouts the logged user.
+     */
+    public void logoutUser() {
+        Subject currentUser = SecurityUtils.getSubject();
+        currentUser.logout();
+    }
+
+    /**
+     * Gets the logged user username
+     *
+     * @return username
+     */
+    public String getLoggedUsername() {
+        Subject currentUser = SecurityUtils.getSubject();
+        return currentUser.getSession().getAttribute("username").toString();
+    }
 }

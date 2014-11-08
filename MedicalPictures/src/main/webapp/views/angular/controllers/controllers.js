@@ -1,17 +1,17 @@
 'use strict';
         /* Contains global settings accessible for all controllers */
-        var MedicalPictures = angular.module('MedicalPictures', ['pascalprecht.translate','ngSanitize']).constant('MedicalPicturesGlobal', {
+        var MedicalPictures = angular.module('MedicalPictures', ['pascalprecht.translate']).constant('MedicalPicturesGlobal', {
             GLOBAL_APP_NAME: "MedicalPictures ver.1.0",
             MIN_PASSWORD_LENGTH: "3",
             MAX_PASSWORD_LENGTH: "30"
         });
         /* LoginView Controller */
         MedicalPictures.controller('LoginController', function ($scope, $http, $window,$translate, $location, MedicalPicturesGlobal) {
-                $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
+                $scope.appName =  MedicalPicturesGlobal.GLOBAL_APP_NAME;
                 $scope.minPasswordLength = MedicalPicturesGlobal.MIN_PASSWORD_LENGTH;
                 $scope.maxPasswordLength = MedicalPicturesGlobal.MAX_PASSWORD_LENGTH;
                 $scope.password = "pass";
-                $scope.username = "userOrm@gmail.com";
+                $scope.username="";//we share this username globally to later can print in in other windows
                 $scope.userAlreadyLogged= ""; //it contain the name of user which couldn't log because of already being logged
                 document.getElementById("alertMessageDiv").style.visibility="hidden";
                 /* This above is a small hack, because loading the html content like below - alert didnt react on clicking the close sign (x).
@@ -31,7 +31,7 @@
                             if (data.username === $scope.username && data.status === "true"){//if login successful
                                 switch(data.accountType){
                                   case "ADMIN":
-                                      $window.location.href = "ManageUsers";
+                                      $window.location.href = "AdminViewManageUsers";
                                       break;
                                   case "PATIENT":
                                       $window.location.href = "PatientView";
@@ -72,10 +72,16 @@
                 "<a href=\"#\" class=\"close\">&times;</a>"+
                 "</div>";
         }
+
+
+
         /* AdminView Controller */
-        MedicalPictures.controller('AdminViewController', function ($scope, MedicalPicturesGlobal) {
-        $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
-                });
+        MedicalPictures.controller('AdminViewController', function ($scope, MedicalPicturesGlobal,LoginController) {
+            $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
+            $scope.loggedUsername = LoginController.username;
+
+
+        });
         /* UserSettings Controller */
         MedicalPictures.controller('UserSettingsController', function ($scope, MedicalPicturesGlobal) {
         $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
