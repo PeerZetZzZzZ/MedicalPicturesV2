@@ -76,11 +76,15 @@
 
 
         /* AdminView Controller */
-        MedicalPictures.controller('AdminViewController', function ($scope, MedicalPicturesGlobal) {
+        MedicalPictures.controller('AdminViewController', function ($scope,$http, MedicalPicturesGlobal) {
             $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
-            $scope.loggedUsername = LoginController.username;
-
-
+            $scope.loggedUsername = function(){
+              $http.get("/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser").success(function(data){
+                return data.username;
+            }).error(function(status){
+              console.log(status);
+            });
+          }
         });
         /* UserSettings Controller */
         MedicalPictures.controller('UserSettingsController', function ($scope, MedicalPicturesGlobal) {
