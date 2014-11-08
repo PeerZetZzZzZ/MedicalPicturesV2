@@ -9,8 +9,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import medicalpictures.model.exception.UserAlreadyLoggedException;
 import medicalpictures.model.exception.UserDoesntExistException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -62,7 +60,8 @@ public class UserSessionManager {
             Session session = currentUser.getSession();
             session.setAttribute("username", username);
         } else {
-            throw new UserAlreadyLoggedException("User: " + username + "is already logged!");
+            String loggedUsername = currentUser.getSession().getAttribute("username").toString();
+            throw new UserAlreadyLoggedException("User: " + loggedUsername + "is already logged!",loggedUsername);
         }
 
     }

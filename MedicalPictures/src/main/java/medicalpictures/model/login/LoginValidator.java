@@ -30,7 +30,8 @@ public class LoginValidator {
     }
 
     /**
-     * Returns the json which informs that login is not successful.
+     * Returns the json which informs that login is not successful because 
+     * user is already logged!
      *
      * @param username
      * @return JSON which is sent as response from LoginView POST.
@@ -42,7 +43,7 @@ public class LoginValidator {
         user.put("reason", "alreadyLogged");
         return user.toString();
     }
-
+    
     public String loginFailedAuthenticationFailed(final String username) {
         JSONObject user = new JSONObject();
         user.put("username", username);

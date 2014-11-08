@@ -60,7 +60,7 @@ public class LoginView extends HttpServlet {
             System.out.println("Send response: "+message);
             response.getWriter().write(message);
         } catch (UserAlreadyLoggedException ex) {
-            String message = loginValidator.loginFailedUserAlreadyLogged(username);
+            String message = loginValidator.loginFailedUserAlreadyLogged(ex.getLoggedUsername());
             System.out.println("Send response: "+message);
             response.getWriter().write(message);
             log.trace(ex);
