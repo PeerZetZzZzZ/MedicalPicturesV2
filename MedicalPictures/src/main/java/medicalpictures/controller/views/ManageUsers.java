@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import medicalpictures.model.exception.UserAlreadyLoggedException;
+import medicalpictures.model.exception.UserDoesntExistException;
 import medicalpictures.model.orm.OrmManager;
 import medicalpictures.model.security.UserSessionManager;
 
@@ -34,7 +35,7 @@ public class ManageUsers extends HttpServlet {
 	 * @throws IOException if an I/O error occurs
 	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, UserAlreadyLoggedException {
+			throws ServletException, IOException, UserAlreadyLoggedException, UserDoesntExistException {
 		response.setContentType("text/html;charset=UTF-8");
 		try (PrintWriter out = response.getWriter()) {
 			/* TODO output your page here. You may use following sample code. */
@@ -66,6 +67,8 @@ public class ManageUsers extends HttpServlet {
             try {
                 processRequest(request, response);
             } catch (UserAlreadyLoggedException ex) {
+                Logger.getLogger(ManageUsers.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UserDoesntExistException ex) {
                 Logger.getLogger(ManageUsers.class.getName()).log(Level.SEVERE, null, ex);
             }
 	}

@@ -1,10 +1,8 @@
 <html ng-app="MedicalPictures">
     <head>
         <link rel="stylesheet" href="./views/css/foundation.css">
-        <link rel="stylesheet" href="./views/css/app.css">
+        <link rel="stylesheet" href="./views/css/normalize.css">
         <script src="./views/js/vendor/modernizr.js"></script>
-        <script src="./views/js/vendor/jquery.js"></script>
-        <script src="./views/js/foundation.min.js"></script>
         <script src="./views/angular/angular.js"></script>
         <script src="./views/angular/angular-sanitize.min.js"></script>
         <script src="./views/angular/angular-translate.min.js"></script>
@@ -68,9 +66,13 @@
             <div class="row">
                 <div class="large-2 columns"><br></div>
                 <div class="large-8 columns" align="center">
-                    <div ng-bind-html="userAlreadyLogged()"></div>
+                    <div id="alertMessageDiv">
+                        <div data-alert class="alert-box alert round">
+                            <a href="#" class="close">&times;</a>
+                      </div>
+                    </div>
                 </div>
-                <div class="large-2 columns"></div>
+                <div class="large-2 columns"><br></div>
             </div>
             <div class="row">
                 <div class="large-2 columns"><br></div>
@@ -78,6 +80,9 @@
                 <div class="large-2 columns"></div>
             </div>
         </form>
+
+        <script src="./views/js/vendor/jquery.js"></script>
+        <script src="./views/js/foundation.min.js"></script>
         <script>
             $(document).foundation();
         </script>

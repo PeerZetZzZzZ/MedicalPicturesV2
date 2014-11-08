@@ -8,9 +8,11 @@ package medicalpictures.model.security;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import medicalpictures.model.exception.UserAlreadyLoggedException;
+import medicalpictures.model.exception.UserDoesntExistException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.config.IniSecurityManagerFactory;
 import org.apache.shiro.session.Session;
@@ -47,12 +49,16 @@ public class UserSessionManager {
      * @param username Username defined in UsersDB
      * @param password Password for username defined in UsersDB
      */
-    public void registerUser(String username, String password) throws UserAlreadyLoggedException {
+    public void registerUser(String username, String password) throws UserAlreadyLoggedException, UserDoesntExistException {
         currentUser = SecurityUtils.getSubject();
         if (!currentUser.isAuthenticated()) {
             UsernamePasswordToken token = new UsernamePasswordToken(username, password);
             token.setRememberMe(true);
-            currentUser.login(token);
+            try {
+                currentUser.login(token);
+            } catch (AuthenticationException ex) {
+                throw new UserDoesntExistException(ex.getMessage());
+            }
             Session session = currentUser.getSession();
             session.setAttribute("username", username);
         } else {

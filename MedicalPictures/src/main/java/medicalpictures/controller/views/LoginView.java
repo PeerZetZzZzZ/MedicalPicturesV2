@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.exception.UserAlreadyLoggedException;
+import medicalpictures.model.exception.UserDoesntExistException;
 import medicalpictures.model.login.LoginValidator;
 import medicalpictures.model.security.UserSessionManager;
 import org.apache.commons.logging.Log;
@@ -59,7 +60,12 @@ public class LoginView extends HttpServlet {
             System.out.println("Send response: "+message);
             response.getWriter().write(message);
         } catch (UserAlreadyLoggedException ex) {
-            String message = loginValidator.loginFailed(username);
+            String message = loginValidator.loginFailedUserAlreadyLogged(username);
+            System.out.println("Send response: "+message);
+            response.getWriter().write(message);
+            log.trace(ex);
+        } catch (UserDoesntExistException ex) {
+            String message = loginValidator.loginFailedAuthenticationFailed(username);
             System.out.println("Send response: "+message);
             response.getWriter().write(message);
             log.trace(ex);

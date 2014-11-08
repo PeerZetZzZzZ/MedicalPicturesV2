@@ -35,10 +35,20 @@ public class LoginValidator {
      * @param username
      * @return JSON which is sent as response from LoginView POST.
      */
-    public String loginFailed(String username) {
+    public String loginFailedUserAlreadyLogged(final String username) {
         JSONObject user = new JSONObject();
-        user.put("username", "user");
+        user.put("username", username);
         user.put("status", "false");
+        user.put("reason", "alreadyLogged");
         return user.toString();
     }
+
+    public String loginFailedAuthenticationFailed(final String username) {
+        JSONObject user = new JSONObject();
+        user.put("username", username);
+        user.put("status", "false");
+        user.put("reason", "authenticationFailed");
+        return user.toString();
+    }
+
 }
