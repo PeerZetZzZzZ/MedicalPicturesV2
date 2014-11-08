@@ -1,4 +1,4 @@
-package medicalpictures.controller.views;
+package medicalpictures.controller.views.admin;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,7 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import medicalpictures.model.exception.UserAlreadyLoggedException;
 import medicalpictures.model.exception.UserDoesntExistException;
 import medicalpictures.model.orm.OrmManager;
-import medicalpictures.model.security.UserSessionManager;
+import medicalpictures.model.security.UserSecurityManager;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.subject.Subject;
 
 /**
  *
@@ -24,7 +27,7 @@ public class ManageUsers extends HttpServlet {
 	@Inject
 	public OrmManager ormManager;
 	@EJB
-	private UserSessionManager manager;
+	private UserSecurityManager manager;
 
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,6 +40,7 @@ public class ManageUsers extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, UserAlreadyLoggedException, UserDoesntExistException {
 		response.setContentType("text/html;charset=UTF-8");
+                Subject currentUser = SecurityUtils.getSubject();
 		try (PrintWriter out = response.getWriter()) {
 			/* TODO output your page here. You may use following sample code. */
 			out.println("<!DOCTYPE html>");

@@ -5,11 +5,11 @@
     </welcome-file-list>
     <servlet>
         <servlet-name>LoginView</servlet-name>
-        <servlet-class>medicalpictures.controller.views.LoginView</servlet-class>
+        <servlet-class>medicalpictures.controller.views.common.LoginView</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ManageUsers</servlet-name>
-        <servlet-class>medicalpictures.controller.views.ManageUsers</servlet-class>
+        <servlet-class>medicalpictures.controller.views.admin.ManageUsers</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginView</servlet-name>
@@ -26,19 +26,17 @@
     </session-config>
     <listener>
         <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
-    </listener>     
+    </listener>
     <filter>
         <filter-name>ShiroFilter</filter-name>
         <filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
     </filter>
-
     <filter-mapping>
         <filter-name>ShiroFilter</filter-name>
         <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher> 
-        <dispatcher>FORWARD</dispatcher> 
-        <dispatcher>INCLUDE</dispatcher> 
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
-  
 </web-app>

@@ -1,8 +1,6 @@
-package medicalpictures.controller.views;
+package medicalpictures.controller.views.common;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +10,7 @@ import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.exception.UserAlreadyLoggedException;
 import medicalpictures.model.exception.UserDoesntExistException;
 import medicalpictures.model.login.LoginValidator;
-import medicalpictures.model.security.UserSessionManager;
+import medicalpictures.model.security.UserSecurityManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
@@ -25,13 +23,13 @@ import org.json.JSONObject;
 public class LoginView extends HttpServlet {
 
     @EJB
-    private UserSessionManager manager;
+    private UserSecurityManager manager;
     @EJB
     private JsonFactory jsonReader;
     @EJB
     private LoginValidator loginValidator;
 
-    private Log log = LogFactory.getLog(UserSessionManager.class);
+    private Log log = LogFactory.getLog(UserSecurityManager.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -56,17 +54,15 @@ public class LoginView extends HttpServlet {
         try {
             manager.registerUser(username, password);
             log.info("User: " + username + " has logged successfully");
-            String message = loginValidator.loginSucceed(username);
-            System.out.println("Send response: "+message);
+            String userAccountType = loginValidator.getUserAccountType(username);
+            String message = loginValidator.loginSucceed(username,userAccountType);
             response.getWriter().write(message);
         } catch (UserAlreadyLoggedException ex) {
             String message = loginValidator.loginFailedUserAlreadyLogged(ex.getLoggedUsername());
-            System.out.println("Send response: "+message);
             response.getWriter().write(message);
             log.trace(ex);
         } catch (UserDoesntExistException ex) {
             String message = loginValidator.loginFailedAuthenticationFailed(username);
-            System.out.println("Send response: "+message);
             response.getWriter().write(message);
             log.trace(ex);
         }

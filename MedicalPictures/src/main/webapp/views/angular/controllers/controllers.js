@@ -29,7 +29,20 @@
                         success(function (data, status, header, config) {
                             console.log(status);
                             if (data.username === $scope.username && data.status === "true"){//if login successful
-                                $window.location.href = "ManageUsers";
+                                switch(data.accountType){
+                                  case "ADMIN":
+                                      $window.location.href = "ManageUsers";
+                                      break;
+                                  case "PATIENT":
+                                      $window.location.href = "PatientView";
+                                      break;
+                                  case "TECHNICIAN":
+                                      $window.location.href = "TechnicianView";
+                                      break;
+                                  case "DOCTOR":
+                                      $window.location.href = "DoctorView";
+                                      break;
+                                }
                             }
                             else{//else print error message
                                         switch(data.reason){

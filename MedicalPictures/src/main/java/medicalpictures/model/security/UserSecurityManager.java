@@ -26,9 +26,7 @@ import org.apache.shiro.mgt.SecurityManager;
  * @author Przemysław Thomann
  */
 @Stateful
-public class UserSessionManager {
-
-    private Subject currentUser;
+public class UserSecurityManager {
 
     /**
      * Initializes the SecurityManager to use shiro:ini.
@@ -46,12 +44,13 @@ public class UserSessionManager {
      *
      * @param username Username defined in UsersDB
      * @param password Password for username defined in UsersDB
+     * @throws medicalpictures.model.exception.UserAlreadyLoggedException When user is already logged in the system.
+     * @throws medicalpictures.model.exception.UserDoesntExistException When given credentials don't match any user.
      */
     public void registerUser(String username, String password) throws UserAlreadyLoggedException, UserDoesntExistException {
-        currentUser = SecurityUtils.getSubject();
+        Subject currentUser = SecurityUtils.getSubject();
         if (!currentUser.isAuthenticated()) {
             UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-            token.setRememberMe(true);
             try {
                 currentUser.login(token);
             } catch (AuthenticationException ex) {
@@ -61,9 +60,17 @@ public class UserSessionManager {
             session.setAttribute("username", username);
         } else {
             String loggedUsername = currentUser.getSession().getAttribute("username").toString();
-            throw new UserAlreadyLoggedException("User: " + loggedUsername + "is already logged!",loggedUsername);
+            throw new UserAlreadyLoggedException("User: " + loggedUsername + "is already logged!", loggedUsername);
         }
-
+    }
+    /**
+     * Checks if user has role requried role for this content.
+     * If not, page/content won't be showed for this user.
+     * @param requriedRole Requried role to show the content.
+     */
+    public void checkUserPermissionToThisContent(final String requriedRole) {
+        Subject currentUser = SecurityUtils.getSubject();
+        currentUser.checkRole(requriedRole);
     }
 
 }
