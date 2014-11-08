@@ -8,7 +8,6 @@ package medicalpictures.model.login;
 import javax.ejb.Stateless;
 import medicalpictures.model.enums.AccountType;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.json.JSONObject;
 

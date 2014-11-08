@@ -76,7 +76,7 @@
 
 
         /* AdminView Controller */
-        MedicalPictures.controller('AdminViewController', function ($scope, MedicalPicturesGlobal,LoginController) {
+        MedicalPictures.controller('AdminViewController', function ($scope, MedicalPicturesGlobal) {
             $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
             $scope.loggedUsername = LoginController.username;
 
