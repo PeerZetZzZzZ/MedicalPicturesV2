@@ -80,18 +80,28 @@
 
 
         /* AdminView Controller */
-        MedicalPictures.controller('AdminViewController', function ($scope,$http, MedicalPicturesGlobal,MedicalPicturesCommon) {
+        MedicalPictures.controller('AdminViewManageUsersController', function ($scope,$http, MedicalPicturesGlobal) {
             $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
               $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
               success(function(data, status, headers, config) {
-                MedicalPicturesCommon.username = data.username;//remember the name for other windows
                 $scope.loggedUsername = data.username;
               }).
               error(function(data, status, headers, config) {
                   console.log(status);
               });
         });
+        MedicalPictures.controller('AdminViewAddUserController',function($scope, $http,MedicalPicturesGlobal){
+            $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
+            $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
+              success(function(data, status, headers, config) {
+                $scope.loggedUsername = data.username;
+              }).
+              error(function(data, status, headers, config) {
+                  console.log(status);
+              });
+
+        });
         /* UserSettings Controller */
         MedicalPictures.controller('UserSettingsController', function ($scope, MedicalPicturesGlobal) {
         $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
-                })
+      });
