@@ -5,6 +5,10 @@
             MIN_PASSWORD_LENGTH: "3",
             MAX_PASSWORD_LENGTH: "30"
         });
+
+        MedicalPictures.factory('MedicalPicturesCommon', function () {
+            return { username:'' };
+        });
         /* LoginView Controller */
         MedicalPictures.controller('LoginController', function ($scope, $http, $window,$translate, $location, MedicalPicturesGlobal) {
                 $scope.appName =  MedicalPicturesGlobal.GLOBAL_APP_NAME;
@@ -76,15 +80,16 @@
 
 
         /* AdminView Controller */
-        MedicalPictures.controller('AdminViewController', function ($scope,$http, MedicalPicturesGlobal) {
+        MedicalPictures.controller('AdminViewController', function ($scope,$http, MedicalPicturesGlobal,MedicalPicturesCommon) {
             $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
-            $scope.loggedUsername = function(){
-              $http.get("/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser").success(function(data){
-                return data.username;
-            }).error(function(status){
-              console.log(status);
-            });
-          }
+              $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
+              success(function(data, status, headers, config) {
+                MedicalPicturesCommon.username = data.username;//remember the name for other windows
+                $scope.loggedUsername = data.username;
+              }).
+              error(function(data, status, headers, config) {
+                  console.log(status);
+              });
         });
         /* UserSettings Controller */
         MedicalPictures.controller('UserSettingsController', function ($scope, MedicalPicturesGlobal) {

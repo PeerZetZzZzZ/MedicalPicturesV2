@@ -15,6 +15,10 @@
         <servlet-name>Logout</servlet-name>
         <servlet-class>medicalpictures.controller.views.common.Logout</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AdminViewAddUser</servlet-name>
+        <servlet-class>medicalpictures.controller.views.admin.AdminViewAddUser</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginView</servlet-name>
         <url-pattern>/LoginView</url-pattern>
@@ -26,6 +30,10 @@
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
         <url-pattern>/Logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminViewAddUser</servlet-name>
+        <url-pattern>/AdminViewAddUser</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
