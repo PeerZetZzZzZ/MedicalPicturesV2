@@ -3,7 +3,12 @@
         var MedicalPictures = angular.module('MedicalPictures', ['pascalprecht.translate']).constant('MedicalPicturesGlobal', {
             GLOBAL_APP_NAME: "MedicalPictures ver.1.0",
             MIN_PASSWORD_LENGTH: "3",
-            MAX_PASSWORD_LENGTH: "30"
+            MAX_PASSWORD_LENGTH: "30",
+            MAX_NAME_SURNAME_LENGTH: "255",
+            MAX_USERNAME_LENGTH:"100",
+            MIN_AGE:"1",
+            MAX_AGE:"150",
+            NAME_REGEXP_PATTERN:/[a-zA-Z]/
         });
 
         MedicalPictures.factory('MedicalPicturesCommon', function () {
@@ -99,7 +104,19 @@
               error(function(data, status, headers, config) {
                   console.log(status);
               });
-
+              document.getElementById("alertMessageDiv").style.visibility="hidden";
+              $scope.minPasswordLength = MedicalPicturesGlobal.MIN_PASSWORD_LENGTH;
+              $scope.maxPasswordLength = MedicalPicturesGlobal.MAX_PASSWORD_LENGTH;
+              $scope.minAge = MedicalPicturesGlobal.MIN_AGE;
+              $scope.maxAge = MedicalPicturesGlobal.MAX_AGE;
+              $scope.nameRegexpPattern = MedicalPicturesGlobal.NAME_REGEXP_PATTERN;
+              $scope.maxNameSurnameLength= MedicalPicturesGlobal.MAX_NAME_SURNAME_LENGTH;
+              $scope.maxUsernameLength = MedicalPicturesGlobal.MAX_USERNAME_LENGTH;
+              $scope.username = "username";
+              $scope.password = "password";
+              $scope.age = "age";
+              $scope.name = "name";
+              $scope.surname = "surname";
         });
         /* UserSettings Controller */
         MedicalPictures.controller('UserSettingsController', function ($scope, MedicalPicturesGlobal) {

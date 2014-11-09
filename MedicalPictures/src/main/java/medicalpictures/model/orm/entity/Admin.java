@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package medicalpictures.model.orm;
+package medicalpictures.model.orm.entity;
 
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -34,11 +34,7 @@ public class Admin implements Serializable {
 
     @NotNull
     private int age;
-
-    public Admin() {
-
-    }
-
+    
     public Admin(String username, String name, String surname, int age) {
         this.username = username;
         this.name = name;

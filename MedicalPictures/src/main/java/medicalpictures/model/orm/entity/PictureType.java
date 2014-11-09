@@ -1,4 +1,4 @@
-package medicalpictures.model.orm;
+package medicalpictures.model.orm.entity;
 
 import java.io.Serializable;
 import java.util.UUID;

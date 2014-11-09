@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package medicalpictures.model.orm;
+package medicalpictures.model.orm.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,12 +26,12 @@ public class UsersDB {
     private String password;
 
     @Column(length = 15)
-    private String account_type;
+    private String accountType;
 
-    public UsersDB(String username, String password, String account_type) {
+    public UsersDB(String username, String password, String accountType) {
         this.username = username;
         this.password = password;
-        this.account_type = account_type;
+        this.accountType = accountType;
     }
 
     public UsersDB() {
@@ -46,8 +46,8 @@ public class UsersDB {
         this.password = password;
     }
 
-    public void setAccount_type(String account_type) {
-        this.account_type = account_type;
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
     }
 
     public String getUsername() {
@@ -58,8 +58,8 @@ public class UsersDB {
         return password;
     }
 
-    public String getAccount_type() {
-        return account_type;
+    public String getAccountType() {
+        return accountType;
     }
 
 }

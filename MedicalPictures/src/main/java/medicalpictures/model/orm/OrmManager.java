@@ -7,7 +7,6 @@ package medicalpictures.model.orm;
 
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -38,10 +37,5 @@ public class OrmManager {
         em.persist(object);
         tx.commit();
         em.close();
-    }
-
-    public void saveObject() {
-        UsersDB admin = new UsersDB("userOrm2@gmail.com", "pass", "ADMIN");
-        persistObject(admin);
     }
 }

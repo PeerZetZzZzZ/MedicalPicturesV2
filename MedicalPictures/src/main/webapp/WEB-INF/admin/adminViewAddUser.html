@@ -10,6 +10,9 @@
     <title>{{'ADMIN_VIEW_HEAD_NAME'| translate}}</title>
     <meta content="" charset="UTF-8">
     <style type="text/css">
+        input.ng-invalid{
+            border:2px solid red
+        }
         .panel {
             overflow: scroll;
             max-height : 400px;
@@ -106,38 +109,50 @@
         <br>
         <form>
         <div class="row">
-          <div class="large-12 columns">
-            <label>Input Label
-              <input type="text" placeholder="large-12.columns" />
-            </label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="large-4 columns">
-            <label>Input Label
-              <input type="text" placeholder="large-4.columns" />
-            </label>
-          </div>
-          <div class="large-4 columns">
-            <label>Input Label
-              <input type="text" placeholder="large-4.columns" />
-            </label>
-          </div>
-          <div class="large-4 columns">
-            <div class="row collapse">
-              <label>Input Label</label>
-              <div class="small-9 columns">
-                <input type="text" placeholder="small-9.columns" />
-              </div>
-              <div class="small-3 columns">
-                <span class="postfix">.com</span>
-              </div>
+            <div class="large-4 columns"><br></div>
+            <div class="large-4 columns">
+                <h3>{{'ADDING_NEW_USER' |translate}}</h3>
             </div>
+            <div class="large-4 columns"><br></div>
+        </div>
+        <div class="row">
+          <div class="large-6 columns">
+            <label>{{'USERNAME_NAME' | translate}}
+              <input type="email" placeholder="" ng-model="username"
+              required
+              ng-maxlength="maxUsernameLength"/>
+            </label>
+          </div>
+          <div class="large-6 columns">
+            <label>{{'PASSWORD' |translate }}
+              <input type="password" placeholder="" ng-model="password"
+              required
+              ng-minlength="minPasswordLength"
+              ng-maxlength="maxPasswordLength"/>
+            </label>
           </div>
         </div>
         <div class="row">
-          <div class="large-12 columns">
-            <label>Select Box
+          <div class="large-6 columns">
+            <label>{{'NAME' | translate}}
+              <input type="text" placeholder="" ng-model="name"
+              required
+              ng-pattern="nameRegexpPattern"
+              ng-maxlength="maxNameSurnameLength" />
+            </label>
+          </div>
+          <div class="large-6 columns">
+            <label>{{'SURNAME' |translate }}
+              <input type="text" placeholder="" ng-model="surname"
+              required
+              ng-pattern="nameRegexpPattern"
+             />
+            </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-6 columns">
+            <label>{{'ACCOUNT_TYPE' | translate }}
               <select>
                 <option value="husker">Husker</option>
                 <option value="starbuck">Starbuck</option>
@@ -146,25 +161,30 @@
               </select>
             </label>
           </div>
-        </div>
-        <div class="row">
           <div class="large-6 columns">
-            <label>Choose Your Favorite</label>
-            <input type="radio" name="pokemon" value="Red" id="pokemonRed"><label for="pokemonRed">Red</label>
-            <input type="radio" name="pokemon" value="Blue" id="pokemonBlue"><label for="pokemonBlue">Blue</label>
-          </div>
-          <div class="large-6 columns">
-            <label>Check these out</label>
-            <input id="checkbox1" type="checkbox"><label for="checkbox1">Checkbox 1</label>
-            <input id="checkbox2" type="checkbox"><label for="checkbox2">Checkbox 2</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="large-12 columns">
-            <label>Textarea Label
-              <textarea placeholder="small-12.columns"></textarea>
+            <label>{{'AGE' | translate }}
+                <input type="number" placeholder="" ng-model="age"
+                required
+                ng-min="minAge"
+                ng-max="maxAge"/>
             </label>
           </div>
+        </div>
+        <div class="row">
+            <div class="large-2 columns"><br></div>
+            <div class="large-8 columns" align="center">
+                <div id="alertMessageDiv">
+                    <div data-alert class="alert-box alert round">
+                        <a href="#" class="close">&times;</a>
+                  </div>
+                </div>
+            </div>
+            <div class="large-2 columns"><br></div>
+        </div>
+        <div class="row">
+            <div class="large-2 columns"><br></div>
+            <div class="large-8 columns" align="center"><input type="submit" id="submit"  ng-click="userAddClicked()" class="button" value="{{'ADD_USER'| translate}}"></div>
+            <div class="large-2 columns"><br></div>
         </div>
       </form>
         <script src="./views/js/vendor/jquery.js"></script>

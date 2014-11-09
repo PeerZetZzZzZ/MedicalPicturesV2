@@ -25,7 +25,7 @@ public class LoginView extends HttpServlet {
     @EJB
     private UserSecurityManager manager;
     @EJB
-    private JsonFactory jsonReader;
+    private JsonFactory jsonFactory;
     @EJB
     private LoginValidator loginValidator;
 
@@ -40,7 +40,7 @@ public class LoginView extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        JSONObject jsonObject = jsonReader.decryptRequest(request);
+        JSONObject jsonObject = jsonFactory.decryptRequest(request);
         System.out.println("Dostolech: " + jsonObject.toString());
         String username = jsonObject.getString("username");
         String password = jsonObject.getString("password");

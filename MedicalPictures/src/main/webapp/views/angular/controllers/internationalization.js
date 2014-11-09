@@ -31,7 +31,11 @@ MedicalPictures.config(function ($translateProvider) {
         'YOUR_PASSWORD': 'Your password',
         'USER_ALREADY_LOGGED':'Given username is already logged!',
         'AUTHENTICATION_FAILED':'Authentication failed for given credentials.',
-        'LOGGED_AS':'Logged as: '
+        'LOGGED_AS':'Logged as: ',
+        'USERNAME_NAME':'Username',
+        'AGE':'Age',
+        'ADDING_NEW_USER':'Adding new user',
+        'ADD_USER':'Add user'
     });
     $translateProvider.translations('pl', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -64,7 +68,11 @@ MedicalPictures.config(function ($translateProvider) {
         'YOUR_PASSWORD': 'Twoje hasło',
         'USER_ALREADY_LOGGED':'Podany użytkownik jest już zalogowany!',
         'AUTHENTICATION_FAILED':'Logowanie nie powiodło się.',
-        'LOGGED_AS':'Zalogowany jako: '
+        'LOGGED_AS':'Zalogowany jako: ',
+        'USERNAME_NAME':'Nazwa użytkownika',
+        'AGE':'Wiek',
+        'ADDING_NEW_USER':'Dodawanie nowego użytkownika',
+        'ADD_USER':'Dodaj użytkownika'
     });
     $translateProvider.preferredLanguage('pl');
 });

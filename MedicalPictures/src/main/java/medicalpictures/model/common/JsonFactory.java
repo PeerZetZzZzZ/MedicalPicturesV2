@@ -6,8 +6,11 @@
 package medicalpictures.model.common;
 
 import java.io.BufferedReader;
+import java.util.HashMap;
+import java.util.Map;
 import javax.ejb.Stateless;
 import javax.servlet.http.HttpServletRequest;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -39,6 +42,26 @@ public class JsonFactory {
         return jsonObject;
     }
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    /**
+     * Reads the user value which will be added to database from json.
+     *
+     * @param jsonUser JSON document with user details
+     * @return Map with user values
+     * @throws JsonException When json is invalid.
+     */
+    public Map<String, String> readUser(JSONObject jsonUser) throws JSONException {
+        Map<String, String> userMap = new HashMap<>();
+        userMap.put("username", jsonUser.getString("username"));
+        userMap.put("password", jsonUser.getString("password"));
+        String accountType = jsonUser.getString("accountType");
+        if (accountType.equals("DOCTOR")) {
+            userMap.put("specialization", jsonUser.getString("specialization"));
+        }
+        userMap.put("accountType", accountType);
+        userMap.put("name", jsonUser.getString("name"));
+        userMap.put("surname", jsonUser.getString("surname"));
+        userMap.put("age", jsonUser.getString("age"));
+        return userMap;
+    }
+
 }
