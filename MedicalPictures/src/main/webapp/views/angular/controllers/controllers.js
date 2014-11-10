@@ -78,7 +78,7 @@
             alert.style.visibility="visible";//We show error message
             alert.innerHTML = "<div data-alert class=\"alert-box alert round\">"+
                 username+" : " + message +
-                "<a href=\"#\" class=\"close\">&times;</a>"+
+                "<a class=\"close\">&times;</a>"+
                 "</div>";
         }
         function showAlertMessageSuccess(message,username){
@@ -86,7 +86,7 @@
             alert.style.visibility="visible";//We show error message
             alert.innerHTML = "<div data-alert class=\"alert-box success radius\">"+
                 username+" : " + message +
-                "<a href=\"#\" class=\"close\">&times;</a>"+
+                "<a class=\"close\">&times;</a>"+
                 "</div>";
         }
 
@@ -120,22 +120,23 @@
               $scope.nameRegexpPattern = MedicalPicturesGlobal.NAME_REGEXP_PATTERN;
               $scope.maxNameSurnameLength= MedicalPicturesGlobal.MAX_NAME_SURNAME_LENGTH;
               $scope.maxUsernameLength = MedicalPicturesGlobal.MAX_USERNAME_LENGTH;
-              // $scope.username = "a@a.pl";
-              // $scope.password = "password";
-              // $scope.age = 1;
-              // $scope.name = "name";
-              // $scope.surname = "surname";
+              $scope.username = "a@a.pl";
+              $scope.password = "password";
+              $scope.age = 1;
+              $scope.name = "name";
+              $scope.surname = "surname";
               $scope.accountType = "ADMIN";
               $scope.addUserClicked = function(){
                   document.getElementById("alertMessageDiv").style.visibility="hidden";//we hide it if user clicks it after adding user previously
                   if(!angular.isUndefined($scope.username) && !angular.isUndefined($scope.password) &&
                   !angular.isUndefined($scope.age) && !angular.isUndefined($scope.name) &&
                   !angular.isUndefined($scope.surname) && !angular.isUndefined($scope.accountType)){
+                   var passwordHash = CryptoJS.SHA3($scope.password).toString();
                    $http({
                           url: '/MedicalPictures/AdminViewAddUser',
                           method: 'POST',
                           headers: {'Content-Type': 'application/json'},
-                          data: {'username': $scope.username, 'password': $scope.password, 'age':$scope.age.toString(),
+                          data: {'username': $scope.username, 'password': passwordHash, 'age':$scope.age.toString(),
                           'name':$scope.name, 'surname':$scope.surname,'accountType':$scope.accountType}
                       }).
                       success(function(data, status, headers, config) {
@@ -145,8 +146,6 @@
                               $scope.age=undefined;
                               $scope.name=undefined;
                               $scope.surname=undefined;
-                              $scope.accountType=undefined;
-                              $scope.accountType=undefined;
                               $translate('USER_ADDED_SUCCESSFULLY').then(function (translation) {
                                 $location.path('/MedicalPictures/AdminViewAddUsers');
                                 $location.replace();
@@ -154,9 +153,15 @@
                               });
                         }
                         else if(data.result === "failed"){
-                              $translate('USER_ADDING_FAILED').then(function (translation) {
-                                  showAlertMessageError(translation ,data.username);
-                              });
+                              if(data.username === ""){
+                                  $translate('INTERNAL_PROBLEM_OCCURRED').then(function (translation) {
+                                      showAlertMessageError(translation ,data.username);
+                                  });
+                              } else{
+                                  $translate('USER_ADDING_FAILED').then(function (translation) {
+                                      showAlertMessageError(translation ,data.username);
+                                  });
+                              }
                         }
                       }).
                       error(function(data, status, headers, config) {

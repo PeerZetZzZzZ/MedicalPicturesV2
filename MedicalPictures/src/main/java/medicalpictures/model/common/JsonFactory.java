@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.ejb.Stateless;
 import javax.servlet.http.HttpServletRequest;
+import medicalpictures.model.exception.JsonParsingException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,19 +50,23 @@ public class JsonFactory {
      * @return Map with user values
      * @throws JsonException When json is invalid.
      */
-    public Map<String, String> readUser(JSONObject jsonUser) throws JSONException {
+    public Map<String, String> readUser(JSONObject jsonUser) throws JsonParsingException {
         Map<String, String> userMap = new HashMap<>();
-        userMap.put("username", jsonUser.getString("username"));
-        userMap.put("password", jsonUser.getString("password"));
-        String accountType = jsonUser.getString("accountType");
-        if (accountType.equals("DOCTOR")) {
-            userMap.put("specialization", jsonUser.getString("specialization"));
+        try {
+            userMap.put("username", jsonUser.getString("username"));
+            userMap.put("password", jsonUser.getString("password"));
+            String accountType = jsonUser.getString("accountType");
+            if (accountType.equals("DOCTOR")) {
+                userMap.put("specialization", jsonUser.getString("specialization"));
+            }
+            userMap.put("accountType", accountType);
+            userMap.put("name", jsonUser.getString("name"));
+            userMap.put("surname", jsonUser.getString("surname"));
+            userMap.put("age", jsonUser.getString("age"));
+            return userMap;
+        } catch (JSONException ex) {
+            throw new JsonParsingException(ex.getMessage());
         }
-        userMap.put("accountType", accountType);
-        userMap.put("name", jsonUser.getString("name"));
-        userMap.put("surname", jsonUser.getString("surname"));
-        userMap.put("age", jsonUser.getString("age"));
-        return userMap;
     }
 
 }

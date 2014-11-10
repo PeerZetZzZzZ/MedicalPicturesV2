@@ -31,6 +31,7 @@ public class DbManager {
      * Saves new user in database.
      *
      * @param userDetails Map with created user details.
+     * @throws medicalpictures.model.exception.AddUserFailed
      */
     public void addNewUser(Map<String, String> userDetails) throws AddUserFailed {
         final String username = userDetails.get("username");
@@ -46,29 +47,23 @@ public class DbManager {
         final String age = userDetails.get("age");
         System.out.println(age);
         final String specialization = userDetails.get("specialization");
-        try {
-            addNewUsersDbUser(username, password, accountType);
-            Object user = null;
-            switch (accountType) {
-                case "ADMIN":
-                    user = new Admin(username, name, surname, Integer.valueOf(age));
-                    break;
-                case "PATIENT":
-                    user = new Patient(username, name, surname, Integer.valueOf(age));
-                    break;
-                case "TECHNICIAN":
-                    user = new Technician(username, name, surname, Integer.valueOf(age));
-                    break;
-                case "DOCTOR":
-                    user = new Doctor(username, name, surname, Integer.valueOf(age), specialization);
-                    break;
-            }
-            ormManager.persistObject(user);
-        } catch (Exception ex) {
-            throw new AddUserFailed("Adding user hihi: " + username + " failed!");
-
+        addNewUsersDbUser(username, password, accountType);
+        Object user = null;
+        switch (accountType) {
+            case "ADMIN":
+                user = new Admin(username, name, surname, Integer.valueOf(age));
+                break;
+            case "PATIENT":
+                user = new Patient(username, name, surname, Integer.valueOf(age));
+                break;
+            case "TECHNICIAN":
+                user = new Technician(username, name, surname, Integer.valueOf(age));
+                break;
+            case "DOCTOR":
+                user = new Doctor(username, name, surname, Integer.valueOf(age), specialization);
+                break;
         }
-
+        ormManager.persistObject(user);
     }
 
     /**
@@ -78,7 +73,7 @@ public class DbManager {
      * @param password password
      * @param accountType accountType
      */
-    private void addNewUsersDbUser(final String username, final String password, final String accountType) throws Exception {
+    private void addNewUsersDbUser(final String username, final String password, final String accountType) throws AddUserFailed {
         UsersDB user = new UsersDB(username, password, accountType);
         ormManager.persistObject(user);
         System.out.println("Dodaelem go do user");

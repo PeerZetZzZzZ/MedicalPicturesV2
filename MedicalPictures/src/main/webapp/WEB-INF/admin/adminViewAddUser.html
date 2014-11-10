@@ -2,38 +2,39 @@
     <head>
         <link rel="stylesheet" href="./views/css/foundation.css">
         <link rel="stylesheet" href="./views/css/normalize.css">
-        <script src="./views/js/vendor/modernizr.js"></script>
+        <script src="./views/js/vendor/modernizr.js"></script>\
         <script src="./views/angular/angular.js"></script>
+        <script src="./views/js/sha3.js"></script>
         <script src="./views/angular/angular-translate.min.js"></script>
         <script src="./views/angular/controllers/controllers.js"></script>
         <script src="./views/angular/controllers/internationalization.js"></script>
-    <title>{{'ADMIN_VIEW_HEAD_NAME'| translate}}</title>
-    <meta content="" charset="UTF-8">
-    <style type="text/css">
-        input.ng-invalid{
-            border:2px solid red
-        }
-        .panel {
-            overflow: scroll;
+        <title>{{'ADMIN_VIEW_HEAD_NAME'| translate}}</title>
+        <meta content="" charset="UTF-8">
+        <style type="text/css">
+            input.ng-invalid{
+                border:2px solid red
+            }
+            .panel {
+                overflow: scroll;
+                max-height : 400px;
+            }
+            .panel {
+              overflow: scroll;
             max-height : 400px;
-        }
-        .panel {
-          overflow: scroll;
-        max-height : 400px;
-        }
-        .top-bar .name h1 {
-        color:orange;
-        }
-        .top-bar .right li {
-        color:orange;
-        }
-        .top-bar .right li b {
-        color:yellow;
-        }
-        .icon-bar .item b{
-        color:red;
-        }
-    </style>
+            }
+            .top-bar .name h1 {
+            color:orange;
+            }
+            .top-bar .right li {
+            color:orange;
+            }
+            .top-bar .right li b {
+            color:yellow;
+            }
+            .icon-bar .item b{
+            color:red;
+            }
+        </style>
     </head>
     <body ng-controller="AdminViewAddUserController">
         <br>
@@ -85,36 +86,13 @@
         <div class="row">
             <div class="large-2 columns"><br></div>
             <div class="large-8 columns">
-                <div class="icon-bar four-up">
-                    <a class="item" href="www.google.pl">
-                        <img src="./views/glyphicons/png/glyphicons_006_user_add.png" >
-                        <label><b>{{'ADD_NEW_USER'| translate}}</b></label>
-                    </a>
-                    <a class="item">
-                        <img src="./views/glyphicons/png/glyphicons_007_user_remove.png" >
-                        <label>{{'DELETE_USER'| translate}}</label>
-                    </a>
-                    <a class="item">
-                        <img src="./views/glyphicons/png/glyphicons_152_check.png" >
-                        <label>{{'MARK_ALL'| translate}}</label>
-                    </a>
-                    <a class="item">
-                        <img src="./views/glyphicons/png/glyphicons_153_unchecked.png" >
-                        <label>{{'UNMARK_ALL'| translate}}</label>
-                    </a>
-                </div>
+                <h3><img src="./views/glyphicons/png/glyphicons_006_user_add.png" >
+                {{'ADDING_NEW_USER' |translate}}</h3>
             </div>
             <div class="large-2 columns"><br></div>
         </div>
         <br>
         <form>
-        <div class="row">
-            <div class="large-4 columns"><br></div>
-            <div class="large-4 columns">
-                <h3>{{'ADDING_NEW_USER' |translate}}</h3>
-            </div>
-            <div class="large-4 columns"><br></div>
-        </div>
         <div class="row">
           <div class="large-6 columns">
             <label>{{'USERNAME_NAME' | translate}}
