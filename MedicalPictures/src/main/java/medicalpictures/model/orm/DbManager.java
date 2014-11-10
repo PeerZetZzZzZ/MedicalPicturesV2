@@ -47,7 +47,7 @@ public class DbManager {
         System.out.println(age);
         final String specialization = userDetails.get("specialization");
         try {
-//            addNewUsersDbUser(username, password, accountType);
+            addNewUsersDbUser(username, password, accountType);
             Object user = null;
             switch (accountType) {
                 case "ADMIN":
@@ -65,7 +65,8 @@ public class DbManager {
             }
             ormManager.persistObject(user);
         } catch (Exception ex) {
-            throw new AddUserFailed("Adding user: " + username + " failed!");
+            throw new AddUserFailed("Adding user hihi: " + username + " failed!");
+
         }
 
     }
@@ -77,8 +78,9 @@ public class DbManager {
      * @param password password
      * @param accountType accountType
      */
-    private void addNewUsersDbUser(final String username, final String password, final String accountType) throws EntityExistsException {
+    private void addNewUsersDbUser(final String username, final String password, final String accountType) throws Exception {
         UsersDB user = new UsersDB(username, password, accountType);
         ormManager.persistObject(user);
+        System.out.println("Dodaelem go do user");
     }
 }

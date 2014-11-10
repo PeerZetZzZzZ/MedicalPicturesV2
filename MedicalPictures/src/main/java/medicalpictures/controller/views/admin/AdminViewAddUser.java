@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import medicalpictures.controller.views.common.LoginView;
+import medicalpictures.model.admin.AdminOperationResponse;
 import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.AddUserFailed;
@@ -28,23 +29,26 @@ import org.json.JSONObject;
  * @author PeerZet
  */
 public class AdminViewAddUser extends HttpServlet {
-
+    
     @EJB
     private UserSecurityManager manager;
     @EJB
     private JsonFactory jsonFactory;
     @EJB
     private DbManager dbManager;
+    @EJB
+    private AdminOperationResponse adminResponse;
+    
     private Log log = LogFactory.getLog(AdminViewAddUser.class);
-
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         manager.checkUserPermissionToThisContent(AccountType.ADMIN);
         request.getRequestDispatcher("/WEB-INF/admin/adminViewAddUser.html").forward(request, response);
-
+        
     }
-
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -54,11 +58,13 @@ public class AdminViewAddUser extends HttpServlet {
         Map<String, String> userDetails = jsonFactory.readUser(user);
         try {
             dbManager.addNewUser(userDetails);
+            response.getWriter().write(adminResponse.userAddedSuccessfully(userDetails.get("username")));
             log.info("Added new user: " + userDetails.get("username") + ".AccountType: " + userDetails.get("accountType"));
         } catch (AddUserFailed ex) {
+            response.getWriter().write(adminResponse.userAddedFailed(userDetails.get("username")));
             log.error(ex);
         }
-
+        
     }
-
+    
 }

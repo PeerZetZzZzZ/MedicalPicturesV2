@@ -57,12 +57,12 @@
                                         switch(data.reason){
                                             case "alreadyLogged":
                                                 $translate('USER_ALREADY_LOGGED').then(function (translation) {
-                                                    showAlertMessage(translation ,data.username);
+                                                    showAlertMessageError(translation ,data.username);
                                                 });
                                                 break;
                                             case "authenticationFailed":
                                                 $translate('AUTHENTICATION_FAILED').then(function (translation) {
-                                                    showAlertMessage(translation,data.username);
+                                                    showAlertMessageError(translation,data.username);
                                                 });
                                                 break;
                                          }
@@ -73,10 +73,18 @@
                   };
               }
         });
-        function showAlertMessage(message,username){
+        function showAlertMessageError(message,username){
             var alert = document.getElementById("alertMessageDiv");
             alert.style.visibility="visible";//We show error message
             alert.innerHTML = "<div data-alert class=\"alert-box alert round\">"+
+                username+" : " + message +
+                "<a href=\"#\" class=\"close\">&times;</a>"+
+                "</div>";
+        }
+        function showAlertMessageSuccess(message,username){
+            var alert = document.getElementById("alertMessageDiv");
+            alert.style.visibility="visible";//We show error message
+            alert.innerHTML = "<div data-alert class=\"alert-box success radius\">"+
                 username+" : " + message +
                 "<a href=\"#\" class=\"close\">&times;</a>"+
                 "</div>";
@@ -95,7 +103,7 @@
                   console.log(status);
               });
         });
-        MedicalPictures.controller('AdminViewAddUserController',function($scope, $http,MedicalPicturesGlobal){
+        MedicalPictures.controller('AdminViewAddUserController',function($scope, $translate,$location, $http,MedicalPicturesGlobal){
             $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
             $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
               success(function(data, status, headers, config) {
@@ -112,13 +120,14 @@
               $scope.nameRegexpPattern = MedicalPicturesGlobal.NAME_REGEXP_PATTERN;
               $scope.maxNameSurnameLength= MedicalPicturesGlobal.MAX_NAME_SURNAME_LENGTH;
               $scope.maxUsernameLength = MedicalPicturesGlobal.MAX_USERNAME_LENGTH;
-              $scope.username = "a@a.pl";
-              $scope.password = "password";
-              $scope.age = 1;
-              $scope.name = "name";
-              $scope.surname = "surname";
+              // $scope.username = "a@a.pl";
+              // $scope.password = "password";
+              // $scope.age = 1;
+              // $scope.name = "name";
+              // $scope.surname = "surname";
               $scope.accountType = "ADMIN";
               $scope.addUserClicked = function(){
+                  document.getElementById("alertMessageDiv").style.visibility="hidden";//we hide it if user clicks it after adding user previously
                   if(!angular.isUndefined($scope.username) && !angular.isUndefined($scope.password) &&
                   !angular.isUndefined($scope.age) && !angular.isUndefined($scope.name) &&
                   !angular.isUndefined($scope.surname) && !angular.isUndefined($scope.accountType)){
@@ -130,9 +139,30 @@
                           'name':$scope.name, 'surname':$scope.surname,'accountType':$scope.accountType}
                       }).
                       success(function(data, status, headers, config) {
-                          $scope.appName = "dodalech";
+                          if(data.result==="success"){
+                              $scope.username=undefined;
+                              $scope.password=undefined;
+                              $scope.age=undefined;
+                              $scope.name=undefined;
+                              $scope.surname=undefined;
+                              $scope.accountType=undefined;
+                              $scope.accountType=undefined;
+                              $translate('USER_ADDED_SUCCESSFULLY').then(function (translation) {
+                                $location.path('/MedicalPictures/AdminViewAddUsers');
+                                $location.replace();
+                                  showAlertMessageSuccess(translation ,data.username);
+                              });
+                        }
+                        else if(data.result === "failed"){
+                              $translate('USER_ADDING_FAILED').then(function (translation) {
+                                  showAlertMessageError(translation ,data.username);
+                              });
+                        }
                       }).
                       error(function(data, status, headers, config) {
+                          $translate('INTERNAL_PROBLEM_OCCURRED').then(function (translation) {
+                              showAlertMessageError(translation ,data.username);
+                          });
                           console.log(status);
                       });
                   }

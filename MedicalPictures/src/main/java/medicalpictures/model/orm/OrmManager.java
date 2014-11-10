@@ -8,16 +8,18 @@ package medicalpictures.model.orm;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
+import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 
 /**
  *
  * @author PeerZet
  */
-@Singleton
+@Stateful
 public class OrmManager {
 
     private final static Logger LOGGER = Logger.getLogger(OrmManager.class.getName());
@@ -26,16 +28,15 @@ public class OrmManager {
 
     @PostConstruct
     public void createConnection() {
+        LOGGER.info("Entity Manager started - connected to the MedicalPictures.");
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("MedicalPictures");
         em = emf.createEntityManager();
-        tx = em.getTransaction();
-        LOGGER.info("Entity Manager started - connected to the MedicalPictures.");
     }
 
     public void persistObject(Object object) {
+        tx = em.getTransaction();
         tx.begin();
         em.persist(object);
         tx.commit();
-        em.close();
     }
 }

@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -22,7 +23,8 @@ public class UsersDB {
     @Column(length = 100)
     private String username;
 
-    @Column(length = 100, nullable = false)
+    @Column(length = 100)
+    @NotNull
     private String password;
 
     @Column(length = 15)

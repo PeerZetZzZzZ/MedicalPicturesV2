@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
- http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-    <persistence-unit name="MedicalPictures" transaction-type="JTA">
-        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <jta-data-source>jdbc/MySql</jta-data-source>
-        <!--<exclude-unlisted-classes>false</exclude-unlisted-classes>-->
-        <class>medicalpictures.model.orm.entity.AccountType</class>
-        <class>medicalpictures.model.orm.entity.Admin</class>
-        <class>medicalpictures.model.orm.entity.BodyPart</class>
-        <class>medicalpictures.model.orm.entity.Doctor</class>
-        <class>medicalpictures.model.orm.entity.Patient</class>
-        <class>medicalpictures.model.orm.entity.Picture</class>
-        <class>medicalpictures.model.orm.entity.PictureDescription</class>
-        <class>medicalpictures.model.orm.entity.PictureType</class>
-        <class>medicalpictures.model.orm.entity.Technician</class>
-        <class>medicalpictures.model.orm.entity.UsersDB</class>
-        <properties>
-            <property name="javax.persistence.schema-generation-action" value="create"/>
-             <property name="javax.persistence.ddl-create-script-target" value="MedicalPicturesSchema.sql"/> 
-            <property name="javax.persistence.schema-generation-target" value="database"/> 
-            <property name="eclipselink.deploy-on-startup" value="true"/>
-        </properties>
-    </persistence-unit>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence  http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="MedicalPictures" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>jdbc/MySql</jta-data-source>
+    <!--<exclude-unlisted-classes>false</exclude-unlisted-classes>-->
+    <class>medicalpictures.model.orm.entity.AccountType</class>
+    <class>medicalpictures.model.orm.entity.Admin</class>
+    <class>medicalpictures.model.orm.entity.BodyPart</class>
+    <class>medicalpictures.model.orm.entity.Doctor</class>
+    <class>medicalpictures.model.orm.entity.Patient</class>
+    <class>medicalpictures.model.orm.entity.Picture</class>
+    <class>medicalpictures.model.orm.entity.PictureDescription</class>
+    <class>medicalpictures.model.orm.entity.PictureType</class>
+    <class>medicalpictures.model.orm.entity.Technician</class>
+    <class>medicalpictures.model.orm.entity.UsersDB</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.schema-generation-action" value="create"/>
+      <!--<property name="javax.persistence.ddl-create-script-target" value="MedicalPicturesSchema.sql"/>-->
+      <property name="javax.persistence.schema-generation-target" value="database"/>
+      <property name="eclipselink.deploy-on-startup" value="true"/>
+    </properties>
+  </persistence-unit>
 </persistence>
