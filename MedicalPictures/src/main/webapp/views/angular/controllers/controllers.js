@@ -112,11 +112,31 @@
               $scope.nameRegexpPattern = MedicalPicturesGlobal.NAME_REGEXP_PATTERN;
               $scope.maxNameSurnameLength= MedicalPicturesGlobal.MAX_NAME_SURNAME_LENGTH;
               $scope.maxUsernameLength = MedicalPicturesGlobal.MAX_USERNAME_LENGTH;
-              $scope.username = "username";
+              $scope.username = "a@a.pl";
               $scope.password = "password";
-              $scope.age = "age";
+              $scope.age = 1;
               $scope.name = "name";
               $scope.surname = "surname";
+              $scope.accountType = "ADMIN";
+              $scope.addUserClicked = function(){
+                  if(!angular.isUndefined($scope.username) && !angular.isUndefined($scope.password) &&
+                  !angular.isUndefined($scope.age) && !angular.isUndefined($scope.name) &&
+                  !angular.isUndefined($scope.surname) && !angular.isUndefined($scope.accountType)){
+                   $http({
+                          url: '/MedicalPictures/AdminViewAddUser',
+                          method: 'POST',
+                          headers: {'Content-Type': 'application/json'},
+                          data: {'username': $scope.username, 'password': $scope.password, 'age':$scope.age.toString(),
+                          'name':$scope.name, 'surname':$scope.surname,'accountType':$scope.accountType}
+                      }).
+                      success(function(data, status, headers, config) {
+                          $scope.appName = "dodalech";
+                      }).
+                      error(function(data, status, headers, config) {
+                          console.log(status);
+                      });
+                  }
+              };
         });
         /* UserSettings Controller */
         MedicalPictures.controller('UserSettingsController', function ($scope, MedicalPicturesGlobal) {

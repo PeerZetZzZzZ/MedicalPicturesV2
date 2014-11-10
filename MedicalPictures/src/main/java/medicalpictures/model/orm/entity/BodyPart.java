@@ -32,6 +32,10 @@ public class BodyPart implements Serializable {
         this.id = UUID.randomUUID().toString();
     }
 
+    public BodyPart() {
+
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

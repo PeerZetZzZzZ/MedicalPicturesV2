@@ -34,12 +34,16 @@ public class Admin implements Serializable {
 
     @NotNull
     private int age;
-    
+
     public Admin(String username, String name, String surname, int age) {
         this.username = username;
         this.name = name;
         this.surname = surname;
         this.age = age;
+
+    }
+
+    public Admin() {
 
     }
 

@@ -17,6 +17,10 @@ public class AccountType implements Serializable {
     @Id
     private String id;
 
+    public AccountType() {
+
+    }
+
     public AccountType(String accountType) {
         this.accountType = accountType;
         this.id = UUID.randomUUID().toString();

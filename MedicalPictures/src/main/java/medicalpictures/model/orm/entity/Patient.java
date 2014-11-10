@@ -60,6 +60,10 @@ public class Patient implements Serializable {
         this.username = username;
     }
 
+    public Patient() {
+
+    }
+
     public Patient(String username, String name, String surname, int age) {
         this.username = username;
         this.name = name;

@@ -64,6 +64,10 @@ public class Technician implements Serializable {
         this.age = age;
     }
 
+    public Technician() {
+
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

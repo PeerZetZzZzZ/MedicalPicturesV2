@@ -79,6 +79,10 @@ public class Doctor implements Serializable {
         this.specialization = specialization;
     }
 
+    public Doctor() {
+
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

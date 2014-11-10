@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import medicalpictures.controller.views.common.LoginView;
 import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.enums.AccountType;
+import medicalpictures.model.exception.AddUserFailed;
 import medicalpictures.model.orm.DbManager;
 import medicalpictures.model.security.UserSecurityManager;
 import org.apache.commons.logging.Log;
@@ -54,9 +55,8 @@ public class AdminViewAddUser extends HttpServlet {
         try {
             dbManager.addNewUser(userDetails);
             log.info("Added new user: " + userDetails.get("username") + ".AccountType: " + userDetails.get("accountType"));
-        } catch (EntityExistsException ex) {
-            log.info("Can't add user: " + userDetails.get("username") + ". Already exists!");
-
+        } catch (AddUserFailed ex) {
+            log.error(ex);
         }
 
     }
