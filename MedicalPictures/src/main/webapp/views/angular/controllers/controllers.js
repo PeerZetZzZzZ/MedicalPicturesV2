@@ -8,7 +8,12 @@
             MAX_USERNAME_LENGTH:"100",
             MIN_AGE:"1",
             MAX_AGE:"150",
-            NAME_REGEXP_PATTERN:/[a-zA-Z]/
+            NAME_REGEXP_PATTERN:/[a-zA-Z]/,
+            ADMIN_VIEW_MAIN_WINDOW:'/MedicalPictures/AdminViewManageUsers',
+            DOCTOR_VIEW_MAIN_WINDOW:'/MedicalPictures/DoctorView',
+            TECHNICIAN_VIEW_MAIN_WINDOW:'/MedicalPictures/TechnicianView',
+            PATIENT_VIEW_MAIN_WINDOW:'/MedicalPictures/PatientView',
+            ACCOUNT_TYPES:['ADMIN','DOCTOR','PATIENT','TECHNICIAN'],
         });
 
         var userMainWindow = "";
@@ -42,19 +47,15 @@
                             if (data.username === $scope.username && data.status === "true"){//if login successful
                                 switch(data.accountType){
                                   case "ADMIN":
-                                      userMainWindow ="AdminViewManagerUsers";
                                       $window.location.href = "AdminViewManageUsers";
                                       break;
                                   case "PATIENT":
-                                      userMainWindow ="PatientView";
                                       $window.location.href = "PatientView";
                                       break;
                                   case "TECHNICIAN":
-                                      userMainWindow ="TechnicianView";
                                       $window.location.href = "TechnicianView";
                                       break;
                                   case "DOCTOR":
-                                      userMainWindow ="DoctorView";
                                       $window.location.href = "DoctorView";
                                       break;
                                 }
@@ -73,8 +74,22 @@
                                                 break;
                                             case "alreadyLoggedLocally":
                                                 $translate('USER_ALREADY_LOGGED_LOCALLY').then(function (translation) {
-                                                  $scope.appName = userMainWindow;
-                                                    showAlertMessageWarning(translation,data.username, userMainWindow);
+                                                    var mainWindow;
+                                                    switch(data.accountType){
+                                                        case "DOCTOR":
+                                                            mainWindow = MedicalPicturesGlobal.DOCTOR_VIEW_MAIN_WINDOW;
+                                                            break;
+                                                        case "ADMIN":
+                                                            mainWindow = MedicalPicturesGlobal.ADMIN_VIEW_MAIN_WINDOW;
+                                                            break;
+                                                        case "PATIENT":
+                                                            mainWindow = MedicalPicturesGlobal.PATIENT_VIEW_MAIN_WINDOW;
+                                                            break;
+                                                        case "TECHNICIAN":
+                                                            mainWindow = MedicalPicturesGlobal.TECHNICIAN_VIEW_MAIN_WINDOW;
+                                                            break;
+                                                    }
+                                                    showAlertMessageWarning(translation,data.username,mainWindow);
                                                 });
                                                 break;
                                          }
@@ -97,8 +112,8 @@
             var alert = document.getElementById("alertMessageDiv");
             alert.style.visibility="visible";//We show error message
             alert.innerHTML = "<div data-alert class=\"alert-box warning round\">"+
-                url+" : " + message +
-                "<a href=\""+url+"\" class=\"close\">&times;</a>"+
+                "<a href=\""+url+"\" >" + username+" : " + message +"</a>" +
+                "<a class=\"close\">&times;</a>"+
                 "</div>";
         }
         function showAlertMessageSuccess(message,username){
@@ -146,19 +161,19 @@
               $scope.name = "name";
               $scope.surname = "surname";
               $scope.accountType = "ADMIN";
+              $scope.accountTypes = MedicalPicturesGlobal.ACCOUNT_TYPES;
               $scope.addUserClicked = function(){
                   document.getElementById("alertMessageDiv").style.visibility="hidden";//we hide it if user clicks it after adding user previously
                   if(!angular.isUndefined($scope.username) && !angular.isUndefined($scope.password) &&
                   !angular.isUndefined($scope.age) && !angular.isUndefined($scope.name) &&
-                  !angular.isUndefined($scope.surname) && !angular.isUndefined($scope.accountType)){
+                  !angular.isUndefined($scope.surname) && !angular.isUndefined($scope.selectedAccountType)){
                    var passwordHash = CryptoJS.SHA512($scope.password).toString();
-                   $scope.husker = "cos";
                    $http({
                           url: '/MedicalPictures/AdminViewAddUser',
                           method: 'POST',
                           headers: {'Content-Type': 'application/json'},
                           data: {'username': $scope.username, 'password': passwordHash, 'age':$scope.age.toString(),
-                          'name':$scope.name, 'surname':$scope.surname,'accountType':$scope.accountType}
+                          'name':$scope.name, 'surname':$scope.surname,'accountType':$scope.selectedAccountType}
                       }).
                       success(function(data, status, headers, config) {
                           if(data.result==="success"){

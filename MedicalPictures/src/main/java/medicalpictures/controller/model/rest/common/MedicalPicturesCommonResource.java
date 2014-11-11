@@ -47,7 +47,29 @@ public class MedicalPicturesCommonResource {
     @GET
     @Path("/getLoggedUser")
     @Produces("application/json")
-    public String getJson() {
+    public String getLoggedUser() {
+        if (manager.checkUserPermissionToAnyContent()) {
+            JSONObject user = new JSONObject();
+            try {
+                user.put("username", manager.getLoggedUsername());
+            } catch (NoLoggedUserExistsHere ex) {
+                return ex.getMessage();
+            }
+            return user.toString();
+        } else {
+            return "";
+        }
+    }
+    /**
+     * Retrieves representation of an instance of
+     * medicalpictures.controller.model.rest.common.MedicalPicturesCommonResource
+     *
+     * @return an instance of java.lang.String
+     */
+    @GET
+    @Path("/getLoggedBodyParts")
+    @Produces("application/json")
+    public String getAccountTypes() {
         if (manager.checkUserPermissionToAnyContent()) {
             JSONObject user = new JSONObject();
             try {

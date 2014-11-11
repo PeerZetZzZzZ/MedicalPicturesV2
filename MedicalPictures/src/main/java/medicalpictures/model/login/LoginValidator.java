@@ -55,12 +55,12 @@ public class LoginValidator {
      * @param username
      * @return JSON which is sent as response from LoginView POST.
      */
-    public String loginFailedUserAlreadyLoggedLocally(final String username) {
+    public String loginFailedUserAlreadyLoggedLocally(final String username, final String accountType) {
         JSONObject user = new JSONObject();
         user.put("username", username);
         user.put("status", "false");
         user.put("reason", "alreadyLoggedLocally");
-        user.put("mainWindow", "alreadyLoggedLocally");
+        user.put("accountType", accountType);
         return user.toString();
     }
 
@@ -88,6 +88,7 @@ public class LoginValidator {
         Subject currentUser = SecurityUtils.getSubject();
         for (AccountType type : AccountType.values()) {
             if (currentUser.hasRole(type.toString())) {
+                currentUser.getSession().setAttribute("accountType", type.toString());//we set this value in Session
                 return type.toString();
             }
         }

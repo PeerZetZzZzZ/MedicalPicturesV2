@@ -1,8 +1,6 @@
 package medicalpictures.controller.views.common;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -57,7 +55,8 @@ public class LoginView extends HttpServlet {
         } catch (UserAlreadyLoggedException ex) {
             try {
                 /* We inform that user is logged already here */
-                String message = loginValidator.loginFailedUserAlreadyLoggedLocally(ex.getLoggedUsername());
+                String message = loginValidator.loginFailedUserAlreadyLoggedLocally(ex.getLoggedUsername(),
+                        loginValidator.getUserAccountType(ex.getLoggedUsername()));
                 response.getWriter().write(message);
                 log.warn("User: " + manager.getLoggedUsername() + " already logged here!");
             } catch (NoLoggedUserExistsHere ex1) {//if user isnt logged locally but somewhere in time :D
