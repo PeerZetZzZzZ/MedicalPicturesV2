@@ -167,14 +167,14 @@
               };
               $scope.deleteUsersClicked = function(){
                  var i;
-                 var usersToDelete = [];
+                 var usersToDeleteList = [];
                   for(i=0;i<$scope.usernamesList.length;i++){
                       if(document.getElementById($scope.usernamesList[i].username).checked === true){
                           var index = usersToDelete.length;
-                          usersToDelete[index]="{username:'"+$scope.usernamesList[i].username+"'}";
+                          usersToDeleteList[index]="{username:'"+$scope.usernamesList[i].username+"'}";
                       }
                   }
-                  $scope.appName = usersToDelete;
+                  var usersToDelete = "{usernames:"+usersToDelete+"}";
               };
 
         });
