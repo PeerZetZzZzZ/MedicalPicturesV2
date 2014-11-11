@@ -21,6 +21,7 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.InvalidSessionException;
 
 /**
  * The class is responsible for validating user and logging him to application.
@@ -86,12 +87,11 @@ public class UserSecurityManager {
             Subject currentUser = SecurityUtils.getSubject();
             username = currentUser.getSession().getAttribute("username").toString();
             currentUser.checkRole(requriedRole.toString());
-        } catch (Exception ex) {
-            if (ex instanceof AuthorizationException) {
-                throw new UserNotPermitted(username + ": is not permitted to see this content. Requried accountType: " + requriedRole);
-            } else if (ex instanceof IllegalStateException) {
-                throw new NoLoggedUserExistsHere("There is no logged user! Can't check specified user permission.");
-            }
+        } catch (IllegalStateException | InvalidSessionException ex) {
+            System.out.println(ex.getMessage());
+            throw new UserNotPermitted(username + ": is not permitted to see this content. Requried accountType: " + requriedRole);
+        } catch (AuthorizationException | NullPointerException ex) {
+            throw new NoLoggedUserExistsHere("There is no logged user! Can't check specified user permission.");
         }
     }
 
@@ -114,12 +114,11 @@ public class UserSecurityManager {
                     return true;
                 }
             }
-        } catch (Exception ex) {
-            if (ex instanceof AuthorizationException) {
-                throw new UserNotPermitted(username + ": is not permitted to see any content.");
-            } else if (ex instanceof IllegalStateException) {
-                throw new NoLoggedUserExistsHere("There is no logged user! Can't check specified user permission.");
-            }
+        } catch (IllegalStateException | InvalidSessionException ex) {
+            System.out.println(ex.getMessage());
+            throw new UserNotPermitted(username + ": is not permitted to see any content.");
+        } catch (AuthorizationException | NullPointerException ex) {
+            throw new NoLoggedUserExistsHere("There is no logged user! Can't check specified user permission.");
         }
         return false;
     }
