@@ -130,15 +130,6 @@
         /* AdminView Controller */
         MedicalPictures.controller('AdminViewManageUsersController', function ($scope,$http, MedicalPicturesGlobal) {
             $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
-$scope.periodic = { elements: [ {
-"atomicNumber": 1,
-"name": "Hydrogen",
-"atomicWeight": 1.00794,
-"phase": "Gas",
-"ionization": 13.5984,
-"melting": -259.15,
-"boiling": -252.87
-}]};
               $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
               success(function(data, status, headers, config) {
                 $scope.loggedUsername = data.username;
@@ -149,7 +140,6 @@ $scope.periodic = { elements: [ {
               $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllUsernames').
               success(function(data, status, headers, config) {
                   $scope.usernamesList = data.usernames;
-                  $scope.appName =$scope.usernamesList;
               }).
               error(function(data, status, headers, config) {
                     console.log(status);

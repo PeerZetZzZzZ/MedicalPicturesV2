@@ -14,6 +14,9 @@
             overflow: scroll;
             max-height : 400px;
         }
+        .panel table{
+            height: 100%; width: 100%
+        }
         .panel {
           overflow: scroll;
         max-height : 400px;
@@ -119,10 +122,15 @@
                         </thead>
                         <tbody >
                                 <tr  ng-repeat="user in usernamesList">
-                                    <td>{{user.username}}</td>
-                                    <td>{{user.accountType}}</td>
-                                    <td>Content Goes Here</td>
-                          </div>
+                                    <td><b>{{user.username}}</b></td>
+                                    <td><b>{{user.accountType}}<b></td>
+                                    <td><a href="#" class="button tiny">Edit user</a> </td>
+                                    <td>
+                                          <fieldset class="switch">
+                                                <input id="{{user.username}}" type="checkbox">
+                                                <label for="{{user.username}}">Check</label>
+                                          </fieldset>
+                                  </td>
                         </tbody>
                     </table>
                 </div>
