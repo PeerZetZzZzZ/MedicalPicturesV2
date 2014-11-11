@@ -35,7 +35,6 @@ public class AdminViewManageUsers extends HttpServlet {
             throws ServletException, IOException {
         try {
             manager.checkUserPermissionToThisContent(AccountType.ADMIN);
-            System.out.println("sprawdzom czy moga");
             request.getRequestDispatcher("/WEB-INF/admin/adminViewManageUsers.html").forward(request, response);
         } catch (UserNotPermitted ex) {
             log.error("GET " + AdminViewManageUsers.class.toString() + " :No permission to see the content!");
@@ -48,6 +47,14 @@ public class AdminViewManageUsers extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        try {
+            manager.checkUserPermissionToThisContent(AccountType.ADMIN);
+            
+        } catch (UserNotPermitted ex) {
+            log.error("POST " + AdminViewManageUsers.class.toString() + " :No permission to see the content!");
+        } catch (NoLoggedUserExistsHere ex) {
+            log.error("POST " + AdminViewManageUsers.class.toString() + " : No logged user exists!");
+        }
     }
 
 }

@@ -31,7 +31,8 @@ public class DBBodyPartManager {
      * @return BodyPart list.
      */
     public List<String> getBodyParts() {
-        Query query = ormManager.getEntityManager().createQuery("SELECT * FROM " + DBNameManager.getBodyPartTable());
+        Query query = ormManager.getEntityManager().createQuery("SELECT c FROM " + DBNameManager.getBodyPartTable() + " c", BodyPart.class);
+//        System.out.println("SELECT * FROM " + DBNameManager.getBodyPartTable());
         Collection<BodyPart> bodyParts = query.getResultList();
         List<String> bodyPartsList = new ArrayList<String>();
         for (BodyPart bodyPart : bodyParts) {

@@ -29,52 +29,48 @@ public class DBNameManager {
     private static final String ACCOUNT_TYPE_TABLE_TABLE_NAME = "AccountType";
     private static final String DOCTOR_PICTURE_TABLE_TABLE_NAME = "DoctorPicture";
 
-    public static DBNameManager getINSTANCE() {
-        return INSTANCE;
-    }
-
     public static String getDatabaseName() {
         return DATABASE_NAME;
     }
 
     public static String getAdminTable() {
-        return DATABASE_NAME + "." + ADMIN_TABLE_NAME;
+        return ADMIN_TABLE_NAME;
     }
 
     public static String getDoctorTable() {
-        return DATABASE_NAME + "." + DOCTOR_TABLE_NAME;
+        return DOCTOR_TABLE_NAME;
     }
 
     public static String getPatientTable() {
-        return DATABASE_NAME + "." + PATIENT_TABLE_NAME;
+        return PATIENT_TABLE_NAME;
     }
 
     public static String getTechnicianTable() {
-        return DATABASE_NAME + "." + TECHNICIAN_TABLE_NAME;
+        return TECHNICIAN_TABLE_NAME;
     }
 
     public static String getUsersDbTable() {
-        return DATABASE_NAME + "." + USERSDB_TABLE_NAME;
+        return USERSDB_TABLE_NAME;
     }
 
     public static String getPictureTypeTable() {
-        return DATABASE_NAME + "." + PICTURE_TYPE_TABLE_NAME;
+        return PICTURE_TYPE_TABLE_NAME;
     }
 
     public static String getBodyPartTable() {
-        return DATABASE_NAME + "." + BODYPART_TABLE_TABLE_NAME;
+        return BODYPART_TABLE_TABLE_NAME;
     }
 
     public static String getPictureTable() {
-        return DATABASE_NAME + "." + PICTURE_TABLE_TABLE_NAME;
+        return PICTURE_TABLE_TABLE_NAME;
     }
 
     public static String getAccountType() {
-        return DATABASE_NAME + "." + ACCOUNT_TYPE_TABLE_TABLE_NAME;
+        return ACCOUNT_TYPE_TABLE_TABLE_NAME;
     }
 
     public static String getDoctorPictureTable() {
-        return DATABASE_NAME + "." + DOCTOR_PICTURE_TABLE_TABLE_NAME;
+        return DOCTOR_PICTURE_TABLE_TABLE_NAME;
     }
 
 }

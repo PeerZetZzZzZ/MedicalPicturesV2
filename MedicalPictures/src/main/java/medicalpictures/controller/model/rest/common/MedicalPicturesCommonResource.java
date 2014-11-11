@@ -80,7 +80,7 @@ public class MedicalPicturesCommonResource {
      * @return an instance of java.lang.String
      */
     @GET
-    @Path("/getLoggedBodyParts")
+    @Path("/getAllBodyParts")
     @Produces("application/json")
     public String getBodyParts() {
         try {
