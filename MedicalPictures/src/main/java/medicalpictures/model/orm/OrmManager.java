@@ -34,14 +34,21 @@ public class OrmManager {
         em = emf.createEntityManager();
     }
 
-    public void persistObject(Object object) throws AddUserFailed{
+    public EntityManager getEntityManager() {
+        return em;
+    }
+
+    public EntityTransaction getEntityTransaction() {
+        return tx;
+    }
+
+    public void persistObject(Object object) throws AddUserFailed {
         try {
             tx = em.getTransaction();
             tx.begin();
             em.persist(object);
             tx.commit();
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             throw new AddUserFailed("User add failed");
         }
     }

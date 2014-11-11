@@ -13,7 +13,11 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import medicalpictures.model.common.JsonFactory;
+import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
+import medicalpictures.model.exception.UserNotPermitted;
+import medicalpictures.model.orm.DBBodyPartManager;
 import medicalpictures.model.security.UserSecurityManager;
 import org.json.JSONObject;
 
@@ -30,7 +34,13 @@ public class MedicalPicturesCommonResource {
     private UriInfo context;
 
     @EJB
-    private UserSecurityManager manager;
+    private UserSecurityManager securityManager;
+
+    @EJB
+    private DBBodyPartManager bodyPartManager;
+
+    @EJB
+    private JsonFactory jsonFactory;
 
     /**
      * Creates a new instance of MedicalPicturesCommonResource
@@ -48,18 +58,21 @@ public class MedicalPicturesCommonResource {
     @Path("/getLoggedUser")
     @Produces("application/json")
     public String getLoggedUser() {
-        if (manager.checkUserPermissionToAnyContent()) {
-            JSONObject user = new JSONObject();
-            try {
-                user.put("username", manager.getLoggedUsername());
-            } catch (NoLoggedUserExistsHere ex) {
-                return ex.getMessage();
+        try {
+            if (securityManager.checkUserPermissionToAnyContent()) {
+                JSONObject user = new JSONObject();
+                user.put("username", securityManager.getLoggedUsername());
+                return user.toString();
+            } else {
+                return jsonFactory.userNotPermitted();
             }
-            return user.toString();
-        } else {
-            return "";
+        } catch (NoLoggedUserExistsHere ex) {
+            return jsonFactory.notUserLogged();
+        } catch (UserNotPermitted ex) {
+            return jsonFactory.userNotPermitted();
         }
     }
+
     /**
      * Retrieves representation of an instance of
      * medicalpictures.controller.model.rest.common.MedicalPicturesCommonResource
@@ -69,17 +82,16 @@ public class MedicalPicturesCommonResource {
     @GET
     @Path("/getLoggedBodyParts")
     @Produces("application/json")
-    public String getAccountTypes() {
-        if (manager.checkUserPermissionToAnyContent()) {
-            JSONObject user = new JSONObject();
-            try {
-                user.put("username", manager.getLoggedUsername());
-            } catch (NoLoggedUserExistsHere ex) {
-                return ex.getMessage();
-            }
-            return user.toString();
-        } else {
-            return "";
+    public String getBodyParts() {
+        try {
+            securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+            JSONObject bodyParts = new JSONObject();
+            bodyParts.put("bodyParts", bodyPartManager.getBodyParts());
+            return bodyParts.toString();
+        } catch (NoLoggedUserExistsHere ex) {
+            return jsonFactory.notUserLogged();
+        } catch (UserNotPermitted ex) {
+            return jsonFactory.userNotPermitted();
         }
     }
 }

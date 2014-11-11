@@ -69,4 +69,23 @@ public class JsonFactory {
         }
     }
 
+    /**
+     * Returns the json which informs that there is no permission to see
+     * content.
+     *
+     * @return message about not being permitted to see content
+     */
+    public String userNotPermitted() {
+        return "{error:\"notPermitted\"}";
+    }
+    /**
+     * Returns the json which informs that there is no permission to see
+     * content.
+     *
+     * @return message about not being permitted to see content
+     */
+    public String notUserLogged() {
+        return "{error:\"notUserLogged\"}";
+    }
+
 }

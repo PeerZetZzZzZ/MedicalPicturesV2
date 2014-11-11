@@ -22,7 +22,7 @@ import medicalpictures.model.orm.entity.UsersDB;
  * @author PeerZet
  */
 @Stateful
-public class DbManager {
+public class DBUserManager {
 
     @EJB
     private OrmManager ormManager;
