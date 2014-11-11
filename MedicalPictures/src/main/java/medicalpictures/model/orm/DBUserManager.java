@@ -6,16 +6,23 @@
 package medicalpictures.model.orm;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.persistence.EntityExistsException;
+import javax.persistence.Query;
+import medicalpictures.controller.views.common.DBNameManager;
 import medicalpictures.model.exception.AddUserFailed;
 import medicalpictures.model.orm.entity.Admin;
+import medicalpictures.model.orm.entity.BodyPart;
 import medicalpictures.model.orm.entity.Doctor;
 import medicalpictures.model.orm.entity.Patient;
 import medicalpictures.model.orm.entity.Technician;
 import medicalpictures.model.orm.entity.UsersDB;
+import org.json.JSONObject;
 
 /**
  *
@@ -77,5 +84,25 @@ public class DBUserManager {
         UsersDB user = new UsersDB(username, password, accountType);
         ormManager.persistObject(user);
         System.out.println("Dodaelem go do user");
+    }
+
+    /**
+     * Returns the list with all users in UsersDB table.
+     *
+     * @return JSON with users - their usernames and accountTypes
+     */
+    public JSONObject getAllUsernames() {
+        Query query = ormManager.getEntityManager().createQuery("SELECT c FROM " + DBNameManager.getUsersDbTable() + " c", UsersDB.class);
+        Collection<UsersDB> usersDb = query.getResultList();
+        JSONObject users = new JSONObject();
+        List<JSONObject> usersList = new ArrayList<>();
+        for (UsersDB userDb : usersDb) {
+            JSONObject singleUser = new JSONObject();
+            singleUser.put("username", userDb.getUsername());
+            singleUser.put("accountType", userDb.getAccountType());
+            usersList.add(singleUser);
+        }
+        users.put("usernames", usersList);
+        return users;
     }
 }

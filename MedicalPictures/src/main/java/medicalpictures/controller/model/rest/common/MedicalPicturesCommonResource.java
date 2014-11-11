@@ -18,6 +18,7 @@ import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;
 import medicalpictures.model.orm.DBBodyPartManager;
+import medicalpictures.model.orm.DBUserManager;
 import medicalpictures.model.security.UserSecurityManager;
 import org.json.JSONObject;
 
@@ -41,6 +42,9 @@ public class MedicalPicturesCommonResource {
 
     @EJB
     private JsonFactory jsonFactory;
+
+    @EJB
+    private DBUserManager userManager;
 
     /**
      * Creates a new instance of MedicalPicturesCommonResource
@@ -88,6 +92,27 @@ public class MedicalPicturesCommonResource {
             JSONObject bodyParts = new JSONObject();
             bodyParts.put("bodyParts", bodyPartManager.getBodyParts());
             return bodyParts.toString();
+        } catch (NoLoggedUserExistsHere ex) {
+            return jsonFactory.notUserLogged();
+        } catch (UserNotPermitted ex) {
+            return jsonFactory.userNotPermitted();
+        }
+    }
+
+    /**
+     * Retrieves representation of an instance of
+     * medicalpictures.controller.model.rest.common.MedicalPicturesCommonResource
+     *
+     * @return an instance of java.lang.String
+     */
+    @GET
+    @Path("/getAllUsernames")
+    @Produces("application/json")
+    public String getBodyUsernames() {
+        try {
+            securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+            System.out.println(userManager.getAllUsernames().toString());
+            return userManager.getAllUsernames().toString();
         } catch (NoLoggedUserExistsHere ex) {
             return jsonFactory.notUserLogged();
         } catch (UserNotPermitted ex) {

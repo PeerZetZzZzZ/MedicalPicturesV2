@@ -117,12 +117,12 @@
                                 <th> Checkbox</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Content Goes Here</td>
-                                <td>This is longer content Donec id elit non mi porta gravida at eget metussdfsdfsdfsdfsdfsdfsdfsdsdfsdfsdfsdfsdfsdfsd</td>
-                                <td>Content Goes Here</td>
-                            </tr>
+                        <tbody >
+                                <tr  ng-repeat="user in usernamesList">
+                                    <td>{{user.username}}</td>
+                                    <td>{{user.accountType}}</td>
+                                    <td>Content Goes Here</td>
+                          </div>
                         </tbody>
                     </table>
                 </div>
