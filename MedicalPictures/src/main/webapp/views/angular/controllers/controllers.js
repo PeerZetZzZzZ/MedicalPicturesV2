@@ -37,7 +37,7 @@
                 $scope.loginClicked = function () {
                     if(!angular.isUndefined($scope.username)&& !angular.isUndefined($scope.password)){
                       $http({
-                      url: '/MedicalPictures/LoginView',
+                              url: '/MedicalPictures/LoginView',
                               method: 'POST',
                               headers: {'Content-Type': 'application/json'},
                               data: {'username': $scope.username, 'password': $scope.password}
@@ -144,6 +144,39 @@
               error(function(data, status, headers, config) {
                     console.log(status);
               });
+              $scope.editUserClicked = function(usernameToEdit){
+                    $http({
+                        // url:
+                    }).success(function(data,status,headers,config){
+
+                    }).error(function(data,status,headers,config){
+
+                    });
+              };
+              $scope.markAllUsersClicked = function(){
+                 var i;
+                  for(i=0;i<$scope.usernamesList.length;i++){
+                      document.getElementById($scope.usernamesList[i].username).checked = true;
+                  }
+              };
+              $scope.unmarkAllUsersClicked = function(){
+                 var i;
+                  for(i=0;i<$scope.usernamesList.length;i++){
+                      document.getElementById($scope.usernamesList[i].username).checked = false;
+                  }
+              };
+              $scope.deleteUsersClicked = function(){
+                 var i;
+                 var usersToDelete = [];
+                  for(i=0;i<$scope.usernamesList.length;i++){
+                      if(document.getElementById($scope.usernamesList[i].username).checked === true){
+                          var index = usersToDelete.length;
+                          usersToDelete[index]="{username:'"+$scope.usernamesList[i].username+"'}";
+                      }
+                  }
+                  $scope.appName = usersToDelete;
+              };
+
         });
         MedicalPictures.controller('AdminViewAddUserController',function($scope, $translate,$location, $http,MedicalPicturesGlobal){
             $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;

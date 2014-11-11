@@ -19,6 +19,10 @@
         <servlet-name>AdminViewAddUser</servlet-name>
         <servlet-class>medicalpictures.controller.views.admin.AdminViewAddUser</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AdminViewEditUser</servlet-name>
+        <servlet-class>medicalpictures.controller.views.admin.AdminViewEditUser</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginView</servlet-name>
         <url-pattern>/LoginView</url-pattern>
@@ -34,6 +38,10 @@
     <servlet-mapping>
         <servlet-name>AdminViewAddUser</servlet-name>
         <url-pattern>/AdminViewAddUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminViewEditUser</servlet-name>
+        <url-pattern>/AdminViewEditUser</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

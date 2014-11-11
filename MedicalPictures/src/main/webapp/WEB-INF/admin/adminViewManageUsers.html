@@ -90,15 +90,15 @@
                         <img src="./views/glyphicons/png/glyphicons_006_user_add.png" >
                         <label>{{'ADD_NEW_USER'| translate}}</label>
                     </a>
-                    <a class="item">
+                    <a class="item"  href="" ng-click="deleteUsersClicked()">
                         <img src="./views/glyphicons/png/glyphicons_007_user_remove.png" >
                         <label>{{'DELETE_USER'| translate}}</label>
                     </a>
-                    <a class="item">
+                    <a class="item" href="" ng-click="markAllUsersClicked()">
                         <img src="./views/glyphicons/png/glyphicons_152_check.png" >
                         <label>{{'MARK_ALL'| translate}}</label>
                     </a>
-                    <a class="item">
+                    <a class="item" href="" ng-click="unmarkAllUsersClicked()">
                         <img src="./views/glyphicons/png/glyphicons_153_unchecked.png" >
                         <label>{{'UNMARK_ALL'| translate}}</label>
                     </a>
@@ -124,11 +124,11 @@
                                 <tr  ng-repeat="user in usernamesList">
                                     <td><b>{{user.username}}</b></td>
                                     <td><b>{{user.accountType}}<b></td>
-                                    <td><a href="#" class="button tiny">Edit user</a> </td>
+                                    <td><a ng-click="editUserClicked(user.username)" class="button tiny">Edit user</a> </td>
                                     <td>
                                           <fieldset class="switch">
                                                 <input id="{{user.username}}" type="checkbox">
-                                                <label for="{{user.username}}">Check</label>
+                                                <label for="{{user.username}}"></label>
                                           </fieldset>
                                   </td>
                         </tbody>
