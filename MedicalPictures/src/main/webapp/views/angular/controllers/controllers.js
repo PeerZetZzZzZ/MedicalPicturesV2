@@ -11,6 +11,7 @@
             NAME_REGEXP_PATTERN:/[a-zA-Z]/
         });
 
+        var userMainWindow = "";
         MedicalPictures.factory('MedicalPicturesCommon', function () {
             return { username:'' };
         });
@@ -22,6 +23,7 @@
                 $scope.password = "pass";
                 $scope.username="";//we share this username globally to later can print in in other windows
                 $scope.userAlreadyLogged= ""; //it contain the name of user which couldn't log because of already being logged
+                $scope.userMainWindow="";// url to the main window for this user, if he will go back to the Login VIew being already logged
                 document.getElementById("alertMessageDiv").style.visibility="hidden";
                 /* This above is a small hack, because loading the html content like below - alert didnt react on clicking the close sign (x).
                 The solution was 2:
@@ -40,29 +42,39 @@
                             if (data.username === $scope.username && data.status === "true"){//if login successful
                                 switch(data.accountType){
                                   case "ADMIN":
+                                      userMainWindow ="AdminViewManagerUsers";
                                       $window.location.href = "AdminViewManageUsers";
                                       break;
                                   case "PATIENT":
+                                      userMainWindow ="PatientView";
                                       $window.location.href = "PatientView";
                                       break;
                                   case "TECHNICIAN":
+                                      userMainWindow ="TechnicianView";
                                       $window.location.href = "TechnicianView";
                                       break;
                                   case "DOCTOR":
+                                      userMainWindow ="DoctorView";
                                       $window.location.href = "DoctorView";
                                       break;
                                 }
                             }
                             else{//else print error message
                                         switch(data.reason){
-                                            case "alreadyLogged":
-                                                $translate('USER_ALREADY_LOGGED').then(function (translation) {
+                                            case "alreadyLoggedOutside":
+                                                $translate('USER_ALREADY_LOGGED_OUTSIDE').then(function (translation) {
                                                     showAlertMessageError(translation ,data.username);
                                                 });
                                                 break;
                                             case "authenticationFailed":
                                                 $translate('AUTHENTICATION_FAILED').then(function (translation) {
                                                     showAlertMessageError(translation,data.username);
+                                                });
+                                                break;
+                                            case "alreadyLoggedLocally":
+                                                $translate('USER_ALREADY_LOGGED_LOCALLY').then(function (translation) {
+                                                  $scope.appName = userMainWindow;
+                                                    showAlertMessageWarning(translation,data.username, userMainWindow);
                                                 });
                                                 break;
                                          }
@@ -79,6 +91,14 @@
             alert.innerHTML = "<div data-alert class=\"alert-box alert round\">"+
                 username+" : " + message +
                 "<a class=\"close\">&times;</a>"+
+                "</div>";
+        }
+        function showAlertMessageWarning(message,username, url){
+            var alert = document.getElementById("alertMessageDiv");
+            alert.style.visibility="visible";//We show error message
+            alert.innerHTML = "<div data-alert class=\"alert-box warning round\">"+
+                url+" : " + message +
+                "<a href=\""+url+"\" class=\"close\">&times;</a>"+
                 "</div>";
         }
         function showAlertMessageSuccess(message,username){
@@ -131,7 +151,8 @@
                   if(!angular.isUndefined($scope.username) && !angular.isUndefined($scope.password) &&
                   !angular.isUndefined($scope.age) && !angular.isUndefined($scope.name) &&
                   !angular.isUndefined($scope.surname) && !angular.isUndefined($scope.accountType)){
-                   var passwordHash = CryptoJS.SHA3($scope.password).toString();
+                   var passwordHash = CryptoJS.SHA512($scope.password).toString();
+                   $scope.husker = "cos";
                    $http({
                           url: '/MedicalPictures/AdminViewAddUser',
                           method: 'POST',

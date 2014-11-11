@@ -8,6 +8,7 @@ package medicalpictures.model.security;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import medicalpictures.model.enums.AccountType;
+import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserAlreadyLoggedException;
 import medicalpictures.model.exception.UserDoesntExistException;
 import org.apache.shiro.SecurityUtils;
@@ -106,8 +107,12 @@ public class UserSecurityManager {
      *
      * @return username
      */
-    public String getLoggedUsername() {
-        Subject currentUser = SecurityUtils.getSubject();
-        return currentUser.getSession().getAttribute("username").toString();
+    public String getLoggedUsername() throws NoLoggedUserExistsHere {
+        try {
+            Subject currentUser = SecurityUtils.getSubject();
+            return currentUser.getSession().getAttribute("username").toString();
+        } catch (IllegalStateException ex) {
+            throw new NoLoggedUserExistsHere("No logged user here!");
+        }
     }
 }

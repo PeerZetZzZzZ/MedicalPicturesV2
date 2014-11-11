@@ -1,12 +1,15 @@
 package medicalpictures.controller.views.common;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import medicalpictures.model.common.JsonFactory;
+import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserAlreadyLoggedException;
 import medicalpictures.model.exception.UserDoesntExistException;
 import medicalpictures.model.login.LoginValidator;
@@ -49,16 +52,23 @@ public class LoginView extends HttpServlet {
             String userAccountType = loginValidator.getUserAccountType(username);
             String message = loginValidator.loginSucceed(username, userAccountType);
             response.getWriter().write(message);
-            log.warn("User: " + manager.getLoggedUsername() + "has logged!");
+            log.warn("User: " + username + "has logged!");
             System.out.println(message);
         } catch (UserAlreadyLoggedException ex) {
-            String message = loginValidator.loginFailedUserAlreadyLogged(ex.getLoggedUsername());
-            response.getWriter().write(message);
-            log.warn("User: " + manager.getLoggedUsername() + "already logged!");
+            try {
+                /* We inform that user is logged already here */
+                String message = loginValidator.loginFailedUserAlreadyLoggedLocally(ex.getLoggedUsername());
+                response.getWriter().write(message);
+                log.warn("User: " + manager.getLoggedUsername() + " already logged here!");
+            } catch (NoLoggedUserExistsHere ex1) {//if user isnt logged locally but somewhere in time :D
+                String message = loginValidator.loginFailedUserAlreadyLoggedOutside(ex.getLoggedUsername());
+                log.warn("User: " + username + " already logged somewhere!");
+                response.getWriter().write(message);
+            }
         } catch (UserDoesntExistException ex) {
             String message = loginValidator.loginFailedAuthenticationFailed(username);
             response.getWriter().write(message);
-            log.warn("User: " + manager.getLoggedUsername() + " does not exist!");
+            log.warn("User: " + username + " does not exist!");
         }
     }
 }

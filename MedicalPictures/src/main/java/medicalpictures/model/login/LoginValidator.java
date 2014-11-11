@@ -36,16 +36,31 @@ public class LoginValidator {
 
     /**
      * Returns the json which informs that login is not successful because user
-     * is already logged!
+     * is already logged somewhere outside!
      *
      * @param username
      * @return JSON which is sent as response from LoginView POST.
      */
-    public String loginFailedUserAlreadyLogged(final String username) {
+    public String loginFailedUserAlreadyLoggedOutside(final String username) {
         JSONObject user = new JSONObject();
         user.put("username", username);
         user.put("status", "false");
-        user.put("reason", "alreadyLogged");
+        user.put("reason", "alreadyLoggedOutside");
+        return user.toString();
+    }
+    /**
+     * Returns the json which informs that login is not successful because user
+     * is already logged locally here!
+     *
+     * @param username
+     * @return JSON which is sent as response from LoginView POST.
+     */
+    public String loginFailedUserAlreadyLoggedLocally(final String username) {
+        JSONObject user = new JSONObject();
+        user.put("username", username);
+        user.put("status", "false");
+        user.put("reason", "alreadyLoggedLocally");
+        user.put("mainWindow", "alreadyLoggedLocally");
         return user.toString();
     }
 

@@ -5,15 +5,15 @@
  */
 package medicalpictures.controller.model.rest.common;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PUT;
+import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.security.UserSecurityManager;
 import org.json.JSONObject;
 
@@ -50,8 +50,11 @@ public class MedicalPicturesCommonResource {
     public String getJson() {
         if (manager.checkUserPermissionToAnyContent()) {
             JSONObject user = new JSONObject();
-            user.put("username", manager.getLoggedUsername());
-            System.out.println("Zwracom: " + user.toString());
+            try {
+                user.put("username", manager.getLoggedUsername());
+            } catch (NoLoggedUserExistsHere ex) {
+                return ex.getMessage();
+            }
             return user.toString();
         } else {
             return "";
