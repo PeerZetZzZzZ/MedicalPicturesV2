@@ -33,6 +33,13 @@
         .icon-bar .item b{
         color:red;
         }
+        td {
+        border-bottom: 1px solid #ccc; /* or whatever specific values you prefer */
+        }
+        td a{
+             margin:auto;
+             display:block;
+        }
     </style>
     </head>
     <body ng-controller="AdminViewManageUsersController">
@@ -65,15 +72,15 @@
             <div class="large-1 columns"><br></div>
             <div class="large-10 columns">
                 <div class="icon-bar three-up">
-                    <a class="item">
-                        <img src="./views/glyphicons/png/glyphicons_024_parents.png" href="">
+                    <a class="item" href="">
+                        <img src="./views/glyphicons/png/glyphicons_024_parents.png" >
                         <label><b>{{'MANAGE_USERS'| translate}}</b></label>
                     </a>
-                    <a class="item">
+                    <a class="item" href="">
                         <img src="./views/glyphicons/png/glyphicons_012_heart.png" >
                         <label>{{'MANAGE_BODY_PARTS'| translate}}</label>
                     </a>
-                    <a class="item">
+                    <a class="item" href="">
                         <img src="./views/glyphicons/png/glyphicons_047_camera_small.png" >
                         <label>{{'MANAGE_PICTURE_TYPES'| translate}}</label>
                     </a>
@@ -114,23 +121,25 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>{{'USERNAME'| translate}}</th>
-                                <th>{{'ACCOUNT_TYPE'| translate}}</th>
-                                <th> Guzik</th>
-                                <th> Checkbox</th>
+                                <th><h6>{{'USERNAME'| translate}}</h6></th>
+                                <th><h6>{{'ACCOUNT_TYPE'| translate}}</h6></th>
+                                <th><h6>{{'EDIT' | translate}}</h6></th>
+                                <th><h6>{{'CHECK' | translate}}</h6></th>
                             </tr>
                         </thead>
                         <tbody >
                                 <tr  ng-repeat="user in usernamesList">
                                     <td><b>{{user.username}}</b></td>
-                                    <td><b>{{user.accountType}}<b></td>
-                                    <td><a ng-click="editUserClicked(user.username)" class="button tiny">Edit user</a> </td>
+                                    <td><b>{{user.accountType}}</b></td>
+                                    <td><a ng-click="editUserClicked(user.username)" class="button tiny">{{'EDIT' |translate}}</a> </td>
                                     <td>
                                           <fieldset class="switch">
-                                                <input id="{{user.username}}" type="checkbox">
+                                                <input id="{{user.username}}" type="checkbox" />
                                                 <label for="{{user.username}}"></label>
                                           </fieldset>
                                   </td>
+                                  <hr>
+                                </tr>
                         </tbody>
                     </table>
                 </div>

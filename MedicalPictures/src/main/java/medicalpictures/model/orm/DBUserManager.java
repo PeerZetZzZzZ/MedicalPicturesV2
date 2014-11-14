@@ -5,23 +5,23 @@
  */
 package medicalpictures.model.orm;
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
-import javax.persistence.EntityExistsException;
 import javax.persistence.Query;
 import medicalpictures.controller.views.common.DBNameManager;
 import medicalpictures.model.exception.AddUserFailed;
 import medicalpictures.model.orm.entity.Admin;
-import medicalpictures.model.orm.entity.BodyPart;
 import medicalpictures.model.orm.entity.Doctor;
 import medicalpictures.model.orm.entity.Patient;
 import medicalpictures.model.orm.entity.Technician;
 import medicalpictures.model.orm.entity.UsersDB;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 
 /**
@@ -33,6 +33,7 @@ public class DBUserManager {
 
     @EJB
     private OrmManager ormManager;
+    private Log logger = LogFactory.getLog(DBUserManager.class);
 
     /**
      * Saves new user in database.
@@ -42,17 +43,11 @@ public class DBUserManager {
      */
     public void addNewUser(Map<String, String> userDetails) throws AddUserFailed {
         final String username = userDetails.get("username");
-        System.out.println(username);
         final String password = userDetails.get("password");
-        System.out.println(password);
         final String accountType = userDetails.get("accountType");
-        System.out.println(accountType);
         final String name = userDetails.get("name");
-        System.out.println(name);
         final String surname = userDetails.get("surname");
-        System.out.println(surname);
         final String age = userDetails.get("age");
-        System.out.println(age);
         final String specialization = userDetails.get("specialization");
         addNewUsersDbUser(username, password, accountType);
         Object user = null;
@@ -71,6 +66,7 @@ public class DBUserManager {
                 break;
         }
         ormManager.persistObject(user);
+        logger.info("Added user: " + username + "," + password + "," + accountType + "," + name + "," + surname + "," + age + "," + specialization);
     }
 
     /**
@@ -83,7 +79,6 @@ public class DBUserManager {
     private void addNewUsersDbUser(final String username, final String password, final String accountType) throws AddUserFailed {
         UsersDB user = new UsersDB(username, password, accountType);
         ormManager.persistObject(user);
-        System.out.println("Dodaelem go do user");
     }
 
     /**
@@ -104,5 +99,17 @@ public class DBUserManager {
         }
         users.put("usernames", usersList);
         return users;
+    }
+
+    public void deleteUsers(List<String> usernames) {
+        ormManager.getEntityTransaction().begin();
+        for (String username : usernames) {
+            Admin admin = ormManager.getEntityManager().find(Admin.class, username);
+            ormManager.getEntityManager().remove(admin);
+            UsersDB user = ormManager.getEntityManager().find(UsersDB.class, username);
+            ormManager.getEntityManager().remove(user);
+            logger.info("Deleted user: "+username);
+        }
+        ormManager.getEntityTransaction().commit();
     }
 }

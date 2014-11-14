@@ -39,7 +39,7 @@ public class OrmManager {
     }
 
     public EntityTransaction getEntityTransaction() {
-        return tx;
+        return em.getTransaction();
     }
 
     public void persistObject(Object object) throws AddUserFailed {

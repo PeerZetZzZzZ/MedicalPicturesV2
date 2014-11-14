@@ -6,11 +6,15 @@
 package medicalpictures.model.common;
 
 import java.io.BufferedReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.ejb.Stateless;
+import javax.json.JsonArray;
 import javax.servlet.http.HttpServletRequest;
 import medicalpictures.model.exception.JsonParsingException;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -78,6 +82,7 @@ public class JsonFactory {
     public String userNotPermitted() {
         return "{error:\"notPermitted\"}";
     }
+
     /**
      * Returns the json which informs that there is no permission to see
      * content.
@@ -86,6 +91,24 @@ public class JsonFactory {
      */
     public String notUserLogged() {
         return "{error:\"notUserLogged\"}";
+    }
+
+    /**
+     * Returns the list of users to delete in such form
+     * Map<username,accountType> for example there can be object such as:
+     * <user@gmail.com,ADMIN>
+     *
+     * @param users
+     * @return
+     */
+    public List<String> readUsersToDelete(JSONObject users) {
+        JSONArray usersToDelete = users.getJSONArray("usernames");
+        List<String> usersToDeleteList = new ArrayList<>();
+        for (int i = 0; i < usersToDelete.length(); i++) {
+            JSONObject singleUserToDelete = (JSONObject) usersToDelete.get(i);
+            usersToDeleteList.add(singleUserToDelete.getString("username"));
+        }
+        return usersToDeleteList;
     }
 
 }

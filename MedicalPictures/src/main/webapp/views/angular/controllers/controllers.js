@@ -170,13 +170,35 @@
                  var usersToDeleteList = [];
                   for(i=0;i<$scope.usernamesList.length;i++){
                       if(document.getElementById($scope.usernamesList[i].username).checked === true){
-                          var index = usersToDelete.length;
+                          var index = usersToDeleteList.length;
                           usersToDeleteList[index]="{username:'"+$scope.usernamesList[i].username+"'}";
                       }
                   }
-                  var usersToDelete = "{usernames:"+usersToDelete+"}";
+                  var usersToDelete ;
+                  if(usersToDeleteList.length ===0){
+                        usersToDelete= "{usernames:[]}";
+                  } else{
+                        usersToDelete = "{usernames:["+usersToDeleteList+"]}";
+                  }
+                  $scope.appName = usersToDelete;
+                  $http({
+                      url: '/MedicalPictures/AdminViewDeleteUsers',
+                      method: 'POST',
+                      headers: {'Content-Type': 'application/json'},
+                      data: usersToDelete
+                  }).
+                  success(function (data, status, header, config) {
+                        $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllUsernames').
+                        success(function(data, status, headers, config) {
+                            $scope.usernamesList = data.usernames;
+                        }).
+                        error(function(data, status, headers, config) {
+                              console.log(status);
+                        });
+                  }).error(function(data, status, headers, config) {
+                        console.log(status);
+                  });
               };
-
         });
         MedicalPictures.controller('AdminViewAddUserController',function($scope, $translate,$location, $http,MedicalPicturesGlobal){
             $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
