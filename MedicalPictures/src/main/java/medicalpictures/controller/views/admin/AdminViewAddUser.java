@@ -67,7 +67,7 @@ public class AdminViewAddUser extends HttpServlet {
             System.out.println("dostolem do dodania: " + user);
             String username = "";
             try {
-                Map<String, String> userDetails = jsonFactory.readUser(user);
+                Map<String, String> userDetails = jsonFactory.readUserFromJson(user);
                 username = userDetails.get("username");
                 System.out.println("Dlugosc: " + userDetails.get("password").length());
                 dbManager.addNewUser(userDetails);

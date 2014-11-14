@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.ejb.Stateless;
 import javax.json.JsonArray;
 import javax.servlet.http.HttpServletRequest;
+import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.JsonParsingException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +55,7 @@ public class JsonFactory {
      * @return Map with user values
      * @throws JsonException When json is invalid.
      */
-    public Map<String, String> readUser(JSONObject jsonUser) throws JsonParsingException {
+    public Map<String, String> readUserFromJson(JSONObject jsonUser) throws JsonParsingException {
         Map<String, String> userMap = new HashMap<>();
         try {
             userMap.put("username", jsonUser.getString("username"));
@@ -109,6 +110,27 @@ public class JsonFactory {
             usersToDeleteList.add(singleUserToDelete.getString("username"));
         }
         return usersToDeleteList;
+    }
+
+    /**
+     * Returns the user read from database with its all values as JSON
+     * representation. It can be later sent to the client.
+     *
+     * @param username Username whos data will be taken
+     * @return
+     */
+    public String getUserDetailsAsJson(Map<String, String> userDetials) {
+        JSONObject user = new JSONObject();
+        user.put("username", userDetials.get("username"));
+        user.put("accountType", userDetials.get("accountType"));
+        user.put("password", userDetials.get("password"));
+        user.put("name", userDetials.get("name"));
+        user.put("surname", userDetials.get("surname"));
+        user.put("age", Integer.valueOf(userDetials.get("age")));
+        if (userDetials.get("accountType").equals(AccountType.DOCTOR.toString())) {
+            user.put("specialization", userDetials.get("specialization"));
+        }
+        return user.toString();
     }
 
 }

@@ -34,7 +34,10 @@
         color:red;
         }
         td {
-        border-bottom: 1px solid #ccc; /* or whatever specific values you prefer */
+        border-top: solid 1px #f00;
+        border-right: solid 1px #f00;
+        border-left: solid 1px #f00;
+        border-bottom: 1px solid  #f00; /* or whatever specific values you prefer */
         }
         td a{
              margin:auto;
@@ -131,7 +134,7 @@
                                 <tr  ng-repeat="user in usernamesList">
                                     <td><b>{{user.username}}</b></td>
                                     <td><b>{{user.accountType}}</b></td>
-                                    <td><a ng-click="editUserClicked(user.username)" class="button tiny">{{'EDIT' |translate}}</a> </td>
+                                    <td><a data-reveal-id="myModal" ng-click="editUserClicked(user.username)" class="button tiny">{{'EDIT' |translate}}</a> </td>
                                     <td>
                                           <fieldset class="switch">
                                                 <input id="{{user.username}}" type="checkbox" />
@@ -145,6 +148,93 @@
                 </div>
             </div>
             <div class="large-1 columns"><br></div>
+        </div>
+        <div id="myModal" class="reveal-modal" data-reveal>
+                            <div class="row">
+                                <div class="large-2 columns"><br></div>
+                                <div class="large-8 columns">
+                                    <h3><img src="./views/glyphicons/png/glyphicons_352_nameplate.png">
+                                    {{ 'MODIFY_USER' |translate}}</h3>
+                                </div>
+                                <div class="large-2 columns"><br></div>
+                            </div>
+                            <br>
+                            <form>
+                            <div class="row">
+                              <div class="large-6 columns">
+                                <label>{{'USERNAME_NAME' | translate}}
+                                  <input type="email" placeholder="" ng-model="editingUsername"
+                                  required
+                                  readonly
+                                  ng-maxlength="maxUsernameLength"/>
+                                </label>
+                              </div>
+                              <div class="large-6 columns">
+                                <label>{{'PASSWORD' |translate }}
+                                  <input type="password" placeholder="" ng-model="editingPassword"
+                                  required
+                                  ng-minlength="minPasswordLength"
+                                  ng-maxlength="maxPasswordLength"/>
+                                </label>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="large-6 columns">
+                                <label>{{'NAME' | translate}}
+                                  <input type="text" placeholder="" ng-model="editingName"
+                                  required
+                                  ng-pattern="nameRegexpPattern"
+                                  ng-maxlength="maxNameSurnameLength" />
+                                </label>
+                              </div>
+                              <div class="large-6 columns">
+                                <label>{{'SURNAME' |translate }}
+                                  <input type="text" placeholder="" ng-model="editingSurname"
+                                  required
+                                  ng-pattern="nameRegexpPattern"
+                                 />
+                                </label>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="large-6 columns">
+                                <label>{{'ACCOUNT_TYPE' | translate }}
+                                  <select ng-options="account for account in accountTypes" ng-model="editingSelectedAccountType" ng-init="selectedAccountType = accountTypes[0]">
+                                  </select>
+                                </label>
+                              </div>
+                              <div class="large-6 columns">
+                                <label>{{'AGE' | translate }}
+                                    <input type="number" placeholder="" ng-model="editingAge"
+                                    required
+                                    ng-min="minAge"
+                                    ng-max="maxAge"/>
+                                </label>
+                              </div>
+                            </div>
+                            <div class="row">
+                                <div class="large-2 columns"><br></div>
+                                <div class="large-8 columns" align="center">
+                                    <div id="alertMessageDiv">
+                                        <div data-alert class="alert-box success radius" >
+                                            <a href="#" class="close">&times;</a>
+                                      </div>
+                                    </div>
+                                </div>
+                                <div class="large-2 columns"><br></div>
+                            </div>
+                            <div class="row">
+                                <div class="large-2 columns"><br></div>
+                                <div class="large-8 columns" align="center"><input type="submit" id="submit"  ng-click="editingAddUserClicked()" class="button" value="{{'UPDATE_USER'| translate}}"></div>
+                                <div class="large-2 columns"><br></div>
+                            </div>
+                          </form>
+                            <a class="close-reveal-modal">&#215;</a>
+
+
+
+
+
         </div>
         <script src="./views/js/vendor/jquery.js"></script>
         <script src="./views/js/foundation.min.js"></script>

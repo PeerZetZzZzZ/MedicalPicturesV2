@@ -130,6 +130,12 @@
         /* AdminView Controller */
         MedicalPictures.controller('AdminViewManageUsersController', function ($scope,$http, MedicalPicturesGlobal) {
             $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
+            $scope.accountTypes = MedicalPicturesGlobal.ACCOUNT_TYPES;
+            $scope.editingUsername="";
+            $scope.editingName="";
+            $scope.editingSurname="";
+            $scope.editingAge=0;
+            $scope.editingSelectedAccountType="";
               $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
               success(function(data, status, headers, config) {
                 $scope.loggedUsername = data.username;
@@ -145,12 +151,17 @@
                     console.log(status);
               });
               $scope.editUserClicked = function(usernameToEdit){
-                    $http({
-                        // url:
-                    }).success(function(data,status,headers,config){
-
-                    }).error(function(data,status,headers,config){
-
+                  $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getUserInfo/'+usernameToEdit).
+                    success(function(data, status, headers, config) {
+                        $scope.editingUsername=data.username;
+                        $scope.editingPassword=data.password;
+                        $scope.editingName=data.name;
+                        $scope.editingSurname=data.surname;
+                        $scope.editingAge=data.age;
+                        $scope.editingSelectedAccountType=data.accountType;
+                    }).
+                    error(function(data, status, headers, config) {
+                        console.log(status);
                     });
               };
               $scope.markAllUsersClicked = function(){

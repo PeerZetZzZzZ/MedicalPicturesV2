@@ -41,7 +41,9 @@ MedicalPictures.config(function ($translateProvider) {
         'USER_ADDING_FAILED':"User adding failed! User already exists.",
         'INTERNAL_PROBLEM_OCCURRED':'Internal problem occurred...!',
         'EDIT':'Edit',
-        'CHECK':'Check'
+        'CHECK':'Check',
+        'MODIFY_USER':'Modify existing user',
+        'UPDATE_USER':'Update user',
     });
     $translateProvider.translations('pl', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -84,7 +86,9 @@ MedicalPictures.config(function ($translateProvider) {
         'USER_ADDING_FAILED':"Nie udało się dodać użytkownika. Użytkownik już istnieje!",
         'INTERNAL_PROBLEM_OCCURRED':'Wystąpił problem w systemie!',
         'EDIT':'Edytuj',
-        'CHECK':'Zaznacz'
+        'CHECK':'Zaznacz',
+        'MODIFY_USER':'Edytuj istniejącego użytkownika',
+        'UPDATE_USER':'Aktualizuj użytkownika',
     });
     $translateProvider.preferredLanguage('pl');
 });

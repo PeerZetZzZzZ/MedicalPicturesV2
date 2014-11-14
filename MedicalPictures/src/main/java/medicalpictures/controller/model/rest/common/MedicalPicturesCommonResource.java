@@ -5,6 +5,7 @@
  */
 package medicalpictures.controller.model.rest.common;
 
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -13,6 +14,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
@@ -108,11 +110,32 @@ public class MedicalPicturesCommonResource {
     @GET
     @Path("/getAllUsernames")
     @Produces("application/json")
-    public String getBodyUsernames() {
+    public String getAllUsernames() {
         try {
             securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
             System.out.println(userManager.getAllUsernames().toString());
             return userManager.getAllUsernames().toString();
+        } catch (NoLoggedUserExistsHere ex) {
+            return jsonFactory.notUserLogged();
+        } catch (UserNotPermitted ex) {
+            return jsonFactory.userNotPermitted();
+        }
+    }
+    /**
+     * Returns the details of given username
+     * @param username
+     * @return 
+     */
+    @GET
+    @Path("/getUserInfo/{username}")
+    @Produces("application/json")
+    public String getUserInfo(@PathParam("username") String username) {
+        try {
+            securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+            Map<String, String> userDetailsMap = userManager.getUserDetails(username);
+            String userDetailsJson = jsonFactory.getUserDetailsAsJson(userDetailsMap);
+            System.out.println("Zwracam user " + userDetailsJson);
+            return userDetailsJson;
         } catch (NoLoggedUserExistsHere ex) {
             return jsonFactory.notUserLogged();
         } catch (UserNotPermitted ex) {
