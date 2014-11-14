@@ -162,54 +162,46 @@
                             <form>
                             <div class="row">
                               <div class="large-6 columns">
-                                <label>{{'USERNAME_NAME' | translate}}
+                                <label>{{'USERNAME_NAME' | translate}}</label>
                                   <input type="email" placeholder="" ng-model="editingUsername"
                                   required
                                   readonly
                                   ng-maxlength="maxUsernameLength"/>
-                                </label>
                               </div>
                               <div class="large-6 columns">
-                                <label>{{'PASSWORD' |translate }}
-                                  <input type="password" placeholder="" ng-model="editingPassword"
-                                  required
-                                  ng-minlength="minPasswordLength"
-                                  ng-maxlength="maxPasswordLength"/>
-                                </label>
+                                <label>{{'RESET_PASSWORD' |translate }}</label>
+                                    <div class="switch round large">
+                                          <input id="{{resetPasswordCheckbox}}" type="checkbox">
+                                          <label for="{{resetPasswordCheckbox}}"></label>
+                                    </div>
                               </div>
                             </div>
                             <div class="row">
                               <div class="large-6 columns">
-                                <label>{{'NAME' | translate}}
+                                <label>{{'NAME' | translate}}</label>
                                   <input type="text" placeholder="" ng-model="editingName"
                                   required
-                                  ng-pattern="nameRegexpPattern"
-                                  ng-maxlength="maxNameSurnameLength" />
-                                </label>
+                                  ng-pattern="nameRegexpPattern"/>
                               </div>
                               <div class="large-6 columns">
-                                <label>{{'SURNAME' |translate }}
+                                <label>{{'SURNAME' |translate }}</label>
                                   <input type="text" placeholder="" ng-model="editingSurname"
                                   required
-                                  ng-pattern="nameRegexpPattern"
-                                 />
-                                </label>
+                                  ng-pattern="nameRegexpPattern"/>
                               </div>
                             </div>
                             <div class="row">
                               <div class="large-6 columns">
-                                <label>{{'ACCOUNT_TYPE' | translate }}
+                                <label>{{'ACCOUNT_TYPE' | translate }}</label>
                                   <select ng-options="account for account in accountTypes" ng-model="editingSelectedAccountType" ng-init="selectedAccountType = accountTypes[0]">
                                   </select>
-                                </label>
                               </div>
                               <div class="large-6 columns">
-                                <label>{{'AGE' | translate }}
+                                <label>{{'AGE' | translate }}</label>
                                     <input type="number" placeholder="" ng-model="editingAge"
                                     required
                                     ng-min="minAge"
                                     ng-max="maxAge"/>
-                                </label>
                               </div>
                             </div>
                             <div class="row">
@@ -225,7 +217,7 @@
                             </div>
                             <div class="row">
                                 <div class="large-2 columns"><br></div>
-                                <div class="large-8 columns" align="center"><input type="submit" id="submit"  ng-click="editingAddUserClicked()" class="button" value="{{'UPDATE_USER'| translate}}"></div>
+                                <div class="large-8 columns" align="center"><input type="submit" id="submit"  ng-click="saveEditedUserClicked()" class="button" value="{{'UPDATE_USER'| translate}}"></div>
                                 <div class="large-2 columns"><br></div>
                             </div>
                           </form>

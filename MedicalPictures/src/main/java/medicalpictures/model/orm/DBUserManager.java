@@ -22,6 +22,7 @@ import medicalpictures.model.orm.entity.Doctor;
 import medicalpictures.model.orm.entity.Patient;
 import medicalpictures.model.orm.entity.Technician;
 import medicalpictures.model.orm.entity.UsersDB;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
@@ -45,10 +46,10 @@ public class DBUserManager {
      */
     public void addNewUser(Map<String, String> userDetails) throws AddUserFailed {
         final String username = userDetails.get("username");
-        final String password = userDetails.get("password");
-        final String accountType = userDetails.get("accountType");
         final String name = userDetails.get("name");
         final String surname = userDetails.get("surname");
+        final String password = generatePassword(name, surname);
+        final String accountType = userDetails.get("accountType");
         final String age = userDetails.get("age");
         final String specialization = userDetails.get("specialization");
         addNewUsersDbUser(username, password, accountType);
@@ -116,6 +117,17 @@ public class DBUserManager {
     }
 
     /**
+     * Generates the default password, which is "name - surname" as sha512hex
+     *
+     * @param name Name of the user
+     * @param surname Surname of the user
+     * @return generated password
+     */
+    private String generatePassword(String name, String surname) {
+        return DigestUtils.sha512Hex(name + "-" + surname);
+    }
+
+    /**
      * Returns users details readed from UsersDB table and specified for given
      * accountType.
      *
@@ -163,12 +175,67 @@ public class DBUserManager {
             }
         }
         userDetails.put("username", username);
-        userDetails.put("password", user.getPassword());
         userDetails.put("name", name);
         userDetails.put("surname", surname);
         userDetails.put("age", String.valueOf(age));
         userDetails.put("accountType", userAccountType);
+        logger.info("Returned user details: " + username);
         return userDetails;
+    }
+    /**
+     * Changes the values of specified user
+     * @param userDetails User which will be changed
+     */
+    public void editUser(Map<String, String> userDetails) {
+        String username = userDetails.get("username");
+        String name = userDetails.get("name");
+        String surname = userDetails.get("surname");
+        String accountType = userDetails.get("accountType");
+        Integer age = Integer.valueOf(userDetails.get("age"));
+        String resetPassword = userDetails.get("resetPassword");
+        ormManager.getEntityTransaction().begin();
+        UsersDB userToEdit = ormManager.getEntityManager().find(UsersDB.class, username);
+        switch (accountType) {
+            case "ADMIN": {
+                Admin admin = ormManager.getEntityManager().find(Admin.class, username);
+                admin.setName(name);
+                admin.setSurname(surname);
+                admin.setAge(age);
+                ormManager.getEntityManager().persist(admin);
+                break;
+            }
+            case "DOCTOR": {
+                Doctor doctor = ormManager.getEntityManager().find(Doctor.class, username);
+                doctor.setName(name);
+                doctor.setSurname(surname);
+                doctor.setAge(age);
+                ormManager.getEntityManager().persist(doctor);
+//                String specialization = doctor.getSpecialization();
+//                userDetails.put("specialization", String.valueOf(specialization));//it's special case when we do it
+                break;
+            }
+            case "PATIENT": {
+                Patient patient = ormManager.getEntityManager().find(Patient.class, username);
+                patient.setName(name);
+                patient.setSurname(surname);
+                patient.setAge(age);
+                ormManager.getEntityManager().persist(patient);
+                break;
+            }
+            case "TECHNICIAN": {
+                Technician technician = ormManager.getEntityManager().find(Technician.class, username);
+                technician.setName(name);
+                technician.setSurname(surname);
+                technician.setAge(age);
+                ormManager.getEntityManager().persist(technician);
+                break;
+            }
+        }
+        userToEdit.setAccountType(accountType);
+        if (resetPassword.equals("true")) {
+            userToEdit.setPassword(generatePassword(name, surname));//default password is generated
+        }
+        ormManager.getEntityTransaction().commit();
     }
 
 }

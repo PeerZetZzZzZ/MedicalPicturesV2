@@ -136,6 +136,7 @@
             $scope.editingSurname="";
             $scope.editingAge=0;
             $scope.editingSelectedAccountType="";
+            $scope.resetPasswordCheckbox = false;
               $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
               success(function(data, status, headers, config) {
                 $scope.loggedUsername = data.username;
@@ -151,6 +152,7 @@
                     console.log(status);
               });
               $scope.editUserClicked = function(usernameToEdit){
+                $scope.resetPasswordCheckbox=false;
                   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getUserInfo/'+usernameToEdit).
                     success(function(data, status, headers, config) {
                         $scope.editingUsername=data.username;
@@ -210,6 +212,30 @@
                         console.log(status);
                   });
               };
+              $scope.saveEditedUserClicked = function(){
+                var resetPassword=false;
+                if(document.getElementById($scope.resetPasswordCheckbox).checked === true){
+                    resetPassword=true;
+                }
+                  var userToEdit ={"username":$scope.editingUsername,"accountType":$scope.editingSelectedAccountType,
+                  "name":$scope.editingName,"surname":$scope.editingSurname,"age":$scope.editingAge.toString(),"resetPassword":resetPassword.toString()}
+                  $http({
+                      url:'/MedicalPictures/AdminViewEditUser',
+                      method:'POST',
+                      headers:{'Content-Type':'application/json'},
+                      data:userToEdit
+                  }).success(function (data, status, header, config) {
+                      $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllUsernames').
+                      success(function(data, status, headers, config) {
+                          $scope.usernamesList = data.usernames;
+                      }).
+                      error(function(data, status, headers, config) {
+                            console.log(status);
+                      });
+                  }).error(function(data,status,headers,config){
+                      console.log(status);
+                  });
+              }
         });
         MedicalPictures.controller('AdminViewAddUserController',function($scope, $translate,$location, $http,MedicalPicturesGlobal){
             $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
@@ -229,7 +255,6 @@
               $scope.maxNameSurnameLength= MedicalPicturesGlobal.MAX_NAME_SURNAME_LENGTH;
               $scope.maxUsernameLength = MedicalPicturesGlobal.MAX_USERNAME_LENGTH;
               $scope.username = "a@a.pl";
-              $scope.password = "password";
               $scope.age = 1;
               $scope.name = "name";
               $scope.surname = "surname";
@@ -240,18 +265,16 @@
                   if(!angular.isUndefined($scope.username) && !angular.isUndefined($scope.password) &&
                   !angular.isUndefined($scope.age) && !angular.isUndefined($scope.name) &&
                   !angular.isUndefined($scope.surname) && !angular.isUndefined($scope.selectedAccountType)){
-                   var passwordHash = CryptoJS.SHA512($scope.password).toString();
                    $http({
                           url: '/MedicalPictures/AdminViewAddUser',
                           method: 'POST',
                           headers: {'Content-Type': 'application/json'},
-                          data: {'username': $scope.username, 'password': passwordHash, 'age':$scope.age.toString(),
+                          data: {'username': $scope.username, 'age':$scope.age.toString(),
                           'name':$scope.name, 'surname':$scope.surname,'accountType':$scope.selectedAccountType}
                       }).
                       success(function(data, status, headers, config) {
                           if(data.result==="success"){
                               $scope.username=undefined;
-                              $scope.password=undefined;
                               $scope.age=undefined;
                               $scope.name=undefined;
                               $scope.surname=undefined;

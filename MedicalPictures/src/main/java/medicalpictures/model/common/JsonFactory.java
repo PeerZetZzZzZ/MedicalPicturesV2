@@ -59,7 +59,6 @@ public class JsonFactory {
         Map<String, String> userMap = new HashMap<>();
         try {
             userMap.put("username", jsonUser.getString("username"));
-            userMap.put("password", jsonUser.getString("password"));
             String accountType = jsonUser.getString("accountType");
             if (accountType.equals("DOCTOR")) {
                 userMap.put("specialization", jsonUser.getString("specialization"));
@@ -68,6 +67,10 @@ public class JsonFactory {
             userMap.put("name", jsonUser.getString("name"));
             userMap.put("surname", jsonUser.getString("surname"));
             userMap.put("age", jsonUser.getString("age"));
+            String resetPassword = jsonUser.getString("resetPassword");
+            if (resetPassword != null) {//it's when we want to edit user values
+                userMap.put("resetPassword", resetPassword);
+            }
             return userMap;
         } catch (JSONException ex) {
             throw new JsonParsingException(ex.getMessage());
@@ -123,7 +126,6 @@ public class JsonFactory {
         JSONObject user = new JSONObject();
         user.put("username", userDetials.get("username"));
         user.put("accountType", userDetials.get("accountType"));
-        user.put("password", userDetials.get("password"));
         user.put("name", userDetials.get("name"));
         user.put("surname", userDetials.get("surname"));
         user.put("age", Integer.valueOf(userDetials.get("age")));

@@ -44,6 +44,7 @@ MedicalPictures.config(function ($translateProvider) {
         'CHECK':'Check',
         'MODIFY_USER':'Modify existing user',
         'UPDATE_USER':'Update user',
+        'RESET_PASSWORD':'Reset password'
     });
     $translateProvider.translations('pl', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -89,6 +90,7 @@ MedicalPictures.config(function ($translateProvider) {
         'CHECK':'Zaznacz',
         'MODIFY_USER':'Edytuj istniejącego użytkownika',
         'UPDATE_USER':'Aktualizuj użytkownika',
+        'RESET_PASSWORD':'Resetuj hasło'
     });
     $translateProvider.preferredLanguage('pl');
 });
