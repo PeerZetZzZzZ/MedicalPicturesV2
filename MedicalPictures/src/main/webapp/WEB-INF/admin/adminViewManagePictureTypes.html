@@ -15,7 +15,7 @@
             max-height : 400px;
         }
         .panel table{
-            height: 100%; width: 100%
+             width: 100%;
         }
         .panel {
           overflow: scroll;
@@ -128,12 +128,12 @@
                     <table>
                         <thead>
                             <tr>
-                                <th><h6>{{'PICTURE_TYPES'| translate}}</h6></th>
+                                <th><h4 align="center">{{'PICTURE_TYPES'| translate}}</h4></th>
                             </tr>
                         </thead>
                         <tbody >
                                 <tr  ng-repeat="picture in pictureTypesList">
-                                    <td><b>{{picture.pictureType}}</b></td>
+                                    <td><b><h5 align="center">{{picture}}<h5></b></td>
                                   <hr>
                                 </tr>
                         </tbody>

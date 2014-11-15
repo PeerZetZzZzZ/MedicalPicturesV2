@@ -11,12 +11,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Named;
 import javax.persistence.Query;
 import medicalpictures.controller.views.common.DBNameManager;
-import medicalpictures.model.exception.AddUserFailed;
+import medicalpictures.model.exception.AddNewUserFailed;
+import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.orm.entity.Admin;
 import medicalpictures.model.orm.entity.Doctor;
 import medicalpictures.model.orm.entity.Patient;
@@ -43,20 +46,28 @@ public class DBUserManager {
      * Saves new user in database (UsersDB + specified table (by accountType)).
      *
      * @param userDetails Map with created user details.
-     * @throws medicalpictures.model.exception.AddUserFailed
+     * @throws medicalpictures.model.exception.AddNewUserFailed
      */
-    public void addNewUser(Map<String, String> userDetails) throws AddUserFailed {
-        addUser(userDetails, true);
+    public void addNewUser(Map<String, String> userDetails) throws AddNewUserFailed {
+        try {
+            addUser(userDetails, true);
+        } catch (AddToDbFailed ex) {
+            throw new AddNewUserFailed(userDetails.get("username")+": adding user failed!");
+        }
     }
 
     /**
      * Saves user only in specified table ( by accountType)
      *
      * @param userDetails
-     * @throws AddUserFailed
+     * @throws AddToDbFailed
      */
-    private void addNewUserInSpecifiedAccountTable(Map<String, String> userDetails) throws AddUserFailed {
-        addUser(userDetails, false);//dont create in UsersDB too
+    private void addNewUserInSpecifiedAccountTable(Map<String, String> userDetails) throws AddNewUserFailed {
+         try {
+            addUser(userDetails, false);
+        } catch (AddToDbFailed ex) {
+            throw new AddNewUserFailed(userDetails.get("username")+": adding user failed!");
+        }
     }
 
     /**
@@ -66,7 +77,7 @@ public class DBUserManager {
      * @param password password
      * @param accountType accountType
      */
-    private void addNewUserInUserDB(final String username, final String password, final String accountType) throws AddUserFailed {
+    private void addNewUserInUserDB(final String username, final String password, final String accountType) throws AddToDbFailed {
         UsersDB user = new UsersDB(username, password, accountType);
         ormManager.persistObject(user);
     }
@@ -77,9 +88,9 @@ public class DBUserManager {
      * @param userDetails User details
      * @param inUsersDBToo If == true, creates user in UsersDB too, if false =
      * creates user only in specified table (by accountType)
-     * @throws AddUserFailed
+     * @throws AddToDbFailed
      */
-    private void addUser(Map<String, String> userDetails, boolean inUsersDBToo) throws AddUserFailed {
+    private void addUser(Map<String, String> userDetails, boolean inUsersDBToo) throws AddToDbFailed {
         final String username = userDetails.get("username");
         final String name = userDetails.get("name");
         final String surname = userDetails.get("surname");
@@ -277,7 +288,7 @@ public class DBUserManager {
      *
      * @param userDetails User which will be changed
      */
-    public void editUser(Map<String, String> userDetails) throws AddUserFailed {
+    public void editUser(Map<String, String> userDetails) throws AddToDbFailed {
         String username = userDetails.get("username");
         String name = userDetails.get("name");
         String surname = userDetails.get("surname");

@@ -6,10 +6,15 @@
 package medicalpictures.model.orm;
 
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import medicalpictures.controller.views.common.DBNameManager;
+import medicalpictures.model.exception.AddNewUserFailed;
+import medicalpictures.model.exception.AddPictureTypeFailed;
+import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.orm.entity.PictureType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,5 +47,17 @@ public class DBPictureTypeManager {
         }
         pictureTypesJson.put("pictureTypes", pictureTypesArray);
         return pictureTypesJson;
+    }
+
+    public void addPictureType(String type) throws AddPictureTypeFailed {
+        PictureType pictureType = new PictureType();
+        pictureType.setPicturetype(type);
+        try {
+            ormManager.persistObject(pictureType);
+            logger.info(type+": Picture type successfully added!");
+        } catch (AddToDbFailed ex) {
+            logger.error(ex.getMessage());
+            throw new AddPictureTypeFailed(type + ": Adding picture type failed!");
+        }
     }
 }

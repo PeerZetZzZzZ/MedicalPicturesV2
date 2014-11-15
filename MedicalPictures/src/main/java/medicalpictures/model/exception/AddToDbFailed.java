@@ -6,12 +6,12 @@
 package medicalpictures.model.exception;
 
 /**
- *
+ * Throwed when it's error while adding sth to database.
  * @author PeerZet
  */
-public class AddUserFailed extends MedicalPicturesException {
+public class AddToDbFailed extends MedicalPicturesException {
 
-    public AddUserFailed(String message) {
+    public AddToDbFailed(String message) {
         super(message);
     }
 

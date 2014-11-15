@@ -24,8 +24,8 @@ public class PictureType implements Serializable {
     @Column(length = 100, unique = true)
     private String pictureType;
 
-    public void setPicturetype(String picturetype) {
-        this.pictureType = picturetype;
+    public void setPicturetype(String pictureType) {
+        this.pictureType = pictureType;
     }
 
     public String getPicturetype() {
@@ -42,7 +42,7 @@ public class PictureType implements Serializable {
     }
 
     public PictureType() {
-
+        this.id = UUID.randomUUID().toString();
     }
 
     @Override

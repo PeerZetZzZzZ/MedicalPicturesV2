@@ -13,13 +13,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jdk.nashorn.internal.parser.JSONParser;
 import medicalpictures.controller.views.admin.AdminViewAddUser;
+import medicalpictures.model.admin.AdminOperationResponse;
+import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.enums.AccountType;
+import medicalpictures.model.exception.AddPictureTypeFailed;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;
+import medicalpictures.model.orm.DBPictureTypeManager;
 import medicalpictures.model.security.UserSecurityManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONObject;
 
 /**
  *
@@ -29,6 +35,15 @@ public class AdminViewManagePictureTypes extends HttpServlet {
 
     @EJB
     private UserSecurityManager securityManager;
+
+    @EJB
+    private DBPictureTypeManager pictureTypeManager;
+
+    @EJB
+    private JsonFactory jsonFactory;
+
+    @EJB
+    private AdminOperationResponse adminResponse;
 
     private Log log = LogFactory.getLog(AdminViewManagePictureTypes.class);
 
@@ -48,6 +63,22 @@ public class AdminViewManagePictureTypes extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String pictureTypeString = "";
+        try {
+            securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+            JSONObject pictureType = jsonFactory.decryptRequest(request);
+            pictureTypeString = jsonFactory.getPictureType(pictureType);
+            pictureTypeManager.addPictureType(pictureTypeString);
+            response.getWriter().write(adminResponse.pictureTypeAddedSuccessfully(pictureTypeString));
+        } catch (UserNotPermitted ex) {
+            log.error("POST " + AdminViewManagePictureTypes.class.toString() + ": No permission to see the content!");
+        } catch (NoLoggedUserExistsHere ex) {
+            log.error("POST " + AdminViewManagePictureTypes.class.toString() + ": No logged user exists!");
+        } catch (AddPictureTypeFailed ex) {
+            log.error("POST " + AdminViewManagePictureTypes.class.toString() + "-"
+                    + pictureTypeString + ": Picture type creation fail!");
+            response.getWriter().write(adminResponse.pictureTypeAddedFailed(pictureTypeString));
+        }
     }
 
 }

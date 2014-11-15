@@ -51,6 +51,7 @@ public class JsonFactory {
      *
      * @param jsonUser JSON document with user details
      * @return Map with user values
+     * @throws medicalpictures.model.exception.JsonParsingException
      * @throws JsonException When json is invalid.
      */
     public Map<String, String> readUserFromJson(JSONObject jsonUser) throws JsonParsingException {
@@ -131,6 +132,15 @@ public class JsonFactory {
             user.put("specialization", userDetials.get("specialization"));
         }
         return user.toString();
+    }
+
+    /**
+     * Returns picture type taken from proper json.
+     * @param pictureType JSON input
+     * @return  picture type
+     */
+    public String getPictureType(JSONObject pictureType) {
+        return pictureType.getString("pictureType");
     }
 
 }

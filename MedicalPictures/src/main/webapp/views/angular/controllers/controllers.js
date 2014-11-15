@@ -333,13 +333,14 @@
             $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
             $scope.pictureTypesList =[];
             $scope.newPictureType ="";
+              document.getElementById("alertMessageDiv").style.visibility="hidden";
             $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
-              success(function(data, status, headers, config) {
-                $scope.loggedUsername = data.username;
-              }).
-              error(function(data, status, headers, config) {
-                  console.log(status);
-              });
+                success(function(data, status, headers, config) {
+                  $scope.loggedUsername = data.username;
+                }).
+                error(function(data, status, headers, config) {
+                    console.log(status);
+                });
             $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllPictureTypes').
               success(function(data, status, headers, config) {
                 $scope.pictureTypesList = data.pictureTypes;
@@ -347,9 +348,37 @@
               error(function(data, status, headers, config) {
                   console.log(status);
               });
-              document.getElementById("alertMessageDiv").style.visibility="hidden";
               $scope.addBodyPartClicked = function(){
-                  $scope.appName=$scope.newPictureType;
+                  document.getElementById("alertMessageDiv").style.visibility="hidden";
+                  var newPictureType = {'pictureType':$scope.newPictureType};
+                  $http({
+                      url:'/MedicalPictures/AdminViewManagePictureTypes',
+                      method:'POST',
+                      headers: {'Content-Type': 'application/json'},
+                      data: newPictureType
+                  }).success(function(data,status,headers,config){
+                      if(data.result==="success"){
+                        $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllPictureTypes').
+                          success(function(data, status, headers, config) {
+                            $scope.pictureTypesList = data.pictureTypes;
+                          }).
+                          error(function(data, status, headers, config) {
+                              console.log(status);
+                          });
+                          $translate('PICTURE_TYPE_ADDED_SUCCESSFULLY').then(function (translation) {
+                              showAlertMessageSuccess(translation ,data.pictureType);
+                          });
+                      } else {
+                          $translate('PICTURE_TYPE_ADDING_FAILED').then(function (translation) {
+                              showAlertMessageSuccess(translation ,data.pictureType);
+                          });
+                      }
+                  }).error(function(data,status,headers,config){
+                      console.log(status);
+                      $translate('INTERNAL_PROBLEM_OCCURRED').then(function (translation) {
+                          showAlertMessageSuccess(translation ,"");
+                      });
+                  });
               };
 
         });

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import medicalpictures.model.common.JsonFactory;
-import medicalpictures.model.exception.AddUserFailed;
+import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.exception.JsonParsingException;
 import medicalpictures.model.orm.DBUserManager;
 import medicalpictures.model.orm.OrmManager;
@@ -53,13 +53,12 @@ public class AdminViewEditUser extends HttpServlet {
 
         try {
             JSONObject userToEdit = jsonFactory.decryptRequest(request);
-            System.out.println("Usera dane do zmiany:"+userToEdit);
             Map<String, String> userDetails = jsonFactory.readUserFromJson(userToEdit);
             userManager.editUser(userDetails);
             logger.info("User: " + userDetails.get("username") + " successfully edited!");
         } catch (JsonParsingException ex) {
             logger.error(ex);
-        } catch (AddUserFailed ex) {
+        } catch (AddToDbFailed ex) {
             Logger.getLogger(AdminViewEditUser.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

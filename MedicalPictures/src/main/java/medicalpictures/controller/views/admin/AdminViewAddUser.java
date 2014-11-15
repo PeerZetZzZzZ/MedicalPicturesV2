@@ -17,7 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import medicalpictures.model.admin.AdminOperationResponse;
 import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.enums.AccountType;
-import medicalpictures.model.exception.AddUserFailed;
+import medicalpictures.model.exception.AddNewUserFailed;
+import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.exception.JsonParsingException;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;
@@ -71,7 +72,7 @@ public class AdminViewAddUser extends HttpServlet {
                 dbManager.addNewUser(userDetails);
                 response.getWriter().write(adminResponse.userAddedSuccessfully(username));
                 log.info("Added new user: " + username + ".AccountType: " + userDetails.get("accountType"));
-            } catch (AddUserFailed ex) {
+            } catch (AddNewUserFailed ex) {
                 response.getWriter().write(adminResponse.userAddedFailed(username));
                 log.error(username + "-" + ex);
             } catch (JsonParsingException ex) {

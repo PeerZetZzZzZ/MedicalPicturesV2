@@ -49,7 +49,9 @@ MedicalPictures.config(function ($translateProvider) {
         'PICTURE_TYPES':'Picture types',
         'ADD_BODY_PART':'Add new body part',
         'ADD_NEW_PICTURE_TYPE':'Add new picture type',
-        'ADD':'Add'
+        'ADD':'Add',
+        'PICTURE_TYPE_ADDED_SUCCESSFULLY':'Picture type has been added successfully!',
+        'PICTURE_TYPE_ADDING_FAILED':'Picture type adding failed...'
     });
     $translateProvider.translations('pl', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -100,7 +102,9 @@ MedicalPictures.config(function ($translateProvider) {
         'PICTURE_TYPES':'Typy zdjęć',
         'ADD_BODY_PART':'Dodaj część ciała',
         'ADD_NEW_PICTURE_TYPE':'Dodaj nowy typ zdjęć',
-        'ADD':'Dodaj'
+        'ADD':'Dodaj',
+        'PICTURE_TYPE_ADDED_SUCCESSFULLY':'Typ zdjęcia został dodany!',
+        'PICTURE_TYPE_ADDING_FAILED':'Typ zdjęcia nie został dodany...'
     });
     $translateProvider.preferredLanguage('pl');
 });

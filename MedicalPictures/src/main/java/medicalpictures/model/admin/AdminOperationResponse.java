@@ -39,8 +39,31 @@ public class AdminOperationResponse {
         JSONObject response = new JSONObject();
         response.put("username", username);
         response.put("result", "failed");
-        System.out.println("response: " + response.toString());
         return response.toString();
     }
 
+    /**
+     * Creates the response to the client that picture type has been added.
+     *
+     * @param pictureType picture type which was added or tried to be added
+     * @return response as String
+     */
+    public String pictureTypeAddedSuccessfully(String pictureType) {
+        JSONObject response = new JSONObject();
+        response.put("pictureType", pictureType);
+        response.put("result", "success");
+        return response.toString();
+    }
+    /**
+     * Creates the response  that picture type hasn't been created successfully.
+     *
+     * @param pictureType picture type which was added or tried to be added
+     * @return response as String
+     */
+    public String pictureTypeAddedFailed(String pictureType) {
+        JSONObject response = new JSONObject();
+        response.put("pictureType", pictureType);
+        response.put("result", "failed");
+        return response.toString();
+    }
 }

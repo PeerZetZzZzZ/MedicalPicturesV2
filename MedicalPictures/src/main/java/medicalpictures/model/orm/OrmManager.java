@@ -13,7 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import medicalpictures.model.exception.AddUserFailed;
+import medicalpictures.model.exception.AddToDbFailed;
 
 /**
  * Responisble for creating objects in database.
@@ -42,15 +42,15 @@ public class OrmManager {
         return em.getTransaction();
     }
 
-    public void persistObject(Object object) throws AddUserFailed {
-        try {
+    public void persistObject(Object object) throws AddToDbFailed {
+//        try {
             tx = em.getTransaction();
             tx.begin();
             em.persist(object);
             tx.commit();
-        } catch (Exception ex) {
-            throw new AddUserFailed("User add failed");
-        }
+//        } catch (Exception ex) {
+//            throw new AddToDbFailed(ex.getMessage());
+//        }
     }
 
     @PreDestroy
