@@ -7,12 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author Przemysław Thomann
  */
 @Entity
+@Table(name="PictureDescription")
 public class PictureDescription implements Serializable {
 
     private static final long serialVersionUID = 1L;

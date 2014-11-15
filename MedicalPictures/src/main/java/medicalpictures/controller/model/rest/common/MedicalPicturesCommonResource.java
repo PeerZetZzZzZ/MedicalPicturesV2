@@ -20,8 +20,11 @@ import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;
 import medicalpictures.model.orm.DBBodyPartManager;
+import medicalpictures.model.orm.DBPictureTypeManager;
 import medicalpictures.model.orm.DBUserManager;
 import medicalpictures.model.security.UserSecurityManager;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 
 /**
@@ -41,12 +44,16 @@ public class MedicalPicturesCommonResource {
 
     @EJB
     private DBBodyPartManager bodyPartManager;
+    @EJB
+    private DBPictureTypeManager pictureTypeManager;
 
     @EJB
     private JsonFactory jsonFactory;
 
     @EJB
     private DBUserManager userManager;
+
+    private Log logger = LogFactory.getLog(MedicalPicturesCommonResource.class);
 
     /**
      * Creates a new instance of MedicalPicturesCommonResource
@@ -66,9 +73,10 @@ public class MedicalPicturesCommonResource {
     public String getLoggedUser() {
         try {
             if (securityManager.checkUserPermissionToAnyContent()) {
-                JSONObject user = new JSONObject();
-                user.put("username", securityManager.getLoggedUsername());
-                return user.toString();
+                String username = securityManager.getLoggedUsername().toString();
+                logger.info("Returned logged user: " + username);
+                return username;
+
             } else {
                 return jsonFactory.userNotPermitted();
             }
@@ -91,9 +99,10 @@ public class MedicalPicturesCommonResource {
     public String getBodyParts() {
         try {
             securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
-            JSONObject bodyParts = new JSONObject();
-            bodyParts.put("bodyParts", bodyPartManager.getBodyParts());
-            return bodyParts.toString();
+            String allBodyParts = bodyPartManager.getAllBodyParts().toString();
+            logger.info("Returned all body parts: " + allBodyParts);
+            return allBodyParts;
+
         } catch (NoLoggedUserExistsHere ex) {
             return jsonFactory.notUserLogged();
         } catch (UserNotPermitted ex) {
@@ -113,18 +122,21 @@ public class MedicalPicturesCommonResource {
     public String getAllUsernames() {
         try {
             securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
-            System.out.println(userManager.getAllUsernames().toString());
-            return userManager.getAllUsernames().toString();
+            String allUsernames = userManager.getAllUsernames().toString();
+            logger.info("Return all usernames: " + allUsernames);
+            return allUsernames;
         } catch (NoLoggedUserExistsHere ex) {
             return jsonFactory.notUserLogged();
         } catch (UserNotPermitted ex) {
             return jsonFactory.userNotPermitted();
         }
     }
+
     /**
      * Returns the details of given username
+     *
      * @param username
-     * @return 
+     * @return
      */
     @GET
     @Path("/getUserInfo/{username}")
@@ -134,8 +146,30 @@ public class MedicalPicturesCommonResource {
             securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
             Map<String, String> userDetailsMap = userManager.getUserDetails(username);
             String userDetailsJson = jsonFactory.getUserDetailsAsJson(userDetailsMap);
-            System.out.println("Zwracam user " + userDetailsJson);
+            logger.info("Return user info: " + userDetailsJson);
             return userDetailsJson;
+        } catch (NoLoggedUserExistsHere ex) {
+            return jsonFactory.notUserLogged();
+        } catch (UserNotPermitted ex) {
+            return jsonFactory.userNotPermitted();
+        }
+    }
+
+    /**
+     * Retrieves representation of an instance of
+     * medicalpictures.controller.model.rest.common.MedicalPicturesCommonResource
+     *
+     * @return an instance of java.lang.String
+     */
+    @GET
+    @Path("/getAllPictureTypes")
+    @Produces("application/json")
+    public String getAllPictureTypes() {
+        try {
+            securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+            String pictureTypes = pictureTypeManager.getAllPictureTypes().toString();
+            logger.info("Returned picture types: " + pictureTypes);
+            return pictureTypes;
         } catch (NoLoggedUserExistsHere ex) {
             return jsonFactory.notUserLogged();
         } catch (UserNotPermitted ex) {

@@ -13,6 +13,9 @@ import javax.ejb.Stateless;
 import javax.persistence.Query;
 import medicalpictures.controller.views.common.DBNameManager;
 import medicalpictures.model.orm.entity.BodyPart;
+import medicalpictures.model.orm.entity.PictureType;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Responsible for operations on BodyPart table.
@@ -30,13 +33,20 @@ public class DBBodyPartManager {
      *
      * @return BodyPart list.
      */
-    public List<String> getBodyParts() {
+    /**
+     * Returns all picture types taken from DB.
+     *
+     * @return All body parts as JSONObject
+     */
+    public JSONObject getAllBodyParts() {
         Query query = ormManager.getEntityManager().createQuery("SELECT c FROM " + DBNameManager.getBodyPartTable() + " c", BodyPart.class);
         Collection<BodyPart> bodyParts = query.getResultList();
-        List<String> bodyPartsList = new ArrayList<String>();
+        JSONObject bodyPartsJson = new JSONObject();
+        JSONArray bodyPartsArray = new JSONArray();
         for (BodyPart bodyPart : bodyParts) {
-            bodyPartsList.add(bodyPart.getBodypart());
+            bodyPartsArray.put(bodyPart.getBodypart());
         }
-        return bodyPartsList;
+        bodyPartsJson.put("bodyParts", bodyPartsArray);
+        return bodyPartsJson;
     }
 }

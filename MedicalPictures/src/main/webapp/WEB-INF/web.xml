@@ -27,6 +27,10 @@
         <servlet-name>AdminViewDeleteUsers</servlet-name>
         <servlet-class>medicalpictures.controller.views.admin.AdminViewDeleteUsers</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AdminViewManagePictureTypes</servlet-name>
+        <servlet-class>medicalpictures.controller.views.admin.AdminViewManagePictureTypes</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginView</servlet-name>
         <url-pattern>/LoginView</url-pattern>
@@ -50,6 +54,10 @@
     <servlet-mapping>
         <servlet-name>AdminViewDeleteUsers</servlet-name>
         <url-pattern>/AdminViewDeleteUsers</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminViewManagePictureTypes</servlet-name>
+        <url-pattern>/AdminViewManagePictureTypes</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

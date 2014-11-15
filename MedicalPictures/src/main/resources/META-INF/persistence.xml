@@ -11,9 +11,9 @@
     <class>medicalpictures.model.orm.entity.Patient</class>
     <class>medicalpictures.model.orm.entity.Picture</class>
     <class>medicalpictures.model.orm.entity.PictureDescription</class>
-    <class>medicalpictures.model.orm.entity.PictureType</class>
     <class>medicalpictures.model.orm.entity.Technician</class>
     <class>medicalpictures.model.orm.entity.UsersDB</class>
+    <class>medicalpictures.model.orm.entity.PictureType</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation-action" value="create"/>

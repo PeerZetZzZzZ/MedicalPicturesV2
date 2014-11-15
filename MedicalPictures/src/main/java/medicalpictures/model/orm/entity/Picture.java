@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -14,6 +15,7 @@ import javax.persistence.TemporalType;
  * @author Przemysław Thomann
  */
 @Entity
+@Table(name="Picture")
 public class Picture implements Serializable {
 
     private static final long serialVersionUID = 1L;

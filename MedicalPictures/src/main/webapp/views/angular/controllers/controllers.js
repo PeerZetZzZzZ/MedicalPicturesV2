@@ -325,6 +325,22 @@
                   }
               };
         });
+        MedicalPictures.controller('AdminViewManagePictureTypesController',function($scope, $translate,$location, $http,MedicalPicturesGlobal){
+            $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
+            $scope.pictureTypesList =[];
+            $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllPictureTypes').
+              success(function(data, status, headers, config) {
+                $scope.pictureTypesList = data.pictureTypes;
+              }).
+              error(function(data, status, headers, config) {
+                  console.log(status);
+              });
+              document.getElementById("alertMessageDiv").style.visibility="hidden";
+              $scope.addBodyPartClicked = function(){
+
+              };
+
+        });
         /* UserSettings Controller */
         MedicalPictures.controller('UserSettingsController', function ($scope, MedicalPicturesGlobal) {
         $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;

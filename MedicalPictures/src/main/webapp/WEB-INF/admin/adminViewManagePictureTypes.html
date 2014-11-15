@@ -48,7 +48,7 @@
         }
     </style>
     </head>
-    <body ng-controller="AdminViewManageUsersController">
+    <body ng-controller="AdminViewManagePictureTypesController">
         <br>
         <nav class="top-bar" data-topbar role="navigation">
             <ul class="title-area">
@@ -86,7 +86,7 @@
                         <img src="./views/glyphicons/png/glyphicons_012_heart.png" >
                         <label>{{'MANAGE_BODY_PARTS'| translate}}</label>
                     </a>
-                    <a class="item" href="/MedicalPictures/AdminViewManagePictureTypes">
+                    <a class="item" href="">
                         <img src="./views/glyphicons/png/glyphicons_047_camera_small.png" >
                         <label>{{'MANAGE_PICTURE_TYPES'| translate}}</label>
                     </a>
@@ -98,23 +98,13 @@
         <div class="row">
             <div class="large-2 columns"><br></div>
             <div class="large-8 columns">
-                <div class="icon-bar four-up">
-                    <a class="item" href="/MedicalPictures/AdminViewAddUser">
-                        <img src="./views/glyphicons/png/glyphicons_006_user_add.png" >
-                        <label>{{'ADD_NEW_USER'| translate}}</label>
-                    </a>
-                    <a class="item"  href="" ng-click="deleteUsersClicked()">
-                        <img src="./views/glyphicons/png/glyphicons_007_user_remove.png" >
-                        <label>{{'DELETE_USER'| translate}}</label>
-                    </a>
-                    <a class="item" href="" ng-click="markAllUsersClicked()">
-                        <img src="./views/glyphicons/png/glyphicons_152_check.png" >
-                        <label>{{'MARK_ALL'| translate}}</label>
-                    </a>
-                    <a class="item" href="" ng-click="unmarkAllUsersClicked()">
-                        <img src="./views/glyphicons/png/glyphicons_153_unchecked.png" >
-                        <label>{{'UNMARK_ALL'| translate}}</label>
-                    </a>
+                 <div class="large-6 columns">
+                    <label>{{'ADD_BODY_PART'}}
+                      <input type="text" placeholder="large-6.columns" />
+                    </label>
+                </div>
+                <div class="large-2 columns" align="center">
+                      <input type="submit" id="submit"  ng-click="addBodyPartClicked()" class="button" value="{{'ADD'| translate}}">
                 </div>
             </div>
             <div class="large-2 columns"><br></div>
@@ -138,23 +128,12 @@
                     <table>
                         <thead>
                             <tr>
-                                <th><h6>{{'USERNAME'| translate}}</h6></th>
-                                <th><h6>{{'ACCOUNT_TYPE'| translate}}</h6></th>
-                                <th><h6>{{'EDIT' | translate}}</h6></th>
-                                <th><h6>{{'CHECK' | translate}}</h6></th>
+                                <th><h6>{{'PICTURE_TYPES'| translate}}</h6></th>
                             </tr>
                         </thead>
                         <tbody >
-                                <tr  ng-repeat="user in usernamesList">
-                                    <td><b>{{user.username}}</b></td>
-                                    <td><b>{{user.accountType}}</b></td>
-                                    <td><a data-reveal-id="myModal" ng-click="editUserClicked(user.username)" class="button tiny">{{'EDIT' |translate}}</a> </td>
-                                    <td>
-                                          <fieldset class="switch">
-                                                <input id="{{user.username}}" type="checkbox" />
-                                                <label for="{{user.username}}"></label>
-                                          </fieldset>
-                                  </td>
+                                <tr  ng-repeat="picture in pictureTypesList">
+                                    <td><b>{{picture.pictureType}}</b></td>
                                   <hr>
                                 </tr>
                         </tbody>
@@ -221,8 +200,7 @@
                             <div class="row">
                                 <div class="large-2 columns"><br></div>
                                 <div class="large-8 columns" align="center">
-                                      <input type="submit" id="submit"  ng-click="saveEditedUserClicked()" class="button" value="{{'UPDATE_USER'| translate}}">
-                                </div>
+                                  <input type="submit" id="submit"  ng-click="saveEditedUserClicked()" class="button" value="{{'UPDATE_USER'| translate}}"></div>
                                 <div class="large-2 columns"><br></div>
                             </div>
                           </form>

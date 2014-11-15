@@ -45,7 +45,10 @@ MedicalPictures.config(function ($translateProvider) {
         'MODIFY_USER':'Modify existing user',
         'UPDATE_USER':'Update user',
         'RESET_PASSWORD':'Reset password',
-        'USER_EDITED_SUCCESSFULLY':'User has been updated successfully.'
+        'USER_EDITED_SUCCESSFULLY':'User has been updated successfully.',
+        'PICTURE_TYPES':'Picture types',
+        'ADD_BODY_PART':'Add new body part',
+        'ADD':'Add'
     });
     $translateProvider.translations('pl', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -92,7 +95,10 @@ MedicalPictures.config(function ($translateProvider) {
         'MODIFY_USER':'Edytuj istniejącego użytkownika',
         'UPDATE_USER':'Aktualizuj użytkownika',
         'RESET_PASSWORD':'Resetuj hasło',
-        'USER_EDITED_SUCCESSFULLY':'Dane użytkownika zostały zaktualizowane.'
+        'USER_EDITED_SUCCESSFULLY':'Dane użytkownika zostały zaktualizowane.',
+        'PICTURE_TYPES':'Typy zdjęć',
+        'ADD_BODY_PART':'Dodaj część ciała',
+        'ADD':'Dodaj'
     });
     $translateProvider.preferredLanguage('pl');
 });

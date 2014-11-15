@@ -22,6 +22,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.InvalidSessionException;
+import org.json.JSONObject;
 
 /**
  * The class is responsible for validating user and logging him to application.
@@ -143,10 +144,14 @@ public class UserSecurityManager {
      * @return username
      * @throws medicalpictures.model.exception.NoLoggedUserExistsHere
      */
-    public String getLoggedUsername() throws NoLoggedUserExistsHere {
+    public JSONObject getLoggedUsername() throws NoLoggedUserExistsHere {
         try {
             Subject currentUser = SecurityUtils.getSubject();
-            return currentUser.getSession().getAttribute("username").toString();
+            String username = currentUser.getSession().getAttribute("username").toString();
+            JSONObject user = new JSONObject();
+            user.put("username", username);
+            return user;
+
         } catch (IllegalStateException ex) {
             throw new NoLoggedUserExistsHere("No logged user here!");
         }

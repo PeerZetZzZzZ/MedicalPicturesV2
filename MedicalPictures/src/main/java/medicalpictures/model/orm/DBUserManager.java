@@ -20,11 +20,13 @@ import medicalpictures.model.exception.AddUserFailed;
 import medicalpictures.model.orm.entity.Admin;
 import medicalpictures.model.orm.entity.Doctor;
 import medicalpictures.model.orm.entity.Patient;
+import medicalpictures.model.orm.entity.PictureType;
 import medicalpictures.model.orm.entity.Technician;
 import medicalpictures.model.orm.entity.UsersDB;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**

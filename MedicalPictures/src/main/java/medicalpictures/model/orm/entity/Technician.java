@@ -4,12 +4,14 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author Przemysław Thomann
  */
 @Entity
+@Table(name="Technician")
 public class Technician implements Serializable {
 
     @Id

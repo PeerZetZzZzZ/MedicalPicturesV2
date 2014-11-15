@@ -6,12 +6,10 @@
 package medicalpictures.model.common;
 
 import java.io.BufferedReader;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.ejb.Stateless;
-import javax.json.JsonArray;
+import javax.json.JsonException;
 import javax.servlet.http.HttpServletRequest;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.JsonParsingException;
