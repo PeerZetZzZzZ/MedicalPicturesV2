@@ -347,7 +347,7 @@
               error(function(data, status, headers, config) {
                   console.log(status);
               });
-              $scope.addBodyPartClicked = function(){
+              $scope.addPictureTypeClicked = function(){
                   document.getElementById("alertMessageDiv").style.visibility="hidden";
                   var newPictureType = {'pictureType':$scope.newPictureType};
                   $http({
@@ -369,13 +369,66 @@
                           });
                       } else {
                           $translate('PICTURE_TYPE_ADDING_FAILED').then(function (translation) {
-                              showAlertMessageSuccess(translation ,data.pictureType);
+                              showAlertMessageError(translation ,data.pictureType);
                           });
                       }
                   }).error(function(data,status,headers,config){
                       console.log(status);
                       $translate('INTERNAL_PROBLEM_OCCURRED').then(function (translation) {
-                          showAlertMessageSuccess(translation ,"");
+                          showAlertMessageError(translation ,"");
+                      });
+                  });
+              };
+
+        });
+        MedicalPictures.controller('AdminViewManageBodyPartsController',function($scope, $translate,$location, $http,MedicalPicturesGlobal){
+            $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
+            $scope.bodyPartsList =[];
+            $scope.newBodyPart ="";
+              document.getElementById("alertMessageDiv").style.visibility="hidden";
+            $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
+                success(function(data, status, headers, config) {
+                  $scope.loggedUsername = data.username;
+                }).
+                error(function(data, status, headers, config) {
+                    console.log(status);
+                });
+            $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllBodyParts').
+              success(function(data, status, headers, config) {
+                $scope.bodyPartsList = data.bodyParts;
+              }).
+              error(function(data, status, headers, config) {
+                  console.log(status);
+              });
+              $scope.addBodyPartClicked = function(){
+                  document.getElementById("alertMessageDiv").style.visibility="hidden";
+                  var newBodyPart = {'bodyPart':$scope.newBodyPart};
+                  $http({
+                      url:'/MedicalPictures/AdminViewManageBodyParts',
+                      method:'POST',
+                      headers: {'Content-Type': 'application/json'},
+                      data: newBodyPart
+                  }).success(function(data,status,headers,config){
+                      if(data.result==="success"){
+                        $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllBodyParts').
+                          success(function(data, status, headers, config) {
+                            $scope.bodyPartsList = data.bodyParts;
+                          }).
+                          error(function(data, status, headers, config) {
+                              console.log(status);
+                          });
+                          $translate('BODY_PART_ADDED_SUCCESSFULLY').then(function (translation) {
+                              showAlertMessageSuccess(translation ,data.bodyPart);
+                          });
+                      } else {
+                          $translate('BODY_PART_ADDING_FAILED').then(function (translation) {
+                              showAlertMessageError(translation ,data.bodyPart);
+                          });
+                      }
+                  }).error(function(data,status,headers,config){
+                      console.log(status);
+                      $translate('INTERNAL_PROBLEM_OCCURRED').then(function (translation) {
+                          showAlertMessageError(translation ,"");
                       });
                   });
               };

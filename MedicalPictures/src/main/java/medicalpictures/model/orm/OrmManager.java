@@ -43,14 +43,14 @@ public class OrmManager {
     }
 
     public void persistObject(Object object) throws AddToDbFailed {
-//        try {
+        try {
             tx = em.getTransaction();
             tx.begin();
             em.persist(object);
             tx.commit();
-//        } catch (Exception ex) {
-//            throw new AddToDbFailed(ex.getMessage());
-//        }
+        } catch (Exception ex) {
+            throw new AddToDbFailed(ex.getMessage());
+        }
     }
 
     @PreDestroy

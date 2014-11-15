@@ -143,4 +143,8 @@ public class JsonFactory {
         return pictureType.getString("pictureType");
     }
 
+    public String getBodyPart(JSONObject bodyPart) {
+        return bodyPart.getString("bodyPart");
+    }
+
 }

@@ -48,7 +48,7 @@
         }
     </style>
     </head>
-    <body ng-controller="AdminViewManagePictureTypesController">
+    <body ng-controller="AdminViewManageBodyPartsController">
         <br>
         <nav class="top-bar" data-topbar role="navigation">
             <ul class="title-area">
@@ -100,7 +100,7 @@
             <div class="large-6 columns">
               <div class="row collapse postfix-round">
                   <div class="small-9 columns">
-                    <input type="text" ng-model="newPictureType" placeholder="{{'ADD_NEW_PICTURE_TYPE' | translate}}">
+                    <input type="text" ng-model="newBodyPart" placeholder="{{'ADD_NEW_BODY_PART' | translate}}">
                   </div>
                   <div class="small-3 columns">
                     <a  ng-click="addBodyPartClicked()" class="button postfix">{{'ADD'|translate}}</a>
@@ -128,12 +128,12 @@
                     <table>
                         <thead>
                             <tr>
-                                <th><h4 align="center">{{'PICTURE_TYPES'| translate}}</h4></th>
+                                <th><h4 align="center">{{'BODY_PARTS'| translate}}</h4></th>
                             </tr>
                         </thead>
                         <tbody >
-                                <tr  ng-repeat="picture in pictureTypesList">
-                                    <td><b><h5 align="center">{{picture}}<h5></b></td>
+                                <tr  ng-repeat="bodyPart in bodyPartsList">
+                                    <td><b><h5 align="center">{{bodyPart}}<h5></b></td>
                                   <hr>
                                 </tr>
                         </tbody>

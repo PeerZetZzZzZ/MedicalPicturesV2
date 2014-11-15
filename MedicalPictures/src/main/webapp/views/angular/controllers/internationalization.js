@@ -47,11 +47,14 @@ MedicalPictures.config(function ($translateProvider) {
         'RESET_PASSWORD':'Reset password',
         'USER_EDITED_SUCCESSFULLY':'User has been updated successfully.',
         'PICTURE_TYPES':'Picture types',
-        'ADD_BODY_PART':'Add new body part',
+        'ADD_NEW_BODY_PART':'Add new body part',
         'ADD_NEW_PICTURE_TYPE':'Add new picture type',
         'ADD':'Add',
         'PICTURE_TYPE_ADDED_SUCCESSFULLY':'Picture type has been added successfully!',
-        'PICTURE_TYPE_ADDING_FAILED':'Picture type adding failed...'
+        'PICTURE_TYPE_ADDING_FAILED':'Picture type adding failed...',
+        'BODY_PART_ADDED_SUCCESSFULLY':'Body part has been added successfully!',
+        'BODY_PART_ADDING_FAILED':'Body part adding failed...',
+        'BODY_PARTS':'Body parts'
     });
     $translateProvider.translations('pl', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -100,11 +103,15 @@ MedicalPictures.config(function ($translateProvider) {
         'RESET_PASSWORD':'Resetuj hasło',
         'USER_EDITED_SUCCESSFULLY':'Dane użytkownika zostały zaktualizowane.',
         'PICTURE_TYPES':'Typy zdjęć',
-        'ADD_BODY_PART':'Dodaj część ciała',
+        'ADD_NEW_BODY_PART':'Dodaj część ciała',
         'ADD_NEW_PICTURE_TYPE':'Dodaj nowy typ zdjęć',
         'ADD':'Dodaj',
         'PICTURE_TYPE_ADDED_SUCCESSFULLY':'Typ zdjęcia został dodany!',
-        'PICTURE_TYPE_ADDING_FAILED':'Typ zdjęcia nie został dodany...'
+        'PICTURE_TYPE_ADDING_FAILED':'Typ zdjęcia nie został dodany...',
+        'BODY_PART_ADDED_SUCCESSFULLY':'Część ciała została dodana!',
+        'BODY_PART_ADDING_FAILED':'Dodanie części ciała nie powiodło się...',
+        'BODY_PARTS':'Części ciała'
+
     });
     $translateProvider.preferredLanguage('pl');
 });

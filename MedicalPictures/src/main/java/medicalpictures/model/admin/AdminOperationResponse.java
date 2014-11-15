@@ -54,8 +54,9 @@ public class AdminOperationResponse {
         response.put("result", "success");
         return response.toString();
     }
+
     /**
-     * Creates the response  that picture type hasn't been created successfully.
+     * Creates the response that picture type hasn't been created successfully.
      *
      * @param pictureType picture type which was added or tried to be added
      * @return response as String
@@ -63,6 +64,32 @@ public class AdminOperationResponse {
     public String pictureTypeAddedFailed(String pictureType) {
         JSONObject response = new JSONObject();
         response.put("pictureType", pictureType);
+        response.put("result", "failed");
+        return response.toString();
+    }
+
+    /**
+     * Creates the response that body part has been created successfully.
+     *
+     * @param bodyPartString body part which should be added
+     * @return response to the client as String
+     */
+    public String bodyPartAddedSuccessfully(String bodyPartString) {
+        JSONObject response = new JSONObject();
+        response.put("bodyPart", bodyPartString);
+        response.put("result", "success");
+        return response.toString();
+    }
+
+    /**
+     * Creates the response that body part hasn't been created successfully.
+     *
+     * @param bodyPartString body part which should be added
+     * @return response to the client as String
+     */
+    public String bodyPartAddedFailed(String bodyPartString) {
+        JSONObject response = new JSONObject();
+        response.put("bodyPart", bodyPartString);
         response.put("result", "failed");
         return response.toString();
     }
