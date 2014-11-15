@@ -105,12 +105,12 @@ public class JsonFactory {
      * @param users
      * @return
      */
-    public List<String> readUsersToDelete(JSONObject users) {
+    public Map<String, String> readUsersToDelete(JSONObject users) {
         JSONArray usersToDelete = users.getJSONArray("usernames");
-        List<String> usersToDeleteList = new ArrayList<>();
+        Map<String, String> usersToDeleteList = new HashMap<>();
         for (int i = 0; i < usersToDelete.length(); i++) {
             JSONObject singleUserToDelete = (JSONObject) usersToDelete.get(i);
-            usersToDeleteList.add(singleUserToDelete.getString("username"));
+            usersToDeleteList.put(singleUserToDelete.getString("username"), singleUserToDelete.getString("accountType"));
         }
         return usersToDeleteList;
     }

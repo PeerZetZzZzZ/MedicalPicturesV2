@@ -128,15 +128,23 @@
 
 
         /* AdminView Controller */
-        MedicalPictures.controller('AdminViewManageUsersController', function ($scope,$http, MedicalPicturesGlobal) {
+        MedicalPictures.controller('AdminViewManageUsersController', function ($scope,$http,$translate, MedicalPicturesGlobal) {
             $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
             $scope.accountTypes = MedicalPicturesGlobal.ACCOUNT_TYPES;
+            $scope.minPasswordLength = MedicalPicturesGlobal.MIN_PASSWORD_LENGTH;
+            $scope.maxPasswordLength = MedicalPicturesGlobal.MAX_PASSWORD_LENGTH;
+            $scope.minAge = MedicalPicturesGlobal.MIN_AGE;
+            $scope.maxAge = MedicalPicturesGlobal.MAX_AGE;
+            $scope.nameRegexpPattern = MedicalPicturesGlobal.NAME_REGEXP_PATTERN;
+            $scope.maxNameSurnameLength= MedicalPicturesGlobal.MAX_NAME_SURNAME_LENGTH;
+            $scope.maxUsernameLength = MedicalPicturesGlobal.MAX_USERNAME_LENGTH;
             $scope.editingUsername="";
             $scope.editingName="";
             $scope.editingSurname="";
             $scope.editingAge=0;
             $scope.editingSelectedAccountType="";
             $scope.resetPasswordCheckbox = false;
+            document.getElementById("alertMessageDiv").style.visibility="hidden";
               $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
               success(function(data, status, headers, config) {
                 $scope.loggedUsername = data.username;
@@ -184,7 +192,8 @@
                   for(i=0;i<$scope.usernamesList.length;i++){
                       if(document.getElementById($scope.usernamesList[i].username).checked === true){
                           var index = usersToDeleteList.length;
-                          usersToDeleteList[index]="{username:'"+$scope.usernamesList[i].username+"'}";
+                          usersToDeleteList[index]="{username:'"+$scope.usernamesList[i].username+"',accountType:'"
+                          +$scope.usernamesList[i].accountType+"'}";
                       }
                   }
                   var usersToDelete ;
@@ -214,6 +223,7 @@
               };
               $scope.saveEditedUserClicked = function(){
                 var resetPassword=false;
+                document.getElementById("alertMessageDiv").style.visibility="hidden";//hide the message about success
                 if(document.getElementById($scope.resetPasswordCheckbox).checked === true){
                     resetPassword=true;
                 }
@@ -225,9 +235,20 @@
                       headers:{'Content-Type':'application/json'},
                       data:userToEdit
                   }).success(function (data, status, header, config) {
+
+
                       $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllUsernames').
                       success(function(data, status, headers, config) {
                           $scope.usernamesList = data.usernames;
+                          $translate('USER_EDITED_SUCCESSFULLY').then(function (translation){
+                              var userEdited = $scope.editingUsername;
+                              $scope.editingUsername=undefined;
+                              $scope.editingAge=undefined;
+                              $scope.editingName=undefined;
+                              $scope.editingSurname=undefined;
+                               $('.close-reveal-modal').click();//close the reveal-modal window, small hack
+                              showAlertMessageSuccess(translation , userEdited);
+                          });
                       }).
                       error(function(data, status, headers, config) {
                             console.log(status);

@@ -103,15 +103,40 @@ public class DBUserManager {
         users.put("usernames", usersList);
         return users;
     }
-
-    public void deleteUsers(List<String> usernames) {
+    /**
+     * Deletes the user from UsersDB and table specified for given accountType.
+     * @param usernamesMap Map with users in such form <username,accountType>
+     */
+    public void deleteUsers(Map<String, String> usernamesMap) {
         ormManager.getEntityTransaction().begin();
+        Set<String> usernames = usernamesMap.keySet();
         for (String username : usernames) {
-            Admin admin = ormManager.getEntityManager().find(Admin.class, username);
-            ormManager.getEntityManager().remove(admin);
+            String accountType = usernamesMap.get(username);//get accountType
+            switch (accountType) {
+                case "ADMIN": {
+                    Admin admin = ormManager.getEntityManager().find(Admin.class, username);
+                    ormManager.getEntityManager().remove(admin);
+                    break;
+                }
+                case "DOCTOR": {
+                    Doctor doctor = ormManager.getEntityManager().find(Doctor.class, username);
+                    ormManager.getEntityManager().remove(doctor);
+                    break;
+                }
+                case "TECHNICIAN": {
+                    Technician technician = ormManager.getEntityManager().find(Technician.class, username);
+                    ormManager.getEntityManager().remove(technician);
+                    break;
+                }
+                case "PATIENT": {
+                    Patient patient = ormManager.getEntityManager().find(Patient.class, username);
+                    ormManager.getEntityManager().remove(patient);
+                    break;
+                }
+            }
             UsersDB user = ormManager.getEntityManager().find(UsersDB.class, username);
             ormManager.getEntityManager().remove(user);
-            logger.info("Deleted user: " + username);
+            logger.info("Deleted user: " + username + ", accountType: " + accountType);
         }
         ormManager.getEntityTransaction().commit();
     }
@@ -182,8 +207,10 @@ public class DBUserManager {
         logger.info("Returned user details: " + username);
         return userDetails;
     }
+
     /**
      * Changes the values of specified user
+     *
      * @param userDetails User which will be changed
      */
     public void editUser(Map<String, String> userDetails) {
@@ -193,45 +220,90 @@ public class DBUserManager {
         String accountType = userDetails.get("accountType");
         Integer age = Integer.valueOf(userDetails.get("age"));
         String resetPassword = userDetails.get("resetPassword");
+        /* If we change user accountType, it means that we must move him to another table, so we must
+         delete him in which he is already */
+        List<String> usersToDelete = new ArrayList<>();
         ormManager.getEntityTransaction().begin();
         UsersDB userToEdit = ormManager.getEntityManager().find(UsersDB.class, username);
-        switch (accountType) {
-            case "ADMIN": {
-                Admin admin = ormManager.getEntityManager().find(Admin.class, username);
-                admin.setName(name);
-                admin.setSurname(surname);
-                admin.setAge(age);
-                ormManager.getEntityManager().persist(admin);
-                break;
+        String currentAccountType = userToEdit.getAccountType();
+        boolean accountTypChanged = false;
+        if (!userToEdit.getAccountType().equals(accountType)) {//if accountType changed
+            userToEdit.setAccountType(accountType);
+            accountTypChanged = true;
+        }
+        if (!accountTypChanged) {
+            switch (accountType) {
+                case "ADMIN": {
+                    Admin admin = ormManager.getEntityManager().find(Admin.class, username);
+                    admin.setName(name);
+                    admin.setSurname(surname);
+                    admin.setAge(age);
+                    ormManager.getEntityManager().persist(admin);
+                    break;
+                }
+                case "DOCTOR": {
+                    Doctor doctor = ormManager.getEntityManager().find(Doctor.class, username);
+                    doctor.setName(name);
+                    doctor.setSurname(surname);
+                    doctor.setAge(age);
+                    doctor.setSpecialization("");
+                    ormManager.getEntityManager().persist(doctor);
+                    break;
+                }
+                case "PATIENT": {
+                    Patient patient = ormManager.getEntityManager().find(Patient.class, username);
+                    patient.setName(name);
+                    patient.setSurname(surname);
+                    patient.setAge(age);
+                    ormManager.getEntityManager().persist(patient);
+                    break;
+                }
+                case "TECHNICIAN": {
+                    Technician technician = ormManager.getEntityManager().find(Technician.class, username);
+                    technician.setName(name);
+                    technician.setSurname(surname);
+                    technician.setAge(age);
+                    ormManager.getEntityManager().persist(technician);
+                    break;
+                }
             }
-            case "DOCTOR": {
-                Doctor doctor = ormManager.getEntityManager().find(Doctor.class, username);
-                doctor.setName(name);
-                doctor.setSurname(surname);
-                doctor.setAge(age);
-                ormManager.getEntityManager().persist(doctor);
-//                String specialization = doctor.getSpecialization();
-//                userDetails.put("specialization", String.valueOf(specialization));//it's special case when we do it
-                break;
-            }
-            case "PATIENT": {
-                Patient patient = ormManager.getEntityManager().find(Patient.class, username);
-                patient.setName(name);
-                patient.setSurname(surname);
-                patient.setAge(age);
-                ormManager.getEntityManager().persist(patient);
-                break;
-            }
-            case "TECHNICIAN": {
-                Technician technician = ormManager.getEntityManager().find(Technician.class, username);
-                technician.setName(name);
-                technician.setSurname(surname);
-                technician.setAge(age);
-                ormManager.getEntityManager().persist(technician);
-                break;
+        } else {
+            switch (currentAccountType) {
+                case "ADMIN": {
+                    Admin admin = ormManager.getEntityManager().find(Admin.class, username);
+                    admin.setName(name);
+                    admin.setSurname(surname);
+                    admin.setAge(age);
+                    ormManager.getEntityManager().persist(admin);
+                    break;
+                }
+                case "DOCTOR": {
+                    Doctor doctor = ormManager.getEntityManager().find(Doctor.class, username);
+                    doctor.setName(name);
+                    doctor.setSurname(surname);
+                    doctor.setAge(age);
+                    doctor.setSpecialization("");
+                    ormManager.getEntityManager().persist(doctor);
+                    break;
+                }
+                case "PATIENT": {
+                    Patient patient = ormManager.getEntityManager().find(Patient.class, username);
+                    patient.setName(name);
+                    patient.setSurname(surname);
+                    patient.setAge(age);
+                    ormManager.getEntityManager().persist(patient);
+                    break;
+                }
+                case "TECHNICIAN": {
+                    Technician technician = ormManager.getEntityManager().find(Technician.class, username);
+                    technician.setName(name);
+                    technician.setSurname(surname);
+                    technician.setAge(age);
+                    ormManager.getEntityManager().persist(technician);
+                    break;
+                }
             }
         }
-        userToEdit.setAccountType(accountType);
         if (resetPassword.equals("true")) {
             userToEdit.setPassword(generatePassword(name, surname));//default password is generated
         }

@@ -44,7 +44,8 @@ MedicalPictures.config(function ($translateProvider) {
         'CHECK':'Check',
         'MODIFY_USER':'Modify existing user',
         'UPDATE_USER':'Update user',
-        'RESET_PASSWORD':'Reset password'
+        'RESET_PASSWORD':'Reset password',
+        'USER_EDITED_SUCCESSFULLY':'User has been updated successfully.'
     });
     $translateProvider.translations('pl', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -90,7 +91,8 @@ MedicalPictures.config(function ($translateProvider) {
         'CHECK':'Zaznacz',
         'MODIFY_USER':'Edytuj istniejącego użytkownika',
         'UPDATE_USER':'Aktualizuj użytkownika',
-        'RESET_PASSWORD':'Resetuj hasło'
+        'RESET_PASSWORD':'Resetuj hasło',
+        'USER_EDITED_SUCCESSFULLY':'Dane użytkownika zostały zaktualizowane.'
     });
     $translateProvider.preferredLanguage('pl');
 });
