@@ -269,7 +269,6 @@
               });
               document.getElementById("alertMessageDiv").style.visibility="hidden";
               $scope.minPasswordLength = MedicalPicturesGlobal.MIN_PASSWORD_LENGTH;
-              $scope.maxPasswordLength = MedicalPicturesGlobal.MAX_PASSWORD_LENGTH;
               $scope.minAge = MedicalPicturesGlobal.MIN_AGE;
               $scope.maxAge = MedicalPicturesGlobal.MAX_AGE;
               $scope.nameRegexpPattern = MedicalPicturesGlobal.NAME_REGEXP_PATTERN;
@@ -283,7 +282,7 @@
               $scope.accountTypes = MedicalPicturesGlobal.ACCOUNT_TYPES;
               $scope.addUserClicked = function(){
                   document.getElementById("alertMessageDiv").style.visibility="hidden";//we hide it if user clicks it after adding user previously
-                  if(!angular.isUndefined($scope.username) && !angular.isUndefined($scope.password) &&
+                  if(!angular.isUndefined($scope.username) &&
                   !angular.isUndefined($scope.age) && !angular.isUndefined($scope.name) &&
                   !angular.isUndefined($scope.surname) && !angular.isUndefined($scope.selectedAccountType)){
                    $http({
@@ -291,7 +290,7 @@
                           method: 'POST',
                           headers: {'Content-Type': 'application/json'},
                           data: {'username': $scope.username, 'age':$scope.age.toString(),
-                          'name':$scope.name, 'surname':$scope.surname,'accountType':$scope.selectedAccountType}
+                          'name':$scope.name, 'surname':$scope.surname,'accountType':$scope.selectedAccountType,'resetPassword':"true"}
                       }).
                       success(function(data, status, headers, config) {
                           if(data.result==="success"){

@@ -39,12 +39,46 @@ public class DBUserManager {
     private Log logger = LogFactory.getLog(DBUserManager.class);
 
     /**
-     * Saves new user in database.
+     * Saves new user in database (UsersDB + specified table (by accountType)).
      *
      * @param userDetails Map with created user details.
      * @throws medicalpictures.model.exception.AddUserFailed
      */
     public void addNewUser(Map<String, String> userDetails) throws AddUserFailed {
+        addUser(userDetails, true);
+    }
+
+    /**
+     * Saves user only in specified table ( by accountType)
+     *
+     * @param userDetails
+     * @throws AddUserFailed
+     */
+    private void addNewUserInSpecifiedAccountTable(Map<String, String> userDetails) throws AddUserFailed {
+        addUser(userDetails, false);//dont create in UsersDB too
+    }
+
+    /**
+     * Saves user in UsersDB.
+     *
+     * @param username username
+     * @param password password
+     * @param accountType accountType
+     */
+    private void addNewUserInUserDB(final String username, final String password, final String accountType) throws AddUserFailed {
+        UsersDB user = new UsersDB(username, password, accountType);
+        ormManager.persistObject(user);
+    }
+
+    /**
+     * Saves the user in database.
+     *
+     * @param userDetails User details
+     * @param inUsersDBToo If == true, creates user in UsersDB too, if false =
+     * creates user only in specified table (by accountType)
+     * @throws AddUserFailed
+     */
+    private void addUser(Map<String, String> userDetails, boolean inUsersDBToo) throws AddUserFailed {
         final String username = userDetails.get("username");
         final String name = userDetails.get("name");
         final String surname = userDetails.get("surname");
@@ -52,7 +86,9 @@ public class DBUserManager {
         final String accountType = userDetails.get("accountType");
         final String age = userDetails.get("age");
         final String specialization = userDetails.get("specialization");
-        addNewUsersDbUser(username, password, accountType);
+        if (inUsersDBToo) { //if it's false it means that don't create
+            addNewUserInUserDB(username, password, accountType);
+        }
         Object user = null;
         switch (accountType) {
             case "ADMIN":
@@ -70,18 +106,6 @@ public class DBUserManager {
         }
         ormManager.persistObject(user);
         logger.info("Added user: " + username + "," + password + "," + accountType + "," + name + "," + surname + "," + age + "," + specialization);
-    }
-
-    /**
-     * Saves user in UsersDB.
-     *
-     * @param username username
-     * @param password password
-     * @param accountType accountType
-     */
-    private void addNewUsersDbUser(final String username, final String password, final String accountType) throws AddUserFailed {
-        UsersDB user = new UsersDB(username, password, accountType);
-        ormManager.persistObject(user);
     }
 
     /**
@@ -103,8 +127,10 @@ public class DBUserManager {
         users.put("usernames", usersList);
         return users;
     }
+
     /**
      * Deletes the user from UsersDB and table specified for given accountType.
+     *
      * @param usernamesMap Map with users in such form <username,accountType>
      */
     public void deleteUsers(Map<String, String> usernamesMap) {
@@ -136,6 +162,43 @@ public class DBUserManager {
             }
             UsersDB user = ormManager.getEntityManager().find(UsersDB.class, username);
             ormManager.getEntityManager().remove(user);
+            logger.info("Deleted user: " + username + ", accountType: " + accountType);
+        }
+        ormManager.getEntityTransaction().commit();
+    }
+
+    /**
+     * Deletes users only in table specified by accountType
+     *
+     * @param usernamesMap Map with users in such form <username,accountType>
+     */
+    private void deleteUsersOnlyInSpecifiedTable(Map<String, String> usernamesMap) {
+        ormManager.getEntityTransaction().begin();
+        Set<String> usernames = usernamesMap.keySet();
+        for (String username : usernames) {
+            String accountType = usernamesMap.get(username);//get accountType
+            switch (accountType) {
+                case "ADMIN": {
+                    Admin admin = ormManager.getEntityManager().find(Admin.class, username);
+                    ormManager.getEntityManager().remove(admin);
+                    break;
+                }
+                case "DOCTOR": {
+                    Doctor doctor = ormManager.getEntityManager().find(Doctor.class, username);
+                    ormManager.getEntityManager().remove(doctor);
+                    break;
+                }
+                case "TECHNICIAN": {
+                    Technician technician = ormManager.getEntityManager().find(Technician.class, username);
+                    ormManager.getEntityManager().remove(technician);
+                    break;
+                }
+                case "PATIENT": {
+                    Patient patient = ormManager.getEntityManager().find(Patient.class, username);
+                    ormManager.getEntityManager().remove(patient);
+                    break;
+                }
+            }
             logger.info("Deleted user: " + username + ", accountType: " + accountType);
         }
         ormManager.getEntityTransaction().commit();
@@ -213,7 +276,7 @@ public class DBUserManager {
      *
      * @param userDetails User which will be changed
      */
-    public void editUser(Map<String, String> userDetails) {
+    public void editUser(Map<String, String> userDetails) throws AddUserFailed {
         String username = userDetails.get("username");
         String name = userDetails.get("name");
         String surname = userDetails.get("surname");
@@ -222,16 +285,20 @@ public class DBUserManager {
         String resetPassword = userDetails.get("resetPassword");
         /* If we change user accountType, it means that we must move him to another table, so we must
          delete him in which he is already */
-        List<String> usersToDelete = new ArrayList<>();
+        Map<String, String> usersToDelete = new HashMap<>();
         ormManager.getEntityTransaction().begin();
         UsersDB userToEdit = ormManager.getEntityManager().find(UsersDB.class, username);
         String currentAccountType = userToEdit.getAccountType();
-        boolean accountTypChanged = false;
+        boolean accountTypeChanged = false;
+        if (resetPassword.equals("true")) {
+            userToEdit.setPassword(generatePassword(name, surname));//default password is generated
+        }
         if (!userToEdit.getAccountType().equals(accountType)) {//if accountType changed
             userToEdit.setAccountType(accountType);
-            accountTypChanged = true;
+            accountTypeChanged = true;
         }
-        if (!accountTypChanged) {
+        ormManager.getEntityManager().persist(userToEdit);
+        if (!accountTypeChanged) {
             switch (accountType) {
                 case "ADMIN": {
                     Admin admin = ormManager.getEntityManager().find(Admin.class, username);
@@ -239,6 +306,7 @@ public class DBUserManager {
                     admin.setSurname(surname);
                     admin.setAge(age);
                     ormManager.getEntityManager().persist(admin);
+                    ormManager.getEntityTransaction().commit();
                     break;
                 }
                 case "DOCTOR": {
@@ -248,6 +316,7 @@ public class DBUserManager {
                     doctor.setAge(age);
                     doctor.setSpecialization("");
                     ormManager.getEntityManager().persist(doctor);
+                    ormManager.getEntityTransaction().commit();
                     break;
                 }
                 case "PATIENT": {
@@ -256,6 +325,7 @@ public class DBUserManager {
                     patient.setSurname(surname);
                     patient.setAge(age);
                     ormManager.getEntityManager().persist(patient);
+                    ormManager.getEntityTransaction().commit();
                     break;
                 }
                 case "TECHNICIAN": {
@@ -264,50 +334,23 @@ public class DBUserManager {
                     technician.setSurname(surname);
                     technician.setAge(age);
                     ormManager.getEntityManager().persist(technician);
+                    ormManager.getEntityTransaction().commit();
                     break;
                 }
             }
         } else {
-            switch (currentAccountType) {
-                case "ADMIN": {
-                    Admin admin = ormManager.getEntityManager().find(Admin.class, username);
-                    admin.setName(name);
-                    admin.setSurname(surname);
-                    admin.setAge(age);
-                    ormManager.getEntityManager().persist(admin);
-                    break;
-                }
-                case "DOCTOR": {
-                    Doctor doctor = ormManager.getEntityManager().find(Doctor.class, username);
-                    doctor.setName(name);
-                    doctor.setSurname(surname);
-                    doctor.setAge(age);
-                    doctor.setSpecialization("");
-                    ormManager.getEntityManager().persist(doctor);
-                    break;
-                }
-                case "PATIENT": {
-                    Patient patient = ormManager.getEntityManager().find(Patient.class, username);
-                    patient.setName(name);
-                    patient.setSurname(surname);
-                    patient.setAge(age);
-                    ormManager.getEntityManager().persist(patient);
-                    break;
-                }
-                case "TECHNICIAN": {
-                    Technician technician = ormManager.getEntityManager().find(Technician.class, username);
-                    technician.setName(name);
-                    technician.setSurname(surname);
-                    technician.setAge(age);
-                    ormManager.getEntityManager().persist(technician);
-                    break;
-                }
-            }
+            ormManager.getEntityTransaction().commit();
+            usersToDelete.put(username, currentAccountType);//we add user to delete
+            deleteUsersOnlyInSpecifiedTable(usersToDelete);//delete existing user but not in UsersDB table
+            Map<String, String> newUserDetails = new HashMap<>();
+            newUserDetails.put("username", username);
+            newUserDetails.put("name", name);
+            newUserDetails.put("accountType", accountType);
+            newUserDetails.put("surname", surname);
+            newUserDetails.put("age", String.valueOf(age));
+            addNewUserInSpecifiedAccountTable(userDetails);
         }
-        if (resetPassword.equals("true")) {
-            userToEdit.setPassword(generatePassword(name, surname));//default password is generated
-        }
-        ormManager.getEntityTransaction().commit();
+
     }
 
 }
