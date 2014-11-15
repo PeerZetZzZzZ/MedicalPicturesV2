@@ -48,6 +48,7 @@ MedicalPictures.config(function ($translateProvider) {
         'USER_EDITED_SUCCESSFULLY':'User has been updated successfully.',
         'PICTURE_TYPES':'Picture types',
         'ADD_BODY_PART':'Add new body part',
+        'ADD_NEW_PICTURE_TYPE':'Add new picture type',
         'ADD':'Add'
     });
     $translateProvider.translations('pl', {
@@ -98,6 +99,7 @@ MedicalPictures.config(function ($translateProvider) {
         'USER_EDITED_SUCCESSFULLY':'Dane użytkownika zostały zaktualizowane.',
         'PICTURE_TYPES':'Typy zdjęć',
         'ADD_BODY_PART':'Dodaj część ciała',
+        'ADD_NEW_PICTURE_TYPE':'Dodaj nowy typ zdjęć',
         'ADD':'Dodaj'
     });
     $translateProvider.preferredLanguage('pl');

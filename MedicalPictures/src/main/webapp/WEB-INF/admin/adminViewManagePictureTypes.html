@@ -96,18 +96,18 @@
         </div>
         <br>
         <div class="row">
-            <div class="large-2 columns"><br></div>
-            <div class="large-8 columns">
-                 <div class="large-6 columns">
-                    <label>{{'ADD_BODY_PART'}}
-                      <input type="text" placeholder="large-6.columns" />
-                    </label>
-                </div>
-                <div class="large-2 columns" align="center">
-                      <input type="submit" id="submit"  ng-click="addBodyPartClicked()" class="button" value="{{'ADD'| translate}}">
+          <div class="large-3 columns"><br></div>
+            <div class="large-6 columns">
+              <div class="row collapse postfix-round">
+                  <div class="small-9 columns">
+                    <input type="text" ng-model="newPictureType" placeholder="{{'ADD_NEW_PICTURE_TYPE' | translate}}">
+                  </div>
+                  <div class="small-3 columns">
+                    <a  ng-click="addBodyPartClicked()" class="button postfix">{{'ADD'|translate}}</a>
+                  </div>
                 </div>
             </div>
-            <div class="large-2 columns"><br></div>
+          <div class="large-3 columns"><br></div>
         </div>
         <br>
         <div class="row">

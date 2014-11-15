@@ -224,39 +224,43 @@
               $scope.saveEditedUserClicked = function(){
                 var resetPassword=false;
                 document.getElementById("alertMessageDiv").style.visibility="hidden";//hide the message about success
-                if(document.getElementById($scope.resetPasswordCheckbox).checked === true){
-                    resetPassword=true;
-                }
-                  var userToEdit ={"username":$scope.editingUsername,"accountType":$scope.editingSelectedAccountType,
-                  "name":$scope.editingName,"surname":$scope.editingSurname,"age":$scope.editingAge.toString(),"resetPassword":resetPassword.toString()}
-                  $http({
-                      url:'/MedicalPictures/AdminViewEditUser',
-                      method:'POST',
-                      headers:{'Content-Type':'application/json'},
-                      data:userToEdit
-                  }).success(function (data, status, header, config) {
+                if(!angular.isUndefined($scope.editingUsername) &&
+                !angular.isUndefined($scope.editingAge) && !angular.isUndefined($scope.editingName) &&
+                !angular.isUndefined($scope.editingSurname) && !angular.isUndefined($scope.editingSelectedAccountType)){
+                    if(document.getElementById($scope.resetPasswordCheckbox).checked === true){
+                        resetPassword=true;
+                    }
+                      var userToEdit ={"username":$scope.editingUsername,"accountType":$scope.editingSelectedAccountType,
+                      "name":$scope.editingName,"surname":$scope.editingSurname,"age":$scope.editingAge.toString(),"resetPassword":resetPassword.toString()}
+                      $http({
+                          url:'/MedicalPictures/AdminViewEditUser',
+                          method:'POST',
+                          headers:{'Content-Type':'application/json'},
+                          data:userToEdit
+                      }).success(function (data, status, header, config) {
 
 
-                      $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllUsernames').
-                      success(function(data, status, headers, config) {
-                          $scope.usernamesList = data.usernames;
-                          $translate('USER_EDITED_SUCCESSFULLY').then(function (translation){
-                              var userEdited = $scope.editingUsername;
-                              $scope.editingUsername=undefined;
-                              $scope.editingAge=undefined;
-                              $scope.editingName=undefined;
-                              $scope.editingSurname=undefined;
-                               $('.close-reveal-modal').click();//close the reveal-modal window, small hack
-                              showAlertMessageSuccess(translation , userEdited);
+                          $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllUsernames').
+                          success(function(data, status, headers, config) {
+                              $scope.usernamesList = data.usernames;
+                              $translate('USER_EDITED_SUCCESSFULLY').then(function (translation){
+                                  var userEdited = $scope.editingUsername;
+                                  $scope.editingUsername=undefined;
+                                  $scope.editingAge=undefined;
+                                  $scope.editingName=undefined;
+                                  $scope.editingSurname=undefined;
+                                   $('.close-reveal-modal').click();//close the reveal-modal window, small hack
+                                  showAlertMessageSuccess(translation , userEdited);
+                              });
+                          }).
+                          error(function(data, status, headers, config) {
+                                console.log(status);
                           });
-                      }).
-                      error(function(data, status, headers, config) {
-                            console.log(status);
+                      }).error(function(data,status,headers,config){
+                          console.log(status);
                       });
-                  }).error(function(data,status,headers,config){
-                      console.log(status);
-                  });
-              }
+               }
+            }
         });
         MedicalPictures.controller('AdminViewAddUserController',function($scope, $translate,$location, $http,MedicalPicturesGlobal){
             $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
@@ -328,6 +332,14 @@
         MedicalPictures.controller('AdminViewManagePictureTypesController',function($scope, $translate,$location, $http,MedicalPicturesGlobal){
             $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
             $scope.pictureTypesList =[];
+            $scope.newPictureType ="";
+            $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
+              success(function(data, status, headers, config) {
+                $scope.loggedUsername = data.username;
+              }).
+              error(function(data, status, headers, config) {
+                  console.log(status);
+              });
             $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllPictureTypes').
               success(function(data, status, headers, config) {
                 $scope.pictureTypesList = data.pictureTypes;
@@ -337,7 +349,7 @@
               });
               document.getElementById("alertMessageDiv").style.visibility="hidden";
               $scope.addBodyPartClicked = function(){
-
+                  $scope.appName=$scope.newPictureType;
               };
 
         });
