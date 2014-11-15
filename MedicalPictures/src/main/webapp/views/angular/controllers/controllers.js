@@ -25,7 +25,7 @@
                 $scope.appName =  MedicalPicturesGlobal.GLOBAL_APP_NAME;
                 $scope.minPasswordLength = MedicalPicturesGlobal.MIN_PASSWORD_LENGTH;
                 $scope.maxPasswordLength = MedicalPicturesGlobal.MAX_PASSWORD_LENGTH;
-                $scope.password = "pass";
+                $scope.password = "";
                 $scope.username="";//we share this username globally to later can print in in other windows
                 $scope.userAlreadyLogged= ""; //it contain the name of user which couldn't log because of already being logged
                 $scope.userMainWindow="";// url to the main window for this user, if he will go back to the Login VIew being already logged
@@ -40,7 +40,7 @@
                               url: '/MedicalPictures/LoginView',
                               method: 'POST',
                               headers: {'Content-Type': 'application/json'},
-                              data: {'username': $scope.username, 'password': $scope.password}
+                              data: {'username': $scope.username, 'password': CryptoJS.SHA512($scope.password).toString()}
                       }).
                         success(function (data, status, header, config) {
                             console.log(status);
