@@ -14,7 +14,7 @@ import javax.persistence.Table;
  * @author Przemysław Thomann
  */
 @Entity
-@Table(name="PictureType")
+@Table(name = "PictureType")
 public class PictureType implements Serializable {
 
     private static final long serialVersionUID = 1L;

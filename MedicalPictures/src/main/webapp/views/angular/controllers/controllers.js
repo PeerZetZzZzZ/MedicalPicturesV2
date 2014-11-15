@@ -202,7 +202,6 @@
                   } else{
                         usersToDelete = "{usernames:["+usersToDeleteList+"]}";
                   }
-                  $scope.appName = usersToDelete;
                   $http({
                       url: '/MedicalPictures/AdminViewDeleteUsers',
                       method: 'POST',
