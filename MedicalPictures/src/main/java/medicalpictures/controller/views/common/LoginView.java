@@ -42,7 +42,6 @@ public class LoginView extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         JSONObject jsonObject = jsonFactory.decryptRequest(request);
-        System.out.println("Dostolech: " + jsonObject.toString());
         String username = jsonObject.getString("username");
         String password = jsonObject.getString("password");
         try {

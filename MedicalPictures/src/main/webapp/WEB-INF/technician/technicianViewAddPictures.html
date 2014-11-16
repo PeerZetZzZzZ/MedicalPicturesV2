@@ -1,0 +1,193 @@
+<html ng-app="MedicalPictures">
+    <head>
+        <link rel="stylesheet" href="./views/css/foundation.css">
+        <link rel="stylesheet" href="./views/css/normalize.css">
+        <script src="./views/js/vendor/modernizr.js"></script>
+        <script src="./views/angular/angular.js"></script>
+        <script src="./views/angular/angular-translate.min.js"></script>
+        <script src="./views/angular/angular-file-upload.js"></script>
+        <script src="./views/angular/controllers/controllers.js"></script>
+        <script src="./views/angular/controllers/internationalization.js"></script>
+    <title>{{'TECHNICIAN_VIEW_HEAD_NAME'| translate}}</title>
+    <meta content="" charset="UTF-8">
+    <style type="text/css">
+          .my-drop-zone {
+              border: dotted 3px red;
+              height:150px;}
+            .nv-file-over {
+              border: dotted 3px red;
+              } /* Default class applied to drop zones on over */
+            .another-file-over-class {
+               border: dotted 3px green;
+               }
+            html, body {
+               height: 100%; }
+        .panel {
+            overflow: scroll;
+            max-height : 400px;
+        }
+        input.ng-invalid{
+            border:2px solid red
+        }
+        .panel table{
+             width: 100%
+        }
+        .panel {
+          overflow: scroll;
+        max-height : 400px;
+        }
+        .top-bar .name h1 {
+        color:orange;
+        }
+        .top-bar .right li {
+        color:orange;
+        }
+        .top-bar .right li b {
+        color:yellow;
+        }
+        .icon-bar .item b{
+        color:red;
+        }
+        td {
+        border-top: solid 1px #f00;
+        border-right: solid 1px #f00;
+        border-left: solid 1px #f00;
+        border-bottom: 1px solid  #f00; /* or whatever specific values you prefer */
+        }
+        .my-modal{
+        position: relative !important;
+        }
+        td a{
+             margin:auto;
+             display:block;
+        }
+    </style>
+    </head>
+    <body ng-controller="TechnicianViewAddPicturesController">
+        <br>
+        <nav class="top-bar" data-topbar role="navigation">
+            <ul class="title-area">
+                <li class="name">
+                    <h1>{{appName}}</h1>
+                </li>
+                <li class="toggle-topbar menu-icon">
+                    <a href="#">{{'MENU'| translate}}</a>
+                </li>
+            </ul>
+            <section class="top-bar-section">
+                <ul class="right">
+                    <li class = "name">
+                        <h1> {{'LOGGED_AS'| translate}} <b> {{loggedUsername}}</b></h1>
+                    </li>
+                    <li>
+                        <a href="#">{{'SETTINGS'| translate}}</a>
+                    </li>
+                    <li class="active">
+                        <a href="/MedicalPictures/Logout">{{'LOGOUT'| translate}}</a>
+                    </li>
+                </ul>
+            </section>
+        </nav>
+        <br>
+        <div class="row">
+            <div class="large-1 columns"><br></div>
+            <div class="large-10 columns">
+                    <div class="icon-bar two-up">
+                        <a class="item" href="/MedicalPictures/TechnicianViewManagePictures">
+                            <img src="./views/glyphicons/png/glyphicons_088_address_book.png" >
+                            <label><b>{{'MANAGE_PICTURES'| translate}}</b></label>
+                        </a>
+                        <a class="item" href="/MedicalPictures/TechnicianViewAddPictures">
+                            <img src="./views/glyphicons/png/glyphicons_011_camera.png" >
+                            <label>{{'ADD_NEW_PICTURES'| translate}}</label>
+                        </a>
+                    </div>
+            </div>
+            <div class="large-1 columns"><br></div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="large-2 columns"><br></div>
+            <div class="large-8 columns">
+                           <div ng-show="uploader.isHTML5">
+                        <!-- 3. nv-file-over uploader="link" over-class="className" -->
+                        <div class="well my-drop-zone" nv-file-over="" uploader="uploader">
+                          <h5 align="center"> {{'DROP_PICTURES_HERE' |translate}} </h5>
+                        </div>
+                    </div>
+            </div>
+            <div class="large-2 columns"><br></div>
+        </div>
+        <br>
+          <div class="col-md-9" style="margin-bottom: 40px">
+
+                    <h3>Upload queue</h3>
+                    <p>Queue length: {{ uploader.queue.length }}</p>
+                    <div class="panel">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="50%">Name</th>
+                                <th ng-show="uploader.isHTML5">Size</th>
+                                <th ng-show="uploader.isHTML5">Progress</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in uploader.queue">
+                                <td><strong>{{ item.file.name }}</strong></td>
+                                <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                                <td ng-show="uploader.isHTML5">
+                                    <div class="progress" style="margin-bottom: 0;">
+                                        <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                    <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                    <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                </td>
+                                <td nowrap>
+                                    <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                        <span class="glyphicon glyphicon-upload"></span> Upload
+                                    </button>
+                                    <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                                        <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                                        <span class="glyphicon glyphicon-trash"></span> Remove
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                  </div>
+                    <div>
+                        <div>
+                            Queue progress:
+                            <div class="progress" style="">
+                                <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
+                            <span class="glyphicon glyphicon-upload"></span> Upload all
+                        </button>
+                        <button type="button" class="btn btn-warning btn-s" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
+                            <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+                        </button>
+                        <button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
+                            <span class="glyphicon glyphicon-trash"></span> Remove all
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        <script src="./views/js/vendor/jquery.js"></script>
+        <script src="./views/js/foundation.min.js"></script>
+        <script>
+            $(document).foundation();
+        </script>
+    </body>
+</html>

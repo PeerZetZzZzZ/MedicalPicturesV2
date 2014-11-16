@@ -35,6 +35,14 @@
         <servlet-name>AdminViewManageBodyParts</servlet-name>
         <servlet-class>medicalpictures.controller.views.admin.AdminViewManageBodyParts</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TechnicianViewAddPictures</servlet-name>
+        <servlet-class>medicalpictures.controller.views.technician.TechnicianViewAddPictures</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TechnicianViewManagePictures</servlet-name>
+        <servlet-class>medicalpictures.controller.views.technician.TechnicianViewManagePictures</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginView</servlet-name>
         <url-pattern>/LoginView</url-pattern>
@@ -66,6 +74,14 @@
     <servlet-mapping>
         <servlet-name>AdminViewManageBodyParts</servlet-name>
         <url-pattern>/AdminViewManageBodyParts</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TechnicianViewAddPictures</servlet-name>
+        <url-pattern>/TechnicianViewAddPictures</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TechnicianViewManagePictures</servlet-name>
+        <url-pattern>/TechnicianViewManagePictures</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

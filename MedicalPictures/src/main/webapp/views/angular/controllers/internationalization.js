@@ -54,7 +54,12 @@ MedicalPictures.config(function ($translateProvider) {
         'PICTURE_TYPE_ADDING_FAILED':'Picture type adding failed...',
         'BODY_PART_ADDED_SUCCESSFULLY':'Body part has been added successfully!',
         'BODY_PART_ADDING_FAILED':'Body part adding failed...',
-        'BODY_PARTS':'Body parts'
+        'BODY_PARTS':'Body parts',
+        'TECHNICIAN_VIEW_HEAD_NAME':'MedicalPictures Techician VIew',
+        'MANAGE_PICTURES':'Manage pictures',
+        'ADD_NEW_PICTURES':'Add pictures',
+        'DELETE_PICTURES':'Delete pictures',
+        'DROP_PICTURES_HERE':'Drop picture here'
     });
     $translateProvider.translations('pl', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -110,7 +115,12 @@ MedicalPictures.config(function ($translateProvider) {
         'PICTURE_TYPE_ADDING_FAILED':'Typ zdjęcia nie został dodany...',
         'BODY_PART_ADDED_SUCCESSFULLY':'Część ciała została dodana!',
         'BODY_PART_ADDING_FAILED':'Dodanie części ciała nie powiodło się...',
-        'BODY_PARTS':'Części ciała'
+        'BODY_PARTS':'Części ciała',
+        'TECHNICIAN_VIEW_HEAD_NAME':'MedicalPictures Panel Technika',
+        'MANAGE_PICTURES':'Zarządzaj zdjęciami',
+        'ADD_NEW_PICTURES':'Dodaj zdjęcia',
+        'DELETE_PICTURES':'Usuń zdjęcia',
+        'DROP_PICTURES_HERE':'Przeciągnij pliki tutaj'
 
     });
     $translateProvider.preferredLanguage('pl');

@@ -1,6 +1,6 @@
 'use strict';
         /* Contains global settings accessible for all controllers */
-        var MedicalPictures = angular.module('MedicalPictures', ['pascalprecht.translate']).constant('MedicalPicturesGlobal', {
+        var MedicalPictures = angular.module('MedicalPictures', ['angularFileUpload','pascalprecht.translate']).constant('MedicalPicturesGlobal', {
             GLOBAL_APP_NAME: "MedicalPictures ver.1.0",
             MIN_PASSWORD_LENGTH: "3",
             MAX_PASSWORD_LENGTH: "30",
@@ -53,7 +53,7 @@
                                       $window.location.href = "PatientView";
                                       break;
                                   case "TECHNICIAN":
-                                      $window.location.href = "TechnicianView";
+                                      $window.location.href = "TechnicianViewManagePictures";
                                       break;
                                   case "DOCTOR":
                                       $window.location.href = "DoctorView";
@@ -434,6 +434,24 @@
               };
 
         });
+        /* TechnicianView Controllers */
+        MedicalPictures.controller('TechnicianViewAddPicturesController', function ($scope,$http,$translate,FileUploader, MedicalPicturesGlobal) {
+            $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
+            $scope.accountTypes = MedicalPicturesGlobal.ACCOUNT_TYPES;
+          $scope.uploader = new FileUploader();
+            document.getElementById("alertMessageDiv").style.visibility="hidden";
+              $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
+              success(function(data, status, headers, config) {
+                $scope.loggedUsername = data.username;
+              }).
+              error(function(data, status, headers, config) {
+                  console.log(status);
+              });
+
+
+        });
+
+
         /* UserSettings Controller */
         MedicalPictures.controller('UserSettingsController', function ($scope, MedicalPicturesGlobal) {
         $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
