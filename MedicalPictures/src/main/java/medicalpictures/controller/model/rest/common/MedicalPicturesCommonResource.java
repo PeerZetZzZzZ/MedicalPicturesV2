@@ -20,6 +20,7 @@ import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;
 import medicalpictures.model.orm.DBBodyPartManager;
+import medicalpictures.model.orm.DBPatientManager;
 import medicalpictures.model.orm.DBPictureTypeManager;
 import medicalpictures.model.orm.DBUserManager;
 import medicalpictures.model.security.UserSecurityManager;
@@ -46,6 +47,8 @@ public class MedicalPicturesCommonResource {
     private DBBodyPartManager bodyPartManager;
     @EJB
     private DBPictureTypeManager pictureTypeManager;
+    @EJB
+    private DBPatientManager patientManager;
 
     @EJB
     private JsonFactory jsonFactory;
@@ -169,6 +172,22 @@ public class MedicalPicturesCommonResource {
             securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
             String pictureTypes = pictureTypeManager.getAllPictureTypes().toString();
             logger.info("Returned picture types: " + pictureTypes);
+            return pictureTypes;
+        } catch (NoLoggedUserExistsHere ex) {
+            return jsonFactory.notUserLogged();
+        } catch (UserNotPermitted ex) {
+            return jsonFactory.userNotPermitted();
+        }
+    }
+
+    @GET
+    @Path("/getAllPatients")
+    @Produces("application/json")
+    public String getAllPatients() {
+        try {
+            securityManager.checkUserPermissionToThisContent(AccountType.TECHNICIAN);
+            String pictureTypes = patientManager.getAllPatients().toString();
+            logger.info("Returned all patients: " + pictureTypes);
             return pictureTypes;
         } catch (NoLoggedUserExistsHere ex) {
             return jsonFactory.notUserLogged();

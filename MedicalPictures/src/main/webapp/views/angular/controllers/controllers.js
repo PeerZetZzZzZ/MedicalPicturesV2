@@ -438,11 +438,33 @@
         MedicalPictures.controller('TechnicianViewAddPicturesController', function ($scope,$http,$translate,FileUploader, MedicalPicturesGlobal) {
             $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
             $scope.accountTypes = MedicalPicturesGlobal.ACCOUNT_TYPES;
-          $scope.uploader = new FileUploader();
-            document.getElementById("alertMessageDiv").style.visibility="hidden";
+            $scope.allPatients=[];
+            $scope.selectedPatient;
+            var uploader = $scope.uploader = new FileUploader({
+                url: '../.upload.php'
+            });
+
+            uploader.filters.push({
+                name: 'customFilter',
+                fn: function(item /*{File|FileLikeObject}*/, options) {
+                    return this.queue.length < 10;
+                }
+            });
+            // document.getElementById("alertMessageDiv").style.visibility="hidden";
               $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
               success(function(data, status, headers, config) {
                 $scope.loggedUsername = data.username;
+              }).
+              error(function(data, status, headers, config) {
+                  console.log(status);
+              });
+              $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllPatients').
+              success(function(data, status, headers, config) {
+                  var i=0;
+                  var patients = data.patients;
+                  for(i=0;i<patients.length;i++){
+                    $scope.allPatients[i]=patients[i].name +" " + patients[i].surname;
+                  }
               }).
               error(function(data, status, headers, config) {
                   console.log(status);

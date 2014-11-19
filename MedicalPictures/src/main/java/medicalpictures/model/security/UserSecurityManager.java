@@ -5,6 +5,12 @@
  */
 package medicalpictures.model.security;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import medicalpictures.model.enums.AccountType;
@@ -57,14 +63,21 @@ public class UserSecurityManager {
      */
     public void registerUser(String username, String password) throws UserAlreadyLoggedException, UserDoesntExistException {
         Subject currentUser = SecurityUtils.getSubject();
+        currentUser.getSession().getId();
         if (!currentUser.isAuthenticated()) {
             UsernamePasswordToken token = new UsernamePasswordToken(username, password);
             try {
+                PrintWriter sessionFile = new PrintWriter(username, "UTF-8");
+                sessionFile.close();
                 Session session = currentUser.getSession();
                 session.setAttribute("username", username);
                 currentUser.login(token);
             } catch (AuthenticationException ex) {
                 throw new UserDoesntExistException(ex.getMessage());
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(UserSecurityManager.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedEncodingException ex) {
+                Logger.getLogger(UserSecurityManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             String loggedUsername = currentUser.getSession().getAttribute("username").toString();
