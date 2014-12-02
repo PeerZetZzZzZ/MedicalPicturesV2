@@ -33,7 +33,7 @@ public class LoginView extends HttpServlet {
 
     @EJB
     private DBUserManager dbManager;
-    
+
     private Log log = LogFactory.getLog(LoginView.class);
 
     @Override

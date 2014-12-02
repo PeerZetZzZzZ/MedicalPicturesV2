@@ -7,6 +7,7 @@
         <script src="./views/angular/angular-translate.min.js"></script>
         <script src="./views/angular/angular-file-upload.js"></script>
         <script src="./views/angular/controllers/controllers.js"></script>
+        <script src="./views/angular/directives.js"></script>
         <script src="./views/angular/controllers/internationalization.js"></script>
     <title>{{'TECHNICIAN_VIEW_HEAD_NAME'| translate}}</title>
     <meta content="" charset="UTF-8">
@@ -67,7 +68,7 @@
         }
     </style>
     </head>
-    <body ng-controller="TechnicianViewAddPicturesController" nv-file-drop="" uploader="uploader" filters="customFilter">
+    <body ng-controller="TechnicianViewAddPicturesController" nv-file-drop="" uploader="uploader" >
         <br>
         <nav class="top-bar" data-topbar role="navigation">
             <ul class="title-area">
@@ -123,11 +124,20 @@
             <div class="large-2 columns"><br></div>
         </div>
         <br>
+        <div  ng-show="uploader.queue.length >0">
         <div class="row">
             <div class="large-1 columns"><br></div>
             <div class="large-10 columns">
-                  <h3>Zdjęcia do załadowania</h3>
-                  <p>Ilość: {{ uploader.queue.length }}</p>
+                <div class="row">
+                    <div class="large-7 columns">
+                        <h3>Zdjęcia do załadowania</h3>
+                        <p>Ilość: {{ uploader.queue.length }}</p>
+                    </div>
+                    <div class="large-3 columns">
+                        <a href="#" class="button" ng-click="uploadPictures()">Załaduj</a>
+                    </div>
+                </div>
+
                   <div class="panel">
                   <table>
                       <thead>
@@ -140,10 +150,11 @@
                       </thead>
                       <tbody>
                           <tr ng-repeat="item in uploader.queue">
+                            <td><div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div></td>
                               <td><strong>{{ item.file.name }}</strong></td>
                               <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024|number:2 }} kB</td>
                               <td>
-                                    <select ng-options="patient for patient in allPatients" ng-model="selectedPatient" ng-init="selectedPatient = allPatients[0]">
+                                    <select ng-options="patient for patient in allPatients" ng-model="item.selectedPatient" ng-init="selectedPatient = allPatients[0]">
                                     </select>
                               </td>
                               <td nowrap>
@@ -190,6 +201,7 @@
             </div>
             <div class="large-1 columns"><br></div>
         </div class="row">
+      </div>
         <script src="./views/js/vendor/jquery.js"></script>
         <script src="./views/js/foundation.min.js"></script>
         <script>

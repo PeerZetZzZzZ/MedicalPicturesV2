@@ -41,7 +41,7 @@ public class JsonFactory {
                 jb.append(line);
             }
         } catch (Exception e) { /*report an error*/ }
-
+        System.out.println(jb.toString());
         JSONObject jsonObject = new JSONObject(jb.toString());
         return jsonObject;
     }
