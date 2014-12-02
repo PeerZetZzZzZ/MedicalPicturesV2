@@ -116,6 +116,13 @@
                 "<a class=\"close\">&times;</a>"+
                 "</div>";
         }
+        function showAlertMessageWarning(message){
+            var alert = document.getElementById("alertMessageDiv");
+            alert.style.visibility="visible";//We show error message
+            alert.innerHTML = "<div data-alert class=\"alert-box warning round\">"+ message +
+                "<a class=\"close\">&times;</a>"+
+                "</div>";
+        }
         function showAlertMessageSuccess(message,username){
             var alert = document.getElementById("alertMessageDiv");
             alert.style.visibility="visible";//We show error message
@@ -124,8 +131,13 @@
                 "<a class=\"close\">&times;</a>"+
                 "</div>";
         }
-
-
+        function showAlertMessageSuccess(message){
+            var alert = document.getElementById("alertMessageDiv");
+            alert.style.visibility="visible";//We show error message
+            alert.innerHTML = "<div data-alert class=\"alert-box success radius\">"+ message +
+                "<a class=\"close\">&times;</a>"+
+                "</div>";
+        }
 
         /* AdminView Controller */
         MedicalPictures.controller('AdminViewManageUsersController', function ($scope,$http,$translate, MedicalPicturesGlobal) {
@@ -439,6 +451,7 @@
             $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
             $scope.accountTypes = MedicalPicturesGlobal.ACCOUNT_TYPES;
             $scope.allPatients=[];
+            var picturesToSendList =[];
             $scope.selectedPatient;
             var fd = new FormData();
             var uploader = $scope.uploader = new FileUploader({
@@ -452,7 +465,7 @@
                     return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
                 }
             });
-            // document.getElementById("alertMessageDiv").style.visibility="hidden";
+            document.getElementById("alertMessageDiv").style.visibility="hidden";
               $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
               success(function(data, status, headers, config) {
                 $scope.loggedUsername = data.username;
@@ -472,6 +485,14 @@
                   console.log(status);
               });
               $scope.uploadPictures = function(){
+                // var i=0;
+                // $scope.appName =picturesToSendList.length;
+                // for(i=0;i<picturesToSendList.length;i++){
+                //   var pictureInfo = {patient:picturesToSendList[i].selectedPatient,pictureName:picturesToSendList[i].name};
+                //   $scope.appName = pictureInfo.toString();
+                //   fd.append(pictureInfo.toString(), picturesToSendList[i].formData);
+                // }
+
                   $http({
                           method: 'POST',
                           url: '/MedicalPictures/TechnicianViewAddPictures',
@@ -479,14 +500,19 @@
                           data: fd,
                           transformRequest: angular.identity
                       }).success(function(data, status) {
-                        $scope.appName = $scope.uploader.queue[0].file;
+                          $translate('ALL_PICTURES_UPLOADED').then(function (translation) {
+                              showAlertMessageSuccess(translation);
+                              // $scope.uploader.clearQueue();
+                          });
                       }).error(function(data, status) {
-                        $scope.appName="chujnia";
+
                       });
-          }
+          };
 
         uploader.onWhenAddingFileFailed = function(item /*{File|FileLikeObject}*/, filter, options) {
-            console.info('onWhenAddingFileFailed', item, filter, options);
+            $translate('ONLY_PICTURES_CAN_BE_UPLOADED').then(function (translation) {
+                showAlertMessageWarning(translation);
+            });
         };
         uploader.onAfterAddingFile = function(fileItem) {
             console.info('onAfterAddingFile', fileItem);
@@ -495,8 +521,13 @@
             console.info('onAfterAddingAll', addedFileItems);
         };
         uploader.onBeforeUploadItem = function(item) {
+            document.getElementById("alertMessageDiv").style.visibility="hidden";
             console.info('onBeforeUploadItem', item);
+            var pictureData = {patient:item.selectedPatient, pictureName:item.name}
+            // picturesToSendList[picturesToSendList.length]=item;
+            // $scope.appName =picturesToSendList.length;
             fd.append(item.name, item.formData);
+            $scope.appName=pictureData.toString();
         };
         uploader.onProgressItem = function(fileItem, progress) {
             console.info('onProgressItem', fileItem, progress);
@@ -517,7 +548,6 @@
             console.info('onCompleteItem', fileItem, response, status, headers);
         };
         uploader.onCompleteAll = function() {
-            console.info('onCompleteAll');
         };
 
         console.info('uploader', uploader);

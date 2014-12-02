@@ -59,7 +59,9 @@ MedicalPictures.config(function ($translateProvider) {
         'MANAGE_PICTURES':'Manage pictures',
         'ADD_NEW_PICTURES':'Add pictures',
         'DELETE_PICTURES':'Delete pictures',
-        'DROP_PICTURES_HERE':'Drop picture here'
+        'DROP_PICTURES_HERE':'Drop picture here',
+        'ALL_PICTURES_UPLOADED':'All pictures have been uploaded successfully!',
+        'ONLY_PICTURES_CAN_BE_UPLOADED':'Cannot upload. Only pictures can be uploaded!'
     });
     $translateProvider.translations('pl', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -120,7 +122,9 @@ MedicalPictures.config(function ($translateProvider) {
         'MANAGE_PICTURES':'Zarządzaj zdjęciami',
         'ADD_NEW_PICTURES':'Dodaj zdjęcia',
         'DELETE_PICTURES':'Usuń zdjęcia',
-        'DROP_PICTURES_HERE':'Przeciągnij pliki tutaj'
+        'DROP_PICTURES_HERE':'Przeciągnij pliki tutaj',
+        'ALL_PICTURES_UPLOADED':'Wszystkie zdjęcia zostały pomyślnie zapisane!',
+        'ONLY_PICTURES_CAN_BE_UPLOADED':'Nie można załadować. Dozwolne są tylko obrazy/zdjęcia!'
 
     });
     $translateProvider.preferredLanguage('pl');

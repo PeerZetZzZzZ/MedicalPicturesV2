@@ -61,19 +61,16 @@ public class TechnicianViewAddPictures extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            System.out.println("wlaza tu kurwa");
             securityManager.checkUserPermissionToThisContent(AccountType.TECHNICIAN);
             List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
             for (FileItem item : items) {
-                if (!item.isFormField()) {
-                     // Process form file field (input type="file").
+//                if (!item.isFormField()) {
                     String filename = FilenameUtils.getName(item.getName());
                     InputStream filecontent = item.getInputStream();
                     System.out.println(item.getSize());
                     System.out.println("Nazwa pliu to chuuje: " + filename);
-//                     File file = new File("/home/peer/zdjecie.jpg");
-//                    item.write(file);
-//                    file.getPath();
-                } 
+//                } 
             }
         } catch (FileUploadException e) {
             throw new ServletException("Cannot parse multipart request.", e);
