@@ -483,8 +483,22 @@
                   console.log(status);
               });
               $scope.uploadPictures = function(){
-
-          };
+                  var i=0;
+                  var flagOfUpload=true;
+                  for(i=0;i<uploader.queue.length;i++){
+                    if(angular.isUndefined(uploader.queue[i].selectedPatient) &&uploader.queue[i].selectedPatient!='' ){
+                        var fileName = uploader.queue[i].file.name;
+                        $translate('NO_PATIENT_SELECTED_FOR_FILE').then(function (translation) {
+                            showAlertMessageError(translation,fileName);
+                        });
+                        flagOfUpload=false;
+                        break;
+                    }
+                  }
+                  if(flagOfUpload){
+                    uploader.uploadAll();
+                  }
+              };
 
         uploader.onWhenAddingFileFailed = function(item /*{File|FileLikeObject}*/, filter, options) {
             $translate('ONLY_PICTURES_CAN_BE_UPLOADED').then(function (translation) {
