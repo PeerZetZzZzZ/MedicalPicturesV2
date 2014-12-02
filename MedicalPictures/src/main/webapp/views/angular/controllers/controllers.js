@@ -549,3 +549,28 @@
         MedicalPictures.controller('UserSettingsController', function ($scope, MedicalPicturesGlobal) {
         $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
       });
+        /* UserSettings Controller */
+        MedicalPictures.controller('Technician', function ($scope, $http, MedicalPicturesGlobal) {
+        $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
+        $scope.picture;
+        $scope.bigPicture;
+        $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getBigPictureData').
+        success(function(data, status, headers, config) {
+          $scope.picture = data.zdjecie;
+        }).
+        error(function(data, status, headers, config) {
+            console.log(status);
+        });
+        $scope.getBigPicture = function(){
+          $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getBigPictureData').
+          success(function(data, status, headers, config) {
+            $scope.bigPicture = data.zdjecie;
+            window.open($scope.bigPicture);
+          }).
+          error(function(data, status, headers, config) {
+            $scope.appName="chuj";
+              console.log(status);
+          });
+        }
+
+      });

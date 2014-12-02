@@ -6,6 +6,7 @@
 package medicalpictures.controller.views.technician;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -61,22 +62,29 @@ public class TechnicianViewAddPictures extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            securityManager.checkUserPermissionToThisContent(AccountType.TECHNICIAN);
+//            securityManager.checkUserPermissionToThisContent(AccountType.TECHNICIAN);
             List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
             for (FileItem item : items) {
-//                if (!item.isFormField()) {
+                if (!item.isFormField()) {
                     String filename = FilenameUtils.getName(item.getName());
                     InputStream filecontent = item.getInputStream();
                     System.out.println(item.getSize());
                     System.out.println("Nazwa pliu to chuuje: " + filename);
-//                } 
+//                    String path = getServletContext().getRealPath("/WEB-INF/technician/");
+                    File fil = new File("zdjecie.jpg");
+                    fil.createNewFile();
+                    FileOutputStream stream = new FileOutputStream(fil);
+                    stream.write(IOUtils.toByteArray(filecontent));
+                    stream.close();
+
+                }
             }
         } catch (FileUploadException e) {
             throw new ServletException("Cannot parse multipart request.", e);
-        } catch (UserNotPermitted ex) {
-            logger.error("POST " + TechnicianViewAddPictures.class.toString() + " :No permission to see the content!");
-        } catch (NoLoggedUserExistsHere ex) {
-            logger.error("POST " + TechnicianViewAddPictures.class.toString() + " : No logged user exists!");
+//        } catch (UserNotPermitted ex) {
+//            logger.error("POST " + TechnicianViewAddPictures.class.toString() + " :No permission to see the content!");
+//        } catch (NoLoggedUserExistsHere ex) {
+//            logger.error("POST " + TechnicianViewAddPictures.class.toString() + " : No logged user exists!");
         } catch (Exception ex) {
             Logger.getLogger(TechnicianViewAddPictures.class.getName()).log(Level.SEVERE, null, ex);
         }

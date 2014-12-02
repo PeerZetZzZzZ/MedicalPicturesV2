@@ -5,16 +5,26 @@
  */
 package medicalpictures.controller.model.rest.common;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.WritableRaster;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.imageio.ImageIO;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.xml.bind.DatatypeConverter;
 import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
@@ -24,6 +34,7 @@ import medicalpictures.model.orm.DBPatientManager;
 import medicalpictures.model.orm.DBPictureTypeManager;
 import medicalpictures.model.orm.DBUserManager;
 import medicalpictures.model.security.UserSecurityManager;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
@@ -194,5 +205,35 @@ public class MedicalPicturesCommonResource {
         } catch (UserNotPermitted ex) {
             return jsonFactory.userNotPermitted();
         }
+    }
+
+    @GET
+    @Path("/getPictureData")
+    @Produces("application/json")
+    public String getPictureData() throws FileNotFoundException, IOException {
+        JSONObject json = new JSONObject();
+        File file = new File("zdjecie.jpg");
+        BufferedImage img = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
+        img.createGraphics().drawImage(ImageIO.read(file).getScaledInstance(200, 200, Image.SCALE_SMOOTH), 0, 0, null);
+        ImageIO.write(img, "jpg", new File("zdjecieThumb.jpg"));
+        File thumbnail = new File("zdjecieThumb.jpg");
+        FileInputStream fileStream = new FileInputStream(file);
+        String imageString = "data:image/png;base64,"
+                + DatatypeConverter.printBase64Binary(IOUtils.toByteArray(fileStream));
+        json.put("zdjecie", imageString);
+        return json.toString();
+    }
+     @GET
+    @Path("/getBigPictureData")
+    @Produces("application/json")
+    public String getBigPictureData() throws FileNotFoundException, IOException {
+        JSONObject json = new JSONObject();
+         System.out.println("zwracam duze");
+        File file = new File("zdjecie.jpg");
+        FileInputStream fileStream = new FileInputStream(file);
+        String imageString = "data:image/png;base64,"
+                + DatatypeConverter.printBase64Binary(IOUtils.toByteArray(fileStream));
+        json.put("zdjecie", imageString);
+        return json.toString();
     }
 }
