@@ -61,7 +61,6 @@ public class TechnicianViewAddPictures extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            System.out.println("wlaza tu kurwa");
             securityManager.checkUserPermissionToThisContent(AccountType.TECHNICIAN);
             List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
             for (FileItem item : items) {

@@ -451,9 +451,7 @@
             $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
             $scope.accountTypes = MedicalPicturesGlobal.ACCOUNT_TYPES;
             $scope.allPatients=[];
-            var picturesToSendList =[];
             $scope.selectedPatient;
-            var fd = new FormData();
             var uploader = $scope.uploader = new FileUploader({
               url:'/MedicalPictures/TechnicianViewAddPictures'
             });
@@ -478,35 +476,14 @@
                   var i=0;
                   var patients = data.patients;
                   for(i=0;i<patients.length;i++){
-                    $scope.allPatients[i]=patients[i].name +" " + patients[i].surname;
+                    $scope.allPatients[i]=patients[i].username+" : "+patients[i].name +" " + patients[i].surname;
                   }
               }).
               error(function(data, status, headers, config) {
                   console.log(status);
               });
               $scope.uploadPictures = function(){
-                // var i=0;
-                // $scope.appName =picturesToSendList.length;
-                // for(i=0;i<picturesToSendList.length;i++){
-                //   var pictureInfo = {patient:picturesToSendList[i].selectedPatient,pictureName:picturesToSendList[i].name};
-                //   $scope.appName = pictureInfo.toString();
-                //   fd.append(pictureInfo.toString(), picturesToSendList[i].formData);
-                // }
 
-                  $http({
-                          method: 'POST',
-                          url: '/MedicalPictures/TechnicianViewAddPictures',
-                          headers: {'Content-Type': undefined},
-                          data: fd,
-                          transformRequest: angular.identity
-                      }).success(function(data, status) {
-                          $translate('ALL_PICTURES_UPLOADED').then(function (translation) {
-                              showAlertMessageSuccess(translation);
-                              // $scope.uploader.clearQueue();
-                          });
-                      }).error(function(data, status) {
-
-                      });
           };
 
         uploader.onWhenAddingFileFailed = function(item /*{File|FileLikeObject}*/, filter, options) {
@@ -523,11 +500,8 @@
         uploader.onBeforeUploadItem = function(item) {
             document.getElementById("alertMessageDiv").style.visibility="hidden";
             console.info('onBeforeUploadItem', item);
-            var pictureData = {patient:item.selectedPatient, pictureName:item.name}
-            // picturesToSendList[picturesToSendList.length]=item;
-            // $scope.appName =picturesToSendList.length;
-            fd.append(item.name, item.formData);
-            $scope.appName=pictureData.toString();
+            var pictureData = '{\'patient\':\''+item.selectedPatient+'\', \'pictureName\':'+item.file.name+'}';
+            item.file.name = pictureData;
         };
         uploader.onProgressItem = function(fileItem, progress) {
             console.info('onProgressItem', fileItem, progress);
@@ -548,6 +522,10 @@
             console.info('onCompleteItem', fileItem, response, status, headers);
         };
         uploader.onCompleteAll = function() {
+          $translate('ALL_PICTURES_UPLOADED').then(function (translation) {
+              showAlertMessageSuccess(translation);
+              $scope.uploader.clearQueue();
+          });
         };
 
         console.info('uploader', uploader);
