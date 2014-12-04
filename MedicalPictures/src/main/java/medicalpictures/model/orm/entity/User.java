@@ -1,42 +1,42 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package medicalpictures.model.orm.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import org.eclipse.persistence.annotations.UuidGenerator;
 
 /**
  *
  * @author PeerZet
  */
 @Entity
-@Table(name = "UsersDB")
-public class UsersDB {
+@UuidGenerator(name = "UUID_GEN")
+public class User {
 
     @Id
-    @Column(length = 100)
+    @GeneratedValue(generator = "UUID_GEN")
+    private String id;
+
+    @Column(length = 100, unique = true)
     private String username;
 
-    @Column(length = 100)
+    @Column(length = 128)
     @NotNull
     private String password;
 
     @Column(length = 15)
     private String accountType;
 
-    public UsersDB(String username, String password, String accountType) {
+    public User(String username, String password, String accountType) {
         this.username = username;
         this.password = password;
         this.accountType = accountType;
     }
 
-    public UsersDB() {
+    public User() {
 
     }
 

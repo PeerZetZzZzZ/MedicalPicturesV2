@@ -11,7 +11,7 @@ import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserAlreadyLoggedException;
 import medicalpictures.model.exception.UserDoesntExistException;
 import medicalpictures.model.login.LoginValidator;
-import medicalpictures.model.orm.DBUserManager;
+import medicalpictures.model.orm.UserDAO;
 import medicalpictures.model.security.UserSecurityManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,7 +32,7 @@ public class LoginView extends HttpServlet {
     private LoginValidator loginValidator;
 
     @EJB
-    private DBUserManager dbManager;
+    private UserDAO dbManager;
 
     private Log log = LogFactory.getLog(LoginView.class);
 
@@ -48,6 +48,7 @@ public class LoginView extends HttpServlet {
         JSONObject jsonObject = jsonFactory.decryptRequest(request);
         String username = jsonObject.getString("username");
         String password = jsonObject.getString("password");
+        System.out.println(password);
         try {
             manager.registerUser(username, password);
             String userAccountType = loginValidator.getUserAccountType(username);

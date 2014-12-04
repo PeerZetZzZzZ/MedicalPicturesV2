@@ -24,7 +24,7 @@ import medicalpictures.model.orm.entity.Admin;
 import medicalpictures.model.orm.entity.Doctor;
 import medicalpictures.model.orm.entity.Patient;
 import medicalpictures.model.orm.entity.Technician;
-import medicalpictures.model.orm.entity.UsersDB;
+import medicalpictures.model.orm.entity.User;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,11 +36,11 @@ import org.json.JSONObject;
  */
 @Stateful
 @Named(value = "DBUserManager")
-public class DBUserManager {
+public class UserDAO {
 
     @EJB
     private OrmManager ormManager;
-    private Log logger = LogFactory.getLog(DBUserManager.class);
+    private Log logger = LogFactory.getLog(UserDAO.class);
 
     /**
      * Saves new user in database (UsersDB + specified table (by accountType)).
@@ -52,7 +52,7 @@ public class DBUserManager {
         try {
             addUser(userDetails, true);
         } catch (AddToDbFailed ex) {
-            throw new AddNewUserFailed(userDetails.get("username")+": adding user failed!");
+            throw new AddNewUserFailed(userDetails.get("username") + ": adding user failed!");
         }
     }
 
@@ -63,10 +63,10 @@ public class DBUserManager {
      * @throws AddToDbFailed
      */
     private void addNewUserInSpecifiedAccountTable(Map<String, String> userDetails) throws AddNewUserFailed {
-         try {
+        try {
             addUser(userDetails, false);
         } catch (AddToDbFailed ex) {
-            throw new AddNewUserFailed(userDetails.get("username")+": adding user failed!");
+            throw new AddNewUserFailed(userDetails.get("username") + ": adding user failed!");
         }
     }
 
@@ -78,7 +78,7 @@ public class DBUserManager {
      * @param accountType accountType
      */
     private void addNewUserInUserDB(final String username, final String password, final String accountType) throws AddToDbFailed {
-        UsersDB user = new UsersDB(username, password, accountType);
+        User user = new User(username, password, accountType);
         ormManager.persistObject(user);
     }
 
@@ -101,23 +101,29 @@ public class DBUserManager {
         if (inUsersDBToo) { //if it's false it means that don't create
             addNewUserInUserDB(username, password, accountType);
         }
-        Object user = null;
-        switch (accountType) {
-            case "ADMIN":
-                user = new Admin(username, name, surname, Integer.valueOf(age));
-                break;
-            case "PATIENT":
-                user = new Patient(username, name, surname, Integer.valueOf(age));
-                break;
-            case "TECHNICIAN":
-                user = new Technician(username, name, surname, Integer.valueOf(age));
-                break;
-            case "DOCTOR":
-                user = new Doctor(username, name, surname, Integer.valueOf(age), specialization);
-                break;
+        User foundUser = findUser(username);
+        if (foundUser != null) {
+            Object user = null;
+            switch (accountType) {
+                case "ADMIN":
+                    user = new Admin(foundUser, name, surname, Integer.valueOf(age));
+                    break;
+                case "PATIENT":
+                    user = new Patient(foundUser, name, surname, Integer.valueOf(age));
+                    break;
+                case "TECHNICIAN":
+                    user = new Technician(foundUser, name, surname, Integer.valueOf(age));
+                    break;
+                case "DOCTOR":
+                    user = new Doctor(foundUser, name, surname, Integer.valueOf(age), specialization);
+                    break;
+            }
+            ormManager.persistObject(user);
+            logger.info("Added user: " + username + "," + password + "," + accountType + "," + name + "," + surname + "," + age + "," + specialization);
+        } else {
+            logger.info("Couldn't add user, null ");
+
         }
-        ormManager.persistObject(user);
-        logger.info("Added user: " + username + "," + password + "," + accountType + "," + name + "," + surname + "," + age + "," + specialization);
     }
 
     /**
@@ -126,11 +132,11 @@ public class DBUserManager {
      * @return JSON with users - their usernames and accountTypes
      */
     public JSONObject getAllUsernames() {
-        Query query = ormManager.getEntityManager().createQuery("SELECT c FROM " + DBNameManager.getUsersDbTable() + " c", UsersDB.class);
-        Collection<UsersDB> usersDb = query.getResultList();
+        Query query = ormManager.getEntityManager().createQuery("SELECT c FROM " + DBNameManager.getUsersDbTable() + " c", User.class);
+        Collection<User> usersDb = query.getResultList();
         JSONObject users = new JSONObject();
         List<JSONObject> usersList = new ArrayList<>();
-        for (UsersDB userDb : usersDb) {
+        for (User userDb : usersDb) {
             JSONObject singleUser = new JSONObject();
             singleUser.put("username", userDb.getUsername());
             singleUser.put("accountType", userDb.getAccountType());
@@ -152,27 +158,27 @@ public class DBUserManager {
             String accountType = usernamesMap.get(username);//get accountType
             switch (accountType) {
                 case "ADMIN": {
-                    Admin admin = ormManager.getEntityManager().find(Admin.class, username);
+                    Admin admin = findAdmin(username);
                     ormManager.getEntityManager().remove(admin);
                     break;
                 }
                 case "DOCTOR": {
-                    Doctor doctor = ormManager.getEntityManager().find(Doctor.class, username);
+                    Doctor doctor = findDoctor(username);
                     ormManager.getEntityManager().remove(doctor);
                     break;
                 }
                 case "TECHNICIAN": {
-                    Technician technician = ormManager.getEntityManager().find(Technician.class, username);
+                    Technician technician = findTechnician(username);
                     ormManager.getEntityManager().remove(technician);
                     break;
                 }
                 case "PATIENT": {
-                    Patient patient = ormManager.getEntityManager().find(Patient.class, username);
+                    Patient patient = findPatient(username);
                     ormManager.getEntityManager().remove(patient);
                     break;
                 }
             }
-            UsersDB user = ormManager.getEntityManager().find(UsersDB.class, username);
+            User user = findUser(username);
             ormManager.getEntityManager().remove(user);
             logger.info("Deleted user: " + username + ", accountType: " + accountType);
         }
@@ -191,22 +197,22 @@ public class DBUserManager {
             String accountType = usernamesMap.get(username);//get accountType
             switch (accountType) {
                 case "ADMIN": {
-                    Admin admin = ormManager.getEntityManager().find(Admin.class, username);
+                    Admin admin = findAdmin(username);
                     ormManager.getEntityManager().remove(admin);
                     break;
                 }
                 case "DOCTOR": {
-                    Doctor doctor = ormManager.getEntityManager().find(Doctor.class, username);
+                    Doctor doctor = findDoctor(username);
                     ormManager.getEntityManager().remove(doctor);
                     break;
                 }
                 case "TECHNICIAN": {
-                    Technician technician = ormManager.getEntityManager().find(Technician.class, username);
+                    Technician technician = findTechnician(username);
                     ormManager.getEntityManager().remove(technician);
                     break;
                 }
                 case "PATIENT": {
-                    Patient patient = ormManager.getEntityManager().find(Patient.class, username);
+                    Patient patient = findPatient(username);
                     ormManager.getEntityManager().remove(patient);
                     break;
                 }
@@ -237,21 +243,21 @@ public class DBUserManager {
     public Map<String, String> getUserDetails(String username) {
         Map<String, String> userDetails = new HashMap<>();
         ormManager.getEntityManager().getTransaction().begin();
-        UsersDB user = ormManager.getEntityManager().find(UsersDB.class, username);
+        User user = findUser(username);
         String userAccountType = user.getAccountType();
         String name = "";
         String surname = "";
         int age = 0;
         switch (userAccountType) {
             case "ADMIN": {
-                Admin admin = ormManager.getEntityManager().find(Admin.class, username);
+                Admin admin = findAdmin(username);
                 name = admin.getName();
                 surname = admin.getSurname();
                 age = admin.getAge();
                 break;
             }
             case "DOCTOR": {
-                Doctor doctor = ormManager.getEntityManager().find(Doctor.class, username);
+                Doctor doctor = findDoctor(username);
                 name = doctor.getName();
                 surname = doctor.getSurname();
                 age = doctor.getAge();
@@ -260,14 +266,14 @@ public class DBUserManager {
                 break;
             }
             case "PATIENT": {
-                Patient patient = ormManager.getEntityManager().find(Patient.class, username);
+                Patient patient = findPatient(username);
                 name = patient.getName();
                 surname = patient.getSurname();
                 age = patient.getAge();
                 break;
             }
             case "TECHNICIAN": {
-                Technician technician = ormManager.getEntityManager().find(Technician.class, username);
+                Technician technician = findTechnician(username);
                 name = technician.getName();
                 surname = technician.getSurname();
                 age = technician.getAge();
@@ -299,7 +305,7 @@ public class DBUserManager {
          delete him in which he is already */
         Map<String, String> usersToDelete = new HashMap<>();
         ormManager.getEntityTransaction().begin();
-        UsersDB userToEdit = ormManager.getEntityManager().find(UsersDB.class, username);
+        User userToEdit = findUser(username);
         String currentAccountType = userToEdit.getAccountType();
         boolean accountTypeChanged = false;
         if (resetPassword.equals("true")) {
@@ -313,7 +319,7 @@ public class DBUserManager {
         if (!accountTypeChanged) {
             switch (accountType) {
                 case "ADMIN": {
-                    Admin admin = ormManager.getEntityManager().find(Admin.class, username);
+                    Admin admin = findAdmin(username);
                     admin.setName(name);
                     admin.setSurname(surname);
                     admin.setAge(age);
@@ -322,7 +328,7 @@ public class DBUserManager {
                     break;
                 }
                 case "DOCTOR": {
-                    Doctor doctor = ormManager.getEntityManager().find(Doctor.class, username);
+                    Doctor doctor = findDoctor(username);
                     doctor.setName(name);
                     doctor.setSurname(surname);
                     doctor.setAge(age);
@@ -332,7 +338,7 @@ public class DBUserManager {
                     break;
                 }
                 case "PATIENT": {
-                    Patient patient = ormManager.getEntityManager().find(Patient.class, username);
+                    Patient patient = findPatient(username);
                     patient.setName(name);
                     patient.setSurname(surname);
                     patient.setAge(age);
@@ -341,7 +347,7 @@ public class DBUserManager {
                     break;
                 }
                 case "TECHNICIAN": {
-                    Technician technician = ormManager.getEntityManager().find(Technician.class, username);
+                    Technician technician = findTechnician(username);
                     technician.setName(name);
                     technician.setSurname(surname);
                     technician.setAge(age);
@@ -365,4 +371,33 @@ public class DBUserManager {
 
     }
 
+    private Patient findPatient(String username) {
+        Query query = ormManager.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getPatientTable() + " a WHERE a.user.username LIKE :userName", Patient.class);
+        Patient patient = (Patient) query.setParameter("userName", username).getSingleResult();
+        return patient;
+    }
+
+    private Admin findAdmin(String username) {
+        Query query = ormManager.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getAdminTable() + " a WHERE a.user.username LIKE :userName", Admin.class);
+        Admin admin = (Admin) query.setParameter("userName", username).getSingleResult();
+        return admin;
+    }
+
+    private Technician findTechnician(String username) {
+        Query query = ormManager.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getTechnicianTable() + " a WHERE a.user.username LIKE :userName", Technician.class);
+        Technician technician = (Technician) query.setParameter("userName", username).getSingleResult();
+        return technician;
+    }
+
+    private Doctor findDoctor(String username) {
+        Query query = ormManager.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getDoctorTable() + " a WHERE a.user.username LIKE :userName", Doctor.class);
+        Doctor doctor = (Doctor) query.setParameter("userName", username).getSingleResult();
+        return doctor;
+    }
+
+    private User findUser(String username) {
+        Query query = ormManager.getEntityManager().createQuery("SELECT u FROM " + DBNameManager.getUsersDbTable() + " u WHERE u.username LIKE :userName", User.class);
+        User user = (User) query.setParameter("userName", username).getSingleResult();
+        return user;
+    }
 }

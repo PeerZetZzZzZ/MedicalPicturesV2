@@ -32,7 +32,7 @@ import medicalpictures.model.exception.UserNotPermitted;
 import medicalpictures.model.orm.DBBodyPartManager;
 import medicalpictures.model.orm.DBPatientManager;
 import medicalpictures.model.orm.DBPictureTypeManager;
-import medicalpictures.model.orm.DBUserManager;
+import medicalpictures.model.orm.UserDAO;
 import medicalpictures.model.security.UserSecurityManager;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -65,7 +65,7 @@ public class MedicalPicturesCommonResource {
     private JsonFactory jsonFactory;
 
     @EJB
-    private DBUserManager userManager;
+    private UserDAO userManager;
 
     private Log logger = LogFactory.getLog(MedicalPicturesCommonResource.class);
 
@@ -195,16 +195,16 @@ public class MedicalPicturesCommonResource {
     @Path("/getAllPatients")
     @Produces("application/json")
     public String getAllPatients() {
-        try {
-            securityManager.checkUserPermissionToThisContent(AccountType.TECHNICIAN);
+//        try {
+//            securityManager.checkUserPermissionToThisContent(AccountType.TECHNICIAN);
             String pictureTypes = patientManager.getAllPatients().toString();
             logger.info("Returned all patients: " + pictureTypes);
             return pictureTypes;
-        } catch (NoLoggedUserExistsHere ex) {
-            return jsonFactory.notUserLogged();
-        } catch (UserNotPermitted ex) {
-            return jsonFactory.userNotPermitted();
-        }
+//        } catch (NoLoggedUserExistsHere ex) {
+//            return jsonFactory.notUserLogged();
+//        } catch (UserNotPermitted ex) {
+//            return jsonFactory.userNotPermitted();
+//        }
     }
 
     @GET

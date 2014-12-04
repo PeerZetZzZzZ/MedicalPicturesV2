@@ -1,15 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package medicalpictures.model.orm.entity;
 
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -17,12 +15,15 @@ import javax.validation.constraints.NotNull;
  * @author PeerZet
  */
 @Entity
-@Table(name = "Admin")
 public class Admin implements Serializable {
 
     @Id
-    @Column(length = 100)
-    private String username;
+    @GeneratedValue(generator = "UUID_GEN")
+    private String id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     @NotNull
     @Column(length = 255)
@@ -34,26 +35,6 @@ public class Admin implements Serializable {
 
     @NotNull
     private int age;
-
-    public Admin(String username, String name, String surname, int age) {
-        this.username = username;
-        this.name = name;
-        this.surname = surname;
-        this.age = age;
-
-    }
-
-    public Admin() {
-
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getName() {
         return name;
@@ -77,5 +58,38 @@ public class Admin implements Serializable {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Admin(User user, String name, String surname, int age) {
+        this.user = user;
+        this.name = name;
+        this.surname = surname;
+        this.age = age;
+
+    }
+
+    public Admin() {
+
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Admin)) {
+            return false;
+        }
+        Admin other = (Admin) object;
+        if ((this.user == null && other.user != null) || (this.user != null && !this.user.equals(other.user))) {
+            return false;
+        }
+        return true;
     }
 }

@@ -4,16 +4,11 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <jta-data-source>jdbc/MySql</jta-data-source>
     <!--<exclude-unlisted-classes>false</exclude-unlisted-classes>-->
-    <class>medicalpictures.model.orm.entity.AccountType</class>
-    <class>medicalpictures.model.orm.entity.Admin</class>
-    <class>medicalpictures.model.orm.entity.BodyPart</class>
-    <class>medicalpictures.model.orm.entity.Doctor</class>
     <class>medicalpictures.model.orm.entity.Patient</class>
-    <class>medicalpictures.model.orm.entity.Picture</class>
-    <class>medicalpictures.model.orm.entity.PictureDescription</class>
+    <class>medicalpictures.model.orm.entity.User</class>
+    <class>medicalpictures.model.orm.entity.Admin</class>
+    <class>medicalpictures.model.orm.entity.Doctor</class>
     <class>medicalpictures.model.orm.entity.Technician</class>
-    <class>medicalpictures.model.orm.entity.UsersDB</class>
-    <class>medicalpictures.model.orm.entity.PictureType</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <validation-mode>NONE</validation-mode>
     <properties>

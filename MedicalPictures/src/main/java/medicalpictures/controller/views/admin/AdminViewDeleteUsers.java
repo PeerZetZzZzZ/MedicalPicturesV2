@@ -18,7 +18,7 @@ import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;
-import medicalpictures.model.orm.DBUserManager;
+import medicalpictures.model.orm.UserDAO;
 import medicalpictures.model.security.UserSecurityManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,7 +33,7 @@ public class AdminViewDeleteUsers extends HttpServlet {
     @EJB
     private UserSecurityManager securityManager;
     @EJB
-    private DBUserManager userManager;
+    private UserDAO userManager;
     @EJB
     private JsonFactory jsonFactory;
 

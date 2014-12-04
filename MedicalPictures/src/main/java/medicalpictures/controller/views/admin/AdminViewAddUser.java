@@ -22,7 +22,7 @@ import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.exception.JsonParsingException;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;
-import medicalpictures.model.orm.DBUserManager;
+import medicalpictures.model.orm.UserDAO;
 import medicalpictures.model.security.UserSecurityManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,7 +39,7 @@ public class AdminViewAddUser extends HttpServlet {
     @EJB
     private JsonFactory jsonFactory;
     @EJB
-    private DBUserManager dbManager;
+    private UserDAO dbManager;
     @EJB
     private AdminOperationResponse adminResponse;
 

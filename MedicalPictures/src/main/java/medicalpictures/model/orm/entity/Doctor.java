@@ -3,7 +3,11 @@ package medicalpictures.model.orm.entity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -12,12 +16,15 @@ import javax.validation.constraints.NotNull;
  * @author Przemysław Thomann
  */
 @Entity
-@Table(name="Doctor")
 public class Doctor implements Serializable {
 
     @Id
-    @Column(length = 100)
-    private String username;
+    @GeneratedValue(generator = "UUID_GEN")
+    private String id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     @NotNull
     @Column(length = 255)
@@ -65,16 +72,16 @@ public class Doctor implements Serializable {
         this.specialization = specialization;
     }
 
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Doctor(String username, String name, String surname, int age, String specialization) {
-        this.username = username;
+    public Doctor(User user, String name, String surname, int age, String specialization) {
+        this.user = user;
         this.name = name;
         this.surname = surname;
         this.age = age;
@@ -86,20 +93,13 @@ public class Doctor implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (username != null ? username.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Doctor)) {
             return false;
         }
         Doctor other = (Doctor) object;
-        if ((this.username == null && other.username != null) || (this.username != null && !this.username.equals(other.username))) {
+        if ((this.user == null && other.user != null) || (this.user != null && !this.user.equals(other.user))) {
             return false;
         }
         return true;

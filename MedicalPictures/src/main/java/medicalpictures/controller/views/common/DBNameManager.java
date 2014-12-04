@@ -22,7 +22,7 @@ public class DBNameManager {
     private static final String DOCTOR_TABLE_NAME = "Doctor";
     private static final String PATIENT_TABLE_NAME = "Patient";
     private static final String TECHNICIAN_TABLE_NAME = "Technician";
-    private static final String USERSDB_TABLE_NAME = "UsersDB";
+    private static final String USERSDB_TABLE_NAME = "User";
     private static final String PICTURE_TYPE_TABLE_NAME = "PictureType";
     private static final String BODYPART_TABLE_TABLE_NAME = "BodyPart";
     private static final String PICTURE_TABLE_TABLE_NAME = "Picture";

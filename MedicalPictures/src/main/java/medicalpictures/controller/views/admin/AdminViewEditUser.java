@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.exception.JsonParsingException;
-import medicalpictures.model.orm.DBUserManager;
+import medicalpictures.model.orm.UserDAO;
 import medicalpictures.model.orm.OrmManager;
 import medicalpictures.model.security.UserSecurityManager;
 import org.apache.commons.logging.Log;
@@ -38,7 +38,7 @@ public class AdminViewEditUser extends HttpServlet {
     private JsonFactory jsonFactory;
 
     @EJB
-    private DBUserManager userManager;
+    private UserDAO userManager;
 
     private Log logger = LogFactory.getLog(AdminViewEditUser.class);
 

@@ -3,7 +3,11 @@ package medicalpictures.model.orm.entity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -11,12 +15,15 @@ import javax.persistence.Table;
  * @author Przemysław Thomann
  */
 @Entity
-@Table(name="Technician")
 public class Technician implements Serializable {
 
     @Id
-    @Column(length = 100)
-    private String username;
+    @GeneratedValue(generator = "UUID_GEN")
+    private String id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     @Column(length = 255)
     private String name;
@@ -51,17 +58,16 @@ public class Technician implements Serializable {
         this.age = age;
     }
 
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Technician(String username, String name, String surname, int age) {
-        this.username = username;
-        this.name = name;
+    public Technician(User user, String name, String surname, int age) {
+        this.user = user;
         this.surname = surname;
         this.age = age;
     }
@@ -71,19 +77,12 @@ public class Technician implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (username != null ? username.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
     public boolean equals(Object object) {
         if (!(object instanceof Technician)) {
             return false;
         }
         Technician other = (Technician) object;
-        if ((this.username == null && other.username != null) || (this.username != null && !this.username.equals(other.username))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;

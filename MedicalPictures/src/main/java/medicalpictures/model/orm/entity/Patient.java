@@ -5,22 +5,31 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import org.eclipse.persistence.annotations.UuidGenerator;
 
 /**
  *
  * @author Przemysław Thomann
  */
 @Entity
-@Table(name = "Patient")
 public class Patient implements Serializable {
 
     @Id
-    @Column(length = 100)
-    private String username;
+    @GeneratedValue(generator = "UUID_GEN")
+    private String id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     @NotNull
     @Column(length = 255)
@@ -33,7 +42,6 @@ public class Patient implements Serializable {
     @NotNull
     private int age;
 
-    
     public String getName() {
         return name;
     }
@@ -58,30 +66,23 @@ public class Patient implements Serializable {
         this.age = age;
     }
 
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Patient() {
 
     }
 
-    public Patient(String username, String name, String surname, int age) {
-        this.username = username;
+    public Patient(User user, String name, String surname, int age) {
+        this.user = user;
         this.name = name;
         this.surname = surname;
         this.age = age;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (username != null ? username.hashCode() : 0);
-        return hash;
     }
 
     @Override
@@ -90,7 +91,7 @@ public class Patient implements Serializable {
             return false;
         }
         Patient other = (Patient) object;
-        if ((this.username == null && other.username != null) || (this.username != null && !this.username.equals(other.username))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
