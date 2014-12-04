@@ -1,9 +1,12 @@
 package medicalpictures.model.orm.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -30,6 +33,7 @@ public class Patient implements Serializable {
     @NotNull
     private int age;
 
+    
     public String getName() {
         return name;
     }

@@ -223,12 +223,13 @@ public class MedicalPicturesCommonResource {
         json.put("zdjecie", imageString);
         return json.toString();
     }
-     @GET
+
+    @GET
     @Path("/getBigPictureData")
     @Produces("application/json")
     public String getBigPictureData() throws FileNotFoundException, IOException {
         JSONObject json = new JSONObject();
-         System.out.println("zwracam duze");
+        System.out.println("zwracam duze");
         File file = new File("zdjecie.jpg");
         FileInputStream fileStream = new FileInputStream(file);
         String imageString = "data:image/png;base64,"
