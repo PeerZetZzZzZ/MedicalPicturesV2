@@ -1,55 +1,81 @@
 package medicalpictures.model.orm.entity;
 
 import java.io.Serializable;
-import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
+ * Is the single picture description made by doctor for specified picture.
  *
  * @author Przemysław Thomann
  */
 @Entity
-@Table(name="PictureDescription")
 public class PictureDescription implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(generator = "UUID_GEN")
+    @Column(length = 36)
     private String id;
 
-    @Column(length = 500, unique = true)
+    @Column(length = 1000, nullable = true)
     private String description;
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    @ManyToOne
+    @JoinColumn(name = "DOCTOR_ID")
+    private Doctor doctor;
+
+    @ManyToOne
+    @JoinColumn(name = "PICTURE_ID")
+    private Picture picture;
+
+    @ManyToOne
+    @JoinColumn(name = "DEFINED_PICTURE_DESCRIPTION_ID", nullable = true)
+    private DefinedPictureDescription definedPictureDescription;
 
     public String getDescription() {
         return description;
     }
 
-    public String getId() {
-        return id;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public PictureDescription(String description) {
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    public Picture getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Picture picture) {
+        this.picture = picture;
+    }
+
+    public DefinedPictureDescription getDefinedPictureDescription() {
+        return definedPictureDescription;
+    }
+
+    public void setDefinedPictureDescription(DefinedPictureDescription definedPictureDescription) {
+        this.definedPictureDescription = definedPictureDescription;
+    }
+
+    public PictureDescription(String description, Doctor doctor, Picture picture, DefinedPictureDescription definedPictureDescription) {
         this.description = description;
-        this.id = UUID.randomUUID().toString();
+        this.doctor = doctor;
+        this.picture = picture;
+        this.definedPictureDescription = definedPictureDescription;
     }
 
     public PictureDescription() {
-
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
     }
 
     @Override

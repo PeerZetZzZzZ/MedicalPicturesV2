@@ -1,55 +1,51 @@
 package medicalpictures.model.orm.entity;
 
 import java.io.Serializable;
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.OneToMany;
 
 /**
+ * Is the type of the picture.
  *
  * @author Przemysław Thomann
  */
 @Entity
-@Table(name = "PictureType")
 public class PictureType implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(generator = "UUID_GEN")
     private String id;
 
     @Column(length = 100, unique = true)
     private String pictureType;
 
-    public void setPicturetype(String pictureType) {
-        this.pictureType = pictureType;
+    @OneToMany(mappedBy = "pictureType", fetch = FetchType.LAZY)
+    private Set<Picture> pictures = new HashSet<>();
+
+    public Set<Picture> getPictures() {
+        return pictures;
     }
 
-    public String getPicturetype() {
+    public String getPictureType() {
         return pictureType;
     }
 
-    public String getId() {
-        return id;
+    public void setPictureType(String pictureType) {
+        this.pictureType = pictureType;
     }
 
     public PictureType(String pictureType) {
         this.pictureType = pictureType;
-        this.id = UUID.randomUUID().toString();
     }
 
     public PictureType() {
-        this.id = UUID.randomUUID().toString();
-    }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
     }
 
     @Override

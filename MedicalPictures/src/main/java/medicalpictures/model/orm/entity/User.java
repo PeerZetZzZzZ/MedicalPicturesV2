@@ -4,11 +4,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import org.eclipse.persistence.annotations.UuidGenerator;
 
 /**
+ * Is the user who can use the application.
  *
  * @author PeerZet
  */
@@ -30,15 +30,6 @@ public class User {
     @Column(length = 15)
     private String accountType;
 
-    public User(String username, String password, String accountType) {
-        this.username = username;
-        this.password = password;
-        this.accountType = accountType;
-    }
-
-    public User() {
-
-    }
 
     public void setUsername(String username) {
         this.username = username;
@@ -64,4 +55,13 @@ public class User {
         return accountType;
     }
 
+    public User(String username, String password, String accountType) {
+        this.username = username;
+        this.password = password;
+        this.accountType = accountType;
+    }
+
+    public User() {
+
+    }
 }

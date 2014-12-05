@@ -3,20 +3,19 @@ package medicalpictures.model.orm.entity;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import org.eclipse.persistence.annotations.UuidGenerator;
 
 /**
+ * Is the patient who has pictures and picture descriptions.
  *
  * @author Przemysław Thomann
  */
@@ -41,6 +40,9 @@ public class Patient implements Serializable {
 
     @NotNull
     private int age;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "patient", cascade = CascadeType.ALL)
+    private Set<Picture> pictureList = new HashSet<>();
 
     public String getName() {
         return name;
@@ -68,6 +70,10 @@ public class Patient implements Serializable {
 
     public User getUser() {
         return user;
+    }
+
+    public Set<Picture> getPictureList() {
+        return pictureList;
     }
 
     public void setUser(User user) {

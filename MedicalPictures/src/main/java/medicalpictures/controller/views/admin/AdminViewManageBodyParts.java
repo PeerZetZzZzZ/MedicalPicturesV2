@@ -6,23 +6,18 @@
 package medicalpictures.controller.views.admin;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import jdk.nashorn.internal.parser.JSONParser;
-import medicalpictures.controller.views.admin.AdminViewAddUser;
 import medicalpictures.model.admin.AdminOperationResponse;
 import medicalpictures.model.common.JsonFactory;
+import medicalpictures.model.dao.BodyPartDAO;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.AddBodyPartFailed;
-import medicalpictures.model.exception.AddPictureTypeFailed;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;
-import medicalpictures.model.orm.DBPictureTypeManager;
 import medicalpictures.model.security.UserSecurityManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,7 +33,7 @@ public class AdminViewManageBodyParts extends HttpServlet {
     private UserSecurityManager securityManager;
 
     @EJB
-    private DBPictureTypeManager pictureTypeManager;
+    private BodyPartDAO bodyPartDAO;
 
     @EJB
     private JsonFactory jsonFactory;
@@ -69,7 +64,7 @@ public class AdminViewManageBodyParts extends HttpServlet {
             securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
             JSONObject bodyPart = jsonFactory.decryptRequest(request);
             bodyPartString = jsonFactory.getBodyPart(bodyPart);
-            pictureTypeManager.addBodyPart(bodyPartString);
+            bodyPartDAO.addBodyPart(bodyPartString);
             response.getWriter().write(adminResponse.bodyPartAddedSuccessfully(bodyPartString));
         } catch (UserNotPermitted ex) {
             log.error("POST " + AdminViewManageBodyParts.class.toString() + ": No permission to see the content!");

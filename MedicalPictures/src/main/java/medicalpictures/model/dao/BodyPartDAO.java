@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package medicalpictures.model.orm;
+package medicalpictures.model.dao;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,8 +12,12 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import medicalpictures.controller.views.common.DBNameManager;
+import medicalpictures.model.exception.AddBodyPartFailed;
+import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.orm.entity.BodyPart;
 import medicalpictures.model.orm.entity.PictureType;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,10 +27,12 @@ import org.json.JSONObject;
  * @author PeerZet
  */
 @Stateless
-public class DBBodyPartManager {
+public class BodyPartDAO {
 
     @EJB
-    private OrmManager ormManager;
+    private ManagerDAO ormManager;
+
+    private Log logger = LogFactory.getLog(DBPictureTypeManager.class);
 
     /**
      * Returns the list of body parts.
@@ -44,9 +50,28 @@ public class DBBodyPartManager {
         JSONObject bodyPartsJson = new JSONObject();
         JSONArray bodyPartsArray = new JSONArray();
         for (BodyPart bodyPart : bodyParts) {
-            bodyPartsArray.put(bodyPart.getBodypart());
+            bodyPartsArray.put(bodyPart.getBodyPart());
         }
         bodyPartsJson.put("bodyParts", bodyPartsArray);
         return bodyPartsJson;
+    }
+
+    /**
+     * Creates new body part in DB.
+     *
+     * @param bodyPartString
+     * @throws medicalpictures.model.exception.AddBodyPartFailed when creation
+     * fails
+     */
+    public void addBodyPart(String bodyPartString) throws AddBodyPartFailed {
+        BodyPart bodyPart = new BodyPart();
+        bodyPart.setBodyPart(bodyPartString);
+        try {
+            ormManager.persistObject(bodyPart);
+            logger.info(bodyPartString + ": Body part successfully added!");
+        } catch (AddToDbFailed ex) {
+            logger.error(ex.getMessage());
+            throw new AddBodyPartFailed(bodyPartString + ": Adding body part failed!");
+        }
     }
 }

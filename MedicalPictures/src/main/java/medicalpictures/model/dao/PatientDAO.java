@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package medicalpictures.model.orm;
+package medicalpictures.model.dao;
 
 import java.util.Collection;
 import javax.ejb.EJB;
@@ -20,10 +20,10 @@ import org.json.JSONObject;
  * @author PeerZet
  */
 @Stateless
-public class DBPatientManager {
+public class PatientDAO {
 
     @EJB
-    private OrmManager ormManager;
+    private ManagerDAO ormManager;
 
     /**
      * Returns all patients in application.

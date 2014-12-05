@@ -29,10 +29,10 @@ import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;
-import medicalpictures.model.orm.DBBodyPartManager;
-import medicalpictures.model.orm.DBPatientManager;
-import medicalpictures.model.orm.DBPictureTypeManager;
-import medicalpictures.model.orm.UserDAO;
+import medicalpictures.model.dao.BodyPartDAO;
+import medicalpictures.model.dao.PatientDAO;
+import medicalpictures.model.dao.DBPictureTypeManager;
+import medicalpictures.model.dao.UserDAO;
 import medicalpictures.model.security.UserSecurityManager;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -55,11 +55,11 @@ public class MedicalPicturesCommonResource {
     private UserSecurityManager securityManager;
 
     @EJB
-    private DBBodyPartManager bodyPartManager;
+    private BodyPartDAO bodyPartManager;
     @EJB
     private DBPictureTypeManager pictureTypeManager;
     @EJB
-    private DBPatientManager patientManager;
+    private PatientDAO patientManager;
 
     @EJB
     private JsonFactory jsonFactory;

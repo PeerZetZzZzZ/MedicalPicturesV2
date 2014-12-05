@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;
-import medicalpictures.model.orm.OrmManager;
+import medicalpictures.model.dao.ManagerDAO;
 import medicalpictures.model.security.UserSecurityManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,7 +24,7 @@ import org.apache.commons.logging.LogFactory;
 public class AdminViewManageUsers extends HttpServlet {
 
     @Inject
-    public OrmManager ormManager;
+    public ManagerDAO ormManager;
     @EJB
     private UserSecurityManager manager;
 

@@ -1,17 +1,20 @@
 package medicalpictures.model.orm.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
+ * Is the doctor, who gives picture descriptions.
  *
  * @author Przemysław Thomann
  */
@@ -39,6 +42,9 @@ public class Doctor implements Serializable {
 
     @Column(length = 100)
     private String specialization;
+
+    @OneToMany(mappedBy = "doctor")
+    private Set<PictureDescription> pictureDescriptions = new HashSet<>();
 
     public String getName() {
         return name;
@@ -78,6 +84,10 @@ public class Doctor implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<PictureDescription> getPictureDescriptions() {
+        return pictureDescriptions;
     }
 
     public Doctor(User user, String name, String surname, int age, String specialization) {

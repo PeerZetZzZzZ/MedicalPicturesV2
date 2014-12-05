@@ -1,143 +1,141 @@
 package medicalpictures.model.orm.entity;
 
 import java.io.Serializable;
+import static java.rmi.server.RemoteRef.serialVersionUID;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 
 /**
+ * Is the single picture for the patient.
  *
  * @author Przemysław Thomann
  */
 @Entity
-@Table(name="Picture")
 public class Picture implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(generator = "UUID_GEN")
     private String id;
 
-    @Column(length = 100)
-    private String username;
+    @ManyToOne
+    @JoinColumn(name = "PATIENT_ID")
+    private Patient patient;
+
+    @ManyToOne
+    @JoinColumn(name = "TECHNICIAN_ID")
+    private Technician technician;
+
+    @ManyToOne
+    @JoinColumn(name = "PICTURE_TYPE_ID")
+    private PictureType pictureType;
+
+    @ManyToOne
+    @JoinColumn(name = "BODY_PART_ID")
+    private BodyPart bodyPart;
+
+    @OneToMany(mappedBy = "picture")
+    private Set<PictureDescription> pictureDescriptions = new HashSet<>();
 
     @Column(length = 100, unique = true)
     private String pictureName;
 
-    @Temporal(TemporalType.DATE)
-    private java.util.Date captureDatetime;
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date captureTimestamp = new Date();
 
-    private byte[] picture_data;
+    private byte[] pictureData;
 
-    @Column(length = 100)
-    private String technicianUsername;
+    private byte[] thumbnailData;
 
-    @Column(length = 100)
-    private String doctorUsername;
-
-    @Column(length = 100)
-    private String pictureType;
-
-    @Column(length = 200)
-    private String pictureDescription;
-
-    public void setUsername(String username) {
-        this.username = username;
+    public Patient getPatient() {
+        return patient;
     }
 
-    public void setPicture_name(String picture_name) {
-        this.pictureName = picture_name;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
-    public void setCapture_datetime(Date capture_datetime) {
-        this.captureDatetime = capture_datetime;
+    public Technician getTechnician() {
+        return technician;
     }
 
-    public void setPicture_data(byte[] picture_data) {
-        this.picture_data = picture_data;
+    public void setTechnician(Technician technician) {
+        this.technician = technician;
     }
 
-    public void setTechnician_username(String technician_username) {
-        this.technicianUsername = technician_username;
-    }
-
-    public void setDoctor_username(String doctor_username) {
-        this.doctorUsername = doctor_username;
-    }
-
-    public void setPicture_type(String picture_type) {
-        this.pictureType = picture_type;
-    }
-
-    public void setPicture_description(String picture_description) {
-        this.pictureDescription = picture_description;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPicture_name() {
-        return pictureName;
-    }
-
-    public Date getCapture_datetime() {
-        return captureDatetime;
-    }
-
-    public byte[] getPicture_data() {
-        return picture_data;
-    }
-
-    public String getTechnician_username() {
-        return technicianUsername;
-    }
-
-    public String getDoctor_username() {
-        return doctorUsername;
-    }
-
-    public String getPicture_type() {
+    public PictureType getPictureType() {
         return pictureType;
     }
 
-    public String getPicture_description() {
-        return pictureDescription;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public Picture(String username, String pictureName, Date captureDatetime, byte[] picture_data, String technicianUsername, String doctorUsername, String pictureType, String pictureDescription) {
-        this.username = username;
-        this.pictureName = pictureName;
-        this.captureDatetime = captureDatetime;
-        this.picture_data = picture_data;
-        this.technicianUsername = technicianUsername;
-        this.doctorUsername = doctorUsername;
+    public void setPictureType(PictureType pictureType) {
         this.pictureType = pictureType;
-        this.pictureDescription = pictureDescription;
-        this.id = UUID.randomUUID().toString();
+    }
+
+    public BodyPart getBodyPart() {
+        return bodyPart;
+    }
+
+    public void setBodyPart(BodyPart bodyPart) {
+        this.bodyPart = bodyPart;
+    }
+
+    public String getPictureName() {
+        return pictureName;
+    }
+
+    public void setPictureName(String pictureName) {
+        this.pictureName = pictureName;
+    }
+
+    public byte[] getPictureData() {
+        return pictureData;
+    }
+
+    public void setPictureData(byte[] pictureData) {
+        this.pictureData = pictureData;
+    }
+
+    public byte[] getThumbnailData() {
+        return thumbnailData;
+    }
+
+    public void setThumbnailData(byte[] thumbnailData) {
+        this.thumbnailData = thumbnailData;
+    }
+
+    public Set<PictureDescription> getPictureDescriptions() {
+        return pictureDescriptions;
+    }
+
+    public Date getCaptureTimestamp() {
+        return captureTimestamp;
+    }
+
+    public Picture(Patient patient, Technician technician, PictureType pictureType, BodyPart bodyPart, String pictureName, byte[] pictureData, byte[] thumbnailData) {
+        this.patient = patient;
+        this.technician = technician;
+        this.pictureType = pictureType;
+        this.bodyPart = bodyPart;
+        this.pictureName = pictureName;
+        this.pictureData = pictureData;
+        this.thumbnailData = thumbnailData;
     }
 
     public Picture() {
 
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
     }
 
     @Override

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package medicalpictures.model.orm;
+package medicalpictures.model.dao;
 
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -21,9 +21,9 @@ import medicalpictures.model.exception.AddToDbFailed;
  * @author PeerZet
  */
 @Stateful
-public class OrmManager {
+public class ManagerDAO {
 
-    private final static Logger LOGGER = Logger.getLogger(OrmManager.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(ManagerDAO.class.getName());
     private EntityManager em;
     private EntityTransaction tx;
 
