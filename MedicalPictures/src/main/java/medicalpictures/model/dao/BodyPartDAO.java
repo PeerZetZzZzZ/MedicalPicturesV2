@@ -32,7 +32,7 @@ public class BodyPartDAO {
     @EJB
     private ManagerDAO ormManager;
 
-    private Log logger = LogFactory.getLog(DBPictureTypeManager.class);
+    private Log logger = LogFactory.getLog(PictureTypeDAO.class);
 
     /**
      * Returns the list of body parts.

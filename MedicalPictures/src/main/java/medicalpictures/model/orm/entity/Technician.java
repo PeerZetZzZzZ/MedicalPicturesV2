@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
+ * Is the technician who uploads pictures of the patient.
  *
  * @author Przemysław Thomann
  */
@@ -38,6 +39,10 @@ public class Technician implements Serializable {
 
     @OneToMany(mappedBy = "technician", fetch = FetchType.LAZY)
     private Set<Picture> pictureMadeList = new HashSet<>();
+
+    public Set<Picture> getPictureMadeList() {
+        return pictureMadeList;
+    }
 
     public String getName() {
         return name;
@@ -75,6 +80,7 @@ public class Technician implements Serializable {
         this.user = user;
         this.surname = surname;
         this.age = age;
+        this.name = name;
     }
 
     public Technician() {

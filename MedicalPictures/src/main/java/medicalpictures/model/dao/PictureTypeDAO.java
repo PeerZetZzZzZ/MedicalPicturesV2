@@ -28,11 +28,11 @@ import org.json.JSONObject;
  * @author PeerZet
  */
 @Stateless
-public class DBPictureTypeManager {
+public class PictureTypeDAO {
 
     @EJB
     private ManagerDAO ormManager;
-    private Log logger = LogFactory.getLog(DBPictureTypeManager.class);
+    private Log logger = LogFactory.getLog(PictureTypeDAO.class);
 
     /**
      * Returns all picture types taken from DB.

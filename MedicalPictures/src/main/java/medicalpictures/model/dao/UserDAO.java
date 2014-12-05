@@ -141,8 +141,10 @@ public class UserDAO {
             singleUser.put("username", userDb.getUsername());
             singleUser.put("accountType", userDb.getAccountType());
             usersList.add(singleUser);
+            System.out.println(singleUser.toString());
         }
         users.put("usernames", usersList);
+        System.out.println("Takie cos zwracom: " + users.toString());
         return users;
     }
 

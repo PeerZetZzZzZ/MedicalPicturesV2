@@ -31,7 +31,7 @@ import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;
 import medicalpictures.model.dao.BodyPartDAO;
 import medicalpictures.model.dao.PatientDAO;
-import medicalpictures.model.dao.DBPictureTypeManager;
+import medicalpictures.model.dao.PictureTypeDAO;
 import medicalpictures.model.dao.UserDAO;
 import medicalpictures.model.security.UserSecurityManager;
 import org.apache.commons.io.IOUtils;
@@ -57,7 +57,7 @@ public class MedicalPicturesCommonResource {
     @EJB
     private BodyPartDAO bodyPartManager;
     @EJB
-    private DBPictureTypeManager pictureTypeManager;
+    private PictureTypeDAO pictureTypeManager;
     @EJB
     private PatientDAO patientManager;
 
@@ -136,12 +136,16 @@ public class MedicalPicturesCommonResource {
     public String getAllUsernames() {
         try {
             securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+            System.out.println("tu wlaza jeszcze ale nizej");
             String allUsernames = userManager.getAllUsernames().toString();
             logger.info("Return all usernames: " + allUsernames);
+            System.out.println(allUsernames.toString());
             return allUsernames;
         } catch (NoLoggedUserExistsHere ex) {
+            System.out.println("user not logged");
             return jsonFactory.notUserLogged();
         } catch (UserNotPermitted ex) {
+            System.out.println("user not permitted");
             return jsonFactory.userNotPermitted();
         }
     }
@@ -197,9 +201,9 @@ public class MedicalPicturesCommonResource {
     public String getAllPatients() {
 //        try {
 //            securityManager.checkUserPermissionToThisContent(AccountType.TECHNICIAN);
-            String pictureTypes = patientManager.getAllPatients().toString();
-            logger.info("Returned all patients: " + pictureTypes);
-            return pictureTypes;
+        String pictureTypes = patientManager.getAllPatients().toString();
+        logger.info("Returned all patients: " + pictureTypes);
+        return pictureTypes;
 //        } catch (NoLoggedUserExistsHere ex) {
 //            return jsonFactory.notUserLogged();
 //        } catch (UserNotPermitted ex) {

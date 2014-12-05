@@ -21,7 +21,7 @@ import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.AddPictureTypeFailed;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;
-import medicalpictures.model.dao.DBPictureTypeManager;
+import medicalpictures.model.dao.PictureTypeDAO;
 import medicalpictures.model.security.UserSecurityManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,7 +37,7 @@ public class AdminViewManagePictureTypes extends HttpServlet {
     private UserSecurityManager securityManager;
 
     @EJB
-    private DBPictureTypeManager pictureTypeManager;
+    private PictureTypeDAO pictureTypeManager;
 
     @EJB
     private JsonFactory jsonFactory;
