@@ -310,6 +310,7 @@ MedicalPictures.controller('AdminViewAddUserController', function($scope, $trans
   $scope.maxNameSurnameLength = MedicalPicturesGlobal.MAX_NAME_SURNAME_LENGTH;
   $scope.maxUsernameLength = MedicalPicturesGlobal.MAX_USERNAME_LENGTH;
   $scope.username = "a@a.pl";
+  $scope.specialization = "lekarz";
   $scope.age = 1;
   $scope.name = "name";
   $scope.surname = "surname";
@@ -319,7 +320,7 @@ MedicalPictures.controller('AdminViewAddUserController', function($scope, $trans
     document.getElementById("alertMessageDiv").style.visibility = "hidden"; //we hide it if user clicks it after adding user previously
     if (!angular.isUndefined($scope.username) &&
       !angular.isUndefined($scope.age) && !angular.isUndefined($scope.name) &&
-      !angular.isUndefined($scope.surname) && !angular.isUndefined($scope.selectedAccountType)) {
+      !angular.isUndefined($scope.surname) && !angular.isUndefined($scope.selectedAccountType) && !angular.isUndefined($scope.specialization)) {
       $http({
         url: '/MedicalPictures/AdminViewAddUser',
         method: 'POST',
@@ -328,6 +329,7 @@ MedicalPictures.controller('AdminViewAddUserController', function($scope, $trans
         },
         data: {
           'username': $scope.username,
+          'specialization': $scope.specialization,
           'age': $scope.age.toString(),
           'name': $scope.name,
           'surname': $scope.surname,
@@ -340,6 +342,7 @@ MedicalPictures.controller('AdminViewAddUserController', function($scope, $trans
           $scope.username = undefined;
           $scope.age = undefined;
           $scope.name = undefined;
+          $scope.specialization = undefined;
           $scope.surname = undefined;
           $translate('USER_ADDED_SUCCESSFULLY').then(function(translation) {
             $location.path('/MedicalPictures/AdminViewAddUsers');
@@ -613,9 +616,9 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
 
   console.info('uploader', uploader);
 });
-MedicalPictures.controller('TechnicianViewManagePicturesController', function($scope,$http, MedicalPicturesGlobal){
+MedicalPictures.controller('TechnicianViewManagePicturesController', function($scope, $http, $translate, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
-  $scope.pictures =[];
+  $scope.pictures = [];
   $scope.allBodyParts = [];
   $scope.allPictureTypes = [];
   document.getElementById("alertMessageDiv").style.visibility = "hidden";
@@ -644,11 +647,88 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
   });
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllPictures').
   success(function(data, status, headers, config) {
-      $scope.pictures = data.pictures;
+    $scope.pictures = data.pictures;
+    if ($scope.pictures.length === 0) {
+      $translate('PICTURES_LIST_IS_EMPTY').then(function(translation) {
+        showAlertMessageWarning(translation);
+      });
+    }
   }).
   error(function(data, status, headers, config) {
     console.log(status);
   });
+  $scope.markAllPicturesClicked = function() {
+    var i;
+    for (i = 0; i < $scope.pictures.length; i++) {
+      document.getElementById($scope.pictures[i].pictureId).checked = true;
+    }
+  };
+  $scope.unmarkAllPicturesClicked = function() {
+    var i;
+    for (i = 0; i < $scope.pictures.length; i++) {
+      document.getElementById($scope.pictures[i].pictureId).checked = false;
+    }
+  };
+  $scope.deletePicturesClicked = function() {
+    var i;
+    var picturesToDelete = [];
+    for (i = 0; i < $scope.pictures.length; i++) {
+      if (document.getElementById($scope.pictures[i].pictureId).checked === true) {
+        var index = picturesToDelete.length;
+        picturesToDelete[index] = "{pictureId:'" + $scope.pictures[i].pictureId + "'}";
+      }
+    }
+    var deletePictures;
+    if (picturesToDelete.length === 0) {} else {
+      deletePictures = "{pictures:[" + picturesToDelete + "]}";
+      $http({
+        url: '/MedicalPictures/webresources/MedicalPicturesCommon/deletePictures',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: deletePictures
+      }).success(function(data, status, header, config) {
+        $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllPictures').
+        success(function(data, status, headers, config) {
+          $scope.pictures = data.pictures;
+          if ($scope.pictures.length === 0) {
+            $translate('PICTURES_LIST_IS_EMPTY').then(function(translation) {
+              showAlertMessageWarning(translation);
+            });
+          }
+        }).
+        error(function(data, status, headers, config) {
+          console.log(status);
+        });
+      }).error(function(data, status, headers, config) {
+        console.log(status);
+      });
+    }
+  }
+  $scope.updatePicture = function(picture) {
+    var pictureUpdateValues = '{pictureId:\'' + picture.pictureId + '\',bodyPart:\'' + picture.selectedBodyPart + '\',pictureType:\'' + picture.selectedPictureType + '\'}';
+    $http({
+      url: '/MedicalPictures/webresources/MedicalPicturesCommon/deletePictures',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: deletePictures
+    }).success(function(data, status, header, config) {
+      if (data.error === "insertToDbFailed") {
+        $translate('ADD_TO_DB_FAILED').then(function(translation) {
+          showAlertMessageError(translation, picture.pictureName);
+        });
+      } else {
+        $translate('SUCCESSFULLY_EDITED_PICTURE').then(function(translation) {
+          showAlertMessageSuccess(translation, picture.pictureName)
+        });
+      }
+    }).error(function(data, status, header, config) {
+
+    });
+  }
 });
 /* UserSettings Controller */
 MedicalPictures.controller('UserSettingsController', function($scope, MedicalPicturesGlobal) {

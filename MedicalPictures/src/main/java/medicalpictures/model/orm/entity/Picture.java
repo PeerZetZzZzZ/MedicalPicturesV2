@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,7 +42,7 @@ public class Picture implements Serializable {
     @JoinColumn(name = "BODY_PART_ID")
     private BodyPart bodyPart;
 
-    @OneToMany(mappedBy = "picture")
+    @OneToMany(mappedBy = "picture", cascade = CascadeType.ALL)
     private Set<PictureDescription> pictureDescriptions = new HashSet<>();
 
     @Column(length = 100)
@@ -117,6 +118,10 @@ public class Picture implements Serializable {
 
     public Date getCaptureTimestamp() {
         return captureTimestamp;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public Picture(Patient patient, Technician technician, PictureType pictureType, BodyPart bodyPart, String pictureName, byte[] pictureData, byte[] thumbnailData) {

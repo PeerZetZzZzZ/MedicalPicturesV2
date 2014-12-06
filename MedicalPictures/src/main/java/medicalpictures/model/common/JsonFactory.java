@@ -6,7 +6,9 @@
 package medicalpictures.model.common;
 
 import java.io.BufferedReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.ejb.Stateless;
 import javax.json.JsonException;
@@ -174,5 +176,41 @@ public class JsonFactory {
         pictureValues.put("bodyPart", pictureDetails.getString("bodyPart"));
         pictureValues.put("pictureType", pictureDetails.getString("pictureType"));
         return pictureValues;
+    }
+
+    /**
+     * Gets the picture values ( but no data ) when technician edit picture
+     *
+     * @param pictureDetails JSONObject of details
+     * @return map with picture details
+     */
+    public Map<String, String> getEditPictureValues(JSONObject pictureDetails) {
+        Map<String, String> pictureValues = new HashMap<>();
+        String patient = pictureDetails.getString("patient");
+        String patientUsername = patient.substring(0, patient.indexOf(":") - 1);//we have email:name username so we want only email
+        pictureValues.put("pictureId", pictureDetails.getString("pictureId"));
+        pictureValues.put("bodyPart", pictureDetails.getString("bodyPart"));
+        pictureValues.put("pictureType", pictureDetails.getString("pictureType"));
+        return pictureValues;
+    }
+
+    public List<String> getPicturesToDeleteList(String pictures) {
+        JSONObject picturesJson = new JSONObject(pictures);
+        JSONArray picturesArray = picturesJson.getJSONArray("pictures");
+        List<String> picturesIdList = new ArrayList<>();
+        for (int i = 0; i < picturesArray.length(); i++) {
+            JSONObject pic = picturesArray.getJSONObject(i);
+            picturesIdList.add(pic.getString("pictureId"));
+        }
+        return picturesIdList;
+    }
+    /**
+     * Returns the information that the inserting/updating item in db failed
+     * @return 
+     */
+    public String insertToDbFailed() {
+        JSONObject json = new JSONObject();
+        json.put("error", "insertToDbFailed");
+        return json.toString();
     }
 }

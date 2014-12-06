@@ -27,6 +27,7 @@ public class TechnicianOperationResponse {
         JSONArray picturesArray = new JSONArray();
         for (Picture picture : pictures) {
             JSONObject singlePicture = new JSONObject();
+            singlePicture.put("pictureId", picture.getId());
             singlePicture.put("pictureName", picture.getPictureName());
             singlePicture.put("bodyPart", picture.getBodyPart().getBodyPart());
             singlePicture.put("pictureType", picture.getPictureType().getPictureType());

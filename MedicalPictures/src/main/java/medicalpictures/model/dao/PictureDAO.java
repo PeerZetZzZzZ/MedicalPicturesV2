@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import medicalpictures.controller.views.common.DBNameManager;
+import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.orm.entity.BodyPart;
 import medicalpictures.model.orm.entity.Patient;
 import medicalpictures.model.orm.entity.Picture;
@@ -69,6 +70,42 @@ public class PictureDAO {
             LOG.info("Couldn't get pictures list, because it's empty");
             return null;
         }
+    }
+
+    public void removePictures(List<String> picturesList) {
+        for (String singlePictureId : picturesList) {
+            Picture picture = managerDAO.getEntityManager().find(Picture.class, singlePictureId);
+            if (picture != null) {
+                managerDAO.getEntityTransaction().begin();
+                managerDAO.getEntityManager().remove(picture);
+                managerDAO.getEntityTransaction().commit();
+                LOG.info("Successfully removed picture: " + singlePictureId);
+            } else {
+                LOG.info("Couldn't remove picture. Picture ': " + singlePictureId + "' not found");
+            }
+        }
+    }
+
+    /**
+     * Updates the picture. Can update bodyPart and pictureType.
+     *
+     * @param pictureDetailsMap
+     */
+    public void updatePicture(Map<String, String> pictureDetailsMap) throws AddToDbFailed {
+        String pictureId = pictureDetailsMap.get("pictureId");
+        String pictureType = pictureDetailsMap.get("pictureType");
+        String bodyPart = pictureDetailsMap.get("bodyPart");
+        managerDAO.getEntityTransaction().begin();
+        BodyPart bodyPartEntity = bodyPartDAO.getBodyPartByName(bodyPart);
+        PictureType pictureTypeEntity = pictureTypeDAO.getPictureTypeByName(pictureType);
+        Picture picture = managerDAO.getEntityManager().find(Picture.class, pictureId);
+        if (picture != null && bodyPartEntity != null && pictureTypeEntity != null) {
+            picture.setBodyPart(bodyPartEntity);
+            picture.setPictureType(pictureTypeEntity);
+        } else {
+            throw new AddToDbFailed("Failed to edit picture with id: '" + pictureId + "'");
+        }
+        managerDAO.getEntityTransaction().commit();
     }
 
 }

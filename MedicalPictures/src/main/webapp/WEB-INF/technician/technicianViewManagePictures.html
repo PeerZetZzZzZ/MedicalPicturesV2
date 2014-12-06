@@ -109,15 +109,15 @@
     </div>
     <div class="large-8 columns">
       <div class="icon-bar three-up">
-        <a class="item" href="" ng-click="deleteUsersClicked()">
+        <a class="item" href="" ng-click="deletePicturesClicked()">
           <img src="./views/glyphicons/png/glyphicons_207_remove_2.png">
           <label>{{'DELETE_PICTURES'| translate}}</label>
         </a>
-        <a class="item" href="" ng-click="markAllUsersClicked()">
+        <a class="item" href="" ng-click="markAllPicturesClicked()">
           <img src="./views/glyphicons/png/glyphicons_152_check.png">
           <label>{{'MARK_ALL'| translate}}</label>
         </a>
-        <a class="item" href="" ng-click="unmarkAllUsersClicked()">
+        <a class="item" href="" ng-click="unmarkAllPicturesClicked()">
           <img src="./views/glyphicons/png/glyphicons_153_unchecked.png">
           <label>{{'UNMARK_ALL'| translate}}</label>
         </a>
@@ -150,32 +150,24 @@
         <br>
       </div>
       <div class="large-10 columns">
-        <div class="row">
-          <div class="large-7 columns">
-            <h3>Zdjęcia do załadowania</h3>
-            <p>Ilość: {{ uploader.queue.length }}</p>
-          </div>
-          <div class="large-3 columns">
-            <a href="#" class="button" ng-click="uploadPictures()">Załaduj</a>
-          </div>
-        </div>
-
         <div class="panel">
+          <h4>{{'PICTURES_LIST' | translate}}</h4>
           <table>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Patient</th>
-                <th>Technician</th>
-                <th>Picture Type</th>
-                <th>Body Part</th>
-                <th>Capture date</th>
-                <th>Actions</th>
+                <th>{{'PICTURE_NAME' | translate}}</th>
+                <th>{{'PATIENT' | translate}}</th>
+                <th>{{'TECHNICIAN' | translate}}</th>
+                <th>{{'PICTURE_TYPE' | translate}}</th>
+                <th>{{'BODY_PART' | translate}}</th>
+                <th>{{'CAPTURE_DATE' | translate}}</th>
+                <th>{{'ACTIONS' | translate}}</th>
               </tr>
             </thead>
             <tbody>
               <tr ng-repeat="item in pictures">
-                <td><strong>{{ item.pictureName }}</strong></td>
+                <td><strong>{{ item.pictureName }}</strong>
+                </td>
                 <td>
                   {{item.patientUsername+" : "+item.patientName + " " + item.patientSurname}}
                 </td>
@@ -183,21 +175,24 @@
                   {{item.technicianUsername+" : "+item.technicianName + " " + item.technicianSurname}}
                 </td>
                 <td>
-                  <select ng-options="pictureType for pictureType in allPictureTypes" ng-model="item.selectedPictureType" ng-init="item.selectedPictureType = item.pictureType" required>
+                  <select ng-options="pictureType for pictureType in allPictureTypes"  ng-change="item.changed=true" ng-model="item.selectedPictureType" ng-init="item.selectedPictureType = item.pictureType" required>
                   </select>
                 </td>
                 <td>
-                  <select ng-options="bodyPart for bodyPart in allBodyParts" ng-model="item.selectedBodyPart" ng-init="item.selectedBodyPart = item.bodyPart" required>
+                  <select ng-options="bodyPart for bodyPart in allBodyParts" ng-change="item.changed=true" ng-model="item.selectedBodyPart" ng-init="item.selectedBodyPart = item.bodyPart" required>
                   </select>
                 </td>
                 <td>
                   {{item.captureTimestamp}}
                 </td>
                 <td nowrap>
-                  <div data-magellan-expedition="fixed">
+                  <fieldset class="switch">
+                    <input id="{{item.pictureId}}" type="checkbox" />
+                    <label for="{{item.pictureId}}"></label>
+                  </fieldset>
+                  <div data-magellan-expedition="fixed" ng-show="item.changed===true">
                     <dl class="sub-nav">
-                      <dd data-magellan-arrival="build"><span class="error label"><a ng-click="item.remove()" href="#build"
-                                        ng-disabled="item.isReady || item.isUploading || item.isSuccess">Remove</a></span>
+                      <dd data-magellan-arrival="build"><span class="error label"><a ng-click="updatePicture(item)" >{{'SAVE' | translate}}</a></span>
                       </dd>
                     </dl>
                   </div>

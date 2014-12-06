@@ -1,22 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package medicalpictures.model.dao;
 
 import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import medicalpictures.controller.views.common.DBNameManager;
-import medicalpictures.model.exception.AddBodyPartFailed;
-import medicalpictures.model.exception.AddNewUserFailed;
 import medicalpictures.model.exception.AddPictureTypeFailed;
 import medicalpictures.model.exception.AddToDbFailed;
-import medicalpictures.model.orm.entity.BodyPart;
 import medicalpictures.model.orm.entity.PictureType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

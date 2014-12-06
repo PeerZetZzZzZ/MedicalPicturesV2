@@ -47,6 +47,7 @@ MedicalPictures.config(function ($translateProvider) {
         'RESET_PASSWORD':'Reset password',
         'USER_EDITED_SUCCESSFULLY':'User has been updated successfully.',
         'PICTURE_TYPES':'Picture types',
+        'PICTURE_TYPE':'Picture type',
         'ADD_NEW_BODY_PART':'Add new body part',
         'ADD_NEW_PICTURE_TYPE':'Add new picture type',
         'ADD':'Add',
@@ -55,6 +56,7 @@ MedicalPictures.config(function ($translateProvider) {
         'BODY_PART_ADDED_SUCCESSFULLY':'Body part has been added successfully!',
         'BODY_PART_ADDING_FAILED':'Body part adding failed...',
         'BODY_PARTS':'Body parts',
+        'BODY_PART':'Body part',
         'TECHNICIAN_VIEW_HEAD_NAME':'MedicalPictures Techician VIew',
         'MANAGE_PICTURES':'Manage pictures',
         'ADD_NEW_PICTURES':'Add pictures',
@@ -64,7 +66,17 @@ MedicalPictures.config(function ($translateProvider) {
         'ONLY_PICTURES_CAN_BE_UPLOADED':'Cannot upload. Only pictures can be uploaded!',
         'NO_PATIENT_SELECTED_FOR_FILE':'There is no patient selected whose picture is uploaded!',
         'NO_BODY_PART_SELECTED_FOR_FILE':'There is no body which the picture describes!',
-        'NO_PICTURE_TYPE_SELECTED_FOR_FILE':'There is no picture type selected for the picture!'
+        'NO_PICTURE_TYPE_SELECTED_FOR_FILE':'There is no picture type selected for the picture!',
+        'SPECIALIZATION':'Specialization',
+        'PICTURES_LIST':'Pictures list',
+        'PICTURES_LIST_IS_EMPTY':'There are no found pictures in the system.',
+        'CAPTURE_DATE':'Capture date',
+        'TECHNICIAN':'Technician',
+        'PATIENT':'Patient',
+        'REMOVE':'Remove',
+        'SAVE':'Save',
+        'ADD_TO_DB_FAILED':'Updating or adding item failed. Internal error.',
+        'SUCCESSFULLY_EDITED_PICTURE':'Successfully updated picture!'
     });
     $translateProvider.translations('pl', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -113,6 +125,7 @@ MedicalPictures.config(function ($translateProvider) {
         'RESET_PASSWORD':'Resetuj hasło',
         'USER_EDITED_SUCCESSFULLY':'Dane użytkownika zostały zaktualizowane.',
         'PICTURE_TYPES':'Typy zdjęć',
+        'PICTURE_TYPE':'Typ zdjęcia',
         'ADD_NEW_BODY_PART':'Dodaj część ciała',
         'ADD_NEW_PICTURE_TYPE':'Dodaj nowy typ zdjęć',
         'ADD':'Dodaj',
@@ -121,17 +134,27 @@ MedicalPictures.config(function ($translateProvider) {
         'BODY_PART_ADDED_SUCCESSFULLY':'Część ciała została dodana!',
         'BODY_PART_ADDING_FAILED':'Dodanie części ciała nie powiodło się...',
         'BODY_PARTS':'Części ciała',
+        'BODY_PART':'Część ciała',
         'TECHNICIAN_VIEW_HEAD_NAME':'MedicalPictures Panel Technika',
         'MANAGE_PICTURES':'Zarządzaj zdjęciami',
         'ADD_NEW_PICTURES':'Dodaj zdjęcia',
         'DELETE_PICTURES':'Usuń zdjęcia',
-        'DROP_PICTURES_HERE':'Przeciągnij pliki tutaj',
+        'DROP_PICTURES_HERE':'Przeciągnij zdjęcia tutaj',
         'ALL_PICTURES_UPLOADED':'Wszystkie zdjęcia zostały wysłane do serwera!',
         'ONLY_PICTURES_CAN_BE_UPLOADED':'Nie można załadować. Dozwolne są tylko obrazy/zdjęcia!',
         'NO_PATIENT_SELECTED_FOR_FILE':'Nie wybrano pacjenta, dla którego to zdjęcie jest ładowane!',
         'NO_BODY_PART_SELECTED_FOR_FILE':'Nie wybrano części ciała dla podanego zdjęcia!',
-        'NO_PICTURE_TYPE_SELECTED_FOR_FILE':'Nie wybrano typu zdjęcia dla podanego obrazu!'
-
+        'NO_PICTURE_TYPE_SELECTED_FOR_FILE':'Nie wybrano typu zdjęcia dla podanego obrazu!',
+        'SPECIALIZATION':'Specjalizacja',
+        'PICTURES_LIST':'Lista zdjęć',
+        'PICTURES_LIST_IS_EMPTY':'W systemie nie ma żadnych zdjęć.',
+        'CAPTURE_DATE':'Data wykonania',
+        'TECHNICIAN':'Technik',
+        'PATIENT':'Pacjent',
+        'REMOVE':'Usuń',
+        'SAVE':'Zapisz',
+        'ADD_TO_DB_FAILED':'Aktualizowanie bądź dodawanie nie udane. Błąd wewnętrzny.',
+        'SUCCESSFULLY_EDITED_PICTURE':'Zaktualizowano zdjęcie!'
     });
     $translateProvider.preferredLanguage('pl');
 });

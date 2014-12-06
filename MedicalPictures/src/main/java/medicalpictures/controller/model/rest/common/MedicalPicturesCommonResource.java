@@ -14,12 +14,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.imageio.ImageIO;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.xml.bind.DatatypeConverter;
@@ -32,9 +36,11 @@ import medicalpictures.model.dao.PatientDAO;
 import medicalpictures.model.dao.PictureDAO;
 import medicalpictures.model.dao.PictureTypeDAO;
 import medicalpictures.model.dao.UserDAO;
+import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.orm.entity.Picture;
 import medicalpictures.model.security.UserSecurityManager;
 import medicalpictures.model.technician.TechnicianOperationResponse;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -172,8 +178,8 @@ public class MedicalPicturesCommonResource {
     public String getUserInfo(@PathParam("username") String username) {
         try {
             securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
-            Map<String, String> userDetailsMap = userManager.getUserDetails(username);
-            String userDetailsJson = jsonFactory.getUserDetailsAsJson(userDetailsMap);
+            tory.decryptRequest(FilenameUtils.getName(item.getName()));
+            Map<String, String> pictureDetailsMap = jsonFactory.getAddPictu
             logger.info("Return user info: " + userDetailsJson);
             return userDetailsJson;
         } catch (NoLoggedUserExistsHere ex) {
@@ -256,10 +262,62 @@ public class MedicalPicturesCommonResource {
     @Path("/getAllPictures")
     @Produces("application/json")
     public String getAllPictures() {
-        List<Picture> picturesList = pictureDAO.getAllPictureList();
-        if (picturesList == null) {
-            picturesList = new ArrayList<Picture>();
+        try {
+            securityManager.checkUserPermissionToThisContent(AccountType.TECHNICIAN, AccountType.ADMIN);
+            List<Picture> picturesList = pictureDAO.getAllPictureList();
+            if (picturesList == null) {
+                picturesList = new ArrayList<Picture>();
+            }
+            return technicianOperationResponse.getAllPicturesResponse(picturesList);
+        } catch (UserNotPermitted ex) {
+            Logger.getLogger(MedicalPicturesCommonResource.class.getName()).log(Level.SEVERE, null, ex);
+            return jsonFactory.notUserLogged();
+        } catch (NoLoggedUserExistsHere ex) {
+            Logger.getLogger(MedicalPicturesCommonResource.class.getName()).log(Level.SEVERE, null, ex);
+            return jsonFactory.userNotPermitted();
         }
-        return technicianOperationResponse.getAllPicturesResponse(picturesList);
+    }
+
+    @POST
+    @Path("/deletePictures")
+    @Produces("application/json")
+    @Consumes("application/json")
+    public String deletePictures(String picturesList) {
+        try {
+            securityManager.checkUserPermissionToThisContent(AccountType.TECHNICIAN, AccountType.ADMIN);
+            List<String> picturesIdList = jsonFactory.getPicturesToDeleteList(picturesList);
+            pictureDAO.removePictures(picturesIdList);
+            return "";
+        } catch (UserNotPermitted ex) {
+            Logger.getLogger(MedicalPicturesCommonResource.class.getName()).log(Level.SEVERE, null, ex);
+            return jsonFactory.notUserLogged();
+        } catch (NoLoggedUserExistsHere ex) {
+            Logger.getLogger(MedicalPicturesCommonResource.class.getName()).log(Level.SEVERE, null, ex);
+            return jsonFactory.userNotPermitted();
+        }
+
+    }
+
+    @POST
+    @Path("/updatePicture")
+    @Produces("application/json")
+    public String updatePicture(String pictureValues) {
+        try {
+            securityManager.checkUserPermissionToThisContent(AccountType.TECHNICIAN, AccountType.ADMIN);
+            JSONObject pictureDetailsJson = jsonFactory.decryptRequest(pictureValues);
+            Map<String, String> pictureDetailsMap = jsonFactory.getEditPictureValues(pictureDetailsJson);
+            pictureDAO.updatePicture(pictureDetailsMap);
+            return "";
+        } catch (UserNotPermitted ex) {
+            Logger.getLogger(MedicalPicturesCommonResource.class.getName()).log(Level.SEVERE, null, ex);
+            return jsonFactory.notUserLogged();
+        } catch (NoLoggedUserExistsHere ex) {
+            Logger.getLogger(MedicalPicturesCommonResource.class.getName()).log(Level.SEVERE, null, ex);
+            return jsonFactory.userNotPermitted();
+        } catch (AddToDbFailed ex) {
+            Logger.getLogger(MedicalPicturesCommonResource.class.getName()).log(Level.SEVERE, null, ex);
+            return jsonFactory.insertToDbFailed();
+        }
+
     }
 }
