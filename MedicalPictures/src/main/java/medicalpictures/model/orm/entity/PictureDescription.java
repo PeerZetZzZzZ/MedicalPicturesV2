@@ -68,6 +68,10 @@ public class PictureDescription implements Serializable {
         this.definedPictureDescription = definedPictureDescription;
     }
 
+    public String getId() {
+        return id;
+    }
+
     public PictureDescription(String description, Doctor doctor, Picture picture, DefinedPictureDescription definedPictureDescription) {
         this.description = description;
         this.doctor = doctor;

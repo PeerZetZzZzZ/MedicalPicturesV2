@@ -783,6 +783,42 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
       console.log(status);
     });
   }
+  $scope.savePictureDescription = function(picture) {
+    var pictureDescription;
+    if (!angular.isUndefined(picture.definedPictureDescriptionId)) {
+      if (picture.pictureDescriptionId != '') { //if we update description , not add new
+        pictureDescription = '{pictureId:\'' + picture.pictureId + '\', pictureDescriptionId:\'' + picture.pictureDescriptionId + '\',pictureDescription:\'\',definedPictureDescriptionId:\'' + picture.definedPictureDescriptionId + '\'}';
+      } else {
+        pictureDescription = '{pictureId:\'' + picture.pictureId + '\', pictureDescriptionId:\'\',pictureDescription:\'\',definedPictureDescriptionId:\'' + picture.definedPictureDescriptionId + '\'}';
+      }
+    } else {
+      if (picture.pictureDescriptionId != '') {
+        pictureDescription = '{pictureId:\'' + picture.pictureId + '\',pictureDescriptionId:\'' + picture.pictureDescriptionId + '\',pictureDescription:\'' + picture.pictureDescription + '\',definedPictureDescriptionId:\'\'}';
+      } else {
+        pictureDescription = '{pictureId:\'' + picture.pictureId + '\',pictureDescriptionId:\'\',pictureDescription:\'' + picture.pictureDescription + '\',definedPictureDescriptionId:\'\'}';
+      }
+    }
+    $http({
+      url: '/MedicalPictures/webresources/MedicalPicturesCommon/savePictureDescription',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: pictureDescription
+    }).success(function(data, status, header, config) {
+      if (data.error === "insertToDbFailed" || data.error==="notObjectFound") {
+        $translate('ADD_TO_DB_FAILED').then(function(translation) {
+          showAlertMessageError(translation, picture.pictureName);
+        });
+      } else {
+        $translate('SUCCESSFULLY_EDITED_PICTURE').then(function(translation) {
+          showAlertMessageSuccess(translation, picture.pictureName)
+        });
+      }
+    }).error(function(data, status, header, config) {
+
+    });
+  }
 
 });
 /* ****************************************** */

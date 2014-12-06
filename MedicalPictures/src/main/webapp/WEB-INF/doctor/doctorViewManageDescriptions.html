@@ -116,7 +116,7 @@
               <section class="middle tab-bar-section">
                 <h1 class="title">MANAGE_DIAGNOSIS</h1>
               </section>
-              
+
             </nav>
 
             <aside class="left-off-canvas-menu">
@@ -195,8 +195,11 @@
                     </div>
                     <div class="large-7 columns">
                       <label>PICTURE_DESCRIPTION
-                        <textarea placeholder=""></textarea>
+                        <textarea placeholder="" ng-change="selectedPicture.changed=true" ng-model="selectedPicture.pictureDescription"></textarea>
                       </label>
+                      <div align="right">
+                        <a ng-show="selectedPicture.changed === true && selectedPicture.pictureDescription !='' " class="button small" ng-click="savePictureDescription(selectedPicture)" >SAVE_DESCRIPTION</a>
+                      </div>
                     </div>
                   <a class="exit-off-canvas"></a>
                   </div>

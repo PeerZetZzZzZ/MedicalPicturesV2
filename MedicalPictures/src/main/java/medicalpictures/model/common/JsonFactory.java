@@ -7,7 +7,6 @@ package medicalpictures.model.common;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,8 +21,10 @@ import javax.xml.bind.DatatypeConverter;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.JsonParsingException;
 import medicalpictures.model.orm.entity.Picture;
+import medicalpictures.model.orm.entity.PictureDescription;
 import medicalpictures.model.orm.entity.Technician;
 import org.apache.commons.io.IOUtils;
+import org.apache.shiro.SecurityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -264,6 +265,26 @@ public class JsonFactory {
             String imageString = "data:image/png;base64,"
                     + DatatypeConverter.printBase64Binary(IOUtils.toByteArray(is));
             pictureJson.put("thumbnailData", imageString);
+            /* Now we easily looking for doctor who already checks patient, and we will get just his descriptions */
+            String loggedUsername = (String) SecurityUtils.getSubject().getSession().getAttribute("username");
+            boolean pictureHasDescription = false;
+            for (PictureDescription pictureDescription : picture.getPictureDescriptions()) {
+                if (pictureDescription.getDoctor().getUser().getUsername().equals(loggedUsername)) {
+                    String pictureDesc = pictureDescription.getDescription();
+                    if (pictureDesc == null) {
+                        pictureDesc = pictureDescription.getDefinedPictureDescription().getPictureDescription();
+                    }
+                    pictureJson.put("pictureDescription", pictureDesc);
+                    pictureJson.put("pictureDescriptionId", pictureDescription.getId());
+                    pictureHasDescription = true;
+                    break;
+                }
+            }
+            if (!pictureHasDescription) {
+                pictureJson.put("pictureDescription", "");//if picture doesn't have description yet made by this doctor
+                pictureJson.put("pictureDescriptionId", "");//if picture doesn't have description yet made by this doctor
+                //we want to send empty description
+            }
             return pictureJson.toString();
         } else {
             return insertToDbFailed();
@@ -278,7 +299,7 @@ public class JsonFactory {
      */
     public String notObjectFound() {
         JSONObject json = new JSONObject();
-        json.put("error", "noObjectFound");
+        json.put("error", "notObjectFound");
         return json.toString();
     }
 

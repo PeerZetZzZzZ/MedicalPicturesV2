@@ -6,13 +6,11 @@
 package medicalpictures.model.dao;
 
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 import medicalpictures.model.exception.AddToDbFailed;
 
 /**
@@ -24,16 +22,16 @@ import medicalpictures.model.exception.AddToDbFailed;
 public class ManagerDAO {
 
     private final static Logger LOGGER = Logger.getLogger(ManagerDAO.class.getName());
+    @PersistenceContext(type = javax.persistence.PersistenceContextType.EXTENDED)
     private EntityManager em;
     private EntityTransaction tx;
 
-    @PostConstruct
-    private void createConnection() {
-        LOGGER.info("Entity Manager started - connected to the MedicalPictures.");
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("MedicalPictures");
-        em = emf.createEntityManager();
-    }
-
+//    @PostConstruct
+//    private void createConnection() {
+//        LOGGER.info("Entity Manager started - connected to the MedicalPictures.");
+//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("MedicalPictures");
+//        em = emf.createEntityManager();
+//    }
     public EntityManager getEntityManager() {
         return em;
     }

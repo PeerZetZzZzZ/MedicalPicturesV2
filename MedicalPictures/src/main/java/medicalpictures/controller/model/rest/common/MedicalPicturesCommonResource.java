@@ -41,7 +41,6 @@ import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.orm.entity.Picture;
 import medicalpictures.model.security.UserSecurityManager;
 import medicalpictures.model.technician.TechnicianOperationResponse;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -372,5 +371,14 @@ public class MedicalPicturesCommonResource {
             Logger.getLogger(MedicalPicturesCommonResource.class.getName()).log(Level.SEVERE, null, ex);
             return jsonFactory.internalServerProblem();
         }
+    }
+
+    @POST
+    @Path("savePictureDescription")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public String savePictureDescription(String pictureDescriptionDetails) {
+        JSONObject pictureDescriptionJson = jsonFactory.decryptRequest(pictureDescriptionDetails);
+        return pictureDAO.savePictureOrUpdateDescription(pictureDescriptionJson);
     }
 }
