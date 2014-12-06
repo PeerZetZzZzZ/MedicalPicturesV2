@@ -69,9 +69,7 @@ public class PictureDAO {
         Technician technician = userDAO.findTechnician((String) SecurityUtils.getSubject().getSession().getAttribute("username"));
         if (patient != null && bodyPart != null && pictureType != null && technician != null) {
             Picture picture = new Picture(patient, technician, pictureType, bodyPart, pictureName, pictureData, thumbnailData);
-            managerDAO.getEntityTransaction().begin();
             managerDAO.getEntityManager().persist(picture);
-            managerDAO.getEntityTransaction().commit();
             LOG.info("Successfully added new picture: " + pictureName);
         } else {
             LOG.info("Couldn't add new picture, because some of the components was null");
@@ -91,9 +89,7 @@ public class PictureDAO {
         for (String singlePictureId : picturesList) {
             Picture picture = managerDAO.getEntityManager().find(Picture.class, singlePictureId);
             if (picture != null) {
-                managerDAO.getEntityTransaction().begin();
                 managerDAO.getEntityManager().remove(picture);
-                managerDAO.getEntityTransaction().commit();
                 LOG.info("Successfully removed picture: " + singlePictureId);
             } else {
                 LOG.info("Couldn't remove picture. Picture ': " + singlePictureId + "' not found");
@@ -110,7 +106,6 @@ public class PictureDAO {
         String pictureId = pictureDetailsMap.get("pictureId");
         String pictureType = pictureDetailsMap.get("pictureType");
         String bodyPart = pictureDetailsMap.get("bodyPart");
-        managerDAO.getEntityTransaction().begin();
         BodyPart bodyPartEntity = bodyPartDAO.getBodyPartByName(bodyPart);
         PictureType pictureTypeEntity = pictureTypeDAO.getPictureTypeByName(pictureType);
         Picture picture = managerDAO.getEntityManager().find(Picture.class, pictureId);
@@ -120,7 +115,6 @@ public class PictureDAO {
         } else {
             throw new AddToDbFailed("Failed to edit picture with id: '" + pictureId + "'");
         }
-        managerDAO.getEntityTransaction().commit();
     }
 
     /**
@@ -150,11 +144,9 @@ public class PictureDAO {
                 if (!definedPictureDescriptionId.equals("")) {//don't add own pictureDescription but defined pictureDescription
                     DefinedPictureDescription dpd = definedPictureDescriptionDAO.getDefinedPictureDesriptionById(definedPictureDescriptionId);
                     if (existingPictureDescription != null && dpd != null) {
-                        managerDAO.getEntityTransaction().begin();
                         managerDAO.getEntityManager().merge(existingPictureDescription);
                         existingPictureDescription.setDescription("");//we want to clear existing description
                         existingPictureDescription.setDefinedPictureDescription(dpd);//update with defined picture description
-                        managerDAO.getEntityTransaction().commit();
                         LOG.info("Set defined picture description with id'" + dpd.getId() + "' for picture '" + existingPictureDescription.getId() + "'.");
                     } else {
                         LOG.warning("DefinedPictureDescription or PictureDescription not found'");
@@ -163,11 +155,9 @@ public class PictureDAO {
                 } else {
                     if (existingPictureDescription != null) {
                         managerDAO.getEntityManager().merge(existingPictureDescription);
-                        managerDAO.getEntityManager().persist(existingPictureDescription);
-                        managerDAO.getEntityTransaction().begin();
+//                        managerDAO.getEntityManager().persist(existingPictureDescription);
                         existingPictureDescription.setDescription(pictureDescription);
                         existingPictureDescription.setDefinedPictureDescription(null);
-                        managerDAO.getEntityTransaction().commit();
                         LOG.info("Set picture description '" + pictureDescription + "' for picture '" + existingPictureDescription.getId() + "'.");
                     } else {
                         LOG.warning("PictureDescription with id'" + pictureDescriptionId + "' not found.");

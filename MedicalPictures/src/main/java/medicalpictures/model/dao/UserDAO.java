@@ -152,7 +152,6 @@ public class UserDAO {
      * @param usernamesMap Map with users in such form <username,accountType>
      */
     public void deleteUsers(Map<String, String> usernamesMap) {
-        ormManager.getEntityTransaction().begin();
         Set<String> usernames = usernamesMap.keySet();
         for (String username : usernames) {
             String accountType = usernamesMap.get(username);//get accountType
@@ -182,7 +181,6 @@ public class UserDAO {
             ormManager.getEntityManager().remove(user);
             logger.info("Deleted user: " + username + ", accountType: " + accountType);
         }
-        ormManager.getEntityTransaction().commit();
     }
 
     /**
@@ -191,7 +189,6 @@ public class UserDAO {
      * @param usernamesMap Map with users in such form <username,accountType>
      */
     private void deleteUsersOnlyInSpecifiedTable(Map<String, String> usernamesMap) {
-        ormManager.getEntityTransaction().begin();
         Set<String> usernames = usernamesMap.keySet();
         for (String username : usernames) {
             String accountType = usernamesMap.get(username);//get accountType
@@ -219,7 +216,6 @@ public class UserDAO {
             }
             logger.info("Deleted user: " + username + ", accountType: " + accountType);
         }
-        ormManager.getEntityTransaction().commit();
     }
 
     /**
@@ -242,7 +238,6 @@ public class UserDAO {
      */
     public Map<String, String> getUserDetails(String username) {
         Map<String, String> userDetails = new HashMap<>();
-        ormManager.getEntityManager().getTransaction().begin();
         User user = findUser(username);
         String userAccountType = user.getAccountType();
         String name = "";
@@ -304,7 +299,6 @@ public class UserDAO {
         /* If we change user accountType, it means that we must move him to another table, so we must
          delete him in which he is already */
         Map<String, String> usersToDelete = new HashMap<>();
-        ormManager.getEntityTransaction().begin();
         User userToEdit = findUser(username);
         String currentAccountType = userToEdit.getAccountType();
         boolean accountTypeChanged = false;
@@ -324,7 +318,6 @@ public class UserDAO {
                     admin.setSurname(surname);
                     admin.setAge(age);
                     ormManager.getEntityManager().persist(admin);
-                    ormManager.getEntityTransaction().commit();
                     break;
                 }
                 case "DOCTOR": {
@@ -334,7 +327,6 @@ public class UserDAO {
                     doctor.setAge(age);
                     doctor.setSpecialization("");
                     ormManager.getEntityManager().persist(doctor);
-                    ormManager.getEntityTransaction().commit();
                     break;
                 }
                 case "PATIENT": {
@@ -343,7 +335,6 @@ public class UserDAO {
                     patient.setSurname(surname);
                     patient.setAge(age);
                     ormManager.getEntityManager().persist(patient);
-                    ormManager.getEntityTransaction().commit();
                     break;
                 }
                 case "TECHNICIAN": {
@@ -352,12 +343,10 @@ public class UserDAO {
                     technician.setSurname(surname);
                     technician.setAge(age);
                     ormManager.getEntityManager().persist(technician);
-                    ormManager.getEntityTransaction().commit();
                     break;
                 }
             }
         } else {
-            ormManager.getEntityTransaction().commit();
             usersToDelete.put(username, currentAccountType);//we add user to delete
             deleteUsersOnlyInSpecifiedTable(usersToDelete);//delete existing user but not in UsersDB table
             Map<String, String> newUserDetails = new HashMap<>();
