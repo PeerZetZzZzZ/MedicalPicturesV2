@@ -355,4 +355,22 @@ public class MedicalPicturesCommonResource {
         }
 
     }
+
+    @GET
+    @Path("getFullPictureData/{pictureId}")
+    @Produces("application/json")
+    public String getFullPictureData(@PathParam("pictureId") String pictureId) {
+        try {
+            Picture picture = pictureDAO.getPictureById(pictureId);
+            if (picture != null) {
+                return jsonFactory.getFullPictureData(picture);
+            } else {
+                logger.error("Retrieving full picture data failed for picture '" + pictureId + "'. Picture not found.");
+                return jsonFactory.notObjectFound();
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(MedicalPicturesCommonResource.class.getName()).log(Level.SEVERE, null, ex);
+            return jsonFactory.internalServerProblem();
+        }
+    }
 }

@@ -241,8 +241,9 @@ public class JsonFactory {
     public String getPictureDetails(Picture picture) throws IOException {
         JSONObject pictureJson = new JSONObject();
         if (picture != null) {
-            pictureJson.put("bodyPart", picture.getBodyPart());
-            pictureJson.put("pictureType", picture.getPictureType());
+            pictureJson.put("pictureId", picture.getId());
+            pictureJson.put("bodyPart", picture.getBodyPart().getBodyPart());
+            pictureJson.put("pictureType", picture.getPictureType().getPictureType());
             pictureJson.put("patientAge", picture.getPatient().getAge());
             pictureJson.put("patientName", picture.getPatient().getName());
             pictureJson.put("patientSurname", picture.getPatient().getSurname());
@@ -251,11 +252,11 @@ public class JsonFactory {
             Technician technician = picture.getTechnician();
             if (technician != null) {
                 pictureJson.put("technicianName", picture.getTechnician().getName());
-                pictureJson.put("getSurname", picture.getTechnician().getSurname());
+                pictureJson.put("technicianSurname", picture.getTechnician().getSurname());
                 pictureJson.put("technicianUsername", picture.getTechnician().getUser().getUsername());
             } else {//if technician was maybe deleted
                 pictureJson.put("technicianName", "no data");
-                pictureJson.put("getSurname", "no data");
+                pictureJson.put("technicianSurname", "no data");
                 pictureJson.put("technicianUsername", "no data");
             }
             pictureJson.put("captureTimestamp", picture.getCaptureTimestamp());
@@ -268,5 +269,32 @@ public class JsonFactory {
             return insertToDbFailed();
         }
 
+    }
+
+    /**
+     * Returns the answer to the client that no object found in db.
+     *
+     * @return
+     */
+    public String notObjectFound() {
+        JSONObject json = new JSONObject();
+        json.put("error", "noObjectFound");
+        return json.toString();
+    }
+
+    public String getFullPictureData(Picture picture) throws IOException {
+        ByteArrayInputStream is = new ByteArrayInputStream(picture.getPictureData());
+        String imageString = "data:image/png;base64,"
+                + DatatypeConverter.printBase64Binary(IOUtils.toByteArray(is));
+        JSONObject json = new JSONObject();
+        json.put("pictureData", imageString);
+        LOG.info("Successfully retreived full picture data for picture: '" + picture.getId() + "'");
+        return json.toString();
+    }
+
+    public String internalServerProblem() {
+        JSONObject json = new JSONObject();
+        json.put("error", "internalServerProblem");
+        return json.toString();
     }
 }

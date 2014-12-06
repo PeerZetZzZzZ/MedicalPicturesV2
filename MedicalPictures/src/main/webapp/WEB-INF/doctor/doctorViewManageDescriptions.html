@@ -26,8 +26,11 @@
       overflow: scroll;
       max-height: 400px;
     }
-    .main-section{
+    .main-section {
       min-height: 400px;
+    }
+    textarea {
+      min-height: 300px;
     }
     .top-bar .name h1 {
       color: orange;
@@ -102,10 +105,7 @@
   <br>
   <div>
     <div class="row">
-      <div class="large-1 columns">
-        <br>
-      </div>
-      <div class="large-10 columns">
+      <div class="large-12 columns">
         <div class="off-canvas-wrap" data-offcanvas>
           <div class="inner-wrap">
             <nav class="tab-bar">
@@ -116,10 +116,7 @@
               <section class="middle tab-bar-section">
                 <h1 class="title">MANAGE_DIAGNOSIS</h1>
               </section>
-
-              <section class="right-small">
-                <a class="right-off-canvas-toggle menu-icon" href="#"><span></span></a>
-              </section>
+              
             </nav>
 
             <aside class="left-off-canvas-menu">
@@ -139,32 +136,85 @@
                   </ul>
                 </li>
             </aside>
-            <section class="main-section" ng-show="selectedPicture!=undefined">
-              <a class="th" >
-                <img src="{{selectedPicture.thumbnailData}}">
-              </a>
-              <div class="row">
-                <div class="large-8 columns">
-                  <label>Textarea Label
-                    <textarea placeholder="small-8.columns"></textarea>
-                  </label>
+            <section class="main-section">
+              <div ng-show="selectedPicture!=undefined">
+                <div class="row">
+                  <div class="large-1 columns">
+                    <br>
+                  </div>
+                  <div class="row">
+                    <div class="large-3 columns">
+                      <form>
+                        <div class="row">
+                          <label>Picture thumbnail</label>
+                          <a class="th" ng-click="getFullPictureData(selectedPicture)">
+                            <img src="{{selectedPicture.thumbnailData}}">
+                          </a>
+                        </div>
+                        <div class="row">
+                          <label>PATIENT_NAME</label>
+                          <input type="text" readonly ng-model="selectedPicture.patientName"></input>
+                        </div>
+                        <div class="row">
+                          <label>PATIENT_SURNAME</label>
+                          <input type="text" readonly ng-model="selectedPicture.patientSurname"></input>
+                        </div>
+                        <div class="row">
+                          <label>PATIENT_USERNAME</label>
+                          <input type="text" readonly ng-model="selectedPicture.patientUsername"></input>
+                        </div>
+                        <div class="row">
+                          <label>CAPTURE_DATE</label>
+                          <input type="text" readonly ng-model="selectedPicture.captureTimestamp"></input>
+                        </div>
+                        <div class="row">
+                          <label>PATIENT_AGE</label>
+                          <input type="text" readonly ng-model="selectedPicture.patientAge"></input>
+                        </div>
+                        <div class="row">
+                          <label>BODY_PART</label>
+                          <input type="text" readonly ng-model="selectedPicture.bodyPart"></input>
+                        </div>
+                        <div class="row">
+                          <label>PICTURE_TYPE</label>
+                          <input type="text" readonly ng-model="selectedPicture.pictureType"></input>
+                        </div>
+                        <div class="row">
+                          <label>TECHNICIAN_NAME</label>
+                          <input type="text" readonly ng-model="selectedPicture.technicianName"></input>
+                        </div>
+                        <div class="row">
+                          <label>TECHNICIAN_SURNAME</label>
+                          <input type="text" readonly ng-model="selectedPicture.technicianSurname"></input>
+                        </div>
+                        <div class="row">
+                          <label>TECHNICIAN_USERNAME</label>
+                          <input type="text" readonly ng-model="selectedPicture.technicianUsername"></input>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="large-7 columns">
+                      <label>PICTURE_DESCRIPTION
+                        <textarea placeholder=""></textarea>
+                      </label>
+                    </div>
+                  <a class="exit-off-canvas"></a>
+                  </div>
+                  <div class="large-1 columns">
+                    <br>
+                  </div>
                 </div>
               </div>
-              <a class="exit-off-canvas"></a>
-
+            </section>
           </div>
         </div>
       </div>
-      <div class="large-1 columns">
-        <br>
-      </div>
     </div>
-  </div>
-  <script src="./views/js/vendor/jquery.js"></script>
-  <script src="./views/js/foundation.min.js"></script>
-  <script>
-    $(document).foundation();
-  </script>
+    <script src="./views/js/vendor/jquery.js"></script>
+    <script src="./views/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
 </body>
 
 </html>

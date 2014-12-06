@@ -773,7 +773,15 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
     error(function(data, status, headers, config) {
       console.log(status);
     });
-
+  }
+  $scope.getFullPictureData = function(picture) {
+    $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getFullPictureData/' + picture.pictureId).
+    success(function(data, status, headers, config) {
+      window.open(data.pictureData);
+    }).
+    error(function(data, status, headers, config) {
+      console.log(status);
+    });
   }
 
 });
