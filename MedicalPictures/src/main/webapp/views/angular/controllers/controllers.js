@@ -633,30 +633,35 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
   success(function(data, status, headers, config) {
     var i = 0;
     $scope.allBodyParts = data.bodyParts;
-  }).
-  error(function(data, status, headers, config) {
-    console.log(status);
-  });
-  $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllPictureTypes').
-  success(function(data, status, headers, config) {
-    var i = 0;
-    $scope.allPictureTypes = data.pictureTypes;
-  }).
-  error(function(data, status, headers, config) {
-    console.log(status);
-  });
-  $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllPictures').
-  success(function(data, status, headers, config) {
-    $scope.pictures = data.pictures;
-    if ($scope.pictures.length === 0) {
-      $translate('PICTURES_LIST_IS_EMPTY').then(function(translation) {
-        showAlertMessageWarning(translation);
+    $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllPictureTypes').
+    success(function(data, status, headers, config) {
+      var i = 0;
+      $scope.allPictureTypes = data.pictureTypes;
+      $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllPictures').
+      success(function(data, status, headers, config) {
+        $scope.pictures = data.pictures;
+        if ($scope.pictures.length === 0) {
+          $translate('PICTURES_LIST_IS_EMPTY').then(function(translation) {
+            showAlertMessageWarning(translation);
+          });
+        } else{
+
+        }
+      }).
+      error(function(data, status, headers, config) {
+        console.log(status);
       });
-    }
+    }).
+    error(function(data, status, headers, config) {
+      console.log(status);
+    });
+
   }).
   error(function(data, status, headers, config) {
     console.log(status);
   });
+
+
   $scope.markAllPicturesClicked = function() {
     var i;
     for (i = 0; i < $scope.pictures.length; i++) {
@@ -709,12 +714,12 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
   $scope.updatePicture = function(picture) {
     var pictureUpdateValues = '{pictureId:\'' + picture.pictureId + '\',bodyPart:\'' + picture.selectedBodyPart + '\',pictureType:\'' + picture.selectedPictureType + '\'}';
     $http({
-      url: '/MedicalPictures/webresources/MedicalPicturesCommon/deletePictures',
+      url: '/MedicalPictures/webresources/MedicalPicturesCommon/updatePicture',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      data: deletePictures
+      data: pictureUpdateValues
     }).success(function(data, status, header, config) {
       if (data.error === "insertToDbFailed") {
         $translate('ADD_TO_DB_FAILED').then(function(translation) {

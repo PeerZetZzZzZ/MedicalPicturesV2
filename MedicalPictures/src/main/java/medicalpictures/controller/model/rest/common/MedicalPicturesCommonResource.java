@@ -178,8 +178,8 @@ public class MedicalPicturesCommonResource {
     public String getUserInfo(@PathParam("username") String username) {
         try {
             securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
-            tory.decryptRequest(FilenameUtils.getName(item.getName()));
-            Map<String, String> pictureDetailsMap = jsonFactory.getAddPictu
+            Map<String, String> userDetailsMap = userManager.getUserDetails(username);
+            String userDetailsJson = jsonFactory.getUserDetailsAsJson(userDetailsMap);
             logger.info("Return user info: " + userDetailsJson);
             return userDetailsJson;
         } catch (NoLoggedUserExistsHere ex) {

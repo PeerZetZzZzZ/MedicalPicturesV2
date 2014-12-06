@@ -76,7 +76,9 @@ MedicalPictures.config(function ($translateProvider) {
         'REMOVE':'Remove',
         'SAVE':'Save',
         'ADD_TO_DB_FAILED':'Updating or adding item failed. Internal error.',
-        'SUCCESSFULLY_EDITED_PICTURE':'Successfully updated picture!'
+        'SUCCESSFULLY_EDITED_PICTURE':'Successfully updated picture!',
+        'PICTURE_NAME':'Picture name',
+        'ACTIONS':'Actions'
     });
     $translateProvider.translations('pl', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -154,7 +156,9 @@ MedicalPictures.config(function ($translateProvider) {
         'REMOVE':'Usuń',
         'SAVE':'Zapisz',
         'ADD_TO_DB_FAILED':'Aktualizowanie bądź dodawanie nie udane. Błąd wewnętrzny.',
-        'SUCCESSFULLY_EDITED_PICTURE':'Zaktualizowano zdjęcie!'
+        'SUCCESSFULLY_EDITED_PICTURE':'Zaktualizowano zdjęcie!',
+        'PICTURE_NAME':'Zdjęcie',
+        'ACTIONS':'Akcje'
     });
     $translateProvider.preferredLanguage('pl');
 });

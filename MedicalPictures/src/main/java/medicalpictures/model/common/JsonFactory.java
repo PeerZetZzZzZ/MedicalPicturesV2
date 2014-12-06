@@ -186,8 +186,6 @@ public class JsonFactory {
      */
     public Map<String, String> getEditPictureValues(JSONObject pictureDetails) {
         Map<String, String> pictureValues = new HashMap<>();
-        String patient = pictureDetails.getString("patient");
-        String patientUsername = patient.substring(0, patient.indexOf(":") - 1);//we have email:name username so we want only email
         pictureValues.put("pictureId", pictureDetails.getString("pictureId"));
         pictureValues.put("bodyPart", pictureDetails.getString("bodyPart"));
         pictureValues.put("pictureType", pictureDetails.getString("pictureType"));
