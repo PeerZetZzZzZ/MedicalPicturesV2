@@ -25,24 +25,24 @@ import org.apache.shiro.SecurityUtils;
  */
 @Stateless
 public class PictureDAO {
-
+    
     @EJB
     private PatientDAO patientDAO;
-
+    
     @EJB
     private BodyPartDAO bodyPartDAO;
-
+    
     @EJB
     private PictureTypeDAO pictureTypeDAO;
-
+    
     @EJB
     private UserDAO userDAO;
-
+    
     @EJB
     private ManagerDAO managerDAO;
-
+    
     private static final Logger LOG = Logger.getLogger(PictureDAO.class.getName());
-
+    
     public void addNewPicture(Map<String, String> pictureDetails, byte[] pictureData, byte[] thumbnailData) {
         String pictureName = pictureDetails.get("pictureName");
         String patientUnserame = pictureDetails.get("patientUsername");
@@ -62,7 +62,7 @@ public class PictureDAO {
             LOG.info("Couldn't add new picture, because some of the components was null");
         }
     }
-
+    
     public List<Picture> getAllPictureList() {
         try {
             return managerDAO.getEntityManager().createQuery("SELECT p FROM " + DBNameManager.getPictureTable() + " p", Picture.class).getResultList();
@@ -71,7 +71,7 @@ public class PictureDAO {
             return null;
         }
     }
-
+    
     public void removePictures(List<String> picturesList) {
         for (String singlePictureId : picturesList) {
             Picture picture = managerDAO.getEntityManager().find(Picture.class, singlePictureId);
@@ -108,4 +108,17 @@ public class PictureDAO {
         managerDAO.getEntityTransaction().commit();
     }
 
+    /**
+     * Returns the picture or null if wasn't found ( by id )
+     *
+     * @param id
+     * @return
+     */
+    public Picture getPictureById(String id) {
+        Picture picture = managerDAO.getEntityManager().find(Picture.class, id);
+        if (picture == null) {
+            LOG.warning("Couldn't find picture with id: " + id);
+        }
+        return picture;
+    }
 }

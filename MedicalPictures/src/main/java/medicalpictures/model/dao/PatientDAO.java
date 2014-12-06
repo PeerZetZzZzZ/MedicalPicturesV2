@@ -6,12 +6,14 @@
 package medicalpictures.model.dao;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import medicalpictures.controller.views.common.DBNameManager;
-import medicalpictures.model.orm.entity.BodyPart;
 import medicalpictures.model.orm.entity.Patient;
+import medicalpictures.model.orm.entity.Picture;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,7 +25,10 @@ import org.json.JSONObject;
 public class PatientDAO {
 
     @EJB
-    private ManagerDAO ormManager;
+    private ManagerDAO managerDAO;
+    
+    @EJB
+    private UserDAO userDAO;
 
     /**
      * Returns all patients in application.
@@ -31,7 +36,7 @@ public class PatientDAO {
      * @return
      */
     public JSONObject getAllPatients() {
-        Query query = ormManager.getEntityManager().createQuery("SELECT c FROM " + DBNameManager.getPatientTable() + " c", Patient.class);
+        Query query = managerDAO.getEntityManager().createQuery("SELECT c FROM " + DBNameManager.getPatientTable() + " c", Patient.class);
         Collection<Patient> patients = query.getResultList();
         JSONObject patientsJson = new JSONObject();
         JSONArray patientsArray = new JSONArray();
@@ -44,5 +49,18 @@ public class PatientDAO {
         }
         patientsJson.put("patients", patientsArray);
         return patientsJson;
+    }
+    /**
+     * Returns patient pictures list ( empty if there are no pictures )
+     * @param patientUsername
+     * @return 
+     */
+    public Set<Picture> getPatientPictures(String patientUsername) {
+        Patient patient = userDAO.findPatient(patientUsername);
+        if(patient!=null){
+            return patient.getPictureList();
+        } else{
+            return new HashSet<>();
+        }
     }
 }

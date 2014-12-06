@@ -6,15 +6,24 @@
 package medicalpictures.model.common;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.json.JsonException;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.DatatypeConverter;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.JsonParsingException;
+import medicalpictures.model.orm.entity.Picture;
+import medicalpictures.model.orm.entity.Technician;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +43,8 @@ public class JsonFactory {
      * @param request
      * @return JSON
      */
+    private static final Logger LOG = Logger.getLogger(JsonFactory.class.getName());
+
     public JSONObject decryptRequest(HttpServletRequest request) {
         StringBuilder jb = new StringBuilder();
         String line = null;
@@ -202,13 +213,60 @@ public class JsonFactory {
         }
         return picturesIdList;
     }
+
     /**
      * Returns the information that the inserting/updating item in db failed
-     * @return 
+     *
+     * @return
      */
     public String insertToDbFailed() {
         JSONObject json = new JSONObject();
         json.put("error", "insertToDbFailed");
         return json.toString();
+    }
+
+    public String getPicturesNames(Set<Picture> patientPictures) {
+        JSONObject pictures = new JSONObject();
+        JSONArray picturesArray = new JSONArray();
+        for (Picture picture : patientPictures) {
+            JSONObject singlePicture = new JSONObject();
+            singlePicture.put("pictureName", picture.getPictureName());
+            singlePicture.put("pictureId", picture.getId());
+            picturesArray.put(singlePicture);
+        }
+        pictures.put("pictures", picturesArray);
+        return pictures.toString();
+    }
+
+    public String getPictureDetails(Picture picture) throws IOException {
+        JSONObject pictureJson = new JSONObject();
+        if (picture != null) {
+            pictureJson.put("bodyPart", picture.getBodyPart());
+            pictureJson.put("pictureType", picture.getPictureType());
+            pictureJson.put("patientAge", picture.getPatient().getAge());
+            pictureJson.put("patientName", picture.getPatient().getName());
+            pictureJson.put("patientSurname", picture.getPatient().getSurname());
+            pictureJson.put("patientUsername", picture.getPatient().getUser().getUsername());
+            pictureJson.put("pictureName", picture.getPictureName());
+            Technician technician = picture.getTechnician();
+            if (technician != null) {
+                pictureJson.put("technicianName", picture.getTechnician().getName());
+                pictureJson.put("getSurname", picture.getTechnician().getSurname());
+                pictureJson.put("technicianUsername", picture.getTechnician().getUser().getUsername());
+            } else {//if technician was maybe deleted
+                pictureJson.put("technicianName", "no data");
+                pictureJson.put("getSurname", "no data");
+                pictureJson.put("technicianUsername", "no data");
+            }
+            pictureJson.put("captureTimestamp", picture.getCaptureTimestamp());
+            ByteArrayInputStream is = new ByteArrayInputStream(picture.getThumbnailData());
+            String imageString = "data:image/png;base64,"
+                    + DatatypeConverter.printBase64Binary(IOUtils.toByteArray(is));
+            pictureJson.put("thumbnailData", imageString);
+            return pictureJson.toString();
+        } else {
+            return insertToDbFailed();
+        }
+
     }
 }

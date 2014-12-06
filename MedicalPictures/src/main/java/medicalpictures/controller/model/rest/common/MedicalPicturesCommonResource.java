@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -315,6 +316,40 @@ public class MedicalPicturesCommonResource {
             Logger.getLogger(MedicalPicturesCommonResource.class.getName()).log(Level.SEVERE, null, ex);
             return jsonFactory.userNotPermitted();
         } catch (AddToDbFailed ex) {
+            Logger.getLogger(MedicalPicturesCommonResource.class.getName()).log(Level.SEVERE, null, ex);
+            return jsonFactory.insertToDbFailed();
+        }
+
+    }
+
+    /**
+     * Returns the patient pictures, but only description ( no picture or
+     * thumbnail data )
+     *
+     * @param patientUsername
+     * @return
+     */
+    @GET
+    @Path("getPatientPicturesNames/{patientUsername}")
+    @Produces("application/json")
+    public String getPatientPicturesNames(@PathParam("patientUsername") String patientUsername) {
+        Set<Picture> patientPictures = patientDAO.getPatientPictures(patientUsername);
+        String picturesNames = jsonFactory.getPicturesNames(patientPictures);
+        logger.info("Returning patient '" + patientUsername + "' pictures names: " + picturesNames);
+        return picturesNames;
+
+    }
+
+    @GET
+    @Path("getPatientPictureWithThumbnail/{pictureId}")
+    @Produces("application/json")
+    public String getPatientPictureWithThumbnail(@PathParam("pictureId") String pictureId) {
+        try {
+            Picture picture = pictureDAO.getPictureById(pictureId);
+            String pictureDetails = jsonFactory.getPictureDetails(picture);
+            logger.info("Retriving picture and thumbnail for '" + pictureId + "' result. Returned: " + pictureDetails);
+            return pictureDetails;
+        } catch (IOException ex) {
             Logger.getLogger(MedicalPicturesCommonResource.class.getName()).log(Level.SEVERE, null, ex);
             return jsonFactory.insertToDbFailed();
         }
