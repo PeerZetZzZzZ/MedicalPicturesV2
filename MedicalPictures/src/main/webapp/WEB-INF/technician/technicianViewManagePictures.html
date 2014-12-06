@@ -55,7 +55,7 @@
   </style>
 </head>
 
-<body ng-controller="TechnicianViewAddPicturesController">
+<body ng-controller="TechnicianViewManagePicturesController">
   <br>
   <nav class="top-bar" data-topbar role="navigation">
     <ul class="title-area">
@@ -144,7 +144,7 @@
     </div>
   </div>
   <br>
-  <div ng-show="uploader.queue.length >0">
+  <div ng-show="pictures.length >0">
     <div class="row">
       <div class="large-1 columns">
         <br>
@@ -164,34 +164,34 @@
           <table>
             <thead>
               <tr>
-                <th width="50%">Preview</th>
-                <th width="50%">Name</th>
-                <th ng-show="uploader.isHTML5">Size</th>
-                <th ng-show="uploader.isHTML5">Patient</th>
+                <th>Name</th>
+                <th>Patient</th>
+                <th>Technician</th>
                 <th>Picture Type</th>
                 <th>Body Part</th>
+                <th>Capture date</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="item in uploader.queue">
+              <tr ng-repeat="item in pictures">
+                <td><strong>{{ item.pictureName }}</strong></td>
                 <td>
-                  <div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
+                  {{item.patientUsername+" : "+item.patientName + " " + item.patientSurname}}
                 </td>
-                <td><strong>{{ item.file.name }}</strong>
-                </td>
-                <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024|number:2 }} kB</td>
                 <td>
-                  <select ng-options="patient for patient in allPatients" ng-model="item.selectedPatient" ng-init="selectedPatient = allPatients[0]" required>
+                  {{item.technicianUsername+" : "+item.technicianName + " " + item.technicianSurname}}
+                </td>
+                <td>
+                  <select ng-options="pictureType for pictureType in allPictureTypes" ng-model="item.selectedPictureType" ng-init="item.selectedPictureType = item.pictureType" required>
                   </select>
                 </td>
                 <td>
-                  <select ng-options="pictureType for pictureType in allPictureTypes" ng-model="item.selectedPictureType" ng-init="selectedPictureType = allPictureTypes[0]" required>
+                  <select ng-options="bodyPart for bodyPart in allBodyParts" ng-model="item.selectedBodyPart" ng-init="item.selectedBodyPart = item.bodyPart" required>
                   </select>
                 </td>
                 <td>
-                  <select ng-options="bodyPart for bodyPart in allBodyParts" ng-model="item.selectedBodyPart" ng-init="selectedBodyPart = allBodyParts[0]" required>
-                  </select>
+                  {{item.captureTimestamp}}
                 </td>
                 <td nowrap>
                   <div data-magellan-expedition="fixed">

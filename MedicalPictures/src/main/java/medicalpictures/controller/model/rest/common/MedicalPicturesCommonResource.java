@@ -7,15 +7,13 @@ package medicalpictures.controller.model.rest.common;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.imageio.ImageIO;
 import javax.ws.rs.core.Context;
@@ -31,9 +29,12 @@ import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;
 import medicalpictures.model.dao.BodyPartDAO;
 import medicalpictures.model.dao.PatientDAO;
+import medicalpictures.model.dao.PictureDAO;
 import medicalpictures.model.dao.PictureTypeDAO;
 import medicalpictures.model.dao.UserDAO;
+import medicalpictures.model.orm.entity.Picture;
 import medicalpictures.model.security.UserSecurityManager;
+import medicalpictures.model.technician.TechnicianOperationResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -56,16 +57,24 @@ public class MedicalPicturesCommonResource {
 
     @EJB
     private BodyPartDAO bodyPartManager;
+
     @EJB
-    private PictureTypeDAO pictureTypeManager;
+    private PictureTypeDAO pictureTypeDAO;
+
     @EJB
-    private PatientDAO patientManager;
+    private PatientDAO patientDAO;
+
+    @EJB
+    private PictureDAO pictureDAO;
 
     @EJB
     private JsonFactory jsonFactory;
 
     @EJB
     private UserDAO userManager;
+
+    @EJB
+    private TechnicianOperationResponse technicianOperationResponse;
 
     private Log logger = LogFactory.getLog(MedicalPicturesCommonResource.class);
 
@@ -186,7 +195,7 @@ public class MedicalPicturesCommonResource {
     public String getAllPictureTypes() {
         try {
             securityManager.checkUserPermissionToThisContent(AccountType.ADMIN, AccountType.TECHNICIAN);
-            String pictureTypes = pictureTypeManager.getAllPictureTypes().toString();
+            String pictureTypes = pictureTypeDAO.getAllPictureTypes().toString();
             logger.info("Returned picture types: " + pictureTypes);
             return pictureTypes;
         } catch (NoLoggedUserExistsHere ex) {
@@ -202,7 +211,7 @@ public class MedicalPicturesCommonResource {
     public String getAllPatients() {
 //        try {
 //            securityManager.checkUserPermissionToThisContent(AccountType.TECHNICIAN);
-        String pictureTypes = patientManager.getAllPatients().toString();
+        String pictureTypes = patientDAO.getAllPatients().toString();
         logger.info("Returned all patients: " + pictureTypes);
         return pictureTypes;
 //        } catch (NoLoggedUserExistsHere ex) {
@@ -241,5 +250,16 @@ public class MedicalPicturesCommonResource {
                 + DatatypeConverter.printBase64Binary(IOUtils.toByteArray(fileStream));
         json.put("zdjecie", imageString);
         return json.toString();
+    }
+
+    @GET
+    @Path("/getAllPictures")
+    @Produces("application/json")
+    public String getAllPictures() {
+        List<Picture> picturesList = pictureDAO.getAllPictureList();
+        if (picturesList == null) {
+            picturesList = new ArrayList<Picture>();
+        }
+        return technicianOperationResponse.getAllPicturesResponse(picturesList);
     }
 }

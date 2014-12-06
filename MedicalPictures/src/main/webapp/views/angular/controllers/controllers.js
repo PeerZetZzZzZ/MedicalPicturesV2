@@ -613,7 +613,43 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
 
   console.info('uploader', uploader);
 });
-
+MedicalPictures.controller('TechnicianViewManagePicturesController', function($scope,$http, MedicalPicturesGlobal){
+  $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
+  $scope.pictures =[];
+  $scope.allBodyParts = [];
+  $scope.allPictureTypes = [];
+  document.getElementById("alertMessageDiv").style.visibility = "hidden";
+  $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
+  success(function(data, status, headers, config) {
+    $scope.loggedUsername = data.username;
+  }).
+  error(function(data, status, headers, config) {
+    console.log(status);
+  });
+  $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllBodyParts').
+  success(function(data, status, headers, config) {
+    var i = 0;
+    $scope.allBodyParts = data.bodyParts;
+  }).
+  error(function(data, status, headers, config) {
+    console.log(status);
+  });
+  $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllPictureTypes').
+  success(function(data, status, headers, config) {
+    var i = 0;
+    $scope.allPictureTypes = data.pictureTypes;
+  }).
+  error(function(data, status, headers, config) {
+    console.log(status);
+  });
+  $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllPictures').
+  success(function(data, status, headers, config) {
+      $scope.pictures = data.pictures;
+  }).
+  error(function(data, status, headers, config) {
+    console.log(status);
+  });
+});
 /* UserSettings Controller */
 MedicalPictures.controller('UserSettingsController', function($scope, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;

@@ -5,10 +5,12 @@
  */
 package medicalpictures.model.dao;
 
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import medicalpictures.controller.views.common.DBNameManager;
 import medicalpictures.model.orm.entity.BodyPart;
 import medicalpictures.model.orm.entity.Patient;
 import medicalpictures.model.orm.entity.Picture;
@@ -57,6 +59,15 @@ public class PictureDAO {
             LOG.info("Successfully added new picture: " + pictureName);
         } else {
             LOG.info("Couldn't add new picture, because some of the components was null");
+        }
+    }
+
+    public List<Picture> getAllPictureList() {
+        try {
+            return managerDAO.getEntityManager().createQuery("SELECT p FROM " + DBNameManager.getPictureTable() + " p", Picture.class).getResultList();
+        } catch (Exception ex) {
+            LOG.info("Couldn't get pictures list, because it's empty");
+            return null;
         }
     }
 
