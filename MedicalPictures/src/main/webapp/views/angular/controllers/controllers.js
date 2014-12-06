@@ -486,7 +486,11 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.accountTypes = MedicalPicturesGlobal.ACCOUNT_TYPES;
   $scope.allPatients = [];
+  $scope.allBodyParts = [];
+  $scope.allPictureType = [];
   $scope.selectedPatient;
+  $scope.selectedBodyPart;
+  $scope.selectedPictureType;
   var uploader = $scope.uploader = new FileUploader({
     url: '/MedicalPictures/TechnicianViewAddPictures'
   });
@@ -517,6 +521,22 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
   error(function(data, status, headers, config) {
     console.log(status);
   });
+  $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllBodyParts').
+  success(function(data, status, headers, config) {
+    var i = 0;
+    $scope.allBodyParts = data.bodyParts;
+  }).
+  error(function(data, status, headers, config) {
+    console.log(status);
+  });
+  $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllPictureTypes').
+  success(function(data, status, headers, config) {
+    var i = 0;
+    $scope.allPictureTypes = data.pictureTypes;
+  }).
+  error(function(data, status, headers, config) {
+    console.log(status);
+  });
   $scope.uploadPictures = function() {
     var i = 0;
     var flagOfUpload = true;
@@ -524,6 +544,20 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
       if (angular.isUndefined(uploader.queue[i].selectedPatient) && uploader.queue[i].selectedPatient != '') {
         var fileName = uploader.queue[i].file.name;
         $translate('NO_PATIENT_SELECTED_FOR_FILE').then(function(translation) {
+          showAlertMessageError(translation, fileName);
+        });
+        flagOfUpload = false;
+        break;
+      } else if (angular.isUndefined(uploader.queue[i].selectedBodyPart) && uploader.queue[i].selectedBodyPart != '') {
+        var fileName = uploader.queue[i].file.name;
+        $translate('NO_BODY_PART_SELECTED_FOR_FILE').then(function(translation) {
+          showAlertMessageError(translation, fileName);
+        });
+        flagOfUpload = false;
+        break;
+      } else if (angular.isUndefined(uploader.queue[i].selectedPictureType) && uploader.queue[i].selectedPictureType != '') {
+        var fileName = uploader.queue[i].file.name;
+        $translate('NO_PICTURE_TYPE_SELECTED_FOR_FILE').then(function(translation) {
           showAlertMessageError(translation, fileName);
         });
         flagOfUpload = false;
@@ -549,7 +583,7 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
   uploader.onBeforeUploadItem = function(item) {
     document.getElementById("alertMessageDiv").style.visibility = "hidden";
     console.info('onBeforeUploadItem', item);
-    var pictureData = '{\'patient\':\'' + item.selectedPatient + '\', \'pictureName\':' + item.file.name + '}';
+    var pictureData = '{\'patient\':\'' + item.selectedPatient + '\', \'pictureName\':' + item.file.name + ',\'bodyPart\':\'' + item.selectedBodyPart + '\',\'pictureType\':\'' + item.selectedPictureType + '\'}';
     item.file.name = pictureData;
   };
   uploader.onProgressItem = function(fileItem, progress) {

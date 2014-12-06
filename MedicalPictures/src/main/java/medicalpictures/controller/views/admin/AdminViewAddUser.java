@@ -7,8 +7,6 @@ package medicalpictures.controller.views.admin;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +16,6 @@ import medicalpictures.model.admin.AdminOperationResponse;
 import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.AddNewUserFailed;
-import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.exception.JsonParsingException;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;

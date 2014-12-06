@@ -15,6 +15,7 @@ import medicalpictures.controller.views.common.DBNameManager;
 import medicalpictures.model.exception.AddBodyPartFailed;
 import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.orm.entity.BodyPart;
+import medicalpictures.model.orm.entity.Patient;
 import medicalpictures.model.orm.entity.PictureType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,7 +31,7 @@ import org.json.JSONObject;
 public class BodyPartDAO {
 
     @EJB
-    private ManagerDAO ormManager;
+    private ManagerDAO managerDAO;
 
     private Log logger = LogFactory.getLog(PictureTypeDAO.class);
 
@@ -45,7 +46,7 @@ public class BodyPartDAO {
      * @return All body parts as JSONObject
      */
     public JSONObject getAllBodyParts() {
-        Query query = ormManager.getEntityManager().createQuery("SELECT c FROM " + DBNameManager.getBodyPartTable() + " c", BodyPart.class);
+        Query query = managerDAO.getEntityManager().createQuery("SELECT c FROM " + DBNameManager.getBodyPartTable() + " c", BodyPart.class);
         Collection<BodyPart> bodyParts = query.getResultList();
         JSONObject bodyPartsJson = new JSONObject();
         JSONArray bodyPartsArray = new JSONArray();
@@ -67,11 +68,21 @@ public class BodyPartDAO {
         BodyPart bodyPart = new BodyPart();
         bodyPart.setBodyPart(bodyPartString);
         try {
-            ormManager.persistObject(bodyPart);
+            managerDAO.persistObject(bodyPart);
             logger.info(bodyPartString + ": Body part successfully added!");
         } catch (AddToDbFailed ex) {
             logger.error(ex.getMessage());
             throw new AddBodyPartFailed(bodyPartString + ": Adding body part failed!");
+        }
+    }
+
+    public BodyPart getBodyPartByName(String name) {
+        try {
+            return (BodyPart) managerDAO.getEntityManager().createQuery("SELECT u FROM " + DBNameManager.getBodyPartTable() + " u WHERE u.bodyPart LIKE :bodyPart").
+                    setParameter("bodyPart", name).getSingleResult();
+        } catch (Exception ex) {
+            System.out.println("Couldn't find body part entity: " + name);
+            return null;//in any case of failure
         }
     }
 }

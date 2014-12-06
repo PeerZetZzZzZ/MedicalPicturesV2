@@ -60,9 +60,11 @@ MedicalPictures.config(function ($translateProvider) {
         'ADD_NEW_PICTURES':'Add pictures',
         'DELETE_PICTURES':'Delete pictures',
         'DROP_PICTURES_HERE':'Drop picture here',
-        'ALL_PICTURES_UPLOADED':'All pictures have been uploaded successfully!',
+        'ALL_PICTURES_UPLOADED':'All pictures have been sent to the server!',
         'ONLY_PICTURES_CAN_BE_UPLOADED':'Cannot upload. Only pictures can be uploaded!',
-        'NO_PATIENT_SELECTED_FOR_FILE':'There is no patient selected whose picture is uploaded!'
+        'NO_PATIENT_SELECTED_FOR_FILE':'There is no patient selected whose picture is uploaded!',
+        'NO_BODY_PART_SELECTED_FOR_FILE':'There is no body which the picture describes!',
+        'NO_PICTURE_TYPE_SELECTED_FOR_FILE':'There is no picture type selected for the picture!'
     });
     $translateProvider.translations('pl', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -124,9 +126,11 @@ MedicalPictures.config(function ($translateProvider) {
         'ADD_NEW_PICTURES':'Dodaj zdjęcia',
         'DELETE_PICTURES':'Usuń zdjęcia',
         'DROP_PICTURES_HERE':'Przeciągnij pliki tutaj',
-        'ALL_PICTURES_UPLOADED':'Wszystkie zdjęcia zostały pomyślnie zapisane!',
+        'ALL_PICTURES_UPLOADED':'Wszystkie zdjęcia zostały wysłane do serwera!',
         'ONLY_PICTURES_CAN_BE_UPLOADED':'Nie można załadować. Dozwolne są tylko obrazy/zdjęcia!',
-        'NO_PATIENT_SELECTED_FOR_FILE':'Nie wybrano pacjenta, dla którego to zdjęcie jest ładowane!'
+        'NO_PATIENT_SELECTED_FOR_FILE':'Nie wybrano pacjenta, dla którego to zdjęcie jest ładowane!',
+        'NO_BODY_PART_SELECTED_FOR_FILE':'Nie wybrano części ciała dla podanego zdjęcia!',
+        'NO_PICTURE_TYPE_SELECTED_FOR_FILE':'Nie wybrano typu zdjęcia dla podanego obrazu!'
 
     });
     $translateProvider.preferredLanguage('pl');

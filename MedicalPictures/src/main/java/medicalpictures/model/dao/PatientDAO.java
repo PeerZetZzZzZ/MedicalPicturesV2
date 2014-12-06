@@ -37,7 +37,7 @@ public class PatientDAO {
         JSONArray patientsArray = new JSONArray();
         for (Patient patient : patients) {
             JSONObject singlePatient = new JSONObject();
-//            singlePatient.put("username", patient.getUsername());
+            singlePatient.put("username", patient.getUser().getUsername());
             singlePatient.put("surname", patient.getSurname());
             singlePatient.put("name", patient.getName());
             patientsArray.put(singlePatient);

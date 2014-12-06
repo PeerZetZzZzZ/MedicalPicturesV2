@@ -1,20 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package medicalpictures.controller.views.admin;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import jdk.nashorn.internal.parser.JSONParser;
-import medicalpictures.controller.views.admin.AdminViewAddUser;
 import medicalpictures.model.admin.AdminOperationResponse;
 import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.enums.AccountType;

@@ -112,14 +112,16 @@ public class MedicalPicturesCommonResource {
     @Produces("application/json")
     public String getBodyParts() {
         try {
-            securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+            securityManager.checkUserPermissionToThisContent(AccountType.ADMIN, AccountType.TECHNICIAN);
             String allBodyParts = bodyPartManager.getAllBodyParts().toString();
             logger.info("Returned all body parts: " + allBodyParts);
             return allBodyParts;
 
         } catch (NoLoggedUserExistsHere ex) {
+            System.out.println("NoLoggedUserExistsHere - return " + jsonFactory.notUserLogged());
             return jsonFactory.notUserLogged();
         } catch (UserNotPermitted ex) {
+            System.out.println("UserNotPermitted - return " + jsonFactory.userNotPermitted());
             return jsonFactory.userNotPermitted();
         }
     }
@@ -136,7 +138,6 @@ public class MedicalPicturesCommonResource {
     public String getAllUsernames() {
         try {
             securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
-            System.out.println("tu wlaza jeszcze ale nizej");
             String allUsernames = userManager.getAllUsernames().toString();
             logger.info("Return all usernames: " + allUsernames);
             System.out.println(allUsernames.toString());
@@ -184,7 +185,7 @@ public class MedicalPicturesCommonResource {
     @Produces("application/json")
     public String getAllPictureTypes() {
         try {
-            securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+            securityManager.checkUserPermissionToThisContent(AccountType.ADMIN, AccountType.TECHNICIAN);
             String pictureTypes = pictureTypeManager.getAllPictureTypes().toString();
             logger.info("Returned picture types: " + pictureTypes);
             return pictureTypes;

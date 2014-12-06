@@ -141,10 +141,8 @@ public class UserDAO {
             singleUser.put("username", userDb.getUsername());
             singleUser.put("accountType", userDb.getAccountType());
             usersList.add(singleUser);
-            System.out.println(singleUser.toString());
         }
         users.put("usernames", usersList);
-        System.out.println("Takie cos zwracom: " + users.toString());
         return users;
     }
 
@@ -373,33 +371,58 @@ public class UserDAO {
 
     }
 
-    private Patient findPatient(String username) {
-        Query query = ormManager.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getPatientTable() + " a WHERE a.user.username LIKE :userName", Patient.class);
-        Patient patient = (Patient) query.setParameter("userName", username).getSingleResult();
-        return patient;
+    public Patient findPatient(String username) {
+        try {
+            Query query = ormManager.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getPatientTable() + " a WHERE a.user.username LIKE :userName", Patient.class);
+            Patient patient = (Patient) query.setParameter("userName", username).getSingleResult();
+            return patient;
+        } catch (Exception ex) {
+            System.out.println("No patient with username: " + username);
+            return null;
+        }
     }
 
-    private Admin findAdmin(String username) {
-        Query query = ormManager.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getAdminTable() + " a WHERE a.user.username LIKE :userName", Admin.class);
-        Admin admin = (Admin) query.setParameter("userName", username).getSingleResult();
-        return admin;
+    public Admin findAdmin(String username) {
+        try {
+            Query query = ormManager.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getAdminTable() + " a WHERE a.user.username LIKE :userName", Admin.class);
+            Admin admin = (Admin) query.setParameter("userName", username).getSingleResult();
+            return admin;
+        } catch (Exception ex) {
+            System.out.println("No admin with username: " + username);
+            return null;
+        }
     }
 
-    private Technician findTechnician(String username) {
-        Query query = ormManager.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getTechnicianTable() + " a WHERE a.user.username LIKE :userName", Technician.class);
-        Technician technician = (Technician) query.setParameter("userName", username).getSingleResult();
-        return technician;
+    public Technician findTechnician(String username) {
+        try {
+            Query query = ormManager.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getTechnicianTable() + " a WHERE a.user.username LIKE :userName", Technician.class);
+            Technician technician = (Technician) query.setParameter("userName", username).getSingleResult();
+            return technician;
+        } catch (Exception ex) {
+            System.out.println("No technician with username: " + username);
+            return null;
+        }
     }
 
-    private Doctor findDoctor(String username) {
-        Query query = ormManager.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getDoctorTable() + " a WHERE a.user.username LIKE :userName", Doctor.class);
-        Doctor doctor = (Doctor) query.setParameter("userName", username).getSingleResult();
-        return doctor;
+    public Doctor findDoctor(String username) {
+        try {
+            Query query = ormManager.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getDoctorTable() + " a WHERE a.user.username LIKE :userName", Doctor.class);
+            Doctor doctor = (Doctor) query.setParameter("userName", username).getSingleResult();
+            return doctor;
+        } catch (Exception ex) {
+            System.out.println("No doctor with username: " + username);
+            return null;
+        }
     }
 
-    private User findUser(String username) {
-        Query query = ormManager.getEntityManager().createQuery("SELECT u FROM " + DBNameManager.getUsersDbTable() + " u WHERE u.username LIKE :userName", User.class);
-        User user = (User) query.setParameter("userName", username).getSingleResult();
-        return user;
+    public User findUser(String username) {
+        try {
+            Query query = ormManager.getEntityManager().createQuery("SELECT u FROM " + DBNameManager.getUsersDbTable() + " u WHERE u.username LIKE :userName", User.class);
+            User user = (User) query.setParameter("userName", username).getSingleResult();
+            return user;
+        } catch (Exception ex) {
+            System.out.println("No user with username: " + username);
+            return null;
+        }
     }
 }

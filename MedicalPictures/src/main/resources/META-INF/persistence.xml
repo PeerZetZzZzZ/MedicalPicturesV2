@@ -21,7 +21,7 @@
       <!--<property name="javax.persistence.ddl-create-script-target" value="MedicalPicturesSchema.sql"/>-->
       <property name="javax.persistence.schema-generation-target" value="database"/>
       <property name="eclipselink.deploy-on-startup" value="true"/>
-      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
     </properties>
   </persistence-unit>
 </persistence>

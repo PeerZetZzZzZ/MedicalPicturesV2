@@ -31,7 +31,7 @@ import org.json.JSONObject;
 public class PictureTypeDAO {
 
     @EJB
-    private ManagerDAO ormManager;
+    private ManagerDAO managerDAO;
     private Log logger = LogFactory.getLog(PictureTypeDAO.class);
 
     /**
@@ -40,7 +40,7 @@ public class PictureTypeDAO {
      * @return
      */
     public JSONObject getAllPictureTypes() {
-        Query query = ormManager.getEntityManager().createQuery("SELECT c FROM " + DBNameManager.getPictureTypeTable() + " c", PictureType.class);
+        Query query = managerDAO.getEntityManager().createQuery("SELECT c FROM " + DBNameManager.getPictureTypeTable() + " c", PictureType.class);
         Collection<PictureType> pictureTypes = query.getResultList();
         JSONObject pictureTypesJson = new JSONObject();
         JSONArray pictureTypesArray = new JSONArray();
@@ -61,11 +61,22 @@ public class PictureTypeDAO {
         PictureType pictureType = new PictureType();
         pictureType.setPictureType(type);
         try {
-            ormManager.persistObject(pictureType);
+            managerDAO.persistObject(pictureType);
             logger.info(type + ": Picture type successfully added!");
         } catch (AddToDbFailed ex) {
             logger.error(ex.getMessage());
             throw new AddPictureTypeFailed(type + ": Adding picture type failed!");
+        }
+    }
+
+    public PictureType getPictureTypeByName(String pictureTypeName) {
+        try {
+            return (PictureType) managerDAO.getEntityManager().createQuery("SELECT u FROM " + DBNameManager.getPictureTypeTable() + " u WHERE u.pictureType LIKE :pictureType").
+                    setParameter("pictureType", pictureTypeName).getSingleResult();
+        } catch (Exception ex) {
+            System.out.println("Couldn't find PictureType entity: " + pictureTypeName);
+            return null;//in any case of failure
+
         }
     }
 }

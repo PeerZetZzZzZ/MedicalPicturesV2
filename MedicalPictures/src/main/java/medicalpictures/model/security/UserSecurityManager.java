@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import medicalpictures.model.enums.AccountType;
+import medicalpictures.model.enums.ContentPermissions;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserAlreadyLoggedException;
 import medicalpictures.model.exception.UserDoesntExistException;
@@ -95,17 +96,36 @@ public class UserSecurityManager {
      * @throws medicalpictures.model.exception.UserNotPermitted When user is not
      * permitted to see this content.
      */
-    public void checkUserPermissionToThisContent(final AccountType requriedRole) throws UserNotPermitted, NoLoggedUserExistsHere {
+    public void checkUserPermissionToThisContent(final AccountType requriedRole, AccountType... requriedRoles) throws UserNotPermitted, NoLoggedUserExistsHere {
         String username = "";
+        ContentPermissions userPermissionToTheContent = ContentPermissions.USER_NOT_ALLOWED;
+        userPermissionToTheContent = checkUserPermissionToTheSingleContent(requriedRole);
+        if (userPermissionToTheContent == ContentPermissions.USER_NOT_ALLOWED) {
+            for (AccountType role : requriedRoles) {
+                if (checkUserPermissionToTheSingleContent(role) == ContentPermissions.USER_ALLOWED) {//if user has any of other roles
+                    userPermissionToTheContent = ContentPermissions.USER_ALLOWED;
+                    break;
+                }
+            }
+        }
+        if (userPermissionToTheContent == ContentPermissions.USER_ISNT_LOGGED) {
+            throw new NoLoggedUserExistsHere("There is no logged user! Can't check specified user permission.");
+        } else if (userPermissionToTheContent == ContentPermissions.USER_NOT_ALLOWED) {
+            throw new UserNotPermitted(username + ": is not permitted to see this content. Requried accountType: " + requriedRole);
+        }
+    }
+
+    private ContentPermissions checkUserPermissionToTheSingleContent(final AccountType requriedRole) {
         try {
             Subject currentUser = SecurityUtils.getSubject();
-            username = currentUser.getSession().getAttribute("username").toString();
             currentUser.checkRole(requriedRole.toString());
+            return ContentPermissions.USER_ALLOWED;
         } catch (IllegalStateException | InvalidSessionException ex) {
             System.out.println(ex.getMessage());
-            throw new UserNotPermitted(username + ": is not permitted to see this content. Requried accountType: " + requriedRole);
+            return ContentPermissions.USER_ISNT_LOGGED;
         } catch (AuthorizationException | NullPointerException ex) {
-            throw new NoLoggedUserExistsHere("There is no logged user! Can't check specified user permission.");
+            System.out.println(ex.getMessage());
+            return ContentPermissions.USER_NOT_ALLOWED;
         }
     }
 

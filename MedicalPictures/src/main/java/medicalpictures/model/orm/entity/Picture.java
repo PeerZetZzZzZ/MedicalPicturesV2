@@ -1,11 +1,9 @@
 package medicalpictures.model.orm.entity;
 
 import java.io.Serializable;
-import static java.rmi.server.RemoteRef.serialVersionUID;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,10 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 
 /**
  * Is the single picture for the patient.
@@ -49,7 +44,7 @@ public class Picture implements Serializable {
     @OneToMany(mappedBy = "picture")
     private Set<PictureDescription> pictureDescriptions = new HashSet<>();
 
-    @Column(length = 100, unique = true)
+    @Column(length = 100)
     private String pictureName;
 
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")

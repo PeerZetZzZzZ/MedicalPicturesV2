@@ -1,197 +1,236 @@
 <html ng-app="MedicalPictures">
-    <head>
-        <link rel="stylesheet" href="./views/css/foundation.css">
-        <link rel="stylesheet" href="./views/css/normalize.css">
-        <script src="./views/js/vendor/modernizr.js"></script>
-        <script src="./views/angular/angular.js"></script>
-        <script src="./views/angular/angular-translate.min.js"></script>
-        <script src="./views/angular/angular-file-upload.js"></script>
-        <script src="./views/angular/controllers/controllers.js"></script>
-        <script src="./views/angular/directives.js"></script>
-        <script src="./views/angular/controllers/internationalization.js"></script>
-    <title>{{'TECHNICIAN_VIEW_HEAD_NAME'| translate}}</title>
-    <meta content="" charset="UTF-8">
-    <style type="text/css">
-      .my-drop-zone {
-          border: dotted 3px grey;
-          height:150px;}
-        .nv-file-over {
-          border: dotted 3px red;
-          } /* Default class applied to drop zones on over */
-        .another-file-over-class {
-           border: dotted 3px green;
-           }
-        html, body {
-           height: 100%;
-        }
-        input.ng-invalid{
-            border:2px solid red
-        }
-        .panel {
-            overflow: scroll;
-            max-height : 400px;
-        }
-        input.ng-invalid{
-            border:2px solid red
-        }
-        .panel table{
-             width: 100%
-        }
-        .panel {
-          overflow: scroll;
-        max-height : 400px;
-        }
-        .top-bar .name h1 {
-        color:orange;
-        }
-        .top-bar .right li {
-        color:orange;
-        }
-        .top-bar .right li b {
-        color:yellow;
-        }
-        .icon-bar .item b{
-        color:red;
-        }
-        td {
-        border-top: solid 1px #f00;
-        border-right: solid 1px #f00;
-        border-left: solid 1px #f00;
-        border-bottom: 1px solid  #f00; /* or whatever specific values you prefer */
-        }
-        .my-modal{
-        position: relative !important;
-        }
-        td a{
-             margin:auto;
-             display:block;
-        }
-        .sub-nav a{
-          color:black;
-        }
-    </style>
-    </head>
-    <body ng-controller="TechnicianViewAddPicturesController" nv-file-drop="" uploader="uploader" >
-        <br>
-        <nav class="top-bar" data-topbar role="navigation">
-            <ul class="title-area">
-                <li class="name">
-                    <h1>{{appName}}</h1>
-                </li>
-                <li class="toggle-topbar menu-icon">
-                    <a href="#">{{'MENU'| translate}}</a>
-                </li>
-            </ul>
-            <section class="top-bar-section">
-                <ul class="right">
-                    <li class = "name">
-                        <h1> {{'LOGGED_AS'| translate}} <b> {{loggedUsername}}</b></h1>
-                    </li>
-                    <li>
-                        <a href="#">{{'SETTINGS'| translate}}</a>
-                    </li>
-                    <li class="active">
-                        <a href="/MedicalPictures/Logout">{{'LOGOUT'| translate}}</a>
-                    </li>
-                </ul>
-            </section>
-        </nav>
-        <br>
-        <div class="row">
-            <div class="large-1 columns"><br></div>
-            <div class="large-10 columns">
-                    <div class="icon-bar two-up">
-                        <a class="item" href="/MedicalPictures/TechnicianViewManagePictures">
-                            <img src="./views/glyphicons/png/glyphicons_088_address_book.png" >
-                            <label><b>{{'MANAGE_PICTURES'| translate}}</b></label>
-                        </a>
-                        <a class="item" href="/MedicalPictures/TechnicianViewAddPictures">
-                            <img src="./views/glyphicons/png/glyphicons_011_camera.png" >
-                            <label>{{'ADD_NEW_PICTURES'| translate}}</label>
-                        </a>
-                    </div>
-            </div>
-            <div class="large-1 columns"><br></div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="large-2 columns"><br></div>
-            <div class="large-8 columns">
-                           <div ng-show="uploader.isHTML5">
-                        <!-- 3. nv-file-over uploader="link" over-class="className" -->
-                        <div class="well my-drop-zone" nv-file-over="" uploader="uploader">
-                          <h5 align="center"> {{'DROP_PICTURES_HERE' |translate}} </h5>
-                        </div>
-                    </div>
-            </div>
-            <div class="large-2 columns"><br></div>
-        </div>
-        <div class="row">
-            <div class="large-2 columns"><br></div>
-            <div class="large-8 columns" align="center">
-                <div id="alertMessageDiv">
-                    <div data-alert class="alert-box success radius" >
-                        <a href="#" class="close">&times;</a>
-                  </div>
-                </div>
-            </div>
-            <div class="large-2 columns"><br></div>
-        </div>
-        <br>
-        <div  ng-show="uploader.queue.length >0">
-        <div class="row">
-            <div class="large-1 columns"><br></div>
-            <div class="large-10 columns">
-                <div class="row">
-                    <div class="large-7 columns">
-                        <h3>Zdjęcia do załadowania</h3>
-                        <p>Ilość: {{ uploader.queue.length }}</p>
-                    </div>
-                    <div class="large-3 columns">
-                        <a href="#" class="button" ng-click="uploadPictures()">Załaduj</a>
-                    </div>
-                </div>
 
-                  <div class="panel">
-                  <table>
-                      <thead>
-                          <tr>
-                              <th width="50%">Preview</th>
-                              <th width="50%">Name</th>
-                              <th ng-show="uploader.isHTML5">Size</th>
-                              <th ng-show="uploader.isHTML5">Patient</th>
-                              <th>Actions</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr ng-repeat="item in uploader.queue">
-                            <td><div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div></td>
-                              <td><strong>{{ item.file.name }}</strong></td>
-                              <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024|number:2 }} kB</td>
-                              <td>
-                                    <select ng-options="patient for patient in allPatients" ng-model="item.selectedPatient" ng-init="selectedPatient = allPatients[0]" required>
-                                    </select>
-                              </td>
-                              <td nowrap>
-                                <div data-magellan-expedition="fixed">
-                                  <dl class="sub-nav">
-                                      <dd data-magellan-arrival="build"><span class="error label"><a ng-click="item.remove()" href="#build"
-                                        ng-disabled="item.isReady || item.isUploading || item.isSuccess">Remove</a></span></dd>
-                                  </dl>
-                                </div>
-                              </td>
-                           </tr>
-                     </tbody>
-                  </table>
-                </div>
-            </div>
-            <div class="large-1 columns"><br></div>
-        </div class="row">
+<head>
+  <link rel="stylesheet" href="./views/css/foundation.css">
+  <link rel="stylesheet" href="./views/css/normalize.css">
+  <script src="./views/js/vendor/modernizr.js"></script>
+  <script src="./views/angular/angular.js"></script>
+  <script src="./views/angular/angular-translate.min.js"></script>
+  <script src="./views/angular/angular-file-upload.js"></script>
+  <script src="./views/angular/controllers/controllers.js"></script>
+  <script src="./views/angular/directives.js"></script>
+  <script src="./views/angular/controllers/internationalization.js"></script>
+  <title>{{'TECHNICIAN_VIEW_HEAD_NAME'| translate}}</title>
+  <meta content="" charset="UTF-8">
+  <style type="text/css">
+    .my-drop-zone {
+      border: dotted 3px grey;
+      height: 150px;
+    }
+    .nv-file-over {
+      border: dotted 3px red;
+    }
+    /* Default class applied to drop zones on over */
+
+    .another-file-over-class {
+      border: dotted 3px green;
+    }
+    html,
+    body {
+      height: 100%;
+    }
+    input.ng-invalid {
+      border: 2px solid red
+    }
+    .panel {
+      overflow: scroll;
+      max-height: 400px;
+    }
+    input.ng-invalid {
+      border: 2px solid red
+    }
+    .panel table {
+      width: 100%
+    }
+    .panel {
+      overflow: scroll;
+      max-height: 400px;
+    }
+    .top-bar .name h1 {
+      color: orange;
+    }
+    .top-bar .right li {
+      color: orange;
+    }
+    .top-bar .right li b {
+      color: yellow;
+    }
+    .icon-bar .item b {
+      color: red;
+    }
+    td {
+      border-top: solid 1px #f00;
+      border-right: solid 1px #f00;
+      border-left: solid 1px #f00;
+      border-bottom: 1px solid #f00;
+      /* or whatever specific values you prefer */
+    }
+    .my-modal {
+      position: relative !important;
+    }
+    td a {
+      margin: auto;
+      display: block;
+    }
+    .sub-nav a {
+      color: black;
+    }
+  </style>
+</head>
+
+<body ng-controller="TechnicianViewAddPicturesController" nv-file-drop="" uploader="uploader">
+  <br>
+  <nav class="top-bar" data-topbar role="navigation">
+    <ul class="title-area">
+      <li class="name">
+        <h1>{{appName}}</h1>
+      </li>
+      <li class="toggle-topbar menu-icon">
+        <a href="#">{{'MENU'| translate}}</a>
+      </li>
+    </ul>
+    <section class="top-bar-section">
+      <ul class="right">
+        <li class="name">
+          <h1> {{'LOGGED_AS'| translate}} <b> {{loggedUsername}}</b></h1>
+        </li>
+        <li>
+          <a href="#">{{'SETTINGS'| translate}}</a>
+        </li>
+        <li class="active">
+          <a href="/MedicalPictures/Logout">{{'LOGOUT'| translate}}</a>
+        </li>
+      </ul>
+    </section>
+  </nav>
+  <br>
+  <div class="row">
+    <div class="large-1 columns">
+      <br>
+    </div>
+    <div class="large-10 columns">
+      <div class="icon-bar two-up">
+        <a class="item" href="/MedicalPictures/TechnicianViewManagePictures">
+          <img src="./views/glyphicons/png/glyphicons_088_address_book.png">
+          <label><b>{{'MANAGE_PICTURES'| translate}}</b>
+          </label>
+        </a>
+        <a class="item" href="/MedicalPictures/TechnicianViewAddPictures">
+          <img src="./views/glyphicons/png/glyphicons_011_camera.png">
+          <label>{{'ADD_NEW_PICTURES'| translate}}</label>
+        </a>
       </div>
-        <script src="./views/js/vendor/jquery.js"></script>
-        <script src="./views/js/foundation.min.js"></script>
-        <script>
-            $(document).foundation();
-        </script>
-    </body>
+    </div>
+    <div class="large-1 columns">
+      <br>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="large-2 columns">
+      <br>
+    </div>
+    <div class="large-8 columns">
+      <div ng-show="uploader.isHTML5">
+        <!-- 3. nv-file-over uploader="link" over-class="className" -->
+        <div class="well my-drop-zone" nv-file-over="" uploader="uploader">
+          <h5 align="center"> {{'DROP_PICTURES_HERE' |translate}} </h5>
+        </div>
+      </div>
+    </div>
+    <div class="large-2 columns">
+      <br>
+    </div>
+  </div>
+  <div class="row">
+    <div class="large-2 columns">
+      <br>
+    </div>
+    <div class="large-8 columns" align="center">
+      <div id="alertMessageDiv">
+        <div data-alert class="alert-box success radius">
+          <a href="#" class="close">&times;</a>
+        </div>
+      </div>
+    </div>
+    <div class="large-2 columns">
+      <br>
+    </div>
+  </div>
+  <br>
+  <div ng-show="uploader.queue.length >0">
+    <div class="row">
+      <div class="large-1 columns">
+        <br>
+      </div>
+      <div class="large-10 columns">
+        <div class="row">
+          <div class="large-7 columns">
+            <h3>Zdjęcia do załadowania</h3>
+            <p>Ilość: {{ uploader.queue.length }}</p>
+          </div>
+          <div class="large-3 columns">
+            <a href="#" class="button" ng-click="uploadPictures()">Załaduj</a>
+          </div>
+        </div>
+
+        <div class="panel">
+          <table>
+            <thead>
+              <tr>
+                <th width="50%">Preview</th>
+                <th width="50%">Name</th>
+                <th ng-show="uploader.isHTML5">Size</th>
+                <th ng-show="uploader.isHTML5">Patient</th>
+                <th>Picture Type</th>
+                <th>Body Part</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="item in uploader.queue">
+                <td>
+                  <div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
+                </td>
+                <td><strong>{{ item.file.name }}</strong>
+                </td>
+                <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024|number:2 }} kB</td>
+                <td>
+                  <select ng-options="patient for patient in allPatients" ng-model="item.selectedPatient" ng-init="selectedPatient = allPatients[0]" required>
+                  </select>
+                </td>
+                <td>
+                  <select ng-options="pictureType for pictureType in allPictureTypes" ng-model="item.selectedPictureType" ng-init="selectedPictureType = allPictureTypes[0]" required>
+                  </select>
+                </td>
+                <td>
+                  <select ng-options="bodyPart for bodyPart in allBodyParts" ng-model="item.selectedBodyPart" ng-init="selectedBodyPart = allBodyParts[0]" required>
+                  </select>
+                </td>
+                <td nowrap>
+                  <div data-magellan-expedition="fixed">
+                    <dl class="sub-nav">
+                      <dd data-magellan-arrival="build"><span class="error label"><a ng-click="item.remove()" href="#build"
+                                        ng-disabled="item.isReady || item.isUploading || item.isSuccess">Remove</a></span>
+                      </dd>
+                    </dl>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="large-1 columns">
+        <br>
+      </div>
+    </div class="row">
+  </div>
+  <script src="./views/js/vendor/jquery.js"></script>
+  <script src="./views/js/foundation.min.js"></script>
+  <script>
+    $(document).foundation();
+  </script>
+</body>
+
 </html>

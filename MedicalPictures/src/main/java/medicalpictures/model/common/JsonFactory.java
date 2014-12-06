@@ -47,6 +47,16 @@ public class JsonFactory {
     }
 
     /**
+     * Decrypts request from input string
+     *
+     * @param request json as string
+     * @return json as JSONObject
+     */
+    public JSONObject decryptRequest(String request) {
+        return new JSONObject(request);
+    }
+
+    /**
      * Reads the user value which will be added to database from json.
      *
      * @param jsonUser JSON document with user details
@@ -136,8 +146,9 @@ public class JsonFactory {
 
     /**
      * Returns picture type taken from proper json.
+     *
      * @param pictureType JSON input
-     * @return  picture type
+     * @return picture type
      */
     public String getPictureType(JSONObject pictureType) {
         return pictureType.getString("pictureType");
@@ -147,4 +158,21 @@ public class JsonFactory {
         return bodyPart.getString("bodyPart");
     }
 
+    /**
+     * Gets the picture values ( but no data ) which will be added to db
+     *
+     * @param pictureDetails JSONObject of details
+     * @return map with picture details
+     */
+    public Map<String, String> getAddPictureValues(JSONObject pictureDetails) {
+        Map<String, String> pictureValues = new HashMap<>();
+        pictureValues.put("patient", pictureDetails.getString("patient"));
+        String patient = pictureDetails.getString("patient");
+        String patientUsername = patient.substring(0, patient.indexOf(":") - 1);//we have email:name username so we want only email
+        pictureValues.put("patientUsername", patientUsername);
+        pictureValues.put("pictureName", pictureDetails.getString("pictureName"));
+        pictureValues.put("bodyPart", pictureDetails.getString("bodyPart"));
+        pictureValues.put("pictureType", pictureDetails.getString("pictureType"));
+        return pictureValues;
+    }
 }
