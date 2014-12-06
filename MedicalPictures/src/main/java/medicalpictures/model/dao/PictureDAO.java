@@ -125,6 +125,7 @@ public class PictureDAO {
      */
     public Picture getPictureById(String id) {
         Picture picture = managerDAO.getEntityManager().find(Picture.class, id);
+        managerDAO.getEntityManager().refresh(picture);
         if (picture == null) {
             LOG.warning("Couldn't find picture with id: " + id);
         }

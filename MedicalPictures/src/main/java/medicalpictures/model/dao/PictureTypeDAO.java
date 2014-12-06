@@ -61,8 +61,10 @@ public class PictureTypeDAO {
 
     public PictureType getPictureTypeByName(String pictureTypeName) {
         try {
-            return (PictureType) managerDAO.getEntityManager().createQuery("SELECT u FROM " + DBNameManager.getPictureTypeTable() + " u WHERE u.pictureType LIKE :pictureType").
+            PictureType pictureType = (PictureType) managerDAO.getEntityManager().createQuery("SELECT u FROM " + DBNameManager.getPictureTypeTable() + " u WHERE u.pictureType LIKE :pictureType").
                     setParameter("pictureType", pictureTypeName).getSingleResult();
+            managerDAO.getEntityManager().refresh(pictureType);
+            return pictureType;
         } catch (Exception ex) {
             System.out.println("Couldn't find PictureType entity: " + pictureTypeName);
             return null;//in any case of failure

@@ -737,6 +737,7 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
 MedicalPictures.controller('DoctorViewManageDescriptionsController', function($scope, $http, $translate, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.patients = [];
+  document.getElementById("alertMessageDiv").style.visibility = "hidden";
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
     $scope.loggedUsername = data.username;

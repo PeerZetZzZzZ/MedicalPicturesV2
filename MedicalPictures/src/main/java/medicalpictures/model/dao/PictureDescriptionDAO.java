@@ -18,6 +18,7 @@ public class PictureDescriptionDAO {
 
     public PictureDescription getPictureDesriptionById(String id) {
         PictureDescription pictureDescription = managerDAO.getEntityManager().find(PictureDescription.class, id);
+        managerDAO.getEntityManager().refresh(pictureDescription);
         if (pictureDescription == null) {
             LOG.warning("Picture description with id '" + id + "' not found.");
         }

@@ -26,7 +26,7 @@ public class PatientDAO {
 
     @EJB
     private ManagerDAO managerDAO;
-    
+
     @EJB
     private UserDAO userDAO;
 
@@ -50,16 +50,18 @@ public class PatientDAO {
         patientsJson.put("patients", patientsArray);
         return patientsJson;
     }
+
     /**
      * Returns patient pictures list ( empty if there are no pictures )
+     *
      * @param patientUsername
-     * @return 
+     * @return
      */
     public Set<Picture> getPatientPictures(String patientUsername) {
         Patient patient = userDAO.findPatient(patientUsername);
-        if(patient!=null){
+        if (patient != null) {
             return patient.getPictureList();
-        } else{
+        } else {
             return new HashSet<>();
         }
     }

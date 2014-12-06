@@ -39,7 +39,7 @@ import org.json.JSONObject;
 public class UserDAO {
 
     @EJB
-    private ManagerDAO ormManager;
+    private ManagerDAO managerDAO;
     private Log logger = LogFactory.getLog(UserDAO.class);
 
     /**
@@ -79,7 +79,7 @@ public class UserDAO {
      */
     private void addNewUserInUserDB(final String username, final String password, final String accountType) throws AddToDbFailed {
         User user = new User(username, password, accountType);
-        ormManager.persistObject(user);
+        managerDAO.persistObject(user);
     }
 
     /**
@@ -118,7 +118,7 @@ public class UserDAO {
                     user = new Doctor(foundUser, name, surname, Integer.valueOf(age), specialization);
                     break;
             }
-            ormManager.persistObject(user);
+            managerDAO.persistObject(user);
             logger.info("Added user: " + username + "," + password + "," + accountType + "," + name + "," + surname + "," + age + "," + specialization);
         } else {
             logger.info("Couldn't add user, null ");
@@ -132,7 +132,7 @@ public class UserDAO {
      * @return JSON with users - their usernames and accountTypes
      */
     public JSONObject getAllUsernames() {
-        Query query = ormManager.getEntityManager().createQuery("SELECT c FROM " + DBNameManager.getUsersDbTable() + " c", User.class);
+        Query query = managerDAO.getEntityManager().createQuery("SELECT c FROM " + DBNameManager.getUsersDbTable() + " c", User.class);
         Collection<User> usersDb = query.getResultList();
         JSONObject users = new JSONObject();
         List<JSONObject> usersList = new ArrayList<>();
@@ -158,27 +158,27 @@ public class UserDAO {
             switch (accountType) {
                 case "ADMIN": {
                     Admin admin = findAdmin(username);
-                    ormManager.getEntityManager().remove(admin);
+                    managerDAO.getEntityManager().remove(admin);
                     break;
                 }
                 case "DOCTOR": {
                     Doctor doctor = findDoctor(username);
-                    ormManager.getEntityManager().remove(doctor);
+                    managerDAO.getEntityManager().remove(doctor);
                     break;
                 }
                 case "TECHNICIAN": {
                     Technician technician = findTechnician(username);
-                    ormManager.getEntityManager().remove(technician);
+                    managerDAO.getEntityManager().remove(technician);
                     break;
                 }
                 case "PATIENT": {
                     Patient patient = findPatient(username);
-                    ormManager.getEntityManager().remove(patient);
+                    managerDAO.getEntityManager().remove(patient);
                     break;
                 }
             }
             User user = findUser(username);
-            ormManager.getEntityManager().remove(user);
+            managerDAO.getEntityManager().remove(user);
             logger.info("Deleted user: " + username + ", accountType: " + accountType);
         }
     }
@@ -195,22 +195,22 @@ public class UserDAO {
             switch (accountType) {
                 case "ADMIN": {
                     Admin admin = findAdmin(username);
-                    ormManager.getEntityManager().remove(admin);
+                    managerDAO.getEntityManager().remove(admin);
                     break;
                 }
                 case "DOCTOR": {
                     Doctor doctor = findDoctor(username);
-                    ormManager.getEntityManager().remove(doctor);
+                    managerDAO.getEntityManager().remove(doctor);
                     break;
                 }
                 case "TECHNICIAN": {
                     Technician technician = findTechnician(username);
-                    ormManager.getEntityManager().remove(technician);
+                    managerDAO.getEntityManager().remove(technician);
                     break;
                 }
                 case "PATIENT": {
                     Patient patient = findPatient(username);
-                    ormManager.getEntityManager().remove(patient);
+                    managerDAO.getEntityManager().remove(patient);
                     break;
                 }
             }
@@ -309,7 +309,7 @@ public class UserDAO {
             userToEdit.setAccountType(accountType);
             accountTypeChanged = true;
         }
-        ormManager.getEntityManager().persist(userToEdit);
+        managerDAO.getEntityManager().persist(userToEdit);
         if (!accountTypeChanged) {
             switch (accountType) {
                 case "ADMIN": {
@@ -317,7 +317,7 @@ public class UserDAO {
                     admin.setName(name);
                     admin.setSurname(surname);
                     admin.setAge(age);
-                    ormManager.getEntityManager().persist(admin);
+                    managerDAO.getEntityManager().persist(admin);
                     break;
                 }
                 case "DOCTOR": {
@@ -326,7 +326,7 @@ public class UserDAO {
                     doctor.setSurname(surname);
                     doctor.setAge(age);
                     doctor.setSpecialization("");
-                    ormManager.getEntityManager().persist(doctor);
+                    managerDAO.getEntityManager().persist(doctor);
                     break;
                 }
                 case "PATIENT": {
@@ -334,7 +334,7 @@ public class UserDAO {
                     patient.setName(name);
                     patient.setSurname(surname);
                     patient.setAge(age);
-                    ormManager.getEntityManager().persist(patient);
+                    managerDAO.getEntityManager().persist(patient);
                     break;
                 }
                 case "TECHNICIAN": {
@@ -342,7 +342,7 @@ public class UserDAO {
                     technician.setName(name);
                     technician.setSurname(surname);
                     technician.setAge(age);
-                    ormManager.getEntityManager().persist(technician);
+                    managerDAO.getEntityManager().persist(technician);
                     break;
                 }
             }
@@ -362,8 +362,9 @@ public class UserDAO {
 
     public Patient findPatient(String username) {
         try {
-            Query query = ormManager.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getPatientTable() + " a WHERE a.user.username LIKE :userName", Patient.class);
+            Query query = managerDAO.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getPatientTable() + " a WHERE a.user.username LIKE :userName", Patient.class);
             Patient patient = (Patient) query.setParameter("userName", username).getSingleResult();
+            managerDAO.getEntityManager().refresh(patient);
             return patient;
         } catch (Exception ex) {
             System.out.println("No patient with username: " + username);
@@ -373,8 +374,9 @@ public class UserDAO {
 
     public Admin findAdmin(String username) {
         try {
-            Query query = ormManager.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getAdminTable() + " a WHERE a.user.username LIKE :userName", Admin.class);
+            Query query = managerDAO.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getAdminTable() + " a WHERE a.user.username LIKE :userName", Admin.class);
             Admin admin = (Admin) query.setParameter("userName", username).getSingleResult();
+            managerDAO.getEntityManager().refresh(admin);
             return admin;
         } catch (Exception ex) {
             System.out.println("No admin with username: " + username);
@@ -384,8 +386,9 @@ public class UserDAO {
 
     public Technician findTechnician(String username) {
         try {
-            Query query = ormManager.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getTechnicianTable() + " a WHERE a.user.username LIKE :userName", Technician.class);
+            Query query = managerDAO.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getTechnicianTable() + " a WHERE a.user.username LIKE :userName", Technician.class);
             Technician technician = (Technician) query.setParameter("userName", username).getSingleResult();
+            managerDAO.getEntityManager().refresh(technician);
             return technician;
         } catch (Exception ex) {
             System.out.println("No technician with username: " + username);
@@ -395,8 +398,9 @@ public class UserDAO {
 
     public Doctor findDoctor(String username) {
         try {
-            Query query = ormManager.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getDoctorTable() + " a WHERE a.user.username LIKE :userName", Doctor.class);
+            Query query = managerDAO.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getDoctorTable() + " a WHERE a.user.username LIKE :userName", Doctor.class);
             Doctor doctor = (Doctor) query.setParameter("userName", username).getSingleResult();
+            managerDAO.getEntityManager().refresh(doctor);
             return doctor;
         } catch (Exception ex) {
             System.out.println("No doctor with username: " + username);
@@ -406,8 +410,9 @@ public class UserDAO {
 
     public User findUser(String username) {
         try {
-            Query query = ormManager.getEntityManager().createQuery("SELECT u FROM " + DBNameManager.getUsersDbTable() + " u WHERE u.username LIKE :userName", User.class);
+            Query query = managerDAO.getEntityManager().createQuery("SELECT u FROM " + DBNameManager.getUsersDbTable() + " u WHERE u.username LIKE :userName", User.class);
             User user = (User) query.setParameter("userName", username).getSingleResult();
+            managerDAO.getEntityManager().refresh(user);
             return user;
         } catch (Exception ex) {
             System.out.println("No user with username: " + username);

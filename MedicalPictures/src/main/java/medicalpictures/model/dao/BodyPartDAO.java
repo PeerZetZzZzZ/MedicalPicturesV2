@@ -51,6 +51,7 @@ public class BodyPartDAO {
         JSONObject bodyPartsJson = new JSONObject();
         JSONArray bodyPartsArray = new JSONArray();
         for (BodyPart bodyPart : bodyParts) {
+            managerDAO.getEntityManager().refresh(bodyPart);
             bodyPartsArray.put(bodyPart.getBodyPart());
         }
         bodyPartsJson.put("bodyParts", bodyPartsArray);
@@ -78,8 +79,10 @@ public class BodyPartDAO {
 
     public BodyPart getBodyPartByName(String name) {
         try {
-            return (BodyPart) managerDAO.getEntityManager().createQuery("SELECT u FROM " + DBNameManager.getBodyPartTable() + " u WHERE u.bodyPart LIKE :bodyPart").
+            BodyPart bodyPart = (BodyPart) managerDAO.getEntityManager().createQuery("SELECT u FROM " + DBNameManager.getBodyPartTable() + " u WHERE u.bodyPart LIKE :bodyPart").
                     setParameter("bodyPart", name).getSingleResult();
+            managerDAO.getEntityManager().refresh(bodyPart);
+            return bodyPart;
         } catch (Exception ex) {
             System.out.println("Couldn't find body part entity: " + name);
             return null;//in any case of failure
