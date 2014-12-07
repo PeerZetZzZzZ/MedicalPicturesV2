@@ -72,7 +72,7 @@
           <h1> {{'LOGGED_AS'| translate}} <b> {{loggedUsername}}</b></h1>
         </li>
         <li>
-          <a href="#">{{'SETTINGS'| translate}}</a>
+          <a href="/MedicalPictures/UserSettings">{{'SETTINGS'| translate}}</a>
         </li>
         <li class="active">
           <a href="/MedicalPictures/Logout">{{'LOGOUT'| translate}}</a>
@@ -244,6 +244,12 @@
         <div class="large-6 columns">
           <label>{{'AGE' | translate }}</label>
           <input type="number" placeholder="" ng-model="editingAge" required ng-min="minAge" ng-max="maxAge" />
+        </div>
+      </div>
+      <div class="row" ng-show="editingSelectedAccountType==='DOCTOR' ">
+        <div class="large-12 columns">
+          <label>{{'SPECIALIZATION' | translate }}</label>
+          <input type="text" placeholder="" ng-model="editingSpecialization" required ng-pattern="nameRegexpPattern" />
         </div>
       </div>
       <div class="row">

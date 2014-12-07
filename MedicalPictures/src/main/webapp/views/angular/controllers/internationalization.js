@@ -97,7 +97,12 @@ MedicalPictures.config(function ($translateProvider) {
         'MANAGE_DIAGNOSIS':'Manage diagnosis',
         'BROWSE_PICTURES_AND_DIAGNOSIS':'Browse pictures and diagnosis',
         'DOCTOR':'Doctor\'s diagnosis',
-        'DIAGNOSIS_AUTHOR':'Diagnosi\'s author'
+        'DIAGNOSIS_AUTHOR':'Diagnosi\'s author',
+        'NO_PICTURE_DESCRIPTIONS_FOUND':'No descriptions found for this picture.',
+        'YOUR_AGE':'Your age',
+        'CHANGE_PASSWORD':'Change your password',
+        'NEW_PASSWORD':'New password',
+        'NEW_PASSWORD_AGAIN':'Ensure new password'
     });
     $translateProvider.translations('pl', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -196,7 +201,12 @@ MedicalPictures.config(function ($translateProvider) {
         'MANAGE_DIAGNOSIS':'Zarządzaj diagnozami',
         'BROWSE_PICTURES_AND_DIAGNOSIS':'Przeglądaj zdjęcia i diagnozy',
         'DOCTOR_DIAGNOSIS':'Diagnoza doktora',
-        'DIAGNOSIS_AUTHOR':'Autor diagnozy'
+        'DIAGNOSIS_AUTHOR':'Autor diagnozy',
+        'NO_PICTURE_DESCRIPTIONS_FOUND':'Brak jakichkolwiek diagnoz dla tego zdjęcia.',
+        'YOUR_AGE':'Twój wiek',
+        'CHANGE_PASSWORD':'Zmień swoje hasło',
+        'NEW_PASSWORD':'Nowe hasło',
+        'NEW_PASSWORD_AGAIN':'Potwierdź nowe hasło'
     });
     $translateProvider.preferredLanguage('pl');
 });

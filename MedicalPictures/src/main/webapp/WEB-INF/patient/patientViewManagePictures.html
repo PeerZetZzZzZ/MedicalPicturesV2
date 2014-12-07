@@ -20,6 +20,9 @@
     .panel h5{
       color:#0080FF;
     }
+    h4{
+      color:red;
+    }
     input.ng-invalid {
       border: 2px solid red
     }
@@ -183,7 +186,9 @@
                         </div>
                       </form>
                     </div>
-                    <div class="large-7 columns">
+                    <div class="large-7 columns" >
+                      <h4 ng-show="selectedDescription === undefined">{{'NO_PICTURE_DESCRIPTIONS_FOUND' | translate}}</h4>
+                      <div ng-show="selectedDescription !=undefined">
                       <label>{{'PICTURE_DESCRIPTION' | translate}}
                         <div class="panel">
                           <h5>{{selectedDescription.pictureDescription}}</h5>
@@ -191,6 +196,7 @@
                       </label>
                       <h8>{{'DIAGNOSIS_AUTHOR' |translate}}:{{selectedDescription.doctor}}</h8><br>
                       <h8>{{'SPECIALIZATION' | translate}}: {{selectedDescription.doctorSpecialization}}</h8>
+                      </div>
                     </div>
                     <a class="exit-off-canvas"></a>
                   </div>

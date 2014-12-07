@@ -51,6 +51,10 @@
         <servlet-name>PatientViewManagePictures</servlet-name>
         <servlet-class>medicalpictures.controller.views.patient.PatientViewManagePictures</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UserSettings</servlet-name>
+        <servlet-class>medicalpictures.controller.views.common.UserSettings</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginView</servlet-name>
         <url-pattern>/LoginView</url-pattern>
@@ -98,6 +102,10 @@
     <servlet-mapping>
         <servlet-name>PatientViewManagePictures</servlet-name>
         <url-pattern>/PatientViewManagePictures</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserSettings</servlet-name>
+        <url-pattern>/UserSettings</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

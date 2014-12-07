@@ -162,6 +162,7 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
   $scope.maxNameSurnameLength = MedicalPicturesGlobal.MAX_NAME_SURNAME_LENGTH;
   $scope.maxUsernameLength = MedicalPicturesGlobal.MAX_USERNAME_LENGTH;
   $scope.editingUsername = "";
+  $scope.editingSpecialization = "";
   $scope.editingName = "";
   $scope.editingSurname = "";
   $scope.editingAge = 0;
@@ -192,6 +193,9 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
       $scope.editingSurname = data.surname;
       $scope.editingAge = data.age;
       $scope.editingSelectedAccountType = data.accountType;
+      if ($scope.editingSelectedAccountType === 'DOCTOR') {
+        $scope.editingSpecialization = data.specialization;
+      }
     }).
     error(function(data, status, headers, config) {
       console.log(status);
@@ -258,6 +262,7 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
         "accountType": $scope.editingSelectedAccountType,
         "name": $scope.editingName,
         "surname": $scope.editingSurname,
+        "specialization": $scope.editingSpecialization,
         "age": $scope.editingAge.toString(),
         "resetPassword": resetPassword.toString()
       }
@@ -280,6 +285,7 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
             $scope.editingAge = undefined;
             $scope.editingName = undefined;
             $scope.editingSurname = undefined;
+            $scope.editingSpecialization = undefined;
             $('.close-reveal-modal').click(); //close the reveal-modal window, small hack
             showAlertMessageSuccess(translation, userEdited);
           });
@@ -841,7 +847,7 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, Medi
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.patientPictures = [];
   $scope.selectedPicture;
-  $scope.selectedDescription="";
+  $scope.selectedDescription = "";
   $scope.pictureDescriptions = [];
   document.getElementById("alertMessageDiv").style.visibility = "hidden";
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
@@ -885,7 +891,7 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, Medi
       console.log(status);
     });
   }
-  $scope.setSelectedDescription = function(selectedDesription){
+  $scope.setSelectedDescription = function(selectedDesription) {
     $scope.selectedDescription = selectedDesription;
   }
 
@@ -895,6 +901,21 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, Medi
 /* UserSettings Controller */
 MedicalPictures.controller('UserSettingsController', function($scope, $http, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
+  $scope.loggedUser;
+  $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
+  success(function(data, status, headers, config) {
+    $scope.loggedUsername = data.username;
+    $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getUserInfo/'+$scope.loggedUsername).
+    success(function(data, status, headers, config) {
+      $scope.loggedUser = data;
+    }).
+    error(function(data, status, headers, config) {
+      console.log(status);
+    });
+  }).
+  error(function(data, status, headers, config) {
+    console.log(status);
+  });
 });
 /* UserSettings Controller */
 MedicalPictures.controller('Technician', function($scope, $http, MedicalPicturesGlobal) {

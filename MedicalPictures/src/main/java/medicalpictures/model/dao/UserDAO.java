@@ -34,7 +34,7 @@ import org.json.JSONObject;
  *
  * @author PeerZet
  */
-@Stateful
+    @Stateful
 @Named(value = "DBUserManager")
 public class UserDAO {
 
@@ -325,7 +325,7 @@ public class UserDAO {
                     doctor.setName(name);
                     doctor.setSurname(surname);
                     doctor.setAge(age);
-                    doctor.setSpecialization("");
+                    doctor.setSpecialization(userDetails.get("specialization"));
                     managerDAO.getEntityManager().persist(doctor);
                     break;
                 }

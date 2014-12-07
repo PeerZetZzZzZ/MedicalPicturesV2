@@ -35,12 +35,9 @@ import medicalpictures.model.dao.PictureTypeDAO;
 import medicalpictures.model.dao.UserDAO;
 import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.orm.entity.Picture;
-import medicalpictures.model.orm.entity.PictureDescription;
 import medicalpictures.model.security.UserSecurityManager;
 import medicalpictures.model.technician.TechnicianOperationResponse;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.SecurityUtils;
 import org.json.JSONObject;
 
@@ -82,8 +79,7 @@ public class MedicalPicturesCommonResource {
 
     @EJB
     private DefinedPictureDescriptionDAO definedPictureDescriptionDAO;
-
-    private Log logger = LogFactory.getLog(MedicalPicturesCommonResource.class);
+    private static final Logger logger = Logger.getLogger(MedicalPicturesCommonResource.class.getName());
 
     /**
      * Creates a new instance of MedicalPicturesCommonResource
@@ -104,7 +100,7 @@ public class MedicalPicturesCommonResource {
         try {
             if (securityManager.checkUserPermissionToAnyContent()) {
                 String username = securityManager.getLoggedUsername().toString();
-                logger.info("Returned logged user: " + username);
+                logger.log(Level.INFO, "Returned logged user: {0}", username);
                 return username;
 
             } else {
@@ -365,7 +361,7 @@ public class MedicalPicturesCommonResource {
             if (picture != null) {
                 return jsonFactory.getFullPictureData(picture);
             } else {
-                logger.error("Retrieving full picture data failed for picture '" + pictureId + "'. Picture not found.");
+                logger.warning("Retrieving full picture data failed for picture '" + pictureId + "'. Picture not found.");
                 return jsonFactory.notObjectFound();
             }
         } catch (IOException ex) {
@@ -397,4 +393,12 @@ public class MedicalPicturesCommonResource {
         String patientUsername = (String) SecurityUtils.getSubject().getSession().getAttribute("username");
         return patientDAO.getPatientPictureDescriptions(patientUsername, pictureId);
     }
+
+//    @GET
+//    @Path("getLoggedUserInfo")
+//    @Produces("application/json")
+//    public String getLoggedUserInfo() {
+//        String patientUsername = (String) SecurityUtils.getSubject().getSession().getAttribute("username");
+////        return userDAO.getUserInfo(patientUsername, pictureId);
+//    }
 }
