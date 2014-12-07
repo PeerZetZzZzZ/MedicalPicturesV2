@@ -47,6 +47,10 @@
         <servlet-name>DoctorViewManageDescriptions</servlet-name>
         <servlet-class>medicalpictures.controller.views.doctor.DoctorViewManageDescriptions</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PatientViewManagePictures</servlet-name>
+        <servlet-class>medicalpictures.controller.views.patient.PatientViewManagePictures</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginView</servlet-name>
         <url-pattern>/LoginView</url-pattern>
@@ -90,6 +94,10 @@
     <servlet-mapping>
         <servlet-name>DoctorViewManageDescriptions</servlet-name>
         <url-pattern>/DoctorViewManageDescriptions</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PatientViewManagePictures</servlet-name>
+        <url-pattern>/PatientViewManagePictures</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

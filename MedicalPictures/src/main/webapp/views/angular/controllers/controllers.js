@@ -57,7 +57,7 @@ MedicalPictures.controller('LoginController', function($scope, $http, $window, $
               $window.location.href = "AdminViewManageUsers";
               break;
             case "PATIENT":
-              $window.location.href = "PatientView";
+              $window.location.href = "PatientViewManagePictures";
               break;
             case "TECHNICIAN":
               $window.location.href = "TechnicianViewManagePictures";
@@ -737,7 +737,7 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
 MedicalPictures.controller('DoctorViewManageDescriptionsController', function($scope, $http, $translate, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.patients = [];
-  $scope.definedPictureDescriptions=[];
+  $scope.definedPictureDescriptions = [];
   document.getElementById("alertMessageDiv").style.visibility = "hidden";
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
@@ -777,7 +777,8 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
   $scope.getPatientPictureWithThumbnail = function(picture) {
     $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getPatientPictureWithThumbnail/' + picture.pictureId).
     success(function(data, status, headers, config) {
-      $scope.selectedPicture = data;
+      if (data.definedPicturesId)
+        $scope.selectedPicture = data;
     }).
     error(function(data, status, headers, config) {
       console.log(status);
@@ -815,7 +816,7 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
       },
       data: pictureDescription
     }).success(function(data, status, header, config) {
-      if (data.error === "insertToDbFailed" || data.error==="notObjectFound") {
+      if (data.error === "insertToDbFailed" || data.error === "notObjectFound") {
         $translate('ADD_TO_DB_FAILED').then(function(translation) {
           showAlertMessageError(translation, picture.pictureName);
         });
@@ -828,15 +829,29 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
 
     });
   }
-  $scope.setDefinedPictureDescriptionForSelectedPicture = function(definedPictureDescription){
+  $scope.setDefinedPictureDescriptionForSelectedPicture = function(definedPictureDescription) {
     $scope.selectedPicture.definedPictureDescriptionId = definedPictureDescription.id;
     $scope.selectedPicture.pictureDescription = definedPictureDescription.pictureDescription;
   }
 
 });
 /* ****************************************** */
+/* Patient Controller */
+MedicalPictures.controller('PatientViewController', function($scope,$http, MedicalPicturesGlobal) {
+  $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
+  document.getElementById("alertMessageDiv").style.visibility = "hidden";
+  $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
+  success(function(data, status, headers, config) {
+    $scope.loggedUsername = data.username;
+  }).
+  error(function(data, status, headers, config) {
+    console.log(status);
+  });
+});
+
+/* ******************************************** */
 /* UserSettings Controller */
-MedicalPictures.controller('UserSettingsController', function($scope, MedicalPicturesGlobal) {
+MedicalPictures.controller('UserSettingsController', function($scope,$http, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
 });
 /* UserSettings Controller */
