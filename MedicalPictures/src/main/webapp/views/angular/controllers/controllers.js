@@ -737,10 +737,18 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
 MedicalPictures.controller('DoctorViewManageDescriptionsController', function($scope, $http, $translate, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.patients = [];
+  $scope.definedPictureDescriptions=[];
   document.getElementById("alertMessageDiv").style.visibility = "hidden";
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
     $scope.loggedUsername = data.username;
+  }).
+  error(function(data, status, headers, config) {
+    console.log(status);
+  });
+  $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getDefinedPictureDescriptions').
+  success(function(data, status, headers, config) {
+    $scope.definedPictureDescriptions = data.definedPictureDescriptions;
   }).
   error(function(data, status, headers, config) {
     console.log(status);
@@ -819,6 +827,10 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
     }).error(function(data, status, header, config) {
 
     });
+  }
+  $scope.setDefinedPictureDescriptionForSelectedPicture = function(definedPictureDescription){
+    $scope.selectedPicture.definedPictureDescriptionId = definedPictureDescription.id;
+    $scope.selectedPicture.pictureDescription = definedPictureDescription.pictureDescription;
   }
 
 });

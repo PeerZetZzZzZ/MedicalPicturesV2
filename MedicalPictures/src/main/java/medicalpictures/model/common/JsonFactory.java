@@ -271,8 +271,9 @@ public class JsonFactory {
             for (PictureDescription pictureDescription : picture.getPictureDescriptions()) {
                 if (pictureDescription.getDoctor().getUser().getUsername().equals(loggedUsername)) {
                     String pictureDesc = pictureDescription.getDescription();
-                    if (pictureDesc == null) {
+                    if (pictureDesc == null || pictureDesc.equals("")) {
                         pictureDesc = pictureDescription.getDefinedPictureDescription().getPictureDescription();
+                        pictureJson.put("definedPictureDescriptionId", pictureDescription.getDefinedPictureDescription().getId());
                     }
                     pictureJson.put("pictureDescription", pictureDesc);
                     pictureJson.put("pictureDescriptionId", pictureDescription.getId());

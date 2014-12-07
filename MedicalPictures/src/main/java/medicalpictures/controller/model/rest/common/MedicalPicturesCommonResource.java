@@ -33,6 +33,7 @@ import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;
 import medicalpictures.model.dao.BodyPartDAO;
+import medicalpictures.model.dao.DefinedPictureDescriptionDAO;
 import medicalpictures.model.dao.PatientDAO;
 import medicalpictures.model.dao.PictureDAO;
 import medicalpictures.model.dao.PictureTypeDAO;
@@ -81,6 +82,9 @@ public class MedicalPicturesCommonResource {
 
     @EJB
     private TechnicianOperationResponse technicianOperationResponse;
+
+    @EJB
+    private DefinedPictureDescriptionDAO definedPictureDescriptionDAO;
 
     private Log logger = LogFactory.getLog(MedicalPicturesCommonResource.class);
 
@@ -380,5 +384,12 @@ public class MedicalPicturesCommonResource {
     public String savePictureDescription(String pictureDescriptionDetails) {
         JSONObject pictureDescriptionJson = jsonFactory.decryptRequest(pictureDescriptionDetails);
         return pictureDAO.savePictureOrUpdateDescription(pictureDescriptionJson);
+    }
+
+    @GET
+    @Path("getDefinedPictureDescriptions")
+    @Produces("application/json")
+    public String getDefinedPictureDescriptions() {
+        return definedPictureDescriptionDAO.getDefinedPictureDescription();
     }
 }

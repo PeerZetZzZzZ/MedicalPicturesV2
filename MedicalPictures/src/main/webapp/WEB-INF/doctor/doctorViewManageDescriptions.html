@@ -117,6 +117,9 @@
                 <h1 class="title">MANAGE_DIAGNOSIS</h1>
               </section>
 
+              <section class="right-small">
+                <a class="right-off-canvas-toggle menu-icon" href="#"><span></span></a>
+              </section>
             </nav>
 
             <aside class="left-off-canvas-menu">
@@ -135,6 +138,15 @@
                     </li>
                   </ul>
                 </li>
+            </aside>
+            <aside class="right-off-canvas-menu">
+              <ul class="off-canvas-list">
+                <li>
+                  <label>DEFINED_PICTURE_DESCRIPTIONS</label>
+                </li>
+                <li ng-repeat="definedPictureDescription in definedPictureDescriptions"><a ng-click="setDefinedPictureDescriptionForSelectedPicture(definedPictureDescription)">{{definedPictureDescription.name}}</a>
+                </li>
+              </ul>
             </aside>
             <section class="main-section">
               <div ng-show="selectedPicture!=undefined">
@@ -195,13 +207,16 @@
                     </div>
                     <div class="large-7 columns">
                       <label>PICTURE_DESCRIPTION
-                        <textarea placeholder="" ng-change="selectedPicture.changed=true" ng-model="selectedPicture.pictureDescription"></textarea>
+                        <textarea placeholder="" ng-change="selectedPicture.changed=true;" ng-readonly="selectedPicture.definedPictureDescriptionId != undefined" ng-model="selectedPicture.pictureDescription"></textarea>
                       </label>
+                      <ul class="breadcrumbs"  ng-show="selectedPicture.definedPictureDescriptionId != undefined" >
+                        <li><a ng-click="selectedPicture.definedPictureDescriptionId=undefined">REMOVE_DEFINED_PICTURE_DESCRIPTION</a></li>
+                      </ul>
                       <div align="right">
-                        <a ng-show="selectedPicture.changed === true && selectedPicture.pictureDescription !='' " class="button small" ng-click="savePictureDescription(selectedPicture)" >SAVE_DESCRIPTION</a>
+                        <a ng-show="selectedPicture.pictureDescription !='' " class="button small" ng-click="savePictureDescription(selectedPicture)">SAVE_DESCRIPTION</a>
                       </div>
                     </div>
-                  <a class="exit-off-canvas"></a>
+                    <a class="exit-off-canvas"></a>
                   </div>
                   <div class="large-1 columns">
                     <br>
