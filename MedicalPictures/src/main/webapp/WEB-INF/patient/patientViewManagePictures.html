@@ -15,16 +15,16 @@
     .panel {
       overflow: scroll;
       max-height: 400px;
+      border-color:  pink;
+    }
+    .panel h5{
+      color:#0080FF;
     }
     input.ng-invalid {
       border: 2px solid red
     }
     .panel table {
       width: 100%
-    }
-    .panel {
-      overflow: scroll;
-      max-height: 400px;
     }
     .main-section {
       min-height: 400px;
@@ -127,24 +127,18 @@
                 <li>
                   <label>{{'PATIENT' | translate}}</label>
                 </li>
-                <li class="has-submenu" ng-repeat="patient in patients"><a ng-click="getPatientPicturesNames(patient)">{{patient.username+" : "+patient.name +" "+patient.surname}}</a>
-                  <ul class="left-submenu">
-                    <li class="back"><a href="#">{{'BACK' | translate}}</a>
-                    </li>
-                    <li>
-                      <label>{{'PATIENT_PICTURES' | translate}}</label>
-                    </li>
-                    <li ng-repeat="picture in patient.pictures"><a ng-click="getPatientPictureWithThumbnail(picture)">{{picture.pictureName}}</a>
-                    </li>
-                  </ul>
+                <li>
+                  <label>{{'PATIENT_PICTURES' | translate}}</label>
+                </li>
+                <li ng-repeat="picture in patientPictures"><a ng-click="getPatientPictureWithThumbnail(picture)">{{picture.pictureName}}</a>
                 </li>
             </aside>
             <aside class="right-off-canvas-menu">
               <ul class="off-canvas-list">
                 <li>
-                  <label>{{'DEFINED_PICTURE_DESCRIPTION' | translate}}</label>
+                  <label>{{'DOCTOR' | translate}}</label>
                 </li>
-                <li ng-repeat="definedPictureDescription in definedPictureDescriptions"><a ng-click="setDefinedPictureDescriptionForSelectedPicture(definedPictureDescription)">{{definedPictureDescription.name}}</a>
+                <li ng-repeat="description in pictureDescriptions" ng-click="setSelectedDescription(description)"><a>{{description.doctor}}</a>
                 </li>
               </ul>
             </aside>
@@ -172,16 +166,12 @@
                           <input type="text" readonly ng-model="selectedPicture.patientSurname"></input>
                         </div>
                         <div class="row">
-                          <label>{{'PATIENT_USERNAME' | translate}}</label>
-                          <input type="text" readonly ng-model="selectedPicture.patientUsername"></input>
+                          <label>{{'PATIENT_AGE' |translate}}</label>
+                          <input type="text" readonly ng-model="selectedPicture.patientAge"></input>
                         </div>
                         <div class="row">
                           <label>{{'CAPTURE_DATE' | translate}}</label>
                           <input type="text" readonly ng-model="selectedPicture.captureTimestamp"></input>
-                        </div>
-                        <div class="row">
-                          <label>{{'PATIENT_AGE' |translate}}</label>
-                          <input type="text" readonly ng-model="selectedPicture.patientAge"></input>
                         </div>
                         <div class="row">
                           <label>{{'BODY_PART' | translate}}</label>
@@ -191,30 +181,16 @@
                           <label>{{'PICTURE_TYPE' | translate}}</label>
                           <input type="text" readonly ng-model="selectedPicture.pictureType"></input>
                         </div>
-                        <div class="row">
-                          <label>{{'TECHNICIAN_NAME' | translate}}</label>
-                          <input type="text" readonly ng-model="selectedPicture.technicianName"></input>
-                        </div>
-                        <div class="row">
-                          <label>{{'TECHNICIAN_SURNAME' | translate}}</label>
-                          <input type="text" readonly ng-model="selectedPicture.technicianSurname"></input>
-                        </div>
-                        <div class="row">
-                          <label>{{'TECHNICIAN_USERNAME' | translate}}</label>
-                          <input type="text" readonly ng-model="selectedPicture.technicianUsername"></input>
-                        </div>
                       </form>
                     </div>
                     <div class="large-7 columns">
                       <label>{{'PICTURE_DESCRIPTION' | translate}}
-                        <textarea placeholder="" ng-change="selectedPicture.changed=true;" ng-readonly="selectedPicture.definedPictureDescriptionId != undefined" ng-model="selectedPicture.pictureDescription"></textarea>
+                        <div class="panel">
+                          <h5>{{selectedDescription.pictureDescription}}</h5>
+                        </div>
                       </label>
-                      <ul class="breadcrumbs"  ng-show="selectedPicture.definedPictureDescriptionId != undefined" >
-                        <li><a ng-click="selectedPicture.definedPictureDescriptionId=undefined">{{'REMOVE_DEFINED_PICTURE_DESCRIPTION' |translate}}</a></li>
-                      </ul>
-                      <div align="right">
-                        <a ng-show="selectedPicture.pictureDescription !='' " class="button small" ng-click="savePictureDescription(selectedPicture)">{{'SAVE_DESCRIPTION'|translate}}</a>
-                      </div>
+                      <h8>{{'DIAGNOSIS_AUTHOR' |translate}}:{{selectedDescription.doctor}}</h8><br>
+                      <h8>{{'SPECIALIZATION' | translate}}: {{selectedDescription.doctorSpecialization}}</h8>
                     </div>
                     <a class="exit-off-canvas"></a>
                   </div>

@@ -15,20 +15,21 @@ import org.json.JSONObject;
  */
 @Stateless
 public class DefinedPictureDescriptionDAO {
-    
+
     @EJB
     private ManagerDAO managerDAO;
     private static final Logger LOG = Logger.getLogger(DefinedPictureDescriptionDAO.class.getName());
-    
+
     public DefinedPictureDescription getDefinedPictureDesriptionById(String id) {
         DefinedPictureDescription definedPictureDescription = managerDAO.getEntityManager().find(DefinedPictureDescription.class, id);
         if (definedPictureDescription == null) {
             LOG.warning("Defined picture description with id '" + id + "' not found.");
+        } else {
+            managerDAO.getEntityManager().refresh(definedPictureDescription);
         }
-        managerDAO.getEntityManager().refresh(definedPictureDescription);
         return definedPictureDescription;
     }
-    
+
     public String getDefinedPictureDescription() {
         List<DefinedPictureDescription> definedPictureDescriptionList = managerDAO.getEntityManager().
                 createQuery("SELECT d FROM " + DBNameManager.getDefinedPictureDescriptionTableName() + " d").getResultList();

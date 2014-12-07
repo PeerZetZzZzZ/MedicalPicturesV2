@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package medicalpictures.controller.model.rest.common;
 
 import java.awt.Image;
@@ -40,11 +35,13 @@ import medicalpictures.model.dao.PictureTypeDAO;
 import medicalpictures.model.dao.UserDAO;
 import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.orm.entity.Picture;
+import medicalpictures.model.orm.entity.PictureDescription;
 import medicalpictures.model.security.UserSecurityManager;
 import medicalpictures.model.technician.TechnicianOperationResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.shiro.SecurityUtils;
 import org.json.JSONObject;
 
 /**
@@ -78,7 +75,7 @@ public class MedicalPicturesCommonResource {
     private JsonFactory jsonFactory;
 
     @EJB
-    private UserDAO userManager;
+    private UserDAO userDAO;
 
     @EJB
     private TechnicianOperationResponse technicianOperationResponse;
@@ -157,7 +154,7 @@ public class MedicalPicturesCommonResource {
     public String getAllUsernames() {
         try {
             securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
-            String allUsernames = userManager.getAllUsernames().toString();
+            String allUsernames = userDAO.getAllUsernames().toString();
             logger.info("Return all usernames: " + allUsernames);
             System.out.println(allUsernames.toString());
             return allUsernames;
@@ -182,7 +179,7 @@ public class MedicalPicturesCommonResource {
     public String getUserInfo(@PathParam("username") String username) {
         try {
             securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
-            Map<String, String> userDetailsMap = userManager.getUserDetails(username);
+            Map<String, String> userDetailsMap = userDAO.getUserDetails(username);
             String userDetailsJson = jsonFactory.getUserDetailsAsJson(userDetailsMap);
             logger.info("Return user info: " + userDetailsJson);
             return userDetailsJson;
@@ -391,5 +388,13 @@ public class MedicalPicturesCommonResource {
     @Produces("application/json")
     public String getDefinedPictureDescriptions() {
         return definedPictureDescriptionDAO.getDefinedPictureDescription();
+    }
+
+    @GET
+    @Path("getPictureDescriptions/{pictureId}")
+    @Produces("application/json")
+    public String getPictureDescriptions(@PathParam("pictureId") String pictureId) {
+        String patientUsername = (String) SecurityUtils.getSubject().getSession().getAttribute("username");
+        return patientDAO.getPatientPictureDescriptions(patientUsername, pictureId);
     }
 }

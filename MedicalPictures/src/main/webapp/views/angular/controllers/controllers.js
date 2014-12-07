@@ -777,8 +777,8 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
   $scope.getPatientPictureWithThumbnail = function(picture) {
     $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getPatientPictureWithThumbnail/' + picture.pictureId).
     success(function(data, status, headers, config) {
-      if (data.definedPicturesId)
-        $scope.selectedPicture = data;
+      // if (data.definedPicturesId)
+      $scope.selectedPicture = data;
     }).
     error(function(data, status, headers, config) {
       console.log(status);
@@ -837,21 +837,63 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
 });
 /* ****************************************** */
 /* Patient Controller */
-MedicalPictures.controller('PatientViewController', function($scope,$http, MedicalPicturesGlobal) {
+MedicalPictures.controller('PatientViewController', function($scope, $http, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
+  $scope.patientPictures = [];
+  $scope.selectedPicture;
+  $scope.selectedDescription="";
+  $scope.pictureDescriptions = [];
   document.getElementById("alertMessageDiv").style.visibility = "hidden";
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
     $scope.loggedUsername = data.username;
+    $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getPatientPicturesNames/' + $scope.loggedUsername).
+    success(function(data, status, headers, config) {
+      $scope.patientPictures = data.pictures;
+    }).
+    error(function(data, status, headers, config) {
+      console.log(status);
+    });
   }).
   error(function(data, status, headers, config) {
     console.log(status);
   });
+  $scope.getPatientPictureWithThumbnail = function(picture) {
+    $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getPatientPictureWithThumbnail/' + picture.pictureId).
+    success(function(data, status, headers, config) {
+      $scope.selectedPicture = data;
+      $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getPictureDescriptions/' + picture.pictureId).
+      success(function(data, status, headers, config) {
+        $scope.pictureDescriptions = data.pictureDescriptions;
+        $scope.selectedDescription = $scope.pictureDescriptions[0];
+      }).
+      error(function(data, status, headers, config) {
+        console.log(status);
+      });
+    }).
+    error(function(data, status, headers, config) {
+      console.log(status);
+    });
+  }
+
+  $scope.getFullPictureData = function(picture) {
+    $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getFullPictureData/' + picture.pictureId).
+    success(function(data, status, headers, config) {
+      window.open(data.pictureData);
+    }).
+    error(function(data, status, headers, config) {
+      console.log(status);
+    });
+  }
+  $scope.setSelectedDescription = function(selectedDesription){
+    $scope.selectedDescription = selectedDesription;
+  }
+
 });
 
 /* ******************************************** */
 /* UserSettings Controller */
-MedicalPictures.controller('UserSettingsController', function($scope,$http, MedicalPicturesGlobal) {
+MedicalPictures.controller('UserSettingsController', function($scope, $http, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
 });
 /* UserSettings Controller */

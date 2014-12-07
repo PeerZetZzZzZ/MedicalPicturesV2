@@ -95,7 +95,9 @@ MedicalPictures.config(function ($translateProvider) {
         'REMOVE_DEFINED_PICTURE_DESCRIPTION':'Remove defined picture description',
         'SAVE_DESCRIPTION':'Save description',
         'MANAGE_DIAGNOSIS':'Manage diagnosis',
-        'BROWSE_PICTURES_AND_DIAGNOSIS':'Browse pictures and diagnosis'
+        'BROWSE_PICTURES_AND_DIAGNOSIS':'Browse pictures and diagnosis',
+        'DOCTOR':'Doctor\'s diagnosis',
+        'DIAGNOSIS_AUTHOR':'Diagnosi\'s author'
     });
     $translateProvider.translations('pl', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -192,7 +194,9 @@ MedicalPictures.config(function ($translateProvider) {
         'REMOVE_DEFINED_PICTURE_DESCRIPTION':'Usuń zdefiniowany opis zdjęcia',
         'SAVE_DESCRIPTION':'Zapisz opis',
         'MANAGE_DIAGNOSIS':'Zarządzaj diagnozami',
-        'BROWSE_PICTURES_AND_DIAGNOSIS':'Przeglądaj zdjęcia i diagnozy'
+        'BROWSE_PICTURES_AND_DIAGNOSIS':'Przeglądaj zdjęcia i diagnozy',
+        'DOCTOR_DIAGNOSIS':'Diagnoza doktora',
+        'DIAGNOSIS_AUTHOR':'Autor diagnozy'
     });
     $translateProvider.preferredLanguage('pl');
 });

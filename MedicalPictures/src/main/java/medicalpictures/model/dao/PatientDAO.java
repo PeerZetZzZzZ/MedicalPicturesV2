@@ -8,12 +8,15 @@ package medicalpictures.model.dao;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import medicalpictures.controller.views.common.DBNameManager;
+import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.orm.entity.Patient;
 import medicalpictures.model.orm.entity.Picture;
+import medicalpictures.model.orm.entity.PictureDescription;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -29,6 +32,13 @@ public class PatientDAO {
 
     @EJB
     private UserDAO userDAO;
+
+    @EJB
+    private PictureDAO pictureDAO;
+
+    @EJB
+    private JsonFactory jsonFactory;
+    private static final Logger LOG = Logger.getLogger(PatientDAO.class.getName());
 
     /**
      * Returns all patients in application.
@@ -63,6 +73,36 @@ public class PatientDAO {
             return patient.getPictureList();
         } else {
             return new HashSet<>();
+        }
+    }
+
+    public String getPatientPictureDescriptions(String patientUsername, String pictureId) {
+        Picture picture = pictureDAO.getPictureById(pictureId);
+        if (picture != null) {
+            if (picture.getPatient().getUser().getUsername().equals(patientUsername)) {
+                JSONObject pictureDescriptions = new JSONObject();
+                JSONArray descriptionsArray = new JSONArray();
+                for (PictureDescription description : picture.getPictureDescriptions()) {
+                    JSONObject desc = new JSONObject();
+                    desc.put("doctor", description.getDoctor().getName() + " " + description.getDoctor().getSurname());
+                    desc.put("doctorSpecialization", description.getDoctor().getSpecialization());
+                    if (description.getDefinedPictureDescription() != null) {
+                        desc.put("pictureDescription", description.getDefinedPictureDescription().getPictureDescription());
+                    } else {
+                        desc.put("pictureDescription", description.getDescription());
+                    }
+                    descriptionsArray.put(desc);
+                }
+                pictureDescriptions.put("pictureDescriptions", descriptionsArray);
+                LOG.info("Return patient picture descriptions: " + pictureDescriptions.toString());
+                return pictureDescriptions.toString();
+            } else {
+                LOG.info("User with username '" + patientUsername + "' is not owner of the picture with id '" + pictureId + "'");
+                return jsonFactory.insertToDbFailed();
+            }
+        } else {
+            LOG.info("Picture with id '" + pictureId + "' not found.");
+            return jsonFactory.notObjectFound();
         }
     }
 }
