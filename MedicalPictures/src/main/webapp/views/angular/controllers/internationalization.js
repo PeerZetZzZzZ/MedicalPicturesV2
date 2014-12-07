@@ -79,7 +79,22 @@ MedicalPictures.config(function ($translateProvider) {
         'SUCCESSFULLY_EDITED_PICTURE':'Successfully updated picture!',
         'PICTURE_NAME':'Picture name',
         'ACTIONS':'Actions',
-        'NO_PATIENTS_FOUND':'There are not any patients!'
+        'NO_PATIENTS_FOUND':'There are not any patients!',
+        'PATIENT_PICTURES':'Patient\'s pictures',
+        'DEFINED_PICTURE_DESCRIPTION':'Defined picture description',
+        'PICTURE_THUMBNAIL':'Picture thumbnail',
+        'PATIENT_NAME':'Patient\'s name',
+        'PATIENT_SURNAME':'Patient\'s surname',
+        'PATIENT_USERNAME':'Patient\'s username',
+        'TECHNICIAN_NAME':'Technician\'s name',
+        'TECHNICIAN_SURNAME':'Technician\'s surname',
+        'TECHNICIAN_USERNAME':'Technician\'s username',
+        'CAPTURE_DATE':'Capture date',
+        'PATIENT_AGE':'Patient\'s age',
+        'PICTURE_DESCRIPTION':'Picture\'s description',
+        'REMOVE_DEFINED_PICTURE_DESCRIPTION':'Remove defined picture description',
+        'SAVE_DESCRIPTION':'Save description',
+        'MANAGE_DIAGNOSIS':'Manage diagnosis',
     });
     $translateProvider.translations('pl', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -160,7 +175,22 @@ MedicalPictures.config(function ($translateProvider) {
         'SUCCESSFULLY_EDITED_PICTURE':'Zaktualizowano zdjęcie!',
         'PICTURE_NAME':'Zdjęcie',
         'ACTIONS':'Akcje',
-        'NO_PATIENTS_FOUND':'Brak jakichkolwiek pacjentów!'
+        'NO_PATIENTS_FOUND':'Brak jakichkolwiek pacjentów!',
+        'PATIENT_PICTURES':'Zdjęcia pacjenta',
+        'DEFINED_PICTURE_DESCRIPTION':'Zdefiniowany opis zdjęcia',
+        'PICTURE_THUMBNAIL':'Miniatura zdjęcia',
+        'PATIENT_NAME':'Imię pacjenta',
+        'PATIENT_SURNAME':'Nazwisko pacjenta',
+        'PATIENT_USERNAME':'Nazwa użytkownika pacjenta',
+        'TECHNICIAN_NAME':'Imię technika',
+        'TECHNICIAN_SURNAME':'Nazwisko technika',
+        'TECHNICIAN_USERNAME':'Nazwa użytkownika technika',
+        'CAPTURE_DATE':'Data wykonania',
+        'PATIENT_AGE':'Wiek pacjenta',
+        'PICTURE_DESCRIPTION':'Opis zdjęcia',
+        'REMOVE_DEFINED_PICTURE_DESCRIPTION':'Usuń zdefiniowany opis zdjęcia',
+        'SAVE_DESCRIPTION':'Zapisz opis',
+        'MANAGE_DIAGNOSIS':'Zarządzaj diagnozami',
     });
     $translateProvider.preferredLanguage('pl');
 });
