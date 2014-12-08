@@ -19,6 +19,23 @@
     input.ng-invalid {
       border: 2px solid red
     }
+    .accordion .accordion-navigation > a,
+    .accordion dd > a {
+      background: #F79F81;
+    }
+    .accordion .accordion-navigation.active > a,
+    .accordion dd.active > a {
+      background: pink;
+    }
+    .accordion .accordion-navigation > .content.active,
+    .accordion dd > .content.active {
+      display: block;
+      background: pink;
+    }
+    .accordion .accordion-navigation > a:hover,
+    .accordion dd > a:hover {
+      background: #F79F81;
+    }
     .panel table {
       width: 100%
     }
@@ -82,60 +99,67 @@
   </nav>
   <br>
 
-  <form ng-show="loggedUser != undefined">
+  <div ng-show="loggedUser != undefined">
     <div class="row">
-      <div class="large-1 columns">
+      <div class="large-3 columns">
         <br>
       </div>
-      <div class="large-10 columns">
-        <fieldset>
-          <legend>{{'CHANGE_YOUR_SETTINGS' | translate}}</legend>
-          <label>{{'USERNAME' | translate}}
-            <input type="text" placeholder="{{'YOUR_USERNAME' | translate}}" ng-model="loggedUser.username">
-          </label>
-        </fieldset>
+      <div class="large-6 columns">
+        <label>{{'USERNAME' | translate}}
+          <input type="text" placeholder="{{'YOUR_USERNAME' | translate}}" ng-model="loggedUser.username">
+        </label>
       </div>
-      <div class="large-1 columns">
+      <div class="large-3 columns">
         <br>
       </div>
     </div>
     <div class="row">
-      <div class="large-1 columns">
+      <div class="large-3 columns">
         <br>
       </div>
-      <div class="large-5 columns">
-        <fieldset>
-          <label>{{'NAME' | translate}}
-            <input type="text" placeholder="{{'YOUR_NAME' | translate}}" ng-model="loggedUser.name">
-          </label>
-        </fieldset>
+      <div class="large-6 columns">
+        <label>{{'NAME' | translate}}
+          <input type="text" placeholder="{{'YOUR_NAME' | translate}}" ng-model="loggedUser.name">
+        </label>
       </div>
-      <div class="large-5 columns">
-        <fieldset>
-          <label>{{'SURNAME' | translate}}
-            <input type="text" placeholder="{{'YOUR_SURNAME' | translate}}" ng-model="loggedUser.surname">
-          </label>
-        </fieldset>
-      </div>
-      <div class="large-1 columns">
+      <div class="large-3 columns">
         <br>
       </div>
     </div>
     <div class="row">
-      <div class="large-1 columns">
+      <div class="large-3 columns">
         <br>
       </div>
-      <div class="large-5 columns">
-        <fieldset>
-          <label>{{'AGE' | translate}}
-            <input type="number" placeholder="{{'YOUR_AGE' | translate}}" ng-model="loggedUser.age">
-          </label>
-        </fieldset>
+      <div class="large-6 columns">
+        <label>{{'SURNAME' | translate}}
+          <input type="text" placeholder="{{'YOUR_SURNAME' | translate}}" ng-model="loggedUser.surname">
+        </label>
       </div>
-      <div class="large-5 columns">
+      <div class="large-3 columns">
+        <br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-3 columns">
+        <br>
+      </div>
+      <div class="large-6 columns">
+        <label>{{'SURNAME' | translate}}
+          <input type="text" placeholder="{{'YOUR_SURNAME' | translate}}" ng-model="loggedUser.surname">
+        </label>
+      </div>
+      <div class="large-3 columns">
+        <br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-3 columns">
+        <br>
+      </div>
+      <div class="large-6 columns">
         <dl class="accordion" data-accordion>
           <dd class="accordion-navigation">
-            <a href="#panel1">{{'CHANGE_PASSWORD' |translate}}</a>
+            <a href="#panel1" align="center">{{'CHANGE_PASSWORD' |translate}}</a>
             <div id="panel1" class="content active">
               <dl class="tabs" data-tab>
                 <label>{{'NEW_PASSWORD' | translate}}</label>
@@ -144,31 +168,21 @@
                   <label>{{'NEW_PASSWORD_AGAIN' | translate}}</label>
                   <input type="password" ng-model="loggedUser.password2" required></input>
                 </div>
+                <h7 ng-show="(loggedUser.password2 != loggedUser.password1) && loggedUser.password1!=undefined">{{'PASSWORDS_ARE_DIFFERENT' | translate}}</h7>
+                <div ng-show="(loggedUser.password2 === loggedUser.password1) && loggedUser.password1!=undefined">
+                  <input type="checkbox" id="checkbox1" ng-model="loggedUser.changePassword">
+                  <label for="checkbox1">{{'CHANGE_MY_PASSWORD' | translate}}</label>
+                </div>
               </dl>
             </div>
           </dd>
         </dl>
       </div>
-      <div class="large-1 columns">
+      <div class="large-3 columns">
         <br>
       </div>
     </div>
-    <div class="row">
-      <div class="large-5 columns">
-        <br>
-      </div>
-      <div class="large-2 columns">
-        <div ng-bind-html='userLoggedAlertDiv'></div>
-      </div>
-      <div class="large-5 columns">
-        <br>
-      </div>
-    </div>
-
-  </form>
-
-
-
+  </div>
   <script src="./views/js/vendor/jquery.js"></script>
   <script src="./views/js/foundation.min.js"></script>
   <script>

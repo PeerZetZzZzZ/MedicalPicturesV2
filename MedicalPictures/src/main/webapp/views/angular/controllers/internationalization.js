@@ -102,7 +102,9 @@ MedicalPictures.config(function ($translateProvider) {
         'YOUR_AGE':'Your age',
         'CHANGE_PASSWORD':'Change your password',
         'NEW_PASSWORD':'New password',
-        'NEW_PASSWORD_AGAIN':'Ensure new password'
+        'NEW_PASSWORD_AGAIN':'Ensure new password',
+        'CHANGE_MY_PASSWORD':'Change my password',
+        'PASSWORDS_ARE_DIFFERENT':'Passwords are different'
     });
     $translateProvider.translations('pl', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -206,7 +208,9 @@ MedicalPictures.config(function ($translateProvider) {
         'YOUR_AGE':'Twój wiek',
         'CHANGE_PASSWORD':'Zmień swoje hasło',
         'NEW_PASSWORD':'Nowe hasło',
-        'NEW_PASSWORD_AGAIN':'Potwierdź nowe hasło'
+        'NEW_PASSWORD_AGAIN':'Potwierdź nowe hasło',
+        'CHANGE_MY_PASSWORD':'Zmień moje hasło',
+        'PASSWORDS_ARE_DIFFERENT':'Hasła różnią się...'
     });
     $translateProvider.preferredLanguage('pl');
 });
