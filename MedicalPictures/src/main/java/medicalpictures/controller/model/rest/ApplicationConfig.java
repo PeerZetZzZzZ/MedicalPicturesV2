@@ -1,4 +1,4 @@
-package medicalpictures.controller.model.rest.common;
+package medicalpictures.controller.model.rest;
 
 import java.util.Set;
 import javax.ws.rs.core.Application;
@@ -24,7 +24,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(medicalpictures.controller.model.rest.common.MedicalPicturesCommonResource.class);
+        resources.add(medicalpictures.controller.model.rest.MedicalPicturesCommonResource.class);
     }
     
 }

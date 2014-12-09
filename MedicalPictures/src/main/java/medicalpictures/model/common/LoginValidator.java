@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package medicalpictures.model.login;
+package medicalpictures.model.common;
 
 import javax.ejb.Stateless;
 import medicalpictures.model.enums.AccountType;

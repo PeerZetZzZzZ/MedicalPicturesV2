@@ -10,7 +10,7 @@ import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserAlreadyLoggedException;
 import medicalpictures.model.exception.UserDoesntExistException;
-import medicalpictures.model.login.LoginValidator;
+import medicalpictures.model.common.LoginValidator;
 import medicalpictures.model.dao.UserDAO;
 import medicalpictures.model.security.UserSecurityManager;
 import org.apache.commons.logging.Log;

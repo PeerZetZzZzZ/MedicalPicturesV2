@@ -63,4 +63,5 @@ public class ResultCodes {
 	 * When operation couldn't finish successfully, because of error connected with Braintrack operation logic.
 	 */
 	public static int OPERATION_NOT_SUCCEED = -5;
+
 }
