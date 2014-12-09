@@ -152,17 +152,18 @@ public class UserSecurityManager {
 	/**
 	 * Gets the logged user username
 	 *
-	 * @return username
+	 * @return username Logged user
 	 * @throws medicalpictures.model.exception.NoLoggedUserExistsHere
 	 */
-	public JSONObject getLoggedUsername() throws NoLoggedUserExistsHere {
+	public String getLoggedUsername() throws NoLoggedUserExistsHere {
 		try {
 			Subject currentUser = SecurityUtils.getSubject();
 			String username = currentUser.getSession().getAttribute("username").toString();
-			JSONObject user = new JSONObject();
-			user.put("username", username);
-			return user;
-
+			if (username == null) {
+				throw new NoLoggedUserExistsHere("No logged user here");
+			} else {
+				return username;
+			}
 		} catch (IllegalStateException ex) {
 			throw new NoLoggedUserExistsHere("No logged user here!");
 		}

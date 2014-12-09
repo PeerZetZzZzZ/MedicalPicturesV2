@@ -24,9 +24,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.xml.bind.DatatypeConverter;
 import medicalpictures.model.admin.AdminOperationResponse;
+import medicalpictures.model.common.BodyPartJsonFactory;
 import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.common.MedicalLogger;
+import medicalpictures.model.common.PatientJsonFactory;
+import medicalpictures.model.common.PictureTypeJsonFactory;
 import medicalpictures.model.common.ResultCodes;
+import medicalpictures.model.common.UserJsonFactory;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;
@@ -40,7 +44,11 @@ import medicalpictures.model.dao.UserDAO;
 import medicalpictures.model.exception.AddNewUserFailed;
 import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.exception.JsonParsingException;
+import medicalpictures.model.orm.entity.BodyPart;
+import medicalpictures.model.orm.entity.Patient;
 import medicalpictures.model.orm.entity.Picture;
+import medicalpictures.model.orm.entity.PictureType;
+import medicalpictures.model.orm.entity.User;
 import medicalpictures.model.security.UserSecurityManager;
 import medicalpictures.model.technician.TechnicianOperationResponse;
 import org.apache.commons.io.IOUtils;
@@ -63,7 +71,7 @@ public class MedicalPicturesCommonResource {
 	private UserSecurityManager securityManager;
 
 	@EJB
-	private BodyPartDAO bodyPartManager;
+	private BodyPartDAO bodyPartDAO;
 
 	@EJB
 	private PictureTypeDAO pictureTypeDAO;
@@ -93,7 +101,20 @@ public class MedicalPicturesCommonResource {
 	private DefinedPictureDescriptionDAO definedPictureDescriptionDAO;
 
 	@EJB
+	private BodyPartJsonFactory bodyPartJsonFactory;
+
+	@EJB
+	private PictureTypeJsonFactory pictureTypeJsonFactory;
+
+	@EJB
+	private UserJsonFactory userJsonFactory;
+
+	@EJB
+	private PatientJsonFactory patientJsonFactory;
+
+	@EJB
 	private MedicalLogger medicalLogger;
+
 	private static final Logger logger = Logger.getLogger(MedicalPicturesCommonResource.class.getName());
 
 	public MedicalPicturesCommonResource() {
@@ -110,9 +131,9 @@ public class MedicalPicturesCommonResource {
 	public String getLoggedUser() {
 		try {
 			securityManager.checkUserPermissionToAnyContent();
-			String username = securityManager.getLoggedUsername().toString();
+			String username = securityManager.getLoggedUsername();
 			medicalLogger.logInfo("Returned logged user: " + username, MedicalPicturesCommonResource.class);
-			return jsonFactory.userNotPermitted();
+			return jsonFactory.getLoggedUser(username);
 		} catch (UserNotPermitted ex) {
 			medicalLogger.logError("User not permitted to access /getLoggedUser !", MedicalPicturesCommonResource.class, ex);
 			return jsonFactory.notUserLogged();
@@ -123,9 +144,9 @@ public class MedicalPicturesCommonResource {
 	}
 
 	/**
-	 * Retrieves representation of an instance of medicalpictures.controller.model.rest.common.MedicalPicturesCommonResource
+	 * Gets all body parts.
 	 *
-	 * @return an instance of java.lang.String
+	 * @return
 	 */
 	@GET
 	@Path("/getAllBodyParts")
@@ -133,21 +154,21 @@ public class MedicalPicturesCommonResource {
 	public String getBodyParts() {
 		try {
 			securityManager.checkUserPermissionToThisContent(AccountType.ADMIN, AccountType.TECHNICIAN);
-			String allBodyParts = bodyPartManager.getAllBodyParts().toString();
-			logger.info("Returned all body parts: " + allBodyParts);
-			return allBodyParts;
-
-		} catch (NoLoggedUserExistsHere ex) {
-			System.out.println("NoLoggedUserExistsHere - return " + jsonFactory.notUserLogged());
-			return jsonFactory.notUserLogged();
+			List<BodyPart> bodyPartList = bodyPartDAO.getAllBodyParts();
+			String bodyParts = bodyPartJsonFactory.getBodyParts(bodyPartList);
+			medicalLogger.logInfo("Returned all body parts: " + bodyParts, MedicalPicturesCommonResource.class);
+			return bodyParts;
 		} catch (UserNotPermitted ex) {
-			System.out.println("UserNotPermitted - return " + jsonFactory.userNotPermitted());
+			medicalLogger.logError("User not permitted to access /getAllBodyParts !", MedicalPicturesCommonResource.class, ex);
 			return jsonFactory.userNotPermitted();
+		} catch (NoLoggedUserExistsHere ex) {
+			medicalLogger.logError("User is not logged - can't access /getAllBodyParts !", MedicalPicturesCommonResource.class, ex);
+			return jsonFactory.notUserLogged();
 		}
 	}
 
 	/**
-	 * Retrieves representation of an instance of medicalpictures.controller.model.rest.common.MedicalPicturesCommonResource
+	 * Gets all the usernames.
 	 *
 	 * @return an instance of java.lang.String
 	 */
@@ -157,16 +178,40 @@ public class MedicalPicturesCommonResource {
 	public String getAllUsernames() {
 		try {
 			securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
-			String allUsernames = userDAO.getAllUsernames().toString();
-			logger.info("Return all usernames: " + allUsernames);
-			System.out.println(allUsernames.toString());
-			return allUsernames;
-		} catch (NoLoggedUserExistsHere ex) {
-			System.out.println("user not logged");
-			return jsonFactory.notUserLogged();
+			List<User> usersList = userDAO.getAllUsernames();
+			String usernames = userJsonFactory.getAllUsernames(usersList);
+			medicalLogger.logInfo("Return all usernames: " + usernames, MedicalPicturesCommonResource.class);
+			return usernames;
 		} catch (UserNotPermitted ex) {
-			System.out.println("user not permitted");
+			medicalLogger.logError("User not permitted to access /getAllUsernames !", MedicalPicturesCommonResource.class, ex);
 			return jsonFactory.userNotPermitted();
+		} catch (NoLoggedUserExistsHere ex) {
+			medicalLogger.logError("User is not logged - can't access /getAllUsernames !", MedicalPicturesCommonResource.class, ex);
+			return jsonFactory.notUserLogged();
+		}
+	}
+
+	/**
+	 * Retrieves representation of an instance of medicalpictures.controller.model.rest.common.MedicalPicturesCommonResource
+	 *
+	 * @return an instance of java.lang.String
+	 */
+	@GET
+	@Path("/getAllPictureTypes")
+	@Produces("application/json")
+	public String getAllPictureTypes() {
+		try {
+			securityManager.checkUserPermissionToThisContent(AccountType.ADMIN, AccountType.TECHNICIAN);
+			List<PictureType> pictureTypeList = pictureTypeDAO.getAllPictureTypes();
+			String pictureTypes = pictureTypeJsonFactory.getAllPictureTypes(pictureTypeList);
+			medicalLogger.logInfo("Return all picture types: " + pictureTypes, MedicalPicturesCommonResource.class);
+			return pictureTypes;
+		} catch (UserNotPermitted ex) {
+			medicalLogger.logError("User not permitted to access /getAllPictureTypes !", MedicalPicturesCommonResource.class, ex);
+			return jsonFactory.userNotPermitted();
+		} catch (NoLoggedUserExistsHere ex) {
+			medicalLogger.logError("User is not logged - can't access /getAllPictureTypes !", MedicalPicturesCommonResource.class, ex);
+			return jsonFactory.notUserLogged();
 		}
 	}
 
@@ -183,34 +228,15 @@ public class MedicalPicturesCommonResource {
 		try {
 			securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
 			Map<String, String> userDetailsMap = userDAO.getUserDetails(username);
-			String userDetailsJson = jsonFactory.getUserDetailsAsJson(userDetailsMap);
-			logger.info("Return user info: " + userDetailsJson);
-			return userDetailsJson;
-		} catch (NoLoggedUserExistsHere ex) {
-			return jsonFactory.notUserLogged();
+			String userInfo = userJsonFactory.getUserDetailsAsJson(userDetailsMap);
+			medicalLogger.logInfo("Return user info of user '" + username + "' :" + userInfo, MedicalPicturesCommonResource.class);
+			return userInfo;
 		} catch (UserNotPermitted ex) {
+			medicalLogger.logError("User not permitted to access /getUserInfo/{username} !", MedicalPicturesCommonResource.class, ex);
 			return jsonFactory.userNotPermitted();
-		}
-	}
-
-	/**
-	 * Retrieves representation of an instance of medicalpictures.controller.model.rest.common.MedicalPicturesCommonResource
-	 *
-	 * @return an instance of java.lang.String
-	 */
-	@GET
-	@Path("/getAllPictureTypes")
-	@Produces("application/json")
-	public String getAllPictureTypes() {
-		try {
-			securityManager.checkUserPermissionToThisContent(AccountType.ADMIN, AccountType.TECHNICIAN);
-			String pictureTypes = pictureTypeDAO.getAllPictureTypes().toString();
-			logger.info("Returned picture types: " + pictureTypes);
-			return pictureTypes;
 		} catch (NoLoggedUserExistsHere ex) {
+			medicalLogger.logError("User is not logged - can't access /getUserInfo/{username} !", MedicalPicturesCommonResource.class, ex);
 			return jsonFactory.notUserLogged();
-		} catch (UserNotPermitted ex) {
-			return jsonFactory.userNotPermitted();
 		}
 	}
 
@@ -218,16 +244,19 @@ public class MedicalPicturesCommonResource {
 	@Path("/getAllPatients")
 	@Produces("application/json")
 	public String getAllPatients() {
-//        try {
-//            securityManager.checkUserPermissionToThisContent(AccountType.TECHNICIAN);
-		String pictureTypes = patientDAO.getAllPatients().toString();
-		logger.info("Returned all patients: " + pictureTypes);
-		return pictureTypes;
-//        } catch (NoLoggedUserExistsHere ex) {
-//            return jsonFactory.notUserLogged();
-//        } catch (UserNotPermitted ex) {
-//            return jsonFactory.userNotPermitted();
-//        }
+		try {
+			securityManager.checkUserPermissionToThisContent(AccountType.TECHNICIAN, AccountType.DOCTOR, AccountType.ADMIN);
+			List<Patient> patientList = patientDAO.getAllPatients();
+			String patients = patientJsonFactory.getAllPatients(patientList);
+			medicalLogger.logInfo("Returned all patients: " + patients, MedicalPicturesCommonResource.class);
+			return patients;
+		} catch (UserNotPermitted ex) {
+			medicalLogger.logError("User not permitted to access /getAllPatients !", MedicalPicturesCommonResource.class, ex);
+			return jsonFactory.userNotPermitted();
+		} catch (NoLoggedUserExistsHere ex) {
+			medicalLogger.logError("User is not logged - can't access /getAllPatients !", MedicalPicturesCommonResource.class, ex);
+			return jsonFactory.notUserLogged();
+		}
 	}
 
 	@GET

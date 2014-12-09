@@ -133,24 +133,7 @@ public class JsonFactory {
 		return usersToDeleteList;
 	}
 
-	/**
-	 * Returns the user read from database with its all values as JSON representation. It can be later sent to the client.
-	 *
-	 * @param username Username whos data will be taken
-	 * @return
-	 */
-	public String getUserDetailsAsJson(Map<String, String> userDetials) {
-		JSONObject user = new JSONObject();
-		user.put("username", userDetials.get("username"));
-		user.put("accountType", userDetials.get("accountType"));
-		user.put("name", userDetials.get("name"));
-		user.put("surname", userDetials.get("surname"));
-		user.put("age", Integer.valueOf(userDetials.get("age")));
-		if (userDetials.get("accountType").equals(AccountType.DOCTOR.toString())) {
-			user.put("specialization", userDetials.get("specialization"));
-		}
-		return user.toString();
-	}
+
 
 	/**
 	 * Returns picture type taken from proper json.
@@ -320,5 +303,17 @@ public class JsonFactory {
 		logger.logInfo("Sending response to the client: " + response.toString(), JsonFactory.class);
 		return response.toString();
 
+	}
+
+	/**
+	 * Returns the response to the client about currently logged user.
+	 *
+	 * @param username
+	 * @return
+	 */
+	public String getLoggedUser(String username) {
+		JSONObject user = new JSONObject();
+		user.put("username", username);
+		return user.toString();
 	}
 }
