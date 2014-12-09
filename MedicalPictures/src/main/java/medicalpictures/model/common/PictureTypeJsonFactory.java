@@ -14,19 +14,19 @@ import org.json.JSONObject;
 @Stateless
 public class PictureTypeJsonFactory {
 
-	/**
-	 * Gets all picture types.
-	 *
-	 * @param pictureTypesList
-	 * @return
-	 */
-	public String getAllPictureTypes(List<PictureType> pictureTypesList) {
-		JSONObject pictureTypesJson = new JSONObject();
-		JSONArray pictureTypesArray = new JSONArray();
-		for (PictureType pictureType : pictureTypesList) {
-			pictureTypesArray.put(pictureType.getPictureType());
-		}
-		pictureTypesJson.put("pictureTypes", pictureTypesArray);
-		return pictureTypesJson.toString();
-	}
+    /**
+     * Gets all picture types.
+     *
+     * @param pictureTypesList
+     * @return
+     */
+    public String getAllPictureTypes(List<PictureType> pictureTypesList) {
+        JSONObject pictureTypesJson = new JSONObject();
+        JSONArray pictureTypesArray = new JSONArray();
+        for (PictureType pictureType : pictureTypesList) {
+            pictureTypesArray.put(pictureType.getPictureType());
+        }
+        pictureTypesJson.put("pictureTypes", pictureTypesArray);
+        return pictureTypesJson.toString();
+    }
 }

@@ -20,13 +20,14 @@ import org.json.JSONObject;
 public class LoginValidator {
 
     /**
-     * Returns the json which informs that login is successful and gives the type of account;
+     * Returns the json which informs that login is successful and gives the
+     * type of account;
      *
      * @param username The username which logged.
      * @param userAccountType The account type of the user.
      * @return JSON which is sent as response from LoginView POST.
      */
-    public String loginSucceed(final String username,final String userAccountType) {
+    public String loginSucceed(final String username, final String userAccountType) {
         JSONObject user = new JSONObject();
         user.put("username", username);
         user.put("status", "true");
@@ -48,6 +49,7 @@ public class LoginValidator {
         user.put("reason", "alreadyLoggedOutside");
         return user.toString();
     }
+
     /**
      * Returns the json which informs that login is not successful because user
      * is already logged locally here!
@@ -78,9 +80,10 @@ public class LoginValidator {
         user.put("reason", "authenticationFailed");
         return user.toString();
     }
-    
+
     /**
      * Checks the role of the user based on all account_types ( ENUM )
+     *
      * @param username
      * @return The account_type as String
      */

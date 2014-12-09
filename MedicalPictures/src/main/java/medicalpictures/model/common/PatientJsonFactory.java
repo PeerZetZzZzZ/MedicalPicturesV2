@@ -17,23 +17,24 @@ import org.json.JSONObject;
  */
 @Stateless
 public class PatientJsonFactory {
-	
-	/**
-	 * Returns all patients
-	 * @param patients
-	 * @return 
-	 */
-	public String getAllPatients(List<Patient> patients) {
-		JSONObject patientsJson = new JSONObject();
-		JSONArray patientsArray = new JSONArray();
-		for (Patient patient : patients) {
-			JSONObject singlePatient = new JSONObject();
-			singlePatient.put("username", patient.getUser().getUsername());
-			singlePatient.put("surname", patient.getSurname());
-			singlePatient.put("name", patient.getName());
-			patientsArray.put(singlePatient);
-		}
-		patientsJson.put("patients", patientsArray);
-		return patientsJson.toString();
-	}
+
+    /**
+     * Returns all patients
+     *
+     * @param patients
+     * @return
+     */
+    public String getAllPatients(List<Patient> patients) {
+        JSONObject patientsJson = new JSONObject();
+        JSONArray patientsArray = new JSONArray();
+        for (Patient patient : patients) {
+            JSONObject singlePatient = new JSONObject();
+            singlePatient.put("username", patient.getUser().getUsername());
+            singlePatient.put("surname", patient.getSurname());
+            singlePatient.put("name", patient.getName());
+            patientsArray.put(singlePatient);
+        }
+        patientsJson.put("patients", patientsArray);
+        return patientsJson.toString();
+    }
 }
