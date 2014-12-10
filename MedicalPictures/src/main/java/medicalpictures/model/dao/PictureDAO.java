@@ -7,7 +7,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import medicalpictures.model.common.DBNameManager;
-import medicalpictures.model.common.JsonFactory;
+import medicalpictures.model.common.jsonfactory.JsonFactory;
 import medicalpictures.model.common.MedicalLogger;
 import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.exception.AddToDbFailed;

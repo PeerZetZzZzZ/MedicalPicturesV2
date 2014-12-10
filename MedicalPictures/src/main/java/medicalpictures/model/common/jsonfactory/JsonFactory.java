@@ -1,4 +1,4 @@
-package medicalpictures.model.common;
+package medicalpictures.model.common.jsonfactory;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -14,6 +14,8 @@ import javax.ejb.Stateless;
 import javax.json.JsonException;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
+import medicalpictures.model.common.MedicalLogger;
+import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.exception.JsonParsingException;
 import medicalpictures.model.orm.entity.Picture;
 import medicalpictures.model.orm.entity.PictureDescription;

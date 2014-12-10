@@ -46,7 +46,7 @@ MedicalPictures.controller('LoginController', function($scope, $http, $window, $
         },
         data: {
           'username': $scope.username,
-          'password': CryptoJS.SHA512($scope.password).toString()
+          'password': $scope.password
         }
       }).
       success(function(data, status, header, config) {

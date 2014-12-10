@@ -1,4 +1,4 @@
-package medicalpictures.model.common;
+package medicalpictures.model.common.jsonfactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

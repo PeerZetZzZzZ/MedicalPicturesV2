@@ -11,6 +11,7 @@ import javax.inject.Named;
 import javax.persistence.Query;
 import medicalpictures.model.common.DBNameManager;
 import medicalpictures.model.common.MedicalLogger;
+import medicalpictures.model.common.PasswordGenerator;
 import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.exception.AddNewUserFailed;
 import medicalpictures.model.exception.AddToDbFailed;
@@ -20,9 +21,6 @@ import medicalpictures.model.orm.entity.Doctor;
 import medicalpictures.model.orm.entity.Patient;
 import medicalpictures.model.orm.entity.Technician;
 import medicalpictures.model.orm.entity.User;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  *
@@ -36,6 +34,8 @@ public class UserDAO {
 	private ManagerDAO managerDAO;
 	@EJB
 	private MedicalLogger logger;
+	@EJB
+	private PasswordGenerator passwordGenerator;
 
 	/**
 	 * Saves new user in database (UsersDB + specified table (by accountType)).
@@ -90,7 +90,7 @@ public class UserDAO {
 		final String username = userDetails.get("username");
 		final String name = userDetails.get("name");
 		final String surname = userDetails.get("surname");
-		final String password = generatePassword(name, surname);
+		final String password = passwordGenerator.generatePassword(name, surname);
 		final String accountType = userDetails.get("accountType");
 		final String age = userDetails.get("age");
 		final String specialization = userDetails.get("specialization");
@@ -235,17 +235,6 @@ public class UserDAO {
 	}
 
 	/**
-	 * Generates the default password, which is "name - surname" as sha512hex
-	 *
-	 * @param name Name of the user
-	 * @param surname Surname of the user
-	 * @return generated password
-	 */
-	private String generatePassword(String name, String surname) {
-		return DigestUtils.sha512Hex(name + "-" + surname);
-	}
-
-	/**
 	 * Returns users details readed from UsersDB table and specified for given accountType.
 	 *
 	 * @param username Username for which details will be found
@@ -341,7 +330,7 @@ public class UserDAO {
 			String currentAccountType = userToEdit.getAccountType();
 			boolean accountTypeChanged = false;
 			if (resetPassword.equals("true")) {
-				userToEdit.setPassword(generatePassword(name, surname));//default password is generated
+				userToEdit.setPassword(passwordGenerator.generatePassword(name, surname));//default password is generated
 			}
 			if (!userToEdit.getAccountType().equals(accountType)) {//if accountType changed
 				userToEdit.setAccountType(accountType);

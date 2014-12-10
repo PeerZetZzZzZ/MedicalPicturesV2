@@ -1,4 +1,4 @@
-package medicalpictures.model.common;
+package medicalpictures.model.common.jsonfactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -5,6 +5,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import medicalpictures.model.common.MedicalLogger;
+import medicalpictures.model.common.PasswordGenerator;
 import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.enums.ContentPermissions;
@@ -32,6 +33,9 @@ public class UserSecurityManager {
 	@EJB
 	private MedicalLogger logger;
 
+	@EJB
+	private PasswordGenerator passwordGeneartor;
+
 	/**
 	 * Initializes the SecurityManager to use shiro:ini.
 	 */
@@ -54,7 +58,7 @@ public class UserSecurityManager {
 		Subject currentUser = SecurityUtils.getSubject();
 		currentUser.getSession().getId();
 		if (!currentUser.isAuthenticated()) {
-			UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+			UsernamePasswordToken token = new UsernamePasswordToken(username, passwordGeneartor.getPasswordHash(password));
 			try {
 				Session session = currentUser.getSession();
 				session.setAttribute("username", username);

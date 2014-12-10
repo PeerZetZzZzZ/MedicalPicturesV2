@@ -1,7 +1,9 @@
-package medicalpictures.model.common;
+package medicalpictures.model.common.jsonfactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import medicalpictures.model.common.MedicalLogger;
+import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.orm.entity.Picture;
 import medicalpictures.model.orm.entity.PictureDescription;
 import org.apache.shiro.SecurityUtils;
