@@ -34,10 +34,10 @@ public class AdminViewAddUser extends HttpServlet {
 			manager.checkUserPermissionToThisContent(AccountType.ADMIN);
 			request.getRequestDispatcher("/WEB-INF/admin/adminViewAddUser.html").forward(request, response);
 		} catch (UserNotPermitted ex) {
-			medicalLogger.logError("User not permitted to access /AdminViewAddUser !", MedicalPicturesCommonResource.class, ex);
+			medicalLogger.logError("User not permitted to access /AdminViewAddUser !", AdminViewAddUser.class, ex);
 			request.getRequestDispatcher("/WEB-INF/common/NotAuthorizedView.html").forward(request, response);
 		} catch (NoLoggedUserExistsHere ex) {
-			medicalLogger.logError("User is not logged - can't access /AdminViewAddUser  !", MedicalPicturesCommonResource.class, ex);
+			medicalLogger.logError("User is not logged - can't access /AdminViewAddUser  !", AdminViewAddUser.class, ex);
 			request.getRequestDispatcher("/WEB-INF/common/NotAuthorizedView.html").forward(request, response);
 		}
 

@@ -8,7 +8,6 @@ package medicalpictures.model.dao;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -27,7 +26,6 @@ import medicalpictures.model.orm.entity.PictureDescription;
 import medicalpictures.model.orm.entity.PictureType;
 import medicalpictures.model.orm.entity.Technician;
 import org.apache.shiro.SecurityUtils;
-import org.json.JSONObject;
 
 /**
  *
@@ -35,9 +33,6 @@ import org.json.JSONObject;
  */
 @Stateless
 public class PictureDAO {
-
-	@EJB
-	private PatientDAO patientDAO;
 
 	@EJB
 	private BodyPartDAO bodyPartDAO;
@@ -65,7 +60,7 @@ public class PictureDAO {
 	@EJB
 	private MedicalLogger logger;
 
-	public void addNewPicture(Map<String, String> pictureDetails, byte[] pictureData, byte[] thumbnailData) {
+	public int addNewPicture(Map<String, String> pictureDetails, byte[] pictureData, byte[] thumbnailData) {
 		String pictureName = pictureDetails.get("pictureName");
 		String patientUnserame = pictureDetails.get("patientUsername");
 		String bodyPartName = pictureDetails.get("bodyPart");
@@ -77,9 +72,11 @@ public class PictureDAO {
 		if (patient != null && bodyPart != null && pictureType != null && technician != null) {
 			Picture picture = new Picture(patient, technician, pictureType, bodyPart, pictureName, pictureData, thumbnailData);
 			managerDAO.getEntityManager().persist(picture);
-			LOG.info("Successfully added new picture: " + pictureName);
+			logger.logInfo("Successfully added new picture: " + pictureName, PictureDAO.class);
+			return ResultCodes.OPERATION_SUCCEED;
 		} else {
-			LOG.info("Couldn't add new picture, because some of the components was null");
+			logger.logWarning("Couldn't add new picture, because some of the components was null", PictureDAO.class);
+			return ResultCodes.OBJECT_DOESNT_EXIST;
 		}
 	}
 

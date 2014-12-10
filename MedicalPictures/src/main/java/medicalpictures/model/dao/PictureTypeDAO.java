@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.persistence.Query;
 import medicalpictures.controller.views.common.DBNameManager;
 import medicalpictures.model.common.MedicalLogger;
+import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.exception.AddPictureTypeFailed;
 import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.orm.entity.PictureType;
@@ -36,29 +37,28 @@ public class PictureTypeDAO {
 		Query query = managerDAO.getEntityManager().createQuery("SELECT c FROM " + DBNameManager.getPictureTypeTable() + " c", PictureType.class);
 		List<PictureType> pictureTypesList = query.getResultList();
 		if (pictureTypesList == null) {
-			logger.logWarning("No picture types found.", BodyPartDAO.class);
+			logger.logWarning("No picture types found.", PictureTypeDAO.class);
 			return new ArrayList<>();
 		} else {
 			return pictureTypesList;
 		}
-//       
 	}
 
 	/**
 	 * Creates new picture type in DB.
 	 *
 	 * @param type type which will be created
-	 * @throws AddPictureTypeFailed When creation fails.
 	 */
-	public void addPictureType(String type) throws AddPictureTypeFailed {
+	public int addPictureType(String type) {
 		PictureType pictureType = new PictureType();
 		pictureType.setPictureType(type);
 		try {
 			managerDAO.persistObject(pictureType);
-			LOG.info(type + ": Picture type successfully added!");
+			logger.logInfo("Successfully added picture type: " + type, PictureTypeDAO.class);
+			return ResultCodes.OPERATION_SUCCEED;
 		} catch (AddToDbFailed ex) {
-			LOG.error(ex.getMessage());
-			throw new AddPictureTypeFailed(type + ": Adding picture type failed!");
+			logger.logError("Couldn't add picture type '" + type + "'. Internal server problem!", PictureTypeDAO.class, ex);
+			return ResultCodes.INTERNAL_SERVER_ERROR;
 		}
 	}
 
@@ -69,7 +69,7 @@ public class PictureTypeDAO {
 			managerDAO.getEntityManager().refresh(pictureType);
 			return pictureType;
 		} catch (Exception ex) {
-			System.out.println("Couldn't find PictureType entity: " + pictureTypeName);
+			logger.logError("Couldn't find PictureType entity: " + pictureTypeName, PictureTypeDAO.class, ex);
 			return null;//in any case of failure
 
 		}

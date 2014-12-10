@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Named;
@@ -146,8 +148,9 @@ public class UserDAO {
 	 * Deletes the user from UsersDB and table specified for given accountType.
 	 *
 	 * @param usernamesMap Map with users in such form <username,accountType>
+	 * @return
 	 */
-	public void deleteUsers(Map<String, String> usernamesMap) {
+	public int deleteUsers(Map<String, String> usernamesMap) {
 		Set<String> usernames = usernamesMap.keySet();
 		for (String username : usernames) {
 			String accountType = usernamesMap.get(username);//get accountType
@@ -174,9 +177,14 @@ public class UserDAO {
 				}
 			}
 			User user = findUser(username);
-			managerDAO.getEntityManager().remove(user);
-			log.info("Deleted user: " + username + ", accountType: " + accountType);
+			if (user != null) {//if user found
+				managerDAO.getEntityManager().remove(user);
+				logger.logInfo("Deleted user: " + username + ", accountType: " + accountType, UserDAO.class);
+			} else {
+				logger.logWarning("Cant remove user '" + username + "' because user doesn't ! " + accountType, UserDAO.class);
+			}
 		}
+		return ResultCodes.OPERATION_SUCCEED;
 	}
 
 	/**
@@ -284,7 +292,7 @@ public class UserDAO {
 	 *
 	 * @param userDetails User which will be changed
 	 */
-	public void editUser(Map<String, String> userDetails) throws AddToDbFailed {
+	public int editUser(Map<String, String> userDetails) {
 		String username = userDetails.get("username");
 		String name = userDetails.get("name");
 		String surname = userDetails.get("surname");
@@ -312,7 +320,13 @@ public class UserDAO {
 					admin.setName(name);
 					admin.setSurname(surname);
 					admin.setAge(age);
-					managerDAO.getEntityManager().persist(admin);
+					try {
+						managerDAO.getEntityManager().persist(admin);
+					} catch (Exception ex) {
+						logger.logError("Persisting failed. Internal server error !", UserDAO.class, ex);
+						return ResultCodes.INTERNAL_SERVER_ERROR;
+					}
+					logger.logInfo("User '" + username + "' successfully edited. User account type: !" + accountType + "'.", UserDAO.class);
 					break;
 				}
 				case "DOCTOR": {
@@ -321,7 +335,13 @@ public class UserDAO {
 					doctor.setSurname(surname);
 					doctor.setAge(age);
 					doctor.setSpecialization(userDetails.get("specialization"));
-					managerDAO.getEntityManager().persist(doctor);
+					try {
+						managerDAO.getEntityManager().persist(doctor);
+					} catch (Exception ex) {
+						logger.logError("Persisting failed. Internal server error !", UserDAO.class, ex);
+						return ResultCodes.INTERNAL_SERVER_ERROR;
+					}
+					logger.logInfo("User '" + username + "' successfully edited. User account type: !" + accountType + "'.", UserDAO.class);
 					break;
 				}
 				case "PATIENT": {
@@ -329,7 +349,13 @@ public class UserDAO {
 					patient.setName(name);
 					patient.setSurname(surname);
 					patient.setAge(age);
-					managerDAO.getEntityManager().persist(patient);
+					try {
+						managerDAO.getEntityManager().persist(patient);
+					} catch (Exception ex) {
+						logger.logError("Persisting failed. Internal server error !", UserDAO.class, ex);
+						return ResultCodes.INTERNAL_SERVER_ERROR;
+					}
+					logger.logInfo("User '" + username + "' successfully edited. User account type: !" + accountType + "'.", UserDAO.class);
 					break;
 				}
 				case "TECHNICIAN": {
@@ -337,7 +363,13 @@ public class UserDAO {
 					technician.setName(name);
 					technician.setSurname(surname);
 					technician.setAge(age);
-					managerDAO.getEntityManager().persist(technician);
+					try {
+						managerDAO.getEntityManager().persist(technician);
+					} catch (Exception ex) {
+						logger.logError("Persisting failed. Internal server error !", UserDAO.class, ex);
+						return ResultCodes.INTERNAL_SERVER_ERROR;
+					}
+					logger.logInfo("User '" + username + "' successfully edited. User account type: !" + accountType + "'.", UserDAO.class);
 					break;
 				}
 			}
@@ -350,9 +382,16 @@ public class UserDAO {
 			newUserDetails.put("accountType", accountType);
 			newUserDetails.put("surname", surname);
 			newUserDetails.put("age", String.valueOf(age));
-			addNewUserInSpecifiedAccountTable(userDetails);
+			try {
+				addNewUserInSpecifiedAccountTable(userDetails);
+				logger.logInfo("User '" + newUserDetails.get("username") + "' successfully edited. User account type changed for: !" + newUserDetails.get("accountType") + "'.", UserDAO.class);
+				return ResultCodes.OPERATION_SUCCEED;
+			} catch (AddNewUserFailed ex) {
+				logger.logError("Editing user failed! Internal server problem!", UserDAO.class, ex);
+				return ResultCodes.INTERNAL_SERVER_ERROR;
+			}
 		}
-
+		return ResultCodes.OPERATION_SUCCEED;
 	}
 
 	public Patient findPatient(String username) {

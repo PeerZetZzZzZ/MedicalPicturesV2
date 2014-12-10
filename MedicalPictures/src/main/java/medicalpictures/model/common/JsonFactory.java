@@ -120,37 +120,6 @@ public class JsonFactory {
 	}
 
 	/**
-	 * Returns the list of users to delete in such form Map<username,accountType> for example there can be object such as:
-	 * <user@gmail.com,ADMIN>
-	 *
-	 * @param users
-	 * @return
-	 */
-	public Map<String, String> readUsersToDelete(JSONObject users) {
-		JSONArray usersToDelete = users.getJSONArray("usernames");
-		Map<String, String> usersToDeleteList = new HashMap<>();
-		for (int i = 0; i < usersToDelete.length(); i++) {
-			JSONObject singleUserToDelete = (JSONObject) usersToDelete.get(i);
-			usersToDeleteList.put(singleUserToDelete.getString("username"), singleUserToDelete.getString("accountType"));
-		}
-		return usersToDeleteList;
-	}
-
-	/**
-	 * Returns picture type taken from proper json.
-	 *
-	 * @param pictureType JSON input
-	 * @return picture type
-	 */
-	public String getPictureType(JSONObject pictureType) {
-		return pictureType.getString("pictureType");
-	}
-
-	public String getBodyPart(JSONObject bodyPart) {
-		return bodyPart.getString("bodyPart");
-	}
-
-	/**
 	 * Gets the picture values ( but no data ) which will be added to db
 	 *
 	 * @param pictureDetails JSONObject of details

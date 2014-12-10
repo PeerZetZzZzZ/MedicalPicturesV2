@@ -12,6 +12,7 @@ import javax.ejb.Stateless;
 import javax.persistence.Query;
 import medicalpictures.controller.views.common.DBNameManager;
 import medicalpictures.model.common.MedicalLogger;
+import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.exception.AddBodyPartFailed;
 import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.orm.entity.BodyPart;
@@ -59,17 +60,18 @@ public class BodyPartDAO {
 	 * Creates new body part in DB.
 	 *
 	 * @param bodyPartString
-	 * @throws medicalpictures.model.exception.AddBodyPartFailed when creation fails
+	 * @return
 	 */
-	public void addBodyPart(String bodyPartString) throws AddBodyPartFailed {
+	public int addBodyPart(String bodyPartString) {
 		BodyPart bodyPart = new BodyPart();
 		bodyPart.setBodyPart(bodyPartString);
 		try {
 			managerDAO.persistObject(bodyPart);
-			LOG.info(bodyPartString + ": Body part successfully added!");
+			logger.logInfo("Successfully added body part: " + bodyPartString, BodyPartDAO.class);
+			return ResultCodes.OPERATION_SUCCEED;
 		} catch (AddToDbFailed ex) {
-			LOG.error(ex.getMessage());
-			throw new AddBodyPartFailed(bodyPartString + ": Adding body part failed!");
+			logger.logError("Couldn't add body part '" + bodyPartString + "'. Internal server problem!", BodyPartDAO.class, ex);
+			return ResultCodes.INTERNAL_SERVER_ERROR;
 		}
 	}
 

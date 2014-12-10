@@ -6,12 +6,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import medicalpictures.model.common.MedicalLogger;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;
 import medicalpictures.model.security.UserSecurityManager;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  *
@@ -19,29 +18,30 @@ import org.apache.commons.logging.LogFactory;
  */
 public class PatientViewManagePictures extends HttpServlet {
 
-    @EJB
-    private UserSecurityManager securityManager;
+	@EJB
+	private UserSecurityManager securityManager;
 
-    private Log logger = LogFactory.getLog(PatientViewManagePictures.class);
+	@EJB
+	private MedicalLogger logger;
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            System.out.println("dupa");
-            securityManager.checkUserPermissionToThisContent(AccountType.PATIENT);
-            request.getRequestDispatcher("/WEB-INF/patient/patientViewManagePictures.html").forward(request, response);
-        } catch (UserNotPermitted ex) {
-            logger.error("GET " + PatientViewManagePictures.class.toString() + " :No permission to see the content!");
-        } catch (NoLoggedUserExistsHere ex) {
-            logger.error("GET " + PatientViewManagePictures.class.toString() + " : No logged user exists!");
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {
+			securityManager.checkUserPermissionToThisContent(AccountType.PATIENT);
+			request.getRequestDispatcher("/WEB-INF/patient/patientViewManagePictures.html").forward(request, response);
+		} catch (UserNotPermitted ex) {
+			logger.logError("User not permitted to access /PatientViewManagePictures !", PatientViewManagePictures.class, ex);
+			request.getRequestDispatcher("/WEB-INF/common/NotAuthorizedView.html").forward(request, response);
+		} catch (NoLoggedUserExistsHere ex) {
+			logger.logError("User is not logged - can't access /PatientViewManagePictures !", PatientViewManagePictures.class, ex);
+			request.getRequestDispatcher("/WEB-INF/common/NotAuthorizedView.html").forward(request, response);
+		}
+	}
 
-        }
-    }
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-    }
+	}
 }

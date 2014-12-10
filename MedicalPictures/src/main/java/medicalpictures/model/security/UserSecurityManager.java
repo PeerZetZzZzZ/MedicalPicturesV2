@@ -1,10 +1,5 @@
 package medicalpictures.model.security;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import medicalpictures.model.enums.AccountType;
@@ -23,7 +18,6 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.InvalidSessionException;
-import org.json.JSONObject;
 
 /**
  * The class is responsible for validating user and logging him to application. It uses Apache Shiro as a SecurityProvider and validate user username and password with data in UsersDB table.
@@ -73,6 +67,7 @@ public class UserSecurityManager {
 	 * Checks if user has role requried role for this content. If not, page/content won't be showed for this user.
 	 *
 	 * @param requriedRole Requried role to show the content.
+	 * @param requriedRoles
 	 * @throws medicalpictures.model.exception.NoLoggedUserExistsHere When there is no logged user.
 	 * @throws medicalpictures.model.exception.UserNotPermitted When user is not permitted to see this content.
 	 */

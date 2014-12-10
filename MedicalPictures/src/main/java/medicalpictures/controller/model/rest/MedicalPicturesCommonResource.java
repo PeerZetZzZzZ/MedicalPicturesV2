@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
@@ -14,7 +15,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import medicalpictures.model.admin.AdminOperationResponse;
 import medicalpictures.model.common.BodyPartJsonFactory;
 import medicalpictures.model.common.DefinedPictureDescriptionJsonFactory;
 import medicalpictures.model.common.JsonFactory;
@@ -44,7 +44,6 @@ import medicalpictures.model.orm.entity.Picture;
 import medicalpictures.model.orm.entity.PictureType;
 import medicalpictures.model.orm.entity.User;
 import medicalpictures.model.security.UserSecurityManager;
-import medicalpictures.model.technician.TechnicianOperationResponse;
 import org.json.JSONObject;
 
 /**
@@ -82,12 +81,6 @@ public class MedicalPicturesCommonResource {
 
 	@EJB
 	private ManagerDAO managerDAO;
-
-	@EJB
-	private TechnicianOperationResponse technicianOperationResponse;
-
-	@EJB
-	private AdminOperationResponse adminOperationResponse;
 
 	@EJB
 	private DefinedPictureDescriptionDAO definedPictureDescriptionDAO;
@@ -522,8 +515,7 @@ public class MedicalPicturesCommonResource {
 	public String addNewUser(String newUserData) {
 		try {
 			securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
-			JSONObject user = jsonFactory.decryptRequest(newUserData);
-			Map<String, String> userDetails = userJsonFactory.readUserFromJson(user);
+			Map<String, String> userDetails = userJsonFactory.readUserFromJson(newUserData);
 			int result = userDAO.addNewUser(userDetails);
 			String response = jsonFactory.getOperationResponseByCode(result);
 			medicalLogger.logInfo("Adding new user operation result: " + result, MedicalPicturesCommonResource.class);
@@ -539,4 +531,99 @@ public class MedicalPicturesCommonResource {
 			return jsonFactory.getOperationResponseByCode(ResultCodes.INPUT_JSON_PARSE_ERROR);
 		}
 	}
+
+	//adminViewDeleteUsers
+
+	/**
+	 * Removes users from application.
+	 *
+	 * @param usersToDelete
+	 * @return
+	 */
+	@POST
+	@Path("deleteUsers")
+	@Produces("application/json")
+	public String deleteUsers(String usersToDelete) {
+		try {
+			securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+			int result = userDAO.deleteUsers(userJsonFactory.readUsersToDelete(usersToDelete));
+			medicalLogger.logInfo("Delete useres response: " + result, MedicalPicturesCommonResource.class);
+			return jsonFactory.getOperationResponseByCode(result);
+		} catch (UserNotPermitted ex) {
+			medicalLogger.logError("User not permitted to access /deleteUsers !", MedicalPicturesCommonResource.class, ex);
+			return jsonFactory.getOperationResponseByCode(ResultCodes.USER_UNAOTHRIZED);
+		} catch (NoLoggedUserExistsHere ex) {
+			medicalLogger.logError("User is not logged - can't access /deleteUsers !", MedicalPicturesCommonResource.class, ex);
+			return jsonFactory.getOperationResponseByCode(ResultCodes.USER_IS_NOT_LOGGED);
+		}
+	}
+
+	//adminViewEditUser
+
+	/**
+	 * Edits the user.
+	 *
+	 * @param userToEdit
+	 * @return
+	 */
+	@POST
+	@Path("editUser")
+	@Produces("application/json")
+	public String editUser(String userToEdit) {
+		try {
+			securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+			Map<String, String> userDetails = userJsonFactory.readUserFromJson(userToEdit);
+			int result = userDAO.editUser(userDetails);
+			medicalLogger.logInfo("Editing user response: " + result, MedicalPicturesCommonResource.class);
+			return jsonFactory.getOperationResponseByCode(result);
+		} catch (UserNotPermitted ex) {
+			medicalLogger.logError("User not permitted to access /editUser !", MedicalPicturesCommonResource.class, ex);
+			return jsonFactory.getOperationResponseByCode(ResultCodes.USER_UNAOTHRIZED);
+		} catch (NoLoggedUserExistsHere ex) {
+			medicalLogger.logError("User is not logged - can't access /editUser !", MedicalPicturesCommonResource.class, ex);
+			return jsonFactory.getOperationResponseByCode(ResultCodes.USER_IS_NOT_LOGGED);
+		} catch (JsonParsingException ex) {
+			medicalLogger.logError("addNewUser: Parsing input json problem: " + userToEdit, MedicalPicturesCommonResource.class, ex);
+			return jsonFactory.getOperationResponseByCode(ResultCodes.INPUT_JSON_PARSE_ERROR);
+		}
+	}
+
+	@POST
+	@Path("addBodyPart")
+	@Produces("application/json")
+	public String addBodyPart(String bodyPartToAdd) {
+		try {
+			securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+			String bodyPartString = bodyPartJsonFactory.getBodyPart(bodyPartToAdd);
+			int result = bodyPartDAO.addBodyPart(bodyPartString);
+			medicalLogger.logInfo("Adding body part response: " + result, MedicalPicturesCommonResource.class);
+			return jsonFactory.getOperationResponseByCode(result);
+		} catch (UserNotPermitted ex) {
+			medicalLogger.logError("User not permitted to access /addBodyPart!", MedicalPicturesCommonResource.class, ex);
+			return jsonFactory.getOperationResponseByCode(ResultCodes.USER_UNAOTHRIZED);
+		} catch (NoLoggedUserExistsHere ex) {
+			medicalLogger.logError("User is not logged - can't access /addBodyPart!", MedicalPicturesCommonResource.class, ex);
+			return jsonFactory.getOperationResponseByCode(ResultCodes.USER_IS_NOT_LOGGED);
+		}
+	}
+
+	@POST
+	@Path("addPictureType")
+	@Produces("application/json")
+	public String addPictureType(String pictureTypeToAdd) {
+		try {
+			securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+			String bodyPartString = pictureTypeJsonFactory.getPictureType(pictureTypeToAdd);
+			int result = pictureTypeDAO.addPictureType(bodyPartString);
+			medicalLogger.logInfo("Adding picture type response: " + result, MedicalPicturesCommonResource.class);
+			return jsonFactory.getOperationResponseByCode(result);
+		} catch (UserNotPermitted ex) {
+			medicalLogger.logError("User not permitted to access /addPictureType !", MedicalPicturesCommonResource.class, ex);
+			return jsonFactory.getOperationResponseByCode(ResultCodes.USER_UNAOTHRIZED);
+		} catch (NoLoggedUserExistsHere ex) {
+			medicalLogger.logError("User is not logged - can't access /addPictureType !", MedicalPicturesCommonResource.class, ex);
+			return jsonFactory.getOperationResponseByCode(ResultCodes.USER_IS_NOT_LOGGED);
+		}
+	}
+
 }

@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.JsonParsingException;
 import medicalpictures.model.orm.entity.User;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -59,11 +60,12 @@ public class UserJsonFactory {
 	/**
 	 * Reads the user value which will be added to database from json.
 	 *
-	 * @param jsonUser JSON document with user details
+	 * @param userData
 	 * @return Map with user values
 	 * @throws medicalpictures.model.exception.JsonParsingException
 	 */
-	public Map<String, String> readUserFromJson(JSONObject jsonUser) throws JsonParsingException {
+	public Map<String, String> readUserFromJson(String userData) throws JsonParsingException {
+		JSONObject jsonUser = new JSONObject(userData);
 		Map<String, String> userMap = new HashMap<>();
 		try {
 			userMap.put("username", jsonUser.getString("username"));
@@ -83,5 +85,23 @@ public class UserJsonFactory {
 		} catch (JSONException ex) {
 			throw new JsonParsingException(ex.getMessage());
 		}
+	}
+
+	/**
+	 * Returns the list of users to delete in such form Map<username,accountType> for example there can be object such as:
+	 * <user@gmail.com,ADMIN>
+	 *
+	 * @param usersToRemove
+	 * @return
+	 */
+	public Map<String, String> readUsersToDelete(String usersToRemove) {
+		JSONObject users = new JSONObject(usersToRemove);
+		JSONArray usersToDelete = users.getJSONArray("usernames");
+		Map<String, String> usersToDeleteList = new HashMap<>();
+		for (int i = 0; i < usersToDelete.length(); i++) {
+			JSONObject singleUserToDelete = (JSONObject) usersToDelete.get(i);
+			usersToDeleteList.put(singleUserToDelete.getString("username"), singleUserToDelete.getString("accountType"));
+		}
+		return usersToDeleteList;
 	}
 }
