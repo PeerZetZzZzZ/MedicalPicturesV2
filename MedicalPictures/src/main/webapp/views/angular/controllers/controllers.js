@@ -328,7 +328,7 @@ MedicalPictures.controller('AdminViewAddUserController', function($scope, $trans
       !angular.isUndefined($scope.age) && !angular.isUndefined($scope.name) &&
       !angular.isUndefined($scope.surname) && !angular.isUndefined($scope.selectedAccountType) && !angular.isUndefined($scope.specialization)) {
       $http({
-        url: '/MedicalPictures/AdminViewAddUser',
+        url: '/MedicalPictures/webresources/MedicalPicturesCommon/addNewUser',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
