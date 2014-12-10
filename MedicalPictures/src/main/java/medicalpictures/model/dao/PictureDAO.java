@@ -1,18 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package medicalpictures.model.dao;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
-import medicalpictures.controller.views.common.DBNameManager;
+import medicalpictures.model.common.DBNameManager;
 import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.common.MedicalLogger;
 import medicalpictures.model.common.ResultCodes;
@@ -55,11 +49,17 @@ public class PictureDAO {
 	@EJB
 	private DefinedPictureDescriptionDAO definedPictureDescriptionDAO;
 
-	private static final Logger LOG = Logger.getLogger(PictureDAO.class.getName());
-
 	@EJB
 	private MedicalLogger logger;
 
+	/**
+	 * Adds the new picture the database.
+	 *
+	 * @param pictureDetails
+	 * @param pictureData
+	 * @param thumbnailData
+	 * @return
+	 */
 	public int addNewPicture(Map<String, String> pictureDetails, byte[] pictureData, byte[] thumbnailData) {
 		String pictureName = pictureDetails.get("pictureName");
 		String patientUnserame = pictureDetails.get("patientUsername");
@@ -97,6 +97,12 @@ public class PictureDAO {
 
 	}
 
+	/**
+	 * Removes pictures from the database.
+	 *
+	 * @param picturesList
+	 * @return
+	 */
 	public int removePictures(List<String> picturesList) {
 		for (String singlePictureId : picturesList) {
 			Picture picture = managerDAO.getEntityManager().find(Picture.class, singlePictureId);
@@ -205,7 +211,7 @@ public class PictureDAO {
 							return jsonFactory.getOperationResponseByCode(ResultCodes.INTERNAL_SERVER_ERROR);
 						}
 					} else {
-						LOG.warning("Couldn't find picture or doctor or defined picture description!");
+						logger.logWarning("Couldn't find picture or doctor or defined picture description!", PictureDAO.class);
 						return jsonFactory.getOperationResponseByCode(ResultCodes.OBJECT_DOESNT_EXIST);
 					}
 				} else {

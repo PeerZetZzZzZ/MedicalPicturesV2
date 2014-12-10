@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package medicalpictures.model.exception;
 
 /**
@@ -12,8 +7,8 @@ package medicalpictures.model.exception;
  */
 public class UserNotPermitted extends MedicalPicturesException {
 
-    public UserNotPermitted(String message) {
-        super(message);
-    }
+	public UserNotPermitted(String message) {
+		super(message);
+	}
 
 }

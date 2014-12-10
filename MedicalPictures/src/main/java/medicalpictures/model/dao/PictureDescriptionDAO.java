@@ -1,8 +1,8 @@
 package medicalpictures.model.dao;
 
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import medicalpictures.model.common.MedicalLogger;
 import medicalpictures.model.orm.entity.PictureDescription;
 
 /**
@@ -12,16 +12,24 @@ import medicalpictures.model.orm.entity.PictureDescription;
 @Stateless
 public class PictureDescriptionDAO {
 
-    @EJB
-    private ManagerDAO managerDAO;
-    private static final Logger LOG = Logger.getLogger(PictureDescriptionDAO.class.getName());
+	@EJB
+	private ManagerDAO managerDAO;
 
-    public PictureDescription getPictureDesriptionById(String id) {
-        PictureDescription pictureDescription = managerDAO.getEntityManager().find(PictureDescription.class, id);
-        managerDAO.getEntityManager().refresh(pictureDescription);
-        if (pictureDescription == null) {
-            LOG.warning("Picture description with id '" + id + "' not found.");
-        }
-        return pictureDescription;
-    }
+	@EJB
+	private MedicalLogger logger;
+
+	/**
+	 * Gets the picture by it's UUID id.
+	 *
+	 * @param id
+	 * @return
+	 */
+	public PictureDescription getPictureDesriptionById(String id) {
+		PictureDescription pictureDescription = managerDAO.getEntityManager().find(PictureDescription.class, id);
+		managerDAO.getEntityManager().refresh(pictureDescription);
+		if (pictureDescription == null) {
+			logger.logWarning("Picture description with id '" + id + "' not found.", PictureDescriptionDAO.class);
+		}
+		return pictureDescription;
+	}
 }

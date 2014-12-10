@@ -2,7 +2,6 @@ package medicalpictures.model.common;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import medicalpictures.model.dao.PatientDAO;
 import medicalpictures.model.orm.entity.Picture;
 import medicalpictures.model.orm.entity.PictureDescription;
 import org.apache.shiro.SecurityUtils;
@@ -23,7 +22,7 @@ public class PictureDescriptionJsonFactory {
 	private JsonFactory jsonFactory;
 
 	/**
-	 * Returns
+	 * Returns the descriptions of the patient picture as response to the client.
 	 *
 	 * @param picture
 	 * @return

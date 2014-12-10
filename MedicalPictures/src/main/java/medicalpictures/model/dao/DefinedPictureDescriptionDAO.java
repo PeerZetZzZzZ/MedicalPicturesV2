@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import medicalpictures.controller.views.common.DBNameManager;
+import medicalpictures.model.common.DBNameManager;
 import medicalpictures.model.common.MedicalLogger;
 import medicalpictures.model.orm.entity.DefinedPictureDescription;
 

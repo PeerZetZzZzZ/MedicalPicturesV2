@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package medicalpictures.model.dao;
 
 import java.util.ArrayList;
@@ -10,17 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Named;
 import javax.persistence.Query;
-import medicalpictures.controller.views.common.DBNameManager;
+import medicalpictures.model.common.DBNameManager;
 import medicalpictures.model.common.MedicalLogger;
 import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.exception.AddNewUserFailed;
 import medicalpictures.model.exception.AddToDbFailed;
+import medicalpictures.model.exception.UserDoesntExistException;
 import medicalpictures.model.orm.entity.Admin;
 import medicalpictures.model.orm.entity.Doctor;
 import medicalpictures.model.orm.entity.Patient;
@@ -40,7 +34,6 @@ public class UserDAO {
 
 	@EJB
 	private ManagerDAO managerDAO;
-	private Log log = LogFactory.getLog(UserDAO.class);
 	@EJB
 	private MedicalLogger logger;
 
@@ -199,26 +192,45 @@ public class UserDAO {
 			switch (accountType) {
 				case "ADMIN": {
 					Admin admin = findAdmin(username);
-					managerDAO.getEntityManager().remove(admin);
+					if (admin != null) {
+						managerDAO.getEntityManager().remove(admin);
+						logger.logInfo("Successfully removed user '" + username + "'", UserDAO.class);
+					} else {
+						logger.logWarning("Couldn't removed user " + username + "'.User doesn't exist!", UserDAO.class);
+					}
 					break;
 				}
 				case "DOCTOR": {
 					Doctor doctor = findDoctor(username);
-					managerDAO.getEntityManager().remove(doctor);
+					if (doctor != null) {
+						managerDAO.getEntityManager().remove(doctor);
+						logger.logInfo("Successfully removed user '" + username + "'", UserDAO.class);
+					} else {
+						logger.logWarning("Couldn't removed user " + username + "'.User doesn't exist!", UserDAO.class);
+					}
 					break;
 				}
 				case "TECHNICIAN": {
 					Technician technician = findTechnician(username);
-					managerDAO.getEntityManager().remove(technician);
+					if (technician != null) {
+						managerDAO.getEntityManager().remove(technician);
+						logger.logInfo("Successfully removed user '" + username + "'", UserDAO.class);
+					} else {
+						logger.logWarning("Couldn't removed user " + username + "'.User doesn't exist!", UserDAO.class);
+					}
 					break;
 				}
 				case "PATIENT": {
 					Patient patient = findPatient(username);
-					managerDAO.getEntityManager().remove(patient);
+					if (patient != null) {
+						managerDAO.getEntityManager().remove(patient);
+						logger.logInfo("Successfully removed user '" + username + "'", UserDAO.class);
+					} else {
+						logger.logWarning("Couldn't removed user " + username + "'.User doesn't exist!", UserDAO.class);
+					}
 					break;
 				}
 			}
-			log.info("Deleted user: " + username + ", accountType: " + accountType);
 		}
 	}
 
@@ -238,8 +250,9 @@ public class UserDAO {
 	 *
 	 * @param username Username for which details will be found
 	 * @return Map with user details
+	 * @throws medicalpictures.model.exception.UserDoesntExistException
 	 */
-	public Map<String, String> getUserDetails(String username) {
+	public Map<String, String> getUserDetails(String username) throws UserDoesntExistException {
 		Map<String, String> userDetails = new HashMap<>();
 		User user = findUser(username);
 		String userAccountType = user.getAccountType();
@@ -249,32 +262,52 @@ public class UserDAO {
 		switch (userAccountType) {
 			case "ADMIN": {
 				Admin admin = findAdmin(username);
-				name = admin.getName();
-				surname = admin.getSurname();
-				age = admin.getAge();
+				if (admin != null) {
+					name = admin.getName();
+					surname = admin.getSurname();
+					age = admin.getAge();
+				} else {
+					logger.logWarning("Coudln't get user details '" + username + "' because user doesn't exist!", UserDAO.class);
+					throw new UserDoesntExistException("Coudln't get user details '" + username + "' because user doesn't exist!");
+				}
 				break;
 			}
 			case "DOCTOR": {
 				Doctor doctor = findDoctor(username);
-				name = doctor.getName();
-				surname = doctor.getSurname();
-				age = doctor.getAge();
-				String specialization = doctor.getSpecialization();
-				userDetails.put("specialization", String.valueOf(specialization));//it's special case when we do it
+				if (doctor != null) {
+					name = doctor.getName();
+					surname = doctor.getSurname();
+					age = doctor.getAge();
+					String specialization = doctor.getSpecialization();
+					userDetails.put("specialization", String.valueOf(specialization));//it's special case when we do it
+				} else {
+					logger.logWarning("Coudln't get user details '" + username + "' because user doesn't exist!", UserDAO.class);
+					throw new UserDoesntExistException("Coudln't get user details '" + username + "' because user doesn't exist!");
+				}
 				break;
 			}
 			case "PATIENT": {
 				Patient patient = findPatient(username);
-				name = patient.getName();
-				surname = patient.getSurname();
-				age = patient.getAge();
+				if (patient != null) {
+					name = patient.getName();
+					surname = patient.getSurname();
+					age = patient.getAge();
+				} else {
+					logger.logWarning("Coudln't get user details '" + username + "' because user doesn't exist!", UserDAO.class);
+					throw new UserDoesntExistException("Coudln't get user details '" + username + "' because user doesn't exist!");
+				}
 				break;
 			}
 			case "TECHNICIAN": {
 				Technician technician = findTechnician(username);
-				name = technician.getName();
-				surname = technician.getSurname();
-				age = technician.getAge();
+				if (technician != null) {
+					name = technician.getName();
+					surname = technician.getSurname();
+					age = technician.getAge();
+				} else {
+					logger.logWarning("Coudln't get user details '" + username + "' because user doesn't exist!", UserDAO.class);
+					throw new UserDoesntExistException("Coudln't get user details '" + username + "' because user doesn't exist!");
+				}
 				break;
 			}
 		}
@@ -283,7 +316,7 @@ public class UserDAO {
 		userDetails.put("surname", surname);
 		userDetails.put("age", String.valueOf(age));
 		userDetails.put("accountType", userAccountType);
-		log.info("Returned user details: " + username);
+		logger.logInfo("Successfuly found user details for user: " + username, UserDAO.class);
 		return userDetails;
 	}
 
@@ -291,6 +324,7 @@ public class UserDAO {
 	 * Changes the values of specified user
 	 *
 	 * @param userDetails User which will be changed
+	 * @return
 	 */
 	public int editUser(Map<String, String> userDetails) {
 		String username = userDetails.get("username");
@@ -303,97 +337,108 @@ public class UserDAO {
 		 delete him in which he is already */
 		Map<String, String> usersToDelete = new HashMap<>();
 		User userToEdit = findUser(username);
-		String currentAccountType = userToEdit.getAccountType();
-		boolean accountTypeChanged = false;
-		if (resetPassword.equals("true")) {
-			userToEdit.setPassword(generatePassword(name, surname));//default password is generated
-		}
-		if (!userToEdit.getAccountType().equals(accountType)) {//if accountType changed
-			userToEdit.setAccountType(accountType);
-			accountTypeChanged = true;
-		}
-		managerDAO.getEntityManager().persist(userToEdit);
-		if (!accountTypeChanged) {
-			switch (accountType) {
-				case "ADMIN": {
-					Admin admin = findAdmin(username);
-					admin.setName(name);
-					admin.setSurname(surname);
-					admin.setAge(age);
-					try {
-						managerDAO.getEntityManager().persist(admin);
-					} catch (Exception ex) {
-						logger.logError("Persisting failed. Internal server error !", UserDAO.class, ex);
-						return ResultCodes.INTERNAL_SERVER_ERROR;
+		if (userToEdit != null) {
+			String currentAccountType = userToEdit.getAccountType();
+			boolean accountTypeChanged = false;
+			if (resetPassword.equals("true")) {
+				userToEdit.setPassword(generatePassword(name, surname));//default password is generated
+			}
+			if (!userToEdit.getAccountType().equals(accountType)) {//if accountType changed
+				userToEdit.setAccountType(accountType);
+				accountTypeChanged = true;
+			}
+			managerDAO.getEntityManager().persist(userToEdit);
+			if (!accountTypeChanged) {
+				switch (accountType) {
+					case "ADMIN": {
+						Admin admin = findAdmin(username);
+						admin.setName(name);
+						admin.setSurname(surname);
+						admin.setAge(age);
+						try {
+							managerDAO.getEntityManager().persist(admin);
+						} catch (Exception ex) {
+							logger.logError("Persisting failed. Internal server error !", UserDAO.class, ex);
+							return ResultCodes.INTERNAL_SERVER_ERROR;
+						}
+						logger.logInfo("User '" + username + "' successfully edited. User account type: !" + accountType + "'.", UserDAO.class);
+						break;
 					}
-					logger.logInfo("User '" + username + "' successfully edited. User account type: !" + accountType + "'.", UserDAO.class);
-					break;
+					case "DOCTOR": {
+						Doctor doctor = findDoctor(username);
+						doctor.setName(name);
+						doctor.setSurname(surname);
+						doctor.setAge(age);
+						doctor.setSpecialization(userDetails.get("specialization"));
+						try {
+							managerDAO.getEntityManager().persist(doctor);
+						} catch (Exception ex) {
+							logger.logError("Persisting failed. Internal server error !", UserDAO.class, ex);
+							return ResultCodes.INTERNAL_SERVER_ERROR;
+						}
+						logger.logInfo("User '" + username + "' successfully edited. User account type: !" + accountType + "'.", UserDAO.class);
+						break;
+					}
+					case "PATIENT": {
+						Patient patient = findPatient(username);
+						patient.setName(name);
+						patient.setSurname(surname);
+						patient.setAge(age);
+						try {
+							managerDAO.getEntityManager().persist(patient);
+						} catch (Exception ex) {
+							logger.logError("Persisting failed. Internal server error !", UserDAO.class, ex);
+							return ResultCodes.INTERNAL_SERVER_ERROR;
+						}
+						logger.logInfo("User '" + username + "' successfully edited. User account type: !" + accountType + "'.", UserDAO.class);
+						break;
+					}
+					case "TECHNICIAN": {
+						Technician technician = findTechnician(username);
+						technician.setName(name);
+						technician.setSurname(surname);
+						technician.setAge(age);
+						try {
+							managerDAO.getEntityManager().persist(technician);
+						} catch (Exception ex) {
+							logger.logError("Persisting failed. Internal server error !", UserDAO.class, ex);
+							return ResultCodes.INTERNAL_SERVER_ERROR;
+						}
+						logger.logInfo("User '" + username + "' successfully edited. User account type: !" + accountType + "'.", UserDAO.class);
+						break;
+					}
 				}
-				case "DOCTOR": {
-					Doctor doctor = findDoctor(username);
-					doctor.setName(name);
-					doctor.setSurname(surname);
-					doctor.setAge(age);
-					doctor.setSpecialization(userDetails.get("specialization"));
-					try {
-						managerDAO.getEntityManager().persist(doctor);
-					} catch (Exception ex) {
-						logger.logError("Persisting failed. Internal server error !", UserDAO.class, ex);
-						return ResultCodes.INTERNAL_SERVER_ERROR;
-					}
-					logger.logInfo("User '" + username + "' successfully edited. User account type: !" + accountType + "'.", UserDAO.class);
-					break;
-				}
-				case "PATIENT": {
-					Patient patient = findPatient(username);
-					patient.setName(name);
-					patient.setSurname(surname);
-					patient.setAge(age);
-					try {
-						managerDAO.getEntityManager().persist(patient);
-					} catch (Exception ex) {
-						logger.logError("Persisting failed. Internal server error !", UserDAO.class, ex);
-						return ResultCodes.INTERNAL_SERVER_ERROR;
-					}
-					logger.logInfo("User '" + username + "' successfully edited. User account type: !" + accountType + "'.", UserDAO.class);
-					break;
-				}
-				case "TECHNICIAN": {
-					Technician technician = findTechnician(username);
-					technician.setName(name);
-					technician.setSurname(surname);
-					technician.setAge(age);
-					try {
-						managerDAO.getEntityManager().persist(technician);
-					} catch (Exception ex) {
-						logger.logError("Persisting failed. Internal server error !", UserDAO.class, ex);
-						return ResultCodes.INTERNAL_SERVER_ERROR;
-					}
-					logger.logInfo("User '" + username + "' successfully edited. User account type: !" + accountType + "'.", UserDAO.class);
-					break;
+			} else {
+				usersToDelete.put(username, currentAccountType);//we add user to delete
+				deleteUsersOnlyInSpecifiedTable(usersToDelete);//delete existing user but not in UsersDB table
+				Map<String, String> newUserDetails = new HashMap<>();
+				newUserDetails.put("username", username);
+				newUserDetails.put("name", name);
+				newUserDetails.put("accountType", accountType);
+				newUserDetails.put("surname", surname);
+				newUserDetails.put("age", String.valueOf(age));
+				try {
+					addNewUserInSpecifiedAccountTable(userDetails);
+					logger.logInfo("User '" + newUserDetails.get("username") + "' successfully edited. User account type changed for: !" + newUserDetails.get("accountType") + "'.", UserDAO.class);
+					return ResultCodes.OPERATION_SUCCEED;
+				} catch (AddNewUserFailed ex) {
+					logger.logError("Editing user failed! Internal server problem!", UserDAO.class, ex);
+					return ResultCodes.INTERNAL_SERVER_ERROR;
 				}
 			}
+			return ResultCodes.OPERATION_SUCCEED;
 		} else {
-			usersToDelete.put(username, currentAccountType);//we add user to delete
-			deleteUsersOnlyInSpecifiedTable(usersToDelete);//delete existing user but not in UsersDB table
-			Map<String, String> newUserDetails = new HashMap<>();
-			newUserDetails.put("username", username);
-			newUserDetails.put("name", name);
-			newUserDetails.put("accountType", accountType);
-			newUserDetails.put("surname", surname);
-			newUserDetails.put("age", String.valueOf(age));
-			try {
-				addNewUserInSpecifiedAccountTable(userDetails);
-				logger.logInfo("User '" + newUserDetails.get("username") + "' successfully edited. User account type changed for: !" + newUserDetails.get("accountType") + "'.", UserDAO.class);
-				return ResultCodes.OPERATION_SUCCEED;
-			} catch (AddNewUserFailed ex) {
-				logger.logError("Editing user failed! Internal server problem!", UserDAO.class, ex);
-				return ResultCodes.INTERNAL_SERVER_ERROR;
-			}
+			logger.logWarning("Couldn't edit user '" + username + "' because user doesn't exist!", UserDAO.class);
+			return ResultCodes.USER_DOESNT_EXIST;
 		}
-		return ResultCodes.OPERATION_SUCCEED;
 	}
 
+	/**
+	 * Finds patient by username.
+	 *
+	 * @param username
+	 * @return
+	 */
 	public Patient findPatient(String username) {
 		try {
 			Query query = managerDAO.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getPatientTable() + " a WHERE a.user.username LIKE :userName", Patient.class);
@@ -401,11 +446,17 @@ public class UserDAO {
 			managerDAO.getEntityManager().refresh(patient);
 			return patient;
 		} catch (Exception ex) {
-			System.out.println("No patient with username: " + username);
+			logger.logWarning("Patient with username '" + username + "' not found.", UserDAO.class);
 			return null;
 		}
 	}
 
+	/**
+	 * Finds admin by username.
+	 *
+	 * @param username
+	 * @return
+	 */
 	public Admin findAdmin(String username) {
 		try {
 			Query query = managerDAO.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getAdminTable() + " a WHERE a.user.username LIKE :userName", Admin.class);
@@ -413,11 +464,17 @@ public class UserDAO {
 			managerDAO.getEntityManager().refresh(admin);
 			return admin;
 		} catch (Exception ex) {
-			System.out.println("No admin with username: " + username);
+			logger.logWarning("Admin with username '" + username + "' not found.", UserDAO.class);
 			return null;
 		}
 	}
 
+	/**
+	 * Finds technician by username.
+	 *
+	 * @param username
+	 * @return
+	 */
 	public Technician findTechnician(String username) {
 		try {
 			Query query = managerDAO.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getTechnicianTable() + " a WHERE a.user.username LIKE :userName", Technician.class);
@@ -425,11 +482,17 @@ public class UserDAO {
 			managerDAO.getEntityManager().refresh(technician);
 			return technician;
 		} catch (Exception ex) {
-			System.out.println("No technician with username: " + username);
+			logger.logWarning("Technician with username '" + username + "' not found.", UserDAO.class);
 			return null;
 		}
 	}
 
+	/**
+	 * Finds doctor by username.
+	 *
+	 * @param username
+	 * @return
+	 */
 	public Doctor findDoctor(String username) {
 		try {
 			Query query = managerDAO.getEntityManager().createQuery("SELECT a FROM " + DBNameManager.getDoctorTable() + " a WHERE a.user.username LIKE :userName", Doctor.class);
@@ -437,11 +500,17 @@ public class UserDAO {
 			managerDAO.getEntityManager().refresh(doctor);
 			return doctor;
 		} catch (Exception ex) {
-			System.out.println("No doctor with username: " + username);
+			logger.logWarning("Doctor with username '" + username + "' not found.", UserDAO.class);
 			return null;
 		}
 	}
 
+	/**
+	 * Finds user by username.
+	 *
+	 * @param username
+	 * @return
+	 */
 	public User findUser(String username) {
 		try {
 			Query query = managerDAO.getEntityManager().createQuery("SELECT u FROM " + DBNameManager.getUsersDbTable() + " u WHERE u.username LIKE :userName", User.class);
@@ -449,7 +518,7 @@ public class UserDAO {
 			managerDAO.getEntityManager().refresh(user);
 			return user;
 		} catch (Exception ex) {
-			System.out.println("No user with username: " + username);
+			logger.logWarning("User with username '" + username + "' not found.", UserDAO.class);
 			return null;
 		}
 	}

@@ -5,14 +5,11 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
-import medicalpictures.controller.views.common.DBNameManager;
+import medicalpictures.model.common.DBNameManager;
 import medicalpictures.model.common.MedicalLogger;
 import medicalpictures.model.common.ResultCodes;
-import medicalpictures.model.exception.AddPictureTypeFailed;
 import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.orm.entity.PictureType;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  *
@@ -23,7 +20,6 @@ public class PictureTypeDAO {
 
 	@EJB
 	private ManagerDAO managerDAO;
-	private Log LOG = LogFactory.getLog(PictureTypeDAO.class);
 
 	@EJB
 	private MedicalLogger logger;
@@ -62,6 +58,12 @@ public class PictureTypeDAO {
 		}
 	}
 
+	/**
+	 * Gets the picture type by its unique name
+	 *
+	 * @param pictureTypeName
+	 * @return
+	 */
 	public PictureType getPictureTypeByName(String pictureTypeName) {
 		try {
 			PictureType pictureType = (PictureType) managerDAO.getEntityManager().createQuery("SELECT u FROM " + DBNameManager.getPictureTypeTable() + " u WHERE u.pictureType LIKE :pictureType").

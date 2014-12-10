@@ -104,4 +104,30 @@ public class UserJsonFactory {
 		}
 		return usersToDeleteList;
 	}
+
+	/**
+	 * Decrypts request and getting all info needed for user login.
+	 *
+	 * @param userToLoginDetails
+	 * @return
+	 */
+	public Map<String, String> getUserLoginDetails(String userToLoginDetails) {
+		Map<String, String> detailsMap = new HashMap<>();
+		JSONObject loginDetails = new JSONObject(userToLoginDetails);
+		detailsMap.put("username", loginDetails.getString("username"));
+		detailsMap.put("password", loginDetails.getString("password"));
+		return detailsMap;
+	}
+
+	/**
+	 * Returns the response to the client about currently logged user.
+	 *
+	 * @param username
+	 * @return
+	 */
+	public String getLoggedUser(String username) {
+		JSONObject user = new JSONObject();
+		user.put("username", username);
+		return user.toString();
+	}
 }

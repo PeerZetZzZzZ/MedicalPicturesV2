@@ -13,18 +13,24 @@ import medicalpictures.model.exception.AddToDbFailed;
 @Stateful
 public class ManagerDAO {
 
-    @PersistenceContext(type = javax.persistence.PersistenceContextType.EXTENDED)
-    private EntityManager em;
+	@PersistenceContext(type = javax.persistence.PersistenceContextType.EXTENDED)
+	private EntityManager em;
 
-    public EntityManager getEntityManager() {
-        return em;
-    }
+	public EntityManager getEntityManager() {
+		return em;
+	}
 
-    public void persistObject(Object object) throws AddToDbFailed {
-        try {
-            em.persist(object);
-        } catch (Exception ex) {
-            throw new AddToDbFailed(ex.getMessage());
-        }
-    }
+	/**
+	 * Persists object to database.
+	 *
+	 * @param object
+	 * @throws AddToDbFailed
+	 */
+	public void persistObject(Object object) throws AddToDbFailed {
+		try {
+			em.persist(object);
+		} catch (Exception ex) {
+			throw new AddToDbFailed(ex.getMessage());
+		}
+	}
 }

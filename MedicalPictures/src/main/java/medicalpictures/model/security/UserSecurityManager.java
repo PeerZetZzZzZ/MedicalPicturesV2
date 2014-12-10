@@ -1,12 +1,14 @@
 package medicalpictures.model.security;
 
+import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import medicalpictures.model.common.MedicalLogger;
+import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.enums.ContentPermissions;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
-import medicalpictures.model.exception.UserAlreadyLoggedException;
-import medicalpictures.model.exception.UserDoesntExistException;
 import medicalpictures.model.exception.UserNotPermitted;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -27,6 +29,9 @@ import org.apache.shiro.session.InvalidSessionException;
 @Stateful
 public class UserSecurityManager {
 
+	@EJB
+	private MedicalLogger logger;
+
 	/**
 	 * Initializes the SecurityManager to use shiro:ini.
 	 */
@@ -40,12 +45,12 @@ public class UserSecurityManager {
 	/**
 	 * Method registers the user = log the user to Application and handles it's connection.
 	 *
-	 * @param username Username defined in UsersDB
-	 * @param password Password for username defined in UsersDB
-	 * @throws medicalpictures.model.exception.UserAlreadyLoggedException When user is already logged in the system.
-	 * @throws medicalpictures.model.exception.UserDoesntExistException When given credentials don't match any user.
+	 * @param userDetails
+	 * @return
 	 */
-	public void registerUser(String username, String password) throws UserAlreadyLoggedException, UserDoesntExistException {
+	public int loginUser(Map<String, String> userDetails) {
+		String username = userDetails.get("username");
+		String password = userDetails.get("password");
 		Subject currentUser = SecurityUtils.getSubject();
 		currentUser.getSession().getId();
 		if (!currentUser.isAuthenticated()) {
@@ -54,12 +59,15 @@ public class UserSecurityManager {
 				Session session = currentUser.getSession();
 				session.setAttribute("username", username);
 				currentUser.login(token);
+				logger.logInfo("Successful login for username '" + username + "'!!", UserSecurityManager.class);
+				return ResultCodes.OPERATION_SUCCEED;
 			} catch (AuthenticationException ex) {
-				throw new UserDoesntExistException(ex.getMessage());
+				logger.logWarning("Login failed for username '" + username + "'.Authentication failed!", UserSecurityManager.class);
+				return ResultCodes.USER_ALREADY_LOGGED;
 			}
 		} else {
-			String loggedUsername = currentUser.getSession().getAttribute("username").toString();
-			throw new UserAlreadyLoggedException("User: " + loggedUsername + "is already logged!", loggedUsername);
+			logger.logWarning("Login failed for username " + username + ". User is already logged", UserSecurityManager.class);
+			return ResultCodes.USER_ALREADY_LOGGED;
 		}
 	}
 

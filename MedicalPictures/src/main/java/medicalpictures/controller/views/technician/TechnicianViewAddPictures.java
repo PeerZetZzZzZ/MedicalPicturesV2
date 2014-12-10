@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.common.MedicalLogger;
+import medicalpictures.model.common.PictureJsonFactory;
 import medicalpictures.model.dao.PictureDAO;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
@@ -32,6 +33,8 @@ public class TechnicianViewAddPictures extends HttpServlet {
 
 	@EJB
 	private UserSecurityManager securityManager;
+	@EJB
+	private PictureJsonFactory pictureJsonFactory;
 	@EJB
 	private JsonFactory jsonFactory;
 	@EJB
@@ -66,7 +69,7 @@ public class TechnicianViewAddPictures extends HttpServlet {
 			for (FileItem item : items) {
 				if (!item.isFormField()) {
 					JSONObject pictureDetailsJson = jsonFactory.decryptRequest(FilenameUtils.getName(item.getName()));
-					Map<String, String> pictureDetailsMap = jsonFactory.getAddPictureValues(pictureDetailsJson);
+					Map<String, String> pictureDetailsMap = pictureJsonFactory.getAddPictureValues(pictureDetailsJson);
 					byte[] pictureData = IOUtils.toByteArray(item.getInputStream());
 					byte[] thumbnailData = thumbnailProducer.getThumbnail(pictureData, pictureDetailsMap.get("pictureName"));
 					int result = pictureDAO.addNewPicture(pictureDetailsMap, pictureData, thumbnailData);

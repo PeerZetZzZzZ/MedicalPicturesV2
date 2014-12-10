@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package medicalpictures.model.common;
 
 import java.io.ByteArrayInputStream;
@@ -103,51 +98,49 @@ public class PictureJsonFactory {
 	 */
 	public String getPictureDetailsWithThumbnail(Picture picture) throws IOException {
 		JSONObject pictureJson = new JSONObject();
-		if (picture != null) {
-			pictureJson.put("pictureId", picture.getId());
-			pictureJson.put("bodyPart", picture.getBodyPart().getBodyPart());
-			pictureJson.put("pictureType", picture.getPictureType().getPictureType());
-			pictureJson.put("patientAge", picture.getPatient().getAge());
-			pictureJson.put("patientName", picture.getPatient().getName());
-			pictureJson.put("patientSurname", picture.getPatient().getSurname());
-			pictureJson.put("patientUsername", picture.getPatient().getUser().getUsername());
-			pictureJson.put("pictureName", picture.getPictureName());
-			Technician technician = picture.getTechnician();
-			if (technician != null) {
-				pictureJson.put("technicianName", picture.getTechnician().getName());
-				pictureJson.put("technicianSurname", picture.getTechnician().getSurname());
-				pictureJson.put("technicianUsername", picture.getTechnician().getUser().getUsername());
-			} else {//if technician was maybe deleted
-				pictureJson.put("technicianName", "no data");
-				pictureJson.put("technicianSurname", "no data");
-				pictureJson.put("technicianUsername", "no data");
-			}
-			pictureJson.put("captureTimestamp", picture.getCaptureTimestamp());
-			ByteArrayInputStream is = new ByteArrayInputStream(picture.getThumbnailData());
-			String imageString = "data:image/png;base64,"
-					+ DatatypeConverter.printBase64Binary(IOUtils.toByteArray(is));
-			pictureJson.put("thumbnailData", imageString);
-			/* Now we easily looking for doctor who already checks patient, and we will get just his descriptions */
-			String loggedUsername = (String) SecurityUtils.getSubject().getSession().getAttribute("username");
-			boolean pictureHasDescription = false;
-			for (PictureDescription pictureDescription : picture.getPictureDescriptions()) {
-				if (pictureDescription.getDoctor().getUser().getUsername().equals(loggedUsername)) {
-					String pictureDesc = pictureDescription.getDescription();
-					if (pictureDesc == null || pictureDesc.equals("")) {
-						pictureDesc = pictureDescription.getDefinedPictureDescription().getPictureDescription();
-						pictureJson.put("definedPictureDescriptionId", pictureDescription.getDefinedPictureDescription().getId());
-					}
-					pictureJson.put("pictureDescription", pictureDesc);
-					pictureJson.put("pictureDescriptionId", pictureDescription.getId());
-					pictureHasDescription = true;
-					break;
+		pictureJson.put("pictureId", picture.getId());
+		pictureJson.put("bodyPart", picture.getBodyPart().getBodyPart());
+		pictureJson.put("pictureType", picture.getPictureType().getPictureType());
+		pictureJson.put("patientAge", picture.getPatient().getAge());
+		pictureJson.put("patientName", picture.getPatient().getName());
+		pictureJson.put("patientSurname", picture.getPatient().getSurname());
+		pictureJson.put("patientUsername", picture.getPatient().getUser().getUsername());
+		pictureJson.put("pictureName", picture.getPictureName());
+		Technician technician = picture.getTechnician();
+		if (technician != null) {
+			pictureJson.put("technicianName", picture.getTechnician().getName());
+			pictureJson.put("technicianSurname", picture.getTechnician().getSurname());
+			pictureJson.put("technicianUsername", picture.getTechnician().getUser().getUsername());
+		} else {//if technician was maybe deleted
+			pictureJson.put("technicianName", "no data");
+			pictureJson.put("technicianSurname", "no data");
+			pictureJson.put("technicianUsername", "no data");
+		}
+		pictureJson.put("captureTimestamp", picture.getCaptureTimestamp());
+		ByteArrayInputStream is = new ByteArrayInputStream(picture.getThumbnailData());
+		String imageString = "data:image/png;base64,"
+				+ DatatypeConverter.printBase64Binary(IOUtils.toByteArray(is));
+		pictureJson.put("thumbnailData", imageString);
+		/* Now we easily looking for doctor who already checks patient, and we will get just his descriptions */
+		String loggedUsername = (String) SecurityUtils.getSubject().getSession().getAttribute("username");
+		boolean pictureHasDescription = false;
+		for (PictureDescription pictureDescription : picture.getPictureDescriptions()) {
+			if (pictureDescription.getDoctor().getUser().getUsername().equals(loggedUsername)) {
+				String pictureDesc = pictureDescription.getDescription();
+				if (pictureDesc == null || pictureDesc.equals("")) {
+					pictureDesc = pictureDescription.getDefinedPictureDescription().getPictureDescription();
+					pictureJson.put("definedPictureDescriptionId", pictureDescription.getDefinedPictureDescription().getId());
 				}
+				pictureJson.put("pictureDescription", pictureDesc);
+				pictureJson.put("pictureDescriptionId", pictureDescription.getId());
+				pictureHasDescription = true;
+				break;
 			}
-			if (!pictureHasDescription) {
-				pictureJson.put("pictureDescription", "");//if picture doesn't have description yet made by this doctor
-				pictureJson.put("pictureDescriptionId", "");//if picture doesn't have description yet made by this doctor
-				//we want to send empty description
-			}
+		}
+		if (!pictureHasDescription) {
+			pictureJson.put("pictureDescription", "");//if picture doesn't have description yet made by this doctor
+			pictureJson.put("pictureDescriptionId", "");//if picture doesn't have description yet made by this doctor
+			//we want to send empty description
 		}
 		return pictureJson.toString();
 	}
@@ -182,5 +175,38 @@ public class PictureJsonFactory {
 		descMap.put("pictureDescription", pictureDescriptionJson.getString("pictureDescription"));
 		descMap.put("definedPictureDescriptionId", pictureDescriptionJson.getString("definedPictureDescriptionId"));
 		return descMap;
+	}
+
+	/**
+	 * Gets the picture values ( but no data ) which will be added to db
+	 *
+	 * @param pictureDetails JSONObject of details
+	 * @return map with picture details
+	 */
+	public Map<String, String> getAddPictureValues(JSONObject pictureDetails) {
+		Map<String, String> pictureValues = new HashMap<>();
+		pictureValues.put("patient", pictureDetails.getString("patient"));
+		String patient = pictureDetails.getString("patient");
+		String patientUsername = patient.substring(0, patient.indexOf(":") - 1);//we have email:name username so we want only email
+		pictureValues.put("patientUsername", patientUsername);
+		pictureValues.put("pictureName", pictureDetails.getString("pictureName"));
+		pictureValues.put("bodyPart", pictureDetails.getString("bodyPart"));
+		pictureValues.put("pictureType", pictureDetails.getString("pictureType"));
+		return pictureValues;
+	}
+
+	/**
+	 * Gets the picture values ( but no data ) when technician edit picture
+	 *
+	 * @param details JSONObject of details
+	 * @return map with picture details
+	 */
+	public Map<String, String> getEditPictureValues(String details) {
+		JSONObject pictureDetails = new JSONObject();
+		Map<String, String> pictureValues = new HashMap<>();
+		pictureValues.put("pictureId", pictureDetails.getString("pictureId"));
+		pictureValues.put("bodyPart", pictureDetails.getString("bodyPart"));
+		pictureValues.put("pictureType", pictureDetails.getString("pictureType"));
+		return pictureValues;
 	}
 }
