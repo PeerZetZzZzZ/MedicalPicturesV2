@@ -1,11 +1,14 @@
 package medicalpictures.model.common;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.Stateless;
 import medicalpictures.model.enums.AccountType;
+import medicalpictures.model.exception.JsonParsingException;
 import medicalpictures.model.orm.entity.User;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -51,5 +54,34 @@ public class UserJsonFactory {
 			user.put("specialization", userDetials.get("specialization"));
 		}
 		return user.toString();
+	}
+
+	/**
+	 * Reads the user value which will be added to database from json.
+	 *
+	 * @param jsonUser JSON document with user details
+	 * @return Map with user values
+	 * @throws medicalpictures.model.exception.JsonParsingException
+	 */
+	public Map<String, String> readUserFromJson(JSONObject jsonUser) throws JsonParsingException {
+		Map<String, String> userMap = new HashMap<>();
+		try {
+			userMap.put("username", jsonUser.getString("username"));
+			String accountType = jsonUser.getString("accountType");
+			if (accountType.equals("DOCTOR")) {
+				userMap.put("specialization", jsonUser.getString("specialization"));
+			}
+			userMap.put("accountType", accountType);
+			userMap.put("name", jsonUser.getString("name"));
+			userMap.put("surname", jsonUser.getString("surname"));
+			userMap.put("age", jsonUser.getString("age"));
+			String resetPassword = jsonUser.getString("resetPassword");
+			if (resetPassword != null) {//it's when we want to edit user values
+				userMap.put("resetPassword", resetPassword);
+			}
+			return userMap;
+		} catch (JSONException ex) {
+			throw new JsonParsingException(ex.getMessage());
+		}
 	}
 }

@@ -17,18 +17,6 @@ import org.json.JSONObject;
 @Stateless
 public class AdminOperationResponse {
 
-    /**
-     * Prepares the response to the client, that user has been added
-     * successfully.
-     *
-     * @param username Username which has been added.
-     */
-    public String userAddedSuccessfully(String username) {
-        JSONObject response = new JSONObject();
-        response.put("username", username);
-        response.put("result", "success");
-        return response.toString();
-    }
 
     /**
      * Prepares the response to the client, that user has not been added.

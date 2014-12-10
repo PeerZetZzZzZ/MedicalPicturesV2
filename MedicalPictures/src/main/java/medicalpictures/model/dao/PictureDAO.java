@@ -16,6 +16,7 @@ import javax.persistence.Query;
 import medicalpictures.controller.views.common.DBNameManager;
 import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.common.MedicalLogger;
+import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.orm.entity.BodyPart;
 import medicalpictures.model.orm.entity.DefinedPictureDescription;
@@ -63,7 +64,7 @@ public class PictureDAO {
 
 	@EJB
 	private MedicalLogger logger;
-	
+
 	public void addNewPicture(Map<String, String> pictureDetails, byte[] pictureData, byte[] thumbnailData) {
 		String pictureName = pictureDetails.get("pictureName");
 		String patientUnserame = pictureDetails.get("patientUsername");
@@ -81,9 +82,11 @@ public class PictureDAO {
 			LOG.info("Couldn't add new picture, because some of the components was null");
 		}
 	}
+
 	/**
 	 * Returns list of all pictures.
-	 * @return 
+	 *
+	 * @return
 	 */
 	public List<Picture> getAllPictureList() {
 		Query query = managerDAO.getEntityManager().createQuery("SELECT p FROM " + DBNameManager.getPictureTable() + " p", Picture.class);
@@ -97,24 +100,26 @@ public class PictureDAO {
 
 	}
 
-	public void removePictures(List<String> picturesList) {
+	public int removePictures(List<String> picturesList) {
 		for (String singlePictureId : picturesList) {
 			Picture picture = managerDAO.getEntityManager().find(Picture.class, singlePictureId);
 			if (picture != null) {
 				managerDAO.getEntityManager().remove(picture);
-				LOG.info("Successfully removed picture: " + singlePictureId);
+				logger.logInfo("Successfully removed picture: " + singlePictureId, PictureDAO.class);
 			} else {
-				LOG.info("Couldn't remove picture. Picture ': " + singlePictureId + "' not found");
+				logger.logInfo("Couldn't remove picture. Picture ': " + singlePictureId + "' not found", PictureDAO.class);
 			}
 		}
+		return ResultCodes.OPERATION_SUCCEED;
 	}
 
 	/**
 	 * Updates the picture. Can update bodyPart and pictureType.
 	 *
 	 * @param pictureDetailsMap
+	 * @return
 	 */
-	public void updatePicture(Map<String, String> pictureDetailsMap) throws AddToDbFailed {
+	public int updatePicture(Map<String, String> pictureDetailsMap) {
 		String pictureId = pictureDetailsMap.get("pictureId");
 		String pictureType = pictureDetailsMap.get("pictureType");
 		String bodyPart = pictureDetailsMap.get("bodyPart");
@@ -124,8 +129,10 @@ public class PictureDAO {
 		if (picture != null && bodyPartEntity != null && pictureTypeEntity != null) {
 			picture.setBodyPart(bodyPartEntity);
 			picture.setPictureType(pictureTypeEntity);
+			return ResultCodes.OPERATION_SUCCEED;
 		} else {
-			throw new AddToDbFailed("Failed to edit picture with id: '" + pictureId + "'");
+			logger.logWarning("Couldn't update picture, because some of the values (picture, bodyPart or pictureType) was not found.", PictureDAO.class);
+			return ResultCodes.OBJECT_DOESNT_EXIST;
 		}
 	}
 
@@ -139,17 +146,22 @@ public class PictureDAO {
 		Picture picture = managerDAO.getEntityManager().find(Picture.class, id);
 		managerDAO.getEntityManager().refresh(picture);
 		if (picture == null) {
-			LOG.warning("Couldn't find picture with id: " + id);
+			logger.logWarning("Couldn't find picture with id: " + id, PictureDAO.class);
 		}
 		return picture;
 	}
 
-	public String savePictureOrUpdateDescription(JSONObject pictureDescriptionJson) {
-		System.out.println("co dostalem: " + pictureDescriptionJson.toString());
-		String pictureId = pictureDescriptionJson.getString("pictureId");
-		String pictureDescriptionId = pictureDescriptionJson.getString("pictureDescriptionId");
-		String pictureDescription = pictureDescriptionJson.getString("pictureDescription");
-		String definedPictureDescriptionId = pictureDescriptionJson.getString("definedPictureDescriptionId");
+	/**
+	 * Saves the description if it doesn't exist or updates the existing one.
+	 *
+	 * @param pictureDescriptionJson
+	 * @return
+	 */
+	public String savePictureOrUpdateDescription(Map<String, String> pictureDescriptionJson) {
+		String pictureId = pictureDescriptionJson.get("pictureId");
+		String pictureDescriptionId = pictureDescriptionJson.get("pictureDescriptionId");
+		String pictureDescription = pictureDescriptionJson.get("pictureDescription");
+		String definedPictureDescriptionId = pictureDescriptionJson.get("definedPictureDescriptionId");
 		Picture picture = getPictureById(pictureId);
 		if (picture != null) {
 			if (!pictureDescriptionId.equals("")) {//in case when we not create but edit existing description
@@ -160,21 +172,22 @@ public class PictureDAO {
 						managerDAO.getEntityManager().merge(existingPictureDescription);
 						existingPictureDescription.setDescription("");//we want to clear existing description
 						existingPictureDescription.setDefinedPictureDescription(dpd);//update with defined picture description
-						LOG.info("Set defined picture description with id'" + dpd.getId() + "' for picture '" + existingPictureDescription.getId() + "'.");
+						logger.logInfo("Set defined picture description with id'" + dpd.getId() + "' for picture '" + existingPictureDescription.getId() + "'.",
+								PictureDAO.class);
 					} else {
-						LOG.warning("DefinedPictureDescription or PictureDescription not found'");
-						return jsonFactory.notObjectFound();
+						logger.logWarning("DefinedPictureDescription or PictureDescription not found'", PictureDAO.class);
+						return jsonFactory.getOperationResponseByCode(ResultCodes.OBJECT_DOESNT_EXIST);
 					}
 				} else {
 					if (existingPictureDescription != null) {
 						managerDAO.getEntityManager().merge(existingPictureDescription);
-//                        managerDAO.getEntityManager().persist(existingPictureDescription);
 						existingPictureDescription.setDescription(pictureDescription);
 						existingPictureDescription.setDefinedPictureDescription(null);
-						LOG.info("Set picture description '" + pictureDescription + "' for picture '" + existingPictureDescription.getId() + "'.");
+						logger.logWarning("Set picture description '" + pictureDescription + "' for picture '" + existingPictureDescription.getId() + "'.",
+								PictureDAO.class);
 					} else {
-						LOG.warning("PictureDescription with id'" + pictureDescriptionId + "' not found.");
-						return jsonFactory.notObjectFound();
+						logger.logWarning("PictureDescription with id'" + pictureDescriptionId + "' not found.", PictureDAO.class);
+						return jsonFactory.getOperationResponseByCode(ResultCodes.OBJECT_DOESNT_EXIST);
 					}
 				}
 			} else {
@@ -187,35 +200,38 @@ public class PictureDAO {
 						try {
 							PictureDescription newPictureDescription = new PictureDescription("", doctorEntity, pictureEntity, dpd);
 							managerDAO.persistObject(newPictureDescription);
-							LOG.info("Create new picture description with defined picture description '" + definedPictureDescriptionId + "'.");
+							logger.logInfo("Create new picture description with defined picture description '" + definedPictureDescriptionId + "'.",
+									PictureDAO.class);
 						} catch (AddToDbFailed ex) {
-							Logger.getLogger(PictureDAO.class.getName()).log(Level.SEVERE, null, ex);
-							return jsonFactory.insertToDbFailed();
+							logger.logError("Inserting picture description failed. Internal server problem! '" + definedPictureDescriptionId + "'.",
+									PictureDAO.class, ex);
+							return jsonFactory.getOperationResponseByCode(ResultCodes.INTERNAL_SERVER_ERROR);
 						}
 					} else {
 						LOG.warning("Couldn't find picture or doctor or defined picture description!");
-						return jsonFactory.notObjectFound();
+						return jsonFactory.getOperationResponseByCode(ResultCodes.OBJECT_DOESNT_EXIST);
 					}
 				} else {
 					if (pictureEntity != null && doctorEntity != null) {
 						try {
 							PictureDescription newPictureDescription = new PictureDescription(pictureDescription, doctorEntity, pictureEntity, null);
 							managerDAO.persistObject(newPictureDescription);
-							LOG.info("Create new picture description with picture description '" + pictureDescription + "'.");
+							logger.logInfo("Create new picture description with picture description '" + pictureDescription + "'.", PictureDAO.class);
 						} catch (AddToDbFailed ex) {
-							Logger.getLogger(PictureDAO.class.getName()).log(Level.SEVERE, null, ex);
-							return jsonFactory.insertToDbFailed();
+							logger.logError("Inserting picture description failed. Internal server problem! '" + definedPictureDescriptionId + "'.",
+									PictureDAO.class, ex);
+							return jsonFactory.getOperationResponseByCode(ResultCodes.INTERNAL_SERVER_ERROR);
 						}
 					} else {
-						LOG.warning("Couldn't find picture or doctor!");
-						return jsonFactory.notObjectFound();
+						logger.logWarning("Couldn't find picture or doctor!", PictureDAO.class);
+						return jsonFactory.getOperationResponseByCode(ResultCodes.OBJECT_DOESNT_EXIST);
 					}
 				}
 			}
 		} else {
-			LOG.info("Can't save picture description. Picture '" + pictureId + "' not found.");
-			return jsonFactory.notObjectFound();
+			logger.logWarning("Can't save picture description. Picture '" + pictureId + "' not found.", PictureDAO.class);
+			return jsonFactory.getOperationResponseByCode(ResultCodes.OBJECT_DOESNT_EXIST);
 		}
-		return "";
+		return jsonFactory.getOperationResponseByCode(ResultCodes.OPERATION_SUCCEED);
 	}
 }

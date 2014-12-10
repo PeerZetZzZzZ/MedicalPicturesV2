@@ -16,9 +16,11 @@ import javax.persistence.Query;
 import medicalpictures.controller.views.common.DBNameManager;
 import medicalpictures.model.common.JsonFactory;
 import medicalpictures.model.common.MedicalLogger;
+import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.orm.entity.Patient;
 import medicalpictures.model.orm.entity.Picture;
 import medicalpictures.model.orm.entity.PictureDescription;
+import org.apache.shiro.SecurityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -73,37 +75,9 @@ public class PatientDAO {
 		if (patient != null) {
 			return patient.getPictureList();
 		} else {
+			logger.logWarning("No patient found with username '" + patientUsername + "'.", PatientDAO.class);
 			return new HashSet<>();
 		}
 	}
 
-	public String getPatientPictureDescriptions(String patientUsername, String pictureId) {
-		Picture picture = pictureDAO.getPictureById(pictureId);
-		if (picture != null) {
-			if (picture.getPatient().getUser().getUsername().equals(patientUsername)) {
-				JSONObject pictureDescriptions = new JSONObject();
-				JSONArray descriptionsArray = new JSONArray();
-				for (PictureDescription description : picture.getPictureDescriptions()) {
-					JSONObject desc = new JSONObject();
-					desc.put("doctor", description.getDoctor().getName() + " " + description.getDoctor().getSurname());
-					desc.put("doctorSpecialization", description.getDoctor().getSpecialization());
-					if (description.getDefinedPictureDescription() != null) {
-						desc.put("pictureDescription", description.getDefinedPictureDescription().getPictureDescription());
-					} else {
-						desc.put("pictureDescription", description.getDescription());
-					}
-					descriptionsArray.put(desc);
-				}
-				pictureDescriptions.put("pictureDescriptions", descriptionsArray);
-				LOG.info("Return patient picture descriptions: " + pictureDescriptions.toString());
-				return pictureDescriptions.toString();
-			} else {
-				LOG.info("User with username '" + patientUsername + "' is not owner of the picture with id '" + pictureId + "'");
-				return jsonFactory.insertToDbFailed();
-			}
-		} else {
-			LOG.info("Picture with id '" + pictureId + "' not found.");
-			return jsonFactory.notObjectFound();
-		}
-	}
 }

@@ -16,6 +16,7 @@ import javax.inject.Named;
 import javax.persistence.Query;
 import medicalpictures.controller.views.common.DBNameManager;
 import medicalpictures.model.common.MedicalLogger;
+import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.exception.AddNewUserFailed;
 import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.orm.entity.Admin;
@@ -45,13 +46,15 @@ public class UserDAO {
 	 * Saves new user in database (UsersDB + specified table (by accountType)).
 	 *
 	 * @param userDetails Map with created user details.
-	 * @throws medicalpictures.model.exception.AddNewUserFailed
+	 * @return
 	 */
-	public void addNewUser(Map<String, String> userDetails) throws AddNewUserFailed {
+	public int addNewUser(Map<String, String> userDetails) {
 		try {
 			addUser(userDetails, true);
+			return ResultCodes.OPERATION_SUCCEED;
 		} catch (AddToDbFailed ex) {
-			throw new AddNewUserFailed(userDetails.get("username") + ": adding user failed!");
+			logger.logError("Internal server problem while adding new user!", UserDAO.class, ex);
+			return ResultCodes.INTERNAL_SERVER_ERROR;
 		}
 	}
 
@@ -117,10 +120,9 @@ public class UserDAO {
 					break;
 			}
 			managerDAO.persistObject(user);
-			log.info("Added user: " + username + "," + password + "," + accountType + "," + name + "," + surname + "," + age + "," + specialization);
+			logger.logInfo("Added user: " + username + "," + password + "," + accountType + "," + name + "," + surname + "," + age + "," + specialization, UserDAO.class);
 		} else {
-			log.info("Couldn't add user, null ");
-
+			logger.logWarning("Couldn't add user in specified table, because of internal problem while adding user in Users! ", UserDAO.class);
 		}
 	}
 

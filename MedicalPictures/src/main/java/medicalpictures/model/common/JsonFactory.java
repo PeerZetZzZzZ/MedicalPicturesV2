@@ -68,35 +68,6 @@ public class JsonFactory {
 		return new JSONObject(request);
 	}
 
-	/**
-	 * Reads the user value which will be added to database from json.
-	 *
-	 * @param jsonUser JSON document with user details
-	 * @return Map with user values
-	 * @throws medicalpictures.model.exception.JsonParsingException
-	 * @throws JsonException When json is invalid.
-	 */
-	public Map<String, String> readUserFromJson(JSONObject jsonUser) throws JsonParsingException {
-		Map<String, String> userMap = new HashMap<>();
-		try {
-			userMap.put("username", jsonUser.getString("username"));
-			String accountType = jsonUser.getString("accountType");
-			if (accountType.equals("DOCTOR")) {
-				userMap.put("specialization", jsonUser.getString("specialization"));
-			}
-			userMap.put("accountType", accountType);
-			userMap.put("name", jsonUser.getString("name"));
-			userMap.put("surname", jsonUser.getString("surname"));
-			userMap.put("age", jsonUser.getString("age"));
-			String resetPassword = jsonUser.getString("resetPassword");
-			if (resetPassword != null) {//it's when we want to edit user values
-				userMap.put("resetPassword", resetPassword);
-			}
-			return userMap;
-		} catch (JSONException ex) {
-			throw new JsonParsingException(ex.getMessage());
-		}
-	}
 
 	/**
 	 * Returns the json which informs that there is no permission to see content.
@@ -104,7 +75,9 @@ public class JsonFactory {
 	 * @return message about not being permitted to see content
 	 */
 	public String userNotPermitted() {
-		return "{error:\"notPermitted\"}";
+		JSONObject response = new JSONObject();
+		response.put("errorCode", ResultCodes.USER_UNAOTHRIZED);
+		return response.toString();
 	}
 
 	/**
@@ -113,7 +86,9 @@ public class JsonFactory {
 	 * @return message about not being permitted to see content
 	 */
 	public String notUserLogged() {
-		return "{error:\"notUserLogged\"}";
+		JSONObject response = new JSONObject();
+		response.put("errorCode", ResultCodes.USER_IS_NOT_LOGGED);
+		return response.toString();
 	}
 
 	/**
@@ -132,8 +107,6 @@ public class JsonFactory {
 		}
 		return usersToDeleteList;
 	}
-
-
 
 	/**
 	 * Returns picture type taken from proper json.
@@ -170,26 +143,16 @@ public class JsonFactory {
 	/**
 	 * Gets the picture values ( but no data ) when technician edit picture
 	 *
-	 * @param pictureDetails JSONObject of details
+	 * @param details JSONObject of details
 	 * @return map with picture details
 	 */
-	public Map<String, String> getEditPictureValues(JSONObject pictureDetails) {
+	public Map<String, String> getEditPictureValues(String details) {
+		JSONObject pictureDetails = new JSONObject();
 		Map<String, String> pictureValues = new HashMap<>();
 		pictureValues.put("pictureId", pictureDetails.getString("pictureId"));
 		pictureValues.put("bodyPart", pictureDetails.getString("bodyPart"));
 		pictureValues.put("pictureType", pictureDetails.getString("pictureType"));
 		return pictureValues;
-	}
-
-	public List<String> getPicturesToDeleteList(String pictures) {
-		JSONObject picturesJson = new JSONObject(pictures);
-		JSONArray picturesArray = picturesJson.getJSONArray("pictures");
-		List<String> picturesIdList = new ArrayList<>();
-		for (int i = 0; i < picturesArray.length(); i++) {
-			JSONObject pic = picturesArray.getJSONObject(i);
-			picturesIdList.add(pic.getString("pictureId"));
-		}
-		return picturesIdList;
 	}
 
 	/**
@@ -200,94 +163,6 @@ public class JsonFactory {
 	public String insertToDbFailed() {
 		JSONObject json = new JSONObject();
 		json.put("error", "insertToDbFailed");
-		return json.toString();
-	}
-
-	public String getPicturesNames(Set<Picture> patientPictures) {
-		JSONObject pictures = new JSONObject();
-		JSONArray picturesArray = new JSONArray();
-		for (Picture picture : patientPictures) {
-			JSONObject singlePicture = new JSONObject();
-			singlePicture.put("pictureName", picture.getPictureName());
-			singlePicture.put("pictureId", picture.getId());
-			picturesArray.put(singlePicture);
-		}
-		pictures.put("pictures", picturesArray);
-		return pictures.toString();
-	}
-
-	public String getPictureDetails(Picture picture) throws IOException {
-		JSONObject pictureJson = new JSONObject();
-		if (picture != null) {
-			pictureJson.put("pictureId", picture.getId());
-			pictureJson.put("bodyPart", picture.getBodyPart().getBodyPart());
-			pictureJson.put("pictureType", picture.getPictureType().getPictureType());
-			pictureJson.put("patientAge", picture.getPatient().getAge());
-			pictureJson.put("patientName", picture.getPatient().getName());
-			pictureJson.put("patientSurname", picture.getPatient().getSurname());
-			pictureJson.put("patientUsername", picture.getPatient().getUser().getUsername());
-			pictureJson.put("pictureName", picture.getPictureName());
-			Technician technician = picture.getTechnician();
-			if (technician != null) {
-				pictureJson.put("technicianName", picture.getTechnician().getName());
-				pictureJson.put("technicianSurname", picture.getTechnician().getSurname());
-				pictureJson.put("technicianUsername", picture.getTechnician().getUser().getUsername());
-			} else {//if technician was maybe deleted
-				pictureJson.put("technicianName", "no data");
-				pictureJson.put("technicianSurname", "no data");
-				pictureJson.put("technicianUsername", "no data");
-			}
-			pictureJson.put("captureTimestamp", picture.getCaptureTimestamp());
-			ByteArrayInputStream is = new ByteArrayInputStream(picture.getThumbnailData());
-			String imageString = "data:image/png;base64,"
-					+ DatatypeConverter.printBase64Binary(IOUtils.toByteArray(is));
-			pictureJson.put("thumbnailData", imageString);
-			/* Now we easily looking for doctor who already checks patient, and we will get just his descriptions */
-			String loggedUsername = (String) SecurityUtils.getSubject().getSession().getAttribute("username");
-			boolean pictureHasDescription = false;
-			for (PictureDescription pictureDescription : picture.getPictureDescriptions()) {
-				if (pictureDescription.getDoctor().getUser().getUsername().equals(loggedUsername)) {
-					String pictureDesc = pictureDescription.getDescription();
-					if (pictureDesc == null || pictureDesc.equals("")) {
-						pictureDesc = pictureDescription.getDefinedPictureDescription().getPictureDescription();
-						pictureJson.put("definedPictureDescriptionId", pictureDescription.getDefinedPictureDescription().getId());
-					}
-					pictureJson.put("pictureDescription", pictureDesc);
-					pictureJson.put("pictureDescriptionId", pictureDescription.getId());
-					pictureHasDescription = true;
-					break;
-				}
-			}
-			if (!pictureHasDescription) {
-				pictureJson.put("pictureDescription", "");//if picture doesn't have description yet made by this doctor
-				pictureJson.put("pictureDescriptionId", "");//if picture doesn't have description yet made by this doctor
-				//we want to send empty description
-			}
-			return pictureJson.toString();
-		} else {
-			return insertToDbFailed();
-		}
-
-	}
-
-	/**
-	 * Returns the answer to the client that no object found in db.
-	 *
-	 * @return
-	 */
-	public String notObjectFound() {
-		JSONObject json = new JSONObject();
-		json.put("errorCode", ResultCodes.OBJECT_DOESNT_EXIST);
-		return json.toString();
-	}
-
-	public String getFullPictureData(Picture picture) throws IOException {
-		ByteArrayInputStream is = new ByteArrayInputStream(picture.getPictureData());
-		String imageString = "data:image/png;base64,"
-				+ DatatypeConverter.printBase64Binary(IOUtils.toByteArray(is));
-		JSONObject json = new JSONObject();
-		json.put("pictureData", imageString);
-		LOG.info("Successfully retreived full picture data for picture: '" + picture.getId() + "'");
 		return json.toString();
 	}
 
