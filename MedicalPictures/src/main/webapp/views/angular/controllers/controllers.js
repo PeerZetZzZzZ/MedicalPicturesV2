@@ -44,7 +44,7 @@ MedicalPictures.controller('LoginController', function ($scope, $http, $window, 
 				}
 			}).success(function (data, status, header, config) {
 				console.log(status);
-				if (data.username === $scope.username && data.errorCode === 0) { //if login successful
+				if (data.errorCode === 0) { //if login successful
 					switch (data.accountType) {
 						case "ADMIN":
 							$window.location.href = "AdminViewManageUsers";
@@ -63,39 +63,25 @@ MedicalPictures.controller('LoginController', function ($scope, $http, $window, 
 					switch (data.errorCode) {
 						case -1:
 							$translate('AUTHENTICATION_FAILED').then(function (translation) {
-								showAlertMessageError(translation, data.username);
-							});
-							break;
-						case -2:
-							$translate('USER_ALREADY_LOGGED_LOCALLY').then(function (translation) {
-								var mainWindow;
-								switch (data.accountType) {
-									case "DOCTOR":
-										mainWindow = MedicalPicturesGlobal.DOCTOR_VIEW_MAIN_WINDOW;
-										break;
-									case "ADMIN":
-										mainWindow = MedicalPicturesGlobal.ADMIN_VIEW_MAIN_WINDOW;
-										break;
-									case "PATIENT":
-										mainWindow = MedicalPicturesGlobal.PATIENT_VIEW_MAIN_WINDOW;
-										break;
-									case "TECHNICIAN":
-										mainWindow = MedicalPicturesGlobal.TECHNICIAN_VIEW_MAIN_WINDOW;
-										break;
-								}
-								showAlertMessageWarning(translation, data.username, mainWindow);
+								showAlertMessageError(translation, $scope.username);
 							});
 							break;
 						case -3:	//json parse
 							$translate('INPUT_JSON_PARSE_PROBLEM').then(function (translation) {
-								showAlertMessageError(translation, data.username);
+								showAlertMessageError(translation, '');
 							});
 							break;
+						case -5:
+							$translate('AUTHENTICATION_FAILED').then(function (translation) {
+								showAlertMessageError(translation, $scope.username);
+							});
+							break;
+
 					}
 				}
 			}).error(function (response) {
 				$translate('INTERNAL_PROBLEM_OCCURRED').then(function (translation) {
-					showAlertMessageError(translation, data.username);
+					showAlertMessageError(translation, '');
 				});
 				console.log(response);
 			});
@@ -113,7 +99,7 @@ function showAlertMessageError(message, username) {
 			"</div>";
 }
 
-function showAlertMessageWarning(message, username, url) {
+function showAlertMessageWarningUrl(message, username, url) {
 	var alert = document.getElementById("alertMessageDiv");
 	alert.style.visibility = "visible"; //We show error message
 	alert.innerHTML = "<div data-alert class=\"alert-box warning round\">" +
@@ -550,6 +536,9 @@ MedicalPictures.controller('AdminViewManagePictureTypesController', function ($s
 								switch (data.errorCode) {
 									case 0:
 										$scope.pictureTypesList = data.pictureTypes;
+										$translate('PICTURE_TYPE_ADDED_SUCCESSFULLY').then(function (translation) {
+											showAlertMessageSuccess(translation, data.pictureType);
+										});
 										break;
 									case -1://unauthorized
 										break;
@@ -563,14 +552,11 @@ MedicalPictures.controller('AdminViewManagePictureTypesController', function ($s
 								});
 								console.log(status);
 							});
-					$translate('PICTURE_TYPE_ADDED_SUCCESSFULLY').then(function (translation) {
-						showAlertMessageSuccess(translation, data.pictureType);
-					});
+					break;
+				case -1://unauthorized
 					$translate('PICTURE_TYPE_ADDING_FAILED').then(function (translation) {
 						showAlertMessageError(translation, data.pictureType);
 					});
-					break;
-				case -1://unauthorized
 					break;
 				case -4: //not logged
 					break;

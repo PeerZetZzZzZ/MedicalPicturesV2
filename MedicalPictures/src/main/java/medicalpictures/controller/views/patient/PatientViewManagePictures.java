@@ -37,7 +37,7 @@ public class PatientViewManagePictures extends HttpServlet {
 			logger.logError("User is not logged - can't access /PatientViewManagePictures !", PatientViewManagePictures.class, ex);
 			request.getRequestDispatcher("/WEB-INF/common/NotAuthorizedView.html").forward(request, response);
 		}
-	}
+	}	
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

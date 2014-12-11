@@ -226,7 +226,7 @@ public class PictureJsonFactory {
 	 */
 	public Map<String, String> getEditPictureValues(String details) throws JsonParsingException {
 		try {
-			JSONObject pictureDetails = new JSONObject();
+			JSONObject pictureDetails = new JSONObject(details);
 			Map<String, String> pictureValues = new HashMap<>();
 			pictureValues.put("pictureId", pictureDetails.getString("pictureId"));
 			pictureValues.put("bodyPart", pictureDetails.getString("bodyPart"));

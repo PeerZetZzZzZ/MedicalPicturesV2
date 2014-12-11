@@ -144,4 +144,19 @@ public class UserJsonFactory {
 		user.put("errorCode", ResultCodes.OPERATION_SUCCEED);
 		return user.toString();
 	}
+
+	/**
+	 * Gives response to the client about successful login with values he needs.
+	 *
+	 * @param loggedUserDetails
+	 * @param result
+	 * @return
+	 */
+	public String getUserLoginResponse(Map<String, String> loggedUserDetails,int result) {
+		JSONObject resp = new JSONObject();
+		resp.put("username", loggedUserDetails.get("username"));
+		resp.put("accountType", loggedUserDetails.get("accountType"));
+		resp.put("errorCode", result);
+		return resp.toString();
+	}
 }

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.core.Context;
@@ -350,7 +352,7 @@ public class MedicalPicturesCommonResource {
 	@Produces("application/json")
 	public String getPatientPicturesNames(@PathParam("patientUsername") String patientUsername) {
 		try {
-			securityManager.checkUserPermissionToThisContent(AccountType.DOCTOR);
+			securityManager.checkUserPermissionToThisContent(AccountType.DOCTOR, AccountType.PATIENT);
 			Set<Picture> patientPictures = patientDAO.getPatientPictures(patientUsername);
 			String picturesNames = pictureJsonFactory.getPicturesNames(patientPictures);
 			logger.logInfo("Returned patient pictures names: " + picturesNames, MedicalPicturesCommonResource.class);
@@ -647,12 +649,30 @@ public class MedicalPicturesCommonResource {
 		try {
 			Map<String, String> userDetails = userJsonFactory.getUserLoginDetails(userToLogin);
 			int result = securityManager.loginUser(userDetails);
-			logger.logInfo("Login user response: " + result, MedicalPicturesCommonResource.class);
-			return jsonFactory.getOperationResponseByCode(result);
+			if (result == ResultCodes.OPERATION_SUCCEED) {//if successful login we must get additional info
+				Map<String, String> loggedUserDetails = userDAO.getLoggedUserDetails(userDetails);
+				String userLoginResponse = userJsonFactory.getUserLoginResponse(loggedUserDetails, result);
+				logger.logInfo("Login user response: " + userLoginResponse, MedicalPicturesCommonResource.class);
+				return userLoginResponse;
+			} else {
+				logger.logInfo("Login user response: " + result, MedicalPicturesCommonResource.class);
+				return jsonFactory.getOperationResponseByCode(result);
+			}
 		} catch (JsonParsingException ex) {
 			logger.logError("/loginUser: input json parse exception! " + userToLogin, MedicalPicturesCommonResource.class, ex);
 			return jsonFactory.getOperationResponseByCode(ResultCodes.INPUT_JSON_PARSE_ERROR);
+		} catch (UserDoesntExistException ex) {
+			logger.logError("Can't get user info after login. Something went wrong. Someone removed user just after he logged.", MedicalPicturesCommonResource.class, ex);
+			return jsonFactory.getOperationResponseByCode(ResultCodes.USER_DOESNT_EXIST);
 		}
+	}
+
+	@GET
+	@Path("init")
+	@Produces("application/json")
+	public String init() {
+		List<User> users = userDAO.getAllUsernames();
+		return "";
 	}
 
 }

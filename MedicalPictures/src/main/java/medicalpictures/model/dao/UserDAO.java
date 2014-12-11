@@ -516,4 +516,24 @@ public class UserDAO {
 			return null;
 		}
 	}
+
+	/**
+	 * Gets the logged user details which are needed for client. Even if user logged successfuly it agagin gets the user from DB and checks whether exists.
+	 *
+	 * @param userDetails
+	 * @return
+	 * @throws medicalpictures.model.exception.UserDoesntExistException
+	 */
+	public Map<String, String> getLoggedUserDetails(Map<String, String> userDetails) throws UserDoesntExistException {
+		String username = userDetails.get("username");
+		User u = findUser(username);
+		if (u != null) {
+			Map<String, String> loggedUserDetails = new HashMap<>();
+			loggedUserDetails.put("username", u.getUsername());
+			loggedUserDetails.put("accountType", u.getAccountType());
+			return loggedUserDetails;
+		} else {
+			throw new UserDoesntExistException(username);
+		}
+	}
 }

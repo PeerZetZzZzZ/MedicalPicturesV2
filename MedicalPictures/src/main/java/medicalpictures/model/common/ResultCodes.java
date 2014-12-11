@@ -34,10 +34,6 @@ public class ResultCodes {
 	 */
 	public static int USER_IS_NOT_LOGGED = -4;
 	/**
-	 * When user is already logged.
-	 */
-	public static int USER_ALREADY_LOGGED = -2;//it's never sent to client that's why it's this value JEST
-	/**
 	 * When user authentication failed while login.
 	 */
 	public static int USER_AUTHENTICATION_FAILED = -1000;

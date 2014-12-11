@@ -57,21 +57,19 @@ public class UserSecurityManager {
 		String password = userDetails.get("password");
 		Subject currentUser = SecurityUtils.getSubject();
 		currentUser.getSession().getId();
-		if (!currentUser.isAuthenticated()) {
-			UsernamePasswordToken token = new UsernamePasswordToken(username, passwordGeneartor.getPasswordHash(password));
-			try {
-				Session session = currentUser.getSession();
-				session.setAttribute("username", username);
-				currentUser.login(token);
-				logger.logInfo("Successful login for username '" + username + "'!!", UserSecurityManager.class);
-				return ResultCodes.OPERATION_SUCCEED;
-			} catch (AuthenticationException ex) {
-				logger.logWarning("Login failed for username '" + username + "'.Authentication failed!", UserSecurityManager.class);
-				return ResultCodes.USER_UNAOTHRIZED;
-			}
-		} else {
-			logger.logWarning("Login failed for username " + username + ". User is already logged", UserSecurityManager.class);
-			return ResultCodes.USER_ALREADY_LOGGED;
+		if (currentUser.isAuthenticated()) {
+			currentUser.logout();
+		}
+		UsernamePasswordToken token = new UsernamePasswordToken(username, passwordGeneartor.getPasswordHash(password));
+		try {
+			Session session = currentUser.getSession();
+			session.setAttribute("username", username);
+			currentUser.login(token);
+			logger.logInfo("Successful login for username '" + username + "'!!", UserSecurityManager.class);
+			return ResultCodes.OPERATION_SUCCEED;
+		} catch (AuthenticationException ex) {
+			logger.logError("Login failed for username '" + username + "'.Authentication failed!", UserSecurityManager.class, ex);
+			return ResultCodes.USER_UNAOTHRIZED;
 		}
 	}
 
