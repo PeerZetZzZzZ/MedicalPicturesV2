@@ -737,21 +737,21 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function ($sco
 		var i = 0;
 		var flagOfUpload = true;
 		for (i = 0; i < uploader.queue.length; i++) {
-			if (angular.isUndefined(uploader.queue[i].selectedPatient) && uploader.queue[i].selectedPatient != '') {
+			if (angular.isUndefined(uploader.queue[i].selectedPatient) && uploader.queue[i].selectedPatient !== '') {
 				var fileName = uploader.queue[i].file.name;
 				$translate('NO_PATIENT_SELECTED_FOR_FILE').then(function (translation) {
 					showAlertMessageError(translation, fileName);
 				});
 				flagOfUpload = false;
 				break;
-			} else if (angular.isUndefined(uploader.queue[i].selectedBodyPart) && uploader.queue[i].selectedBodyPart != '') {
+			} else if (angular.isUndefined(uploader.queue[i].selectedBodyPart) && uploader.queue[i].selectedBodyPart !== '') {
 				var fileName = uploader.queue[i].file.name;
 				$translate('NO_BODY_PART_SELECTED_FOR_FILE').then(function (translation) {
 					showAlertMessageError(translation, fileName);
 				});
 				flagOfUpload = false;
 				break;
-			} else if (angular.isUndefined(uploader.queue[i].selectedPictureType) && uploader.queue[i].selectedPictureType != '') {
+			} else if (angular.isUndefined(uploader.queue[i].selectedPictureType) && uploader.queue[i].selectedPictureType !== '') {
 				var fileName = uploader.queue[i].file.name;
 				$translate('NO_PICTURE_TYPE_SELECTED_FOR_FILE').then(function (translation) {
 					showAlertMessageError(translation, fileName);
@@ -1112,13 +1112,13 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function ($
 	$scope.savePictureDescription = function (picture) {
 		var pictureDescription;
 		if (!angular.isUndefined(picture.definedPictureDescriptionId)) {
-			if (picture.pictureDescriptionId != '') { //if we update description , not add new
+			if (picture.pictureDescriptionId !== '') { //if we update description , not add new
 				pictureDescription = '{pictureId:\'' + picture.pictureId + '\', pictureDescriptionId:\'' + picture.pictureDescriptionId + '\',pictureDescription:\'\',definedPictureDescriptionId:\'' + picture.definedPictureDescriptionId + '\'}';
 			} else {
 				pictureDescription = '{pictureId:\'' + picture.pictureId + '\', pictureDescriptionId:\'\',pictureDescription:\'\',definedPictureDescriptionId:\'' + picture.definedPictureDescriptionId + '\'}';
 			}
 		} else {
-			if (picture.pictureDescriptionId != '') {
+			if (picture.pictureDescriptionId !== '') {
 				pictureDescription = '{pictureId:\'' + picture.pictureId + '\',pictureDescriptionId:\'' + picture.pictureDescriptionId + '\',pictureDescription:\'' + picture.pictureDescription + '\',definedPictureDescriptionId:\'\'}';
 			} else {
 				pictureDescription = '{pictureId:\'' + picture.pictureId + '\',pictureDescriptionId:\'\',pictureDescription:\'' + picture.pictureDescription + '\',definedPictureDescriptionId:\'\'}';
