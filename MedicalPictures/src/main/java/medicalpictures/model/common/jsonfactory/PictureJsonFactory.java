@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.xml.bind.DatatypeConverter;
+import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.orm.entity.Picture;
 import medicalpictures.model.orm.entity.PictureDescription;
 import medicalpictures.model.orm.entity.Technician;
@@ -50,6 +51,7 @@ public class PictureJsonFactory {
 			picturesArray.put(singlePicture);
 		}
 		picturesList.put("pictures", picturesArray);
+		picturesList.put("errorCode", ResultCodes.OPERATION_SUCCEED);
 		return picturesList.toString();
 	}
 
@@ -86,6 +88,7 @@ public class PictureJsonFactory {
 			picturesArray.put(singlePicture);
 		}
 		pictures.put("pictures", picturesArray);
+		pictures.put("errorCode", ResultCodes.OPERATION_SUCCEED);
 		return pictures.toString();
 	}
 
@@ -142,6 +145,7 @@ public class PictureJsonFactory {
 			pictureJson.put("pictureDescriptionId", "");//if picture doesn't have description yet made by this doctor
 			//we want to send empty description
 		}
+		pictureJson.put("errorCode", ResultCodes.OPERATION_SUCCEED);
 		return pictureJson.toString();
 	}
 
@@ -158,6 +162,7 @@ public class PictureJsonFactory {
 				+ DatatypeConverter.printBase64Binary(IOUtils.toByteArray(is));
 		JSONObject json = new JSONObject();
 		json.put("pictureData", imageString);
+		json.put("errorCode", ResultCodes.OPERATION_SUCCEED);
 		return json.toString();
 	}
 

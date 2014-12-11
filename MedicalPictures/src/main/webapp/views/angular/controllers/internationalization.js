@@ -3,6 +3,9 @@ MedicalPictures.config(function ($translateProvider) {
     $translateProvider.translations('en', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Login View',
         'ADMIN_VIEW_HEAD_NAME': 'MedicalPictures Admin View',
+		'DOCTOR_VIEW_HEAD_NAME': 'MedicalPictures Doctor View',
+		'PATIENT_VIEW_HEAD_NAME': 'MedicalPictures Patient View',
+		'SETTINGS_VIEW_HEAD_NAME': 'MedicalPictures Settings View',
         'USERNAME': 'Username',
         'PASSWORD': 'Password',
         'LOG_IN': 'Login',
@@ -109,6 +112,9 @@ MedicalPictures.config(function ($translateProvider) {
     $translateProvider.translations('pl', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
         'ADMIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Administratora',
+		'DOCTOR_VIEW_HEAD_NAME': 'MedicalPictures Panel Doktora',
+		'PATIENT_VIEW_HEAD_NAME': 'MedicalPictures Panel Pacjenta',
+		'SETTINGS_VIEW_HEAD_NAME': 'MedicalPictures Panel Ustawień',
         'USERNAME': 'Użytkownik',
         'LOG_IN': 'Zaloguj',
         'PASSWORD': 'Hasło',

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.Stateless;
+import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.JsonParsingException;
 import medicalpictures.model.orm.entity.User;
@@ -35,6 +36,7 @@ public class UserJsonFactory {
 			usersList.add(singleUser);
 		}
 		users.put("usernames", usersList);
+		users.put("errorCode", ResultCodes.OPERATION_SUCCEED);
 		return users.toString();
 	}
 
@@ -54,6 +56,7 @@ public class UserJsonFactory {
 		if (userDetials.get("accountType").equals(AccountType.DOCTOR.toString())) {
 			user.put("specialization", userDetials.get("specialization"));
 		}
+		user.put("errorCode", ResultCodes.OPERATION_SUCCEED);
 		return user.toString();
 	}
 
@@ -128,6 +131,6 @@ public class UserJsonFactory {
 	public String getLoggedUser(String username) {
 		JSONObject user = new JSONObject();
 		user.put("username", username);
-		return user.toString();
+		return user.toString();	
 	}
 }

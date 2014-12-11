@@ -46,6 +46,7 @@ public class PictureDescriptionJsonFactory {
 				descriptionsArray.put(desc);
 			}
 			pictureDescriptions.put("pictureDescriptions", descriptionsArray);
+			pictureDescriptions.put("errorCode", ResultCodes.OPERATION_SUCCEED);
 			return pictureDescriptions.toString();
 		} else {
 			logger.logWarning("User with username '" + patientUsername + "' is not owner of the picture with id '" + picture.getId() + "'",

@@ -2,6 +2,7 @@ package medicalpictures.model.common.jsonfactory;
 
 import java.util.List;
 import javax.ejb.Stateless;
+import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.orm.entity.DefinedPictureDescription;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,6 +31,7 @@ public class DefinedPictureDescriptionJsonFactory {
 			dpdArray.put(singleDpd);
 		}
 		dpdList.put("definedPictureDescriptions", dpdArray);
+		dpdList.put("errorCode", ResultCodes.OPERATION_SUCCEED);
 		return dpdList.toString();
 	}
 }

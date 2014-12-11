@@ -7,6 +7,7 @@ package medicalpictures.model.common.jsonfactory;
 
 import java.util.List;
 import javax.ejb.Stateless;
+import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.orm.entity.Patient;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,6 +36,7 @@ public class PatientJsonFactory {
             patientsArray.put(singlePatient);
         }
         patientsJson.put("patients", patientsArray);
+        patientsJson.put("errorCode", ResultCodes.OPERATION_SUCCEED);
         return patientsJson.toString();
     }
 }

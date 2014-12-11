@@ -3,6 +3,7 @@ package medicalpictures.model.common.jsonfactory;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.dao.ManagerDAO;
 import medicalpictures.model.orm.entity.BodyPart;
 import org.json.JSONArray;
@@ -32,6 +33,7 @@ public class BodyPartJsonFactory {
 			bodyPartsArray.put(bodyPart.getBodyPart());
 		}
 		bodyPartsJson.put("bodyParts", bodyPartsArray);
+		bodyPartsJson.put("errorCode", ResultCodes.OPERATION_SUCCEED);
 		return bodyPartsJson.toString();
 	}
 

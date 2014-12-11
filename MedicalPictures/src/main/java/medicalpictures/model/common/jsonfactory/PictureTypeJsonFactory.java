@@ -2,6 +2,7 @@ package medicalpictures.model.common.jsonfactory;
 
 import java.util.List;
 import javax.ejb.Stateless;
+import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.orm.entity.PictureType;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,6 +28,7 @@ public class PictureTypeJsonFactory {
 			pictureTypesArray.put(pictureType.getPictureType());
 		}
 		pictureTypesJson.put("pictureTypes", pictureTypesArray);
+		pictureTypesJson.put("errorCode", ResultCodes.OPERATION_SUCCEED);
 		return pictureTypesJson.toString();
 	}
 
