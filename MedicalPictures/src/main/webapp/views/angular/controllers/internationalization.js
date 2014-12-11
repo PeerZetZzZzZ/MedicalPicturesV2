@@ -107,7 +107,8 @@ MedicalPictures.config(function ($translateProvider) {
         'NEW_PASSWORD':'New password',
         'NEW_PASSWORD_AGAIN':'Ensure new password',
         'CHANGE_MY_PASSWORD':'Change my password',
-        'PASSWORDS_ARE_DIFFERENT':'Passwords are different'
+        'PASSWORDS_ARE_DIFFERENT':'Passwords are different',
+		'INPUT_JSON_PARSE_PROBLEM':'Ups! Something went wrong with parsing input from client'
     });
     $translateProvider.translations('pl', {
         'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -216,7 +217,9 @@ MedicalPictures.config(function ($translateProvider) {
         'NEW_PASSWORD':'Nowe hasło',
         'NEW_PASSWORD_AGAIN':'Potwierdź nowe hasło',
         'CHANGE_MY_PASSWORD':'Zmień moje hasło',
-        'PASSWORDS_ARE_DIFFERENT':'Hasła różnią się...'
+        'PASSWORDS_ARE_DIFFERENT':'Hasła różnią się...',
+		'INPUT_JSON_PARSE_PROBLEM':'Ups! Pojawił się problem z parsowaniem zapytania przez serwer.'
+
     });
     $translateProvider.preferredLanguage('pl');
 });

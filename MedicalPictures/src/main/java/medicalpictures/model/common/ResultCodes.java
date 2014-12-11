@@ -40,7 +40,7 @@ public class ResultCodes {
 	/**
 	 * When user authentication failed while login.
 	 */
-	public static int USER_AUTHENTICATION_FAILED = -1002;
+	public static int USER_AUTHENTICATION_FAILED = -1000;
 
 	/**
 	 * When object doesn't exist for example GROUP ( except USER, it has own code )

@@ -5,8 +5,10 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.dao.ManagerDAO;
+import medicalpictures.model.exception.JsonParsingException;
 import medicalpictures.model.orm.entity.BodyPart;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -42,9 +44,14 @@ public class BodyPartJsonFactory {
 	 *
 	 * @param bodyPart
 	 * @return
+	 * @throws medicalpictures.model.exception.JsonParsingException
 	 */
-	public String getBodyPart(String bodyPart) {
-		JSONObject bodyPartJson = new JSONObject(bodyPart);
-		return bodyPartJson.getString("bodyPart");
+	public String getBodyPart(String bodyPart) throws JsonParsingException {
+		try {
+			JSONObject bodyPartJson = new JSONObject(bodyPart);
+			return bodyPartJson.getString("bodyPart");
+		} catch (JSONException ex) {
+			throw new JsonParsingException(ex.getMessage());
+		}
 	}
 }

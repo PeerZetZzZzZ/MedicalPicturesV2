@@ -11,12 +11,14 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.xml.bind.DatatypeConverter;
 import medicalpictures.model.common.ResultCodes;
+import medicalpictures.model.exception.JsonParsingException;
 import medicalpictures.model.orm.entity.Picture;
 import medicalpictures.model.orm.entity.PictureDescription;
 import medicalpictures.model.orm.entity.Technician;
 import org.apache.commons.io.IOUtils;
 import org.apache.shiro.SecurityUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -60,16 +62,21 @@ public class PictureJsonFactory {
 	 *
 	 * @param pictures
 	 * @return
+	 * @throws medicalpictures.model.exception.JsonParsingException
 	 */
-	public List<String> getPicturesToDeleteList(String pictures) {
-		JSONObject picturesJson = new JSONObject(pictures);
-		JSONArray picturesArray = picturesJson.getJSONArray("pictures");
-		List<String> picturesIdList = new ArrayList<>();
-		for (int i = 0; i < picturesArray.length(); i++) {
-			JSONObject pic = picturesArray.getJSONObject(i);
-			picturesIdList.add(pic.getString("pictureId"));
+	public List<String> getPicturesToDeleteList(String pictures) throws JsonParsingException {
+		try {
+			JSONObject picturesJson = new JSONObject(pictures);
+			JSONArray picturesArray = picturesJson.getJSONArray("pictures");
+			List<String> picturesIdList = new ArrayList<>();
+			for (int i = 0; i < picturesArray.length(); i++) {
+				JSONObject pic = picturesArray.getJSONObject(i);
+				picturesIdList.add(pic.getString("pictureId"));
+			}
+			return picturesIdList;
+		} catch (JSONException ex) {
+			throw new JsonParsingException(ex.getMessage());
 		}
-		return picturesIdList;
 	}
 
 	/**
@@ -171,47 +178,62 @@ public class PictureJsonFactory {
 	 *
 	 * @param pictureDescriptionDetails
 	 * @return
+	 * @throws medicalpictures.model.exception.JsonParsingException
 	 */
-	public Map<String, String> getSavePictureDescription(String pictureDescriptionDetails) {
-		Map<String, String> descMap = new HashMap<>();
-		JSONObject pictureDescriptionJson = new JSONObject(pictureDescriptionDetails);
-		descMap.put("pictureId", pictureDescriptionJson.getString("pictureId"));
-		descMap.put("pictureDescriptionId", pictureDescriptionJson.getString("pictureDescriptionId"));
-		descMap.put("pictureDescription", pictureDescriptionJson.getString("pictureDescription"));
-		descMap.put("definedPictureDescriptionId", pictureDescriptionJson.getString("definedPictureDescriptionId"));
-		return descMap;
+	public Map<String, String> getSavePictureDescription(String pictureDescriptionDetails) throws JsonParsingException {
+		try {
+			Map<String, String> descMap = new HashMap<>();
+			JSONObject pictureDescriptionJson = new JSONObject(pictureDescriptionDetails);
+			descMap.put("pictureId", pictureDescriptionJson.getString("pictureId"));
+			descMap.put("pictureDescriptionId", pictureDescriptionJson.getString("pictureDescriptionId"));
+			descMap.put("pictureDescription", pictureDescriptionJson.getString("pictureDescription"));
+			descMap.put("definedPictureDescriptionId", pictureDescriptionJson.getString("definedPictureDescriptionId"));
+			return descMap;
+		} catch (JSONException ex) {
+			throw new JsonParsingException(ex.getMessage());
+		}
 	}
 
 	/**
-	 * Gets the picture values ( but no data ) which will be added to db
+	 * Decryptes request from the client and gets the picture values ( but no data ) which will be added to db
 	 *
 	 * @param pictureDetails JSONObject of details
 	 * @return map with picture details
+	 * @throws medicalpictures.model.exception.JsonParsingException
 	 */
-	public Map<String, String> getAddPictureValues(JSONObject pictureDetails) {
-		Map<String, String> pictureValues = new HashMap<>();
-		pictureValues.put("patient", pictureDetails.getString("patient"));
-		String patient = pictureDetails.getString("patient");
-		String patientUsername = patient.substring(0, patient.indexOf(":") - 1);//we have email:name username so we want only email
-		pictureValues.put("patientUsername", patientUsername);
-		pictureValues.put("pictureName", pictureDetails.getString("pictureName"));
-		pictureValues.put("bodyPart", pictureDetails.getString("bodyPart"));
-		pictureValues.put("pictureType", pictureDetails.getString("pictureType"));
-		return pictureValues;
+	public Map<String, String> getAddPictureValues(JSONObject pictureDetails) throws JsonParsingException {
+		try {
+			Map<String, String> pictureValues = new HashMap<>();
+			pictureValues.put("patient", pictureDetails.getString("patient"));
+			String patient = pictureDetails.getString("patient");
+			String patientUsername = patient.substring(0, patient.indexOf(":") - 1);//we have email:name username so we want only email
+			pictureValues.put("patientUsername", patientUsername);
+			pictureValues.put("pictureName", pictureDetails.getString("pictureName"));
+			pictureValues.put("bodyPart", pictureDetails.getString("bodyPart"));
+			pictureValues.put("pictureType", pictureDetails.getString("pictureType"));
+			return pictureValues;
+		} catch (JSONException ex) {
+			throw new JsonParsingException(ex.getMessage());
+		}
 	}
 
 	/**
-	 * Gets the picture values ( but no data ) when technician edit picture
+	 * Decryptes request from the client and gets the picture values ( but no data ) when technician edit picture
 	 *
 	 * @param details JSONObject of details
 	 * @return map with picture details
+	 * @throws medicalpictures.model.exception.JsonParsingException
 	 */
-	public Map<String, String> getEditPictureValues(String details) {
-		JSONObject pictureDetails = new JSONObject();
-		Map<String, String> pictureValues = new HashMap<>();
-		pictureValues.put("pictureId", pictureDetails.getString("pictureId"));
-		pictureValues.put("bodyPart", pictureDetails.getString("bodyPart"));
-		pictureValues.put("pictureType", pictureDetails.getString("pictureType"));
-		return pictureValues;
+	public Map<String, String> getEditPictureValues(String details) throws JsonParsingException {
+		try {
+			JSONObject pictureDetails = new JSONObject();
+			Map<String, String> pictureValues = new HashMap<>();
+			pictureValues.put("pictureId", pictureDetails.getString("pictureId"));
+			pictureValues.put("bodyPart", pictureDetails.getString("bodyPart"));
+			pictureValues.put("pictureType", pictureDetails.getString("pictureType"));
+			return pictureValues;
+		} catch (JSONException ex) {
+			throw new JsonParsingException(ex.getMessage());
+		}
 	}
 }

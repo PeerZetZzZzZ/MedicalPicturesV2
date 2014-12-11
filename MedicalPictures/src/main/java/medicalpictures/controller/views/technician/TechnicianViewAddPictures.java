@@ -13,6 +13,7 @@ import medicalpictures.model.common.MedicalLogger;
 import medicalpictures.model.common.jsonfactory.PictureJsonFactory;
 import medicalpictures.model.dao.PictureDAO;
 import medicalpictures.model.enums.AccountType;
+import medicalpictures.model.exception.JsonParsingException;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;
 import medicalpictures.model.security.UserSecurityManager;
@@ -88,6 +89,8 @@ public class TechnicianViewAddPictures extends HttpServlet {
 		} catch (NoLoggedUserExistsHere ex) {
 			logger.logError("User is not logged - can't access /TechnicianViewAddPictures!", TechnicianViewAddPictures.class, ex);
 			request.getRequestDispatcher("/WEB-INF/common/NotAuthorizedView.html").forward(request, response);
+		} catch (JsonParsingException ex) {
+			logger.logError("/TechnicianViewAddPictures: input json parse exception!Can't add picture! ", TechnicianViewAddPictures.class, ex);
 		}
 
 	}

@@ -61,7 +61,7 @@ public class UserJsonFactory {
 	}
 
 	/**
-	 * Reads the user value which will be added to database from json.
+	 * Decryptes request from the client and reads the user value which will be added to database from json.
 	 *
 	 * @param userData
 	 * @return Map with user values
@@ -91,21 +91,26 @@ public class UserJsonFactory {
 	}
 
 	/**
-	 * Returns the list of users to delete in such form Map<username,accountType> for example there can be object such as:
+	 * Decryptes request from the client and returns the list of users to delete in such form Map<username,accountType> for example there can be object such as:
 	 * <user@gmail.com,ADMIN>
 	 *
 	 * @param usersToRemove
 	 * @return
+	 * @throws medicalpictures.model.exception.JsonParsingException
 	 */
-	public Map<String, String> readUsersToDelete(String usersToRemove) {
-		JSONObject users = new JSONObject(usersToRemove);
-		JSONArray usersToDelete = users.getJSONArray("usernames");
-		Map<String, String> usersToDeleteList = new HashMap<>();
-		for (int i = 0; i < usersToDelete.length(); i++) {
-			JSONObject singleUserToDelete = (JSONObject) usersToDelete.get(i);
-			usersToDeleteList.put(singleUserToDelete.getString("username"), singleUserToDelete.getString("accountType"));
+	public Map<String, String> readUsersToDelete(String usersToRemove) throws JsonParsingException {
+		try {
+			JSONObject users = new JSONObject(usersToRemove);
+			JSONArray usersToDelete = users.getJSONArray("usernames");
+			Map<String, String> usersToDeleteList = new HashMap<>();
+			for (int i = 0; i < usersToDelete.length(); i++) {
+				JSONObject singleUserToDelete = (JSONObject) usersToDelete.get(i);
+				usersToDeleteList.put(singleUserToDelete.getString("username"), singleUserToDelete.getString("accountType"));
+			}
+			return usersToDeleteList;
+		} catch (JSONException ex) {
+			throw new JsonParsingException(ex.getMessage());
 		}
-		return usersToDeleteList;
 	}
 
 	/**
@@ -113,13 +118,18 @@ public class UserJsonFactory {
 	 *
 	 * @param userToLoginDetails
 	 * @return
+	 * @throws medicalpictures.model.exception.JsonParsingException
 	 */
-	public Map<String, String> getUserLoginDetails(String userToLoginDetails) {
-		Map<String, String> detailsMap = new HashMap<>();
-		JSONObject loginDetails = new JSONObject(userToLoginDetails);
-		detailsMap.put("username", loginDetails.getString("username"));
-		detailsMap.put("password", loginDetails.getString("password"));
-		return detailsMap;
+	public Map<String, String> getUserLoginDetails(String userToLoginDetails) throws JsonParsingException {
+		try {
+			Map<String, String> detailsMap = new HashMap<>();
+			JSONObject loginDetails = new JSONObject(userToLoginDetails);
+			detailsMap.put("username", loginDetails.getString("username"));
+			detailsMap.put("password", loginDetails.getString("password"));
+			return detailsMap;
+		} catch (JSONException ex) {
+			throw new JsonParsingException(ex.getMessage());
+		}
 	}
 
 	/**

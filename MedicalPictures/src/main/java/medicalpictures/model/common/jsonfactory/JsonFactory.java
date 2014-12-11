@@ -1,29 +1,12 @@
 package medicalpictures.model.common.jsonfactory;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.json.JsonException;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.DatatypeConverter;
 import medicalpictures.model.common.MedicalLogger;
 import medicalpictures.model.common.ResultCodes;
-import medicalpictures.model.exception.JsonParsingException;
-import medicalpictures.model.orm.entity.Picture;
-import medicalpictures.model.orm.entity.PictureDescription;
-import medicalpictures.model.orm.entity.Technician;
-import org.apache.commons.io.IOUtils;
-import org.apache.shiro.SecurityUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -89,17 +72,6 @@ public class JsonFactory {
 		JSONObject response = new JSONObject();
 		response.put("errorCode", ResultCodes.USER_IS_NOT_LOGGED);
 		return response.toString();
-	}
-
-	/**
-	 * Returns the information that the inserting/updating item in db failed
-	 *
-	 * @return
-	 */
-	public String insertToDbFailed() {
-		JSONObject json = new JSONObject();
-		json.put("error", "insertToDbFailed");
-		return json.toString();
 	}
 
 	/**

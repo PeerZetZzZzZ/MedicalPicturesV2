@@ -87,6 +87,9 @@ MedicalPictures.controller('LoginController', function ($scope, $http, $window, 
 							});
 							break;
 						case -3:	//json parse
+							$translate('INPUT_JSON_PARSE_PROBLEM').then(function (translation) {
+								showAlertMessageError(translation, data.username);
+							});
 							break;
 					}
 				}
@@ -175,7 +178,20 @@ MedicalPictures.controller('AdminViewManageUsersController', function ($scope, $
 			});
 	$http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getAllUsernames').
 			success(function (data, status, headers, config) {
-				$scope.usernamesList = data.usernames;
+				switch (data.errorCode) {
+					case 0:
+						$scope.usernamesList = data.usernames;
+						break;
+					case -1://unauthorized
+						break;
+					case -4: //not logged
+						break;
+					case -3:	//json parse
+						$translate('INPUT_JSON_PARSE_PROBLEM').then(function (translation) {
+							showAlertMessageError(translation, data.username);
+						});
+						break;
+				}
 			}).
 			error(function (data, status, headers, config) {
 				$translate('INTERNAL_PROBLEM_OCCURRED').then(function (translation) {
@@ -208,6 +224,9 @@ MedicalPictures.controller('AdminViewManageUsersController', function ($scope, $
 						case -5: //user doesn't exist
 							break;
 						case -3:	//json parse
+							$translate('INPUT_JSON_PARSE_PROBLEM').then(function (translation) {
+								showAlertMessageError(translation, data.username);
+							});
 							break;
 					}
 
@@ -284,6 +303,9 @@ MedicalPictures.controller('AdminViewManageUsersController', function ($scope, $
 				case -4: //not logged
 					break;
 				case -3: //json parse
+					$translate('INPUT_JSON_PARSE_PROBLEM').then(function (translation) {
+						showAlertMessageError(translation, data.username);
+					});
 					break;
 			}
 		}).error(function (data, status, headers, config) {
@@ -345,6 +367,9 @@ MedicalPictures.controller('AdminViewManageUsersController', function ($scope, $
 										case -4: //not logged
 											break;
 										case -3:	//json parse
+											$translate('INPUT_JSON_PARSE_PROBLEM').then(function (translation) {
+												showAlertMessageError(translation, data.username);
+											});
 											break;
 
 									}
@@ -366,6 +391,9 @@ MedicalPictures.controller('AdminViewManageUsersController', function ($scope, $
 					case -4: //not logged
 						break;
 					case -3://json parse
+						$translate('INPUT_JSON_PARSE_PROBLEM').then(function (translation) {
+							showAlertMessageError(translation, data.username);
+						});
 						break;
 
 				}
@@ -447,6 +475,9 @@ MedicalPictures.controller('AdminViewAddUserController', function ($scope, $tran
 					case -4: //not logged
 						break;
 					case -3://json parse
+						$translate('INPUT_JSON_PARSE_PROBLEM').then(function (translation) {
+							showAlertMessageError(translation, data.username);
+						});
 						break;
 				}
 
@@ -488,6 +519,9 @@ MedicalPictures.controller('AdminViewManagePictureTypesController', function ($s
 					case -4: //not logged
 						break;
 					case -3://json parse
+						$translate('INPUT_JSON_PARSE_PROBLEM').then(function (translation) {
+							showAlertMessageError(translation, data.username);
+						});
 						break;
 				}
 			}).error(function (data, status, headers, config) {
@@ -541,6 +575,9 @@ MedicalPictures.controller('AdminViewManagePictureTypesController', function ($s
 				case -4: //not logged
 					break;
 				case -3://json parse
+					$translate('INPUT_JSON_PARSE_PROBLEM').then(function (translation) {
+						showAlertMessageError(translation, data.username);
+					});
 					break;
 			}
 		}).error(function (data, status, headers, config) {
@@ -619,6 +656,9 @@ MedicalPictures.controller('AdminViewManageBodyPartsController', function ($scop
 				case -4: //not logged
 					break;
 				case -3://json parse
+					$translate('INPUT_JSON_PARSE_PROBLEM').then(function (translation) {
+						showAlertMessageError(translation, data.username);
+					});
 					break;
 				case -99:
 					$translate('BODY_PART_ADDING_FAILED').then(function (translation) {
@@ -940,6 +980,9 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function ($
 					case -4: //not logged
 						break;
 					case -3:
+						$translate('INPUT_JSON_PARSE_PROBLEM').then(function (translation) {
+							showAlertMessageError(translation, data.username);
+						});
 						break;
 					case -99:
 						break;
@@ -978,6 +1021,9 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function ($
 				case -4: //not logged
 					break;
 				case -3: //json parse
+					$translate('INPUT_JSON_PARSE_PROBLEM').then(function (translation) {
+						showAlertMessageError(translation, data.username);
+					});
 					break;
 				case -99: //internal server error
 					break;
@@ -1147,6 +1193,9 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function ($
 				case -99: //internal server error
 					break;
 				case -3:	//json parse
+					$translate('INPUT_JSON_PARSE_PROBLEM').then(function (translation) {
+						showAlertMessageError(translation, data.username);
+					});
 					break;
 			}
 		}).error(function (data, status, header, config) {
@@ -1227,6 +1276,11 @@ MedicalPictures.controller('PatientViewController', function ($scope, $http, Med
 											case -99: //internal server error
 												break;
 											case -3:	//json parse
+												$translate('INPUT_JSON_PARSE_PROBLEM').then(function (translation) {
+													showAlertMessageError(translation, data.username);
+												});
+												break;
+											case -1000://user cannot access not his content
 												break;
 										}
 									}).
@@ -1243,6 +1297,9 @@ MedicalPictures.controller('PatientViewController', function ($scope, $http, Med
 						case -99: //internal server error
 							break;
 						case -3:	//json parse
+							$translate('INPUT_JSON_PARSE_PROBLEM').then(function (translation) {
+								showAlertMessageError(translation, data.username);
+							});
 							break;
 					}
 				}).
@@ -1302,6 +1359,9 @@ MedicalPictures.controller('UserSettingsController', function ($scope, $http, Me
 										case -5: //user doesn't exist
 											break;
 										case -3:	//json parse
+											$translate('INPUT_JSON_PARSE_PROBLEM').then(function (translation) {
+												showAlertMessageError(translation, data.username);
+											});
 											break;
 									}
 								}).
