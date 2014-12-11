@@ -131,6 +131,7 @@ public class UserJsonFactory {
 	public String getLoggedUser(String username) {
 		JSONObject user = new JSONObject();
 		user.put("username", username);
-		return user.toString();	
+		user.put("errorCode", ResultCodes.OPERATION_SUCCEED);
+		return user.toString();
 	}
 }

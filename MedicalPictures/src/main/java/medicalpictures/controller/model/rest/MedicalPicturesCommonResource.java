@@ -612,8 +612,8 @@ public class MedicalPicturesCommonResource {
 	public String addPictureType(String pictureTypeToAdd) {
 		try {
 			securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
-			String bodyPartString = pictureTypeJsonFactory.getPictureType(pictureTypeToAdd);
-			int result = pictureTypeDAO.addPictureType(bodyPartString);
+			String picturePartString = pictureTypeJsonFactory.getPictureType(pictureTypeToAdd);
+			int result = pictureTypeDAO.addPictureType(picturePartString);
 			medicalLogger.logInfo("Adding picture type response: " + result, MedicalPicturesCommonResource.class);
 			return jsonFactory.getOperationResponseByCode(result);
 		} catch (UserNotPermitted ex) {
