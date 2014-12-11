@@ -28,6 +28,9 @@
         .top-bar .right li {
         color:orange;
         }
+        .top-bar .name h1 a {
+          color: orange;
+        }
         .top-bar .right li b {
         color:yellow;
         }
@@ -35,10 +38,10 @@
         color:red;
         }
         td {
-        border-top: solid 1px #f00;
-        border-right: solid 1px #f00;
-        border-left: solid 1px #f00;
-        border-bottom: 1px solid  #f00; /* or whatever specific values you prefer */
+          border-top: solid 2px #F79F81;
+          border-right: solid 2px #F79F81;
+          border-left: solid 2px #F79F81;
+          border-bottom: 2px solid #F79F81;
         }
         .my-modal{
         position: relative !important;
@@ -47,6 +50,9 @@
              margin:auto;
              display:block;
         }
+        input.ng-invalid {
+          border: 2px solid red
+        }
     </style>
     </head>
     <body ng-controller="AdminViewManagePictureTypesController">
@@ -54,7 +60,7 @@
         <nav class="top-bar" data-topbar role="navigation">
             <ul class="title-area">
                 <li class="name">
-                    <h1>{{appName}}</h1>
+                  <h1><a href="/MedicalPictures/AdminViewManageUsers">{{appName}}</a></h1>
                 </li>
                 <li class="toggle-topbar menu-icon">
                     <a href="#">{{'MENU'| translate}}</a>
@@ -96,12 +102,13 @@
             <div class="large-1 columns"><br></div>
         </div>
         <br>
+        <form name="pictureForm">
         <div class="row">
           <div class="large-3 columns"><br></div>
             <div class="large-6 columns">
               <div class="row collapse postfix-round">
                   <div class="small-9 columns">
-                    <input type="text" ng-model="newPictureType" placeholder="{{'ADD_NEW_PICTURE_TYPE' | translate}}">
+                    <input type="text" ng-model="newPictureType"  name="newPictureType" required ng-maxlength="maxPictureTypeLength"  placeholder="{{'ADD_NEW_PICTURE_TYPE' | translate}}">
                   </div>
                   <div class="small-3 columns">
                     <a  ng-click="addPictureTypeClicked()" class="button postfix">{{'ADD'|translate}}</a>
@@ -123,6 +130,18 @@
             <div class="large-2 columns"><br></div>
         </div>
         <div class="row">
+          <div class="large-2 columns">
+            <br>
+          </div>
+          <div class="large-8 columns" align="center">
+            <p ng-show="pictureForm.newPictureType.$error.maxlength">{{'PICTURE_TYPE_TOO_LONG'| translate}}</p>
+          </div>
+          <div class="large-2 columns">
+            <br>
+          </div>
+        </div>
+      </form>
+        <div class="row">
             <div class="large-1 columns"><br></div>
             <div class="large-10 columns">
                 <div class="panel">
@@ -142,75 +161,6 @@
                 </div>
             </div>
             <div class="large-1 columns"><br></div>
-        </div>
-        <div id="myModal" class="reveal-modal" data-reveal>
-                            <div class="row">
-                                <div class="large-2 columns"><br></div>
-                                <div class="large-8 columns">
-                                    <h3><img src="./views/glyphicons/png/glyphicons_352_nameplate.png">
-                                    {{ 'MODIFY_USER' |translate}}</h3>
-                                </div>
-                                <div class="large-2 columns"><br></div>
-                            </div>
-                            <br>
-                            <form>
-                            <div class="row">
-                              <div class="large-6 columns">
-                                <label>{{'USERNAME_NAME' | translate}}</label>
-                                  <input type="email" placeholder="" ng-model="editingUsername"
-                                  required
-                                  readonly
-                                  ng-maxlength="maxUsernameLength"/>
-                              </div>
-                              <div class="large-6 columns">
-                                <label>{{'RESET_PASSWORD' |translate }}</label>
-                                    <div class="switch round large">
-                                          <input id="{{resetPasswordCheckbox}}" type="checkbox">
-                                          <label for="{{resetPasswordCheckbox}}"></label>
-                                    </div>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="large-6 columns">
-                                <label>{{'NAME' | translate}}</label>
-                                  <input type="text" placeholder="" ng-model="editingName"
-                                  required
-                                  ng-pattern="nameRegexpPattern"/>
-                              </div>
-                              <div class="large-6 columns">
-                                <label>{{'SURNAME' |translate }}</label>
-                                  <input type="text" placeholder="" ng-model="editingSurname"
-                                  required
-                                  ng-pattern="nameRegexpPattern"/>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="large-6 columns">
-                                <label>{{'ACCOUNT_TYPE' | translate }}</label>
-                                  <select ng-options="account for account in accountTypes" ng-model="editingSelectedAccountType" ng-init="selectedAccountType = accountTypes[0]">
-                                  </select>
-                              </div>
-                              <div class="large-6 columns">
-                                <label>{{'AGE' | translate }}</label>
-                                    <input type="number" placeholder="" ng-model="editingAge"
-                                    required
-                                    ng-min="minAge"
-                                    ng-max="maxAge"/>
-                              </div>
-                            </div>
-                            <div class="row">
-                                <div class="large-2 columns"><br></div>
-                                <div class="large-8 columns" align="center">
-                                  <input type="submit" id="submit"  ng-click="saveEditedUserClicked()" class="button" value="{{'UPDATE_USER'| translate}}"></div>
-                                <div class="large-2 columns"><br></div>
-                            </div>
-                          </form>
-                            <a class="close-reveal-modal">&#215;</a>
-
-
-
-
-
         </div>
         <script src="./views/js/vendor/jquery.js"></script>
         <script src="./views/js/foundation.min.js"></script>

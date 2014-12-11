@@ -1,91 +1,127 @@
 <html ng-app="MedicalPictures">
-    <head>
-        <link rel="stylesheet" href="./views/css/foundation.css">
-        <link rel="stylesheet" href="./views/css/normalize.css">
-        <script src="./views/js/sha512.js"></script>
-        <script src="./views/js/vendor/modernizr.js"></script>
-        <script src="./views/angular/angular.js"></script>
-        <script src="./views/angular/angular-translate.min.js"></script>
-        <script src="./views/angular/angular-file-upload.js"></script>
-        <script src="./views/angular/controllers/controllers.js"></script>
-        <script src="./views/angular/controllers/internationalization.js"></script>
-        <title>{{'LOGIN_VIEW_HEAD_NAME'| translate}}</title>
-        <meta content="" charset="UTF-8">
-        <style>
-            input.ng-invalid{
-                border:2px solid red
-            }
-            .panel {
-                overflow: scroll;
-                max-height : 400px;
-                }
-            .top-bar .name h1 a {
-                color:orange;
-            }
-            .top-bar .name h1  {
-                color:orange;
-            }
-        </style>
-    </head>
-    <body ng-controller="LoginController">
-        <br>
-        <nav class="top-bar" data-topbar role="navigation">
-            <ul class="title-area">
-                <li class="name">
-                    <h1>{{appName}}</h1>
-                </li>
-            </ul>
-        </nav>
-        <form name="loginForm">
-            <br>  <br>  <br>  <br>  <br>
-            <div class="row">
-                <div class="large-2 columns"><br></div>
-                <div class="large-8 columns" align="center"><h5>{{'PROVIDE_CREDENTIALS'| translate}}</h5></div>
-                <div class="large-2 columns"><br></div>
-            </div>
-            <div class="row">
-                <div class="large-2 columns"><br></div>
-                <div class="large-8 columns" align="center">
-                    <input type="email" name="username"  ng-model="username" placeholder="{{'USERNAME'| translate}}" required title="{{'INCORRECT_EMAIL'| translate}}">
-                </div>
-                <div class="large-2 columns"><br></div>
-            </div>
-            <div class="row">
-                <div class="large-2 columns"><br></div>
-                <div class="large-8 columns">
-                    <input type="password" name="password" ng-model="password" placeholder="{{'PASSWORD'| translate}}"
-                           required
-                           ng-minlength={{minPasswordLength}}
-                           ng-maxlength={{maxPasswordLength}}>
-                </div>
-                <div class="large-2 columns">
-                    <p ng-show="loginForm.password.$error.minlength" >{{'PASSWORD_TOO_SHORT '| translate}}</p>
-                    <p ng-show="loginForm.password.$error.maxlength" >{{'PASSWORD_TOO_LONG'| translate}}</p>
 
-                </div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="large-2 columns"><br></div>
-                <div class="large-8 columns" align="center">
-                    <div id="alertMessageDiv">
-                        <div data-alert class="alert-box alert round">
-                            <a href="#" class="close">&times;</a>
-                      </div>
-                    </div>
-                </div>
-                <div class="large-2 columns"><br></div>
-            </div>
-            <div class="row">
-                <div class="large-2 columns"><br></div>
-                <div class="large-8 columns" align="center"><input type="submit" id="submit"  ng-click="loginClicked()" class="button" value="{{'LOG_IN'| translate}}"></div>
-                <div class="large-2 columns"><br></div>
-            </div>
-        </form>
-        <script src="./views/js/vendor/jquery.js"></script>
-        <script src="./views/js/foundation.min.js"></script>
-        <script>
-            $(document).foundation();
-        </script>
-    </body>
+<head>
+  <link rel="stylesheet" href="./views/css/foundation.css">
+  <link rel="stylesheet" href="./views/css/normalize.css">
+  <script src="./views/js/vendor/modernizr.js"></script>
+  <script src="./views/angular/angular.js"></script>
+  <script src="./views/angular/angular-translate.min.js"></script>
+  <script src="./views/angular/angular-file-upload.js"></script>
+  <script src="./views/angular/controllers/controllers.js"></script>
+  <script src="./views/angular/controllers/internationalization.js"></script>
+  <title>{{'LOGIN_VIEW_HEAD_NAME'| translate}}</title>
+  <meta content="" charset="UTF-8">
+  <style>
+    input.ng-invalid {
+      border: 2px solid red
+    }
+    .panel {
+      overflow: scroll;
+      max-height: 400px;
+    }
+    .top-bar .name h1 a {
+      color: orange;
+    }
+    .top-bar .name h1 {
+      color: orange;
+    }
+  </style>
+</head>
+
+<body ng-controller="LoginController">
+  <br>
+  <nav class="top-bar" data-topbar role="navigation">
+    <ul class="title-area">
+      <li class="name">
+        <h1>{{appName}}</h1>
+      </li>
+    </ul>
+  </nav>
+  <form name="loginForm">
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns" align="center">
+        <h5>{{'PROVIDE_CREDENTIALS'| translate}}</h5>
+      </div>
+      <div class="large-2 columns">
+        <br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns" align="center">
+        <input type="email" name="username" ng-maxlength="maxUsernameLength" ng-model="username" placeholder="{{'USERNAME'| translate}}" required title="{{'INCORRECT_EMAIL'| translate}}">
+      </div>
+      <div class="large-2 columns">
+        <br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns">
+        <input type="password" name="password" ng-model="password" placeholder="{{'PASSWORD'| translate}}" required ng-minlength={{minPasswordLength}} ng-maxlength={{maxPasswordLength}}>
+      </div>
+      <div class="large-2 columns">
+        <br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns" align="center">
+        <p ng-show="loginForm.password.$error.minlength">{{'PASSWORD_TOO_SHORT '| translate}}</p>
+        <p ng-show="loginForm.password.$error.maxlength">{{'PASSWORD_TOO_LONG'| translate}}</p>
+        <p ng-show="loginForm.username.$error.maxlength">{{'USERNAME_TOO_LONG'| translate}}</p>
+      </div>
+      <div class="large-2 columns">
+        <br>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns" align="center">
+        <div id="alertMessageDiv">
+          <div data-alert class="alert-box alert round">
+            <a href="#" class="close">&times;</a>
+          </div>
+        </div>
+      </div>
+      <div class="large-2 columns">
+        <br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns" align="center">
+        <input type="submit" id="submit" ng-click="loginClicked()" class="button" value="{{'LOG_IN'| translate}}">
+      </div>
+      <div class="large-2 columns">
+        <br>
+      </div>
+    </div>
+  </form>
+  <script src="./views/js/vendor/jquery.js"></script>
+  <script src="./views/js/foundation.min.js"></script>
+  <script>
+    $(document).foundation();
+  </script>
+</body>
+
 </html>

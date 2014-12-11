@@ -22,7 +22,7 @@ public class PictureType implements Serializable {
     @GeneratedValue(generator = "UUID_GEN")
     private String id;
 
-    @Column(length = 100, unique = true)
+    @Column(length = 255, unique = true)
     private String pictureType;
 
     @OneToMany(mappedBy = "pictureType", fetch = FetchType.LAZY)

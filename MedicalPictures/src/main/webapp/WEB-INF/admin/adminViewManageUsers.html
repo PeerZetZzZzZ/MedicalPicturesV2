@@ -29,6 +29,9 @@
     .top-bar .name h1 {
       color: orange;
     }
+    .top-bar .name h1 a {
+      color: orange;
+    }
     .top-bar .right li {
       color: orange;
     }
@@ -39,10 +42,10 @@
       color: red;
     }
     td {
-      border-top: solid 1px #f00;
-      border-right: solid 1px #f00;
-      border-left: solid 1px #f00;
-      border-bottom: 1px solid #f00;
+      border-top: solid 2px #F79F81;
+      border-right: solid 2px #F79F81;
+      border-left: solid 2px #F79F81;
+      border-bottom: 2px solid #F79F81;
       /* or whatever specific values you prefer */
     }
     .my-modal {
@@ -60,7 +63,7 @@
   <nav class="top-bar" data-topbar role="navigation">
     <ul class="title-area">
       <li class="name">
-        <h1>{{appName}}</h1>
+        <h1><a href="/MedicalPictures/AdminViewManageUsers">{{appName}}</a></h1>
       </li>
       <li class="toggle-topbar menu-icon">
         <a href="#">{{'MENU'| translate}}</a>
@@ -151,6 +154,7 @@
       <br>
     </div>
   </div>
+  <br>
   <div class="row">
     <div class="large-1 columns">
       <br>
@@ -182,7 +186,7 @@
               </td>
               <td><a data-reveal-id="myModal" ng-click="editUserClicked(user.username)" class="button tiny">{{'EDIT' |translate}}</a> </td>
               <td>
-                <fieldset class="switch">
+                <fieldset class="switch" ng-show="user.username!=loggedUsername">
                   <input id="{{user.username}}" type="checkbox" />
                   <label for="{{user.username}}"></label>
                 </fieldset>
@@ -235,7 +239,7 @@
           <input type="text" placeholder="" ng-model="editingSurname" required ng-pattern="nameRegexpPattern" />
         </div>
       </div>
-      <div class="row">
+      <div class="row" ng-show="editingUsername != loggedUsername">
         <div class="large-6 columns">
           <label>{{'ACCOUNT_TYPE' | translate }}</label>
           <select ng-options="account for account in accountTypes" ng-model="editingSelectedAccountType" ng-init="selectedAccountType = accountTypes[0]">

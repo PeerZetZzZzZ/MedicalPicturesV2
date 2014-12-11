@@ -1,221 +1,196 @@
 <html ng-app="MedicalPictures">
-    <head>
-        <link rel="stylesheet" href="./views/css/foundation.css">
-        <link rel="stylesheet" href="./views/css/normalize.css">
-              <script src="./views/js/vendor/modernizr.js"></script>
-              <script src="./views/angular/angular.js"></script>
-              <script src="./views/angular/angular-translate.min.js"></script>
-              <script src="./views/angular/angular-file-upload.js"></script>
-              <script src="./views/angular/controllers/controllers.js"></script>
-              <script src="./views/angular/controllers/internationalization.js"></script>
-    <title>{{'ADMIN_VIEW_HEAD_NAME'| translate}}</title>
-    <meta content="" charset="UTF-8">
-    <style type="text/css">
-        .panel {
-            overflow: scroll;
-            max-height : 400px;
-        }
-        .panel table{
-             width: 100%;
-        }
-        .panel {
-          overflow: scroll;
-        max-height : 400px;
-        }
-        .top-bar .name h1 {
-        color:orange;
-        }
-        .top-bar .right li {
-        color:orange;
-        }
-        .top-bar .right li b {
-        color:yellow;
-        }
-        .icon-bar .item b{
-        color:red;
-        }
-        td {
-        border-top: solid 1px #f00;
-        border-right: solid 1px #f00;
-        border-left: solid 1px #f00;
-        border-bottom: 1px solid  #f00; /* or whatever specific values you prefer */
-        }
-        .my-modal{
-        position: relative !important;
-        }
-        td a{
-             margin:auto;
-             display:block;
-        }
-    </style>
-    </head>
-    <body ng-controller="AdminViewManageBodyPartsController">
+
+<head>
+  <link rel="stylesheet" href="./views/css/foundation.css">
+  <link rel="stylesheet" href="./views/css/normalize.css">
+  <script src="./views/js/vendor/modernizr.js"></script>
+  <script src="./views/angular/angular.js"></script>
+  <script src="./views/angular/angular-translate.min.js"></script>
+  <script src="./views/angular/angular-file-upload.js"></script>
+  <script src="./views/angular/controllers/controllers.js"></script>
+  <script src="./views/angular/controllers/internationalization.js"></script>
+  <title>{{'ADMIN_VIEW_HEAD_NAME'| translate}}</title>
+  <meta content="" charset="UTF-8">
+  <style type="text/css">
+    .panel {
+      overflow: scroll;
+      max-height: 400px;
+    }
+    .panel table {
+      width: 100%;
+    }
+    .panel {
+      overflow: scroll;
+      max-height: 400px;
+    }
+    .top-bar .name h1 {
+      color: orange;
+    }
+    .top-bar .right li {
+      color: orange;
+    }
+    .top-bar .name h1 a {
+      color: orange;
+    }
+    .top-bar .right li b {
+      color: yellow;
+    }
+    .icon-bar .item b {
+      color: red;
+    }
+    input.ng-invalid {
+      border: 2px solid red
+    }
+    td {
+      border-top: solid 2px #F79F81;
+      border-right: solid 2px #F79F81;
+      border-left: solid 2px #F79F81;
+      border-bottom: 2px solid #F79F81;
+      /* or whatever specific values you prefer */
+    }
+    .my-modal {
+      position: relative !important;
+    }
+    td a {
+      margin: auto;
+      display: block;
+    }
+  </style>
+</head>
+
+<body ng-controller="AdminViewManageBodyPartsController">
+  <br>
+  <nav class="top-bar" data-topbar role="navigation">
+    <ul class="title-area">
+      <li class="name">
+        <h1><a href="/MedicalPictures/AdminViewManageUsers">{{appName}}</a></h1>
+      </li>
+      <li class="toggle-topbar menu-icon">
+        <a href="#">{{'MENU'| translate}}</a>
+      </li>
+    </ul>
+    <section class="top-bar-section">
+      <ul class="right">
+        <li class="name">
+          <h1> {{'LOGGED_AS'| translate}} <b> {{loggedUsername}}</b></h1>
+        </li>
+        <li>
+          <a href="#">{{'SETTINGS'| translate}}</a>
+        </li>
+        <li class="active">
+          <a href="/MedicalPictures/Logout">{{'LOGOUT'| translate}}</a>
+        </li>
+      </ul>
+    </section>
+  </nav>
+  <br>
+  <div class="row">
+    <div class="large-1 columns">
+      <br>
+    </div>
+    <div class="large-10 columns">
+      <div class="icon-bar three-up">
+        <a class="item" href="/MedicalPictures/AdminViewManageUsers">
+          <img src="./views/glyphicons/png/glyphicons_024_parents.png">
+          <label>{{'MANAGE_USERS'| translate}}</label>
+        </a>
+        <a class="item" href="/MedicalPictures/AdminViewManageBodyParts">
+          <img src="./views/glyphicons/png/glyphicons_012_heart.png">
+          <label><b>{{'MANAGE_BODY_PARTS'| translate}}</b>
+          </label>
+        </a>
+        <a class="item" href="/MedicalPictures/AdminViewManagePictureTypes">
+          <img src="./views/glyphicons/png/glyphicons_047_camera_small.png">
+          <label>{{'MANAGE_PICTURE_TYPES'| translate}}</label>
+        </a>
+      </div>
+    </div>
+    <div class="large-1 columns">
+      <br>
+    </div>
+  </div>
+  <br>
+  <form name="bodyForm">
+    <div class="row">
+      <div class="large-3 columns">
         <br>
-        <nav class="top-bar" data-topbar role="navigation">
-            <ul class="title-area">
-                <li class="name">
-                    <h1>{{appName}}</h1>
-                </li>
-                <li class="toggle-topbar menu-icon">
-                    <a href="#">{{'MENU'| translate}}</a>
-                </li>
-            </ul>
-            <section class="top-bar-section">
-                <ul class="right">
-                    <li class = "name">
-                        <h1> {{'LOGGED_AS'| translate}} <b> {{loggedUsername}}</b></h1>
-                    </li>
-                    <li>
-                        <a href="#">{{'SETTINGS'| translate}}</a>
-                    </li>
-                    <li class="active">
-                        <a href="/MedicalPictures/Logout">{{'LOGOUT'| translate}}</a>
-                    </li>
-                </ul>
-            </section>
-        </nav>
+      </div>
+      <div class="large-6 columns">
+        <div class="row collapse postfix-round">
+          <div class="small-9 columns">
+            <input type="text" name="newBodyPart" ng-model="newBodyPart"  required ng-maxlength="maxBodyPartLength"   placeholder="{{'ADD_NEW_BODY_PART' | translate}}">
+          </div>
+          <div class="small-3 columns">
+            <a ng-click="addBodyPartClicked()" class="button postfix">{{'ADD'|translate}}</a>
+          </div>
+        </div>
+      </div>
+      <div class="large-3 columns">
         <br>
-        <div class="row">
-            <div class="large-1 columns"><br></div>
-            <div class="large-10 columns">
-                <div class="icon-bar three-up">
-                    <a class="item" href="/MedicalPictures/AdminViewManageUsers">
-                        <img src="./views/glyphicons/png/glyphicons_024_parents.png" >
-                        <label>{{'MANAGE_USERS'| translate}}</label>
-                    </a>
-                    <a class="item" href="/MedicalPictures/AdminViewManageBodyParts">
-                        <img src="./views/glyphicons/png/glyphicons_012_heart.png" >
-                        <label><b>{{'MANAGE_BODY_PARTS'| translate}}</b></label>
-                    </a>
-                    <a class="item" href="/MedicalPictures/AdminViewManagePictureTypes">
-                        <img src="./views/glyphicons/png/glyphicons_047_camera_small.png" >
-                        <label>{{'MANAGE_PICTURE_TYPES'| translate}}</label>
-                    </a>
-                </div>
-            </div>
-            <div class="large-1 columns"><br></div>
-        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="large-2 columns">
         <br>
-        <div class="row">
-          <div class="large-3 columns"><br></div>
-            <div class="large-6 columns">
-              <div class="row collapse postfix-round">
-                  <div class="small-9 columns">
-                    <input type="text" ng-model="newBodyPart" placeholder="{{'ADD_NEW_BODY_PART' | translate}}">
-                  </div>
-                  <div class="small-3 columns">
-                    <a  ng-click="addBodyPartClicked()" class="button postfix">{{'ADD'|translate}}</a>
-                  </div>
-                </div>
-            </div>
-          <div class="large-3 columns"><br></div>
+      </div>
+      <div class="large-8 columns" align="center">
+        <div id="alertMessageDiv">
+          <div data-alert class="alert-box success radius">
+            <a href="#" class="close">&times;</a>
+          </div>
         </div>
+      </div>
+      <div class="large-2 columns">
         <br>
-        <div class="row">
-            <div class="large-2 columns"><br></div>
-            <div class="large-8 columns" align="center">
-                <div id="alertMessageDiv">
-                    <div data-alert class="alert-box success radius" >
-                        <a href="#" class="close">&times;</a>
-                  </div>
-                </div>
-            </div>
-            <div class="large-2 columns"><br></div>
-        </div>
-        <div class="row">
-            <div class="large-1 columns"><br></div>
-            <div class="large-10 columns">
-                <div class="panel">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th><h4 align="center">{{'BODY_PARTS'| translate}}</h4></th>
-                            </tr>
-                        </thead>
-                        <tbody >
-                                <tr  ng-repeat="bodyPart in bodyPartsList">
-                                    <td><b><h5 align="center">{{bodyPart}}<h5></b></td>
-                                  <hr>
-                                </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="large-1 columns"><br></div>
-        </div>
-        <div id="myModal" class="reveal-modal" data-reveal>
-                            <div class="row">
-                                <div class="large-2 columns"><br></div>
-                                <div class="large-8 columns">
-                                    <h3><img src="./views/glyphicons/png/glyphicons_352_nameplate.png">
-                                    {{ 'MODIFY_USER' |translate}}</h3>
-                                </div>
-                                <div class="large-2 columns"><br></div>
-                            </div>
-                            <br>
-                            <form>
-                            <div class="row">
-                              <div class="large-6 columns">
-                                <label>{{'USERNAME_NAME' | translate}}</label>
-                                  <input type="email" placeholder="" ng-model="editingUsername"
-                                  required
-                                  readonly
-                                  ng-maxlength="maxUsernameLength"/>
-                              </div>
-                              <div class="large-6 columns">
-                                <label>{{'RESET_PASSWORD' |translate }}</label>
-                                    <div class="switch round large">
-                                          <input id="{{resetPasswordCheckbox}}" type="checkbox">
-                                          <label for="{{resetPasswordCheckbox}}"></label>
-                                    </div>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="large-6 columns">
-                                <label>{{'NAME' | translate}}</label>
-                                  <input type="text" placeholder="" ng-model="editingName"
-                                  required
-                                  ng-pattern="nameRegexpPattern"/>
-                              </div>
-                              <div class="large-6 columns">
-                                <label>{{'SURNAME' |translate }}</label>
-                                  <input type="text" placeholder="" ng-model="editingSurname"
-                                  required
-                                  ng-pattern="nameRegexpPattern"/>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="large-6 columns">
-                                <label>{{'ACCOUNT_TYPE' | translate }}</label>
-                                  <select ng-options="account for account in accountTypes" ng-model="editingSelectedAccountType" ng-init="selectedAccountType = accountTypes[0]">
-                                  </select>
-                              </div>
-                              <div class="large-6 columns">
-                                <label>{{'AGE' | translate }}</label>
-                                    <input type="number" placeholder="" ng-model="editingAge"
-                                    required
-                                    ng-min="minAge"
-                                    ng-max="maxAge"/>
-                              </div>
-                            </div>
-                            <div class="row">
-                                <div class="large-2 columns"><br></div>
-                                <div class="large-8 columns" align="center">
-                                  <input type="submit" id="submit"  ng-click="saveEditedUserClicked()" class="button" value="{{'UPDATE_USER'| translate}}"></div>
-                                <div class="large-2 columns"><br></div>
-                            </div>
-                          </form>
-                            <a class="close-reveal-modal">&#215;</a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns" align="center">
+        <p ng-show="bodyForm.newBodyPart.$error.maxlength">{{'BODY_PART_TOO_LONG'| translate}}</p>
+      </div>
+      <div class="large-2 columns">
+        <br>
+      </div>
+    </div>
+  </form>
+  <div class="row">
+    <div class="large-1 columns">
+      <br>
+    </div>
+    <div class="large-10 columns">
+      <div class="panel">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <h4 align="center">{{'BODY_PARTS'| translate}}</h4>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="bodyPart in bodyPartsList">
+              <td><b><h5 align="center">{{bodyPart}}<h5></b>
+              </td>
+              <hr>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="large-1 columns">
+      <br>
+    </div>
+  </div>
 
+  <script src="./views/js/vendor/jquery.js"></script>
+  <script src="./views/js/foundation.min.js"></script>
+  <script>
+    $(document).foundation();
+  </script>
+</body>
 
-
-
-
-        </div>
-        <script src="./views/js/vendor/jquery.js"></script>
-        <script src="./views/js/foundation.min.js"></script>
-        <script>
-            $(document).foundation();
-        </script>
-    </body>
 </html>
