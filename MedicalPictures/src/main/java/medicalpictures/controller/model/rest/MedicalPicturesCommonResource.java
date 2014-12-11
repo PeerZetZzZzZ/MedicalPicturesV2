@@ -582,7 +582,7 @@ public class MedicalPicturesCommonResource {
 			medicalLogger.logError("User is not logged - can't access /editUser !", MedicalPicturesCommonResource.class, ex);
 			return jsonFactory.getOperationResponseByCode(ResultCodes.USER_IS_NOT_LOGGED);
 		} catch (JsonParsingException ex) {
-			medicalLogger.logError("addNewUser: Parsing input json problem: " + userToEdit, MedicalPicturesCommonResource.class, ex);
+			medicalLogger.logError("editUser: Parsing input json problem: " + userToEdit, MedicalPicturesCommonResource.class, ex);
 			return jsonFactory.getOperationResponseByCode(ResultCodes.INPUT_JSON_PARSE_ERROR);
 		}
 	}
@@ -628,20 +628,11 @@ public class MedicalPicturesCommonResource {
 	@POST
 	@Path("loginUser")
 	@Produces("application/json")
-	public String loginUser(String pictureTypeToAdd) {
-		try {
-			securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
-			Map<String, String> userDetails = userJsonFactory.getUserLoginDetails(pictureTypeToAdd);
-			int result = securityManager.loginUser(userDetails);
-			medicalLogger.logInfo("Login user response: " + result, MedicalPicturesCommonResource.class);
-			return jsonFactory.getOperationResponseByCode(result);
-		} catch (UserNotPermitted ex) {
-			medicalLogger.logError("User not permitted to access /loginUser !", MedicalPicturesCommonResource.class, ex);
-			return jsonFactory.getOperationResponseByCode(ResultCodes.USER_UNAOTHRIZED);
-		} catch (NoLoggedUserExistsHere ex) {
-			medicalLogger.logError("User is not logged - can't access /loginUser !", MedicalPicturesCommonResource.class, ex);
-			return jsonFactory.getOperationResponseByCode(ResultCodes.USER_IS_NOT_LOGGED);
-		}
+	public String loginUser(String userToLogin) {
+		Map<String, String> userDetails = userJsonFactory.getUserLoginDetails(userToLogin);
+		int result = securityManager.loginUser(userDetails);
+		medicalLogger.logInfo("Login user response: " + result, MedicalPicturesCommonResource.class);
+		return jsonFactory.getOperationResponseByCode(result);
 	}
 
 }

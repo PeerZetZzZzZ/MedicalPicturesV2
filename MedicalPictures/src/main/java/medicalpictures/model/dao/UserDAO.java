@@ -244,69 +244,74 @@ public class UserDAO {
 	public Map<String, String> getUserDetails(String username) throws UserDoesntExistException {
 		Map<String, String> userDetails = new HashMap<>();
 		User user = findUser(username);
-		String userAccountType = user.getAccountType();
-		String name = "";
-		String surname = "";
-		int age = 0;
-		switch (userAccountType) {
-			case "ADMIN": {
-				Admin admin = findAdmin(username);
-				if (admin != null) {
-					name = admin.getName();
-					surname = admin.getSurname();
-					age = admin.getAge();
-				} else {
-					logger.logWarning("Coudln't get user details '" + username + "' because user doesn't exist!", UserDAO.class);
-					throw new UserDoesntExistException("Coudln't get user details '" + username + "' because user doesn't exist!");
+		if (user != null) {
+			String userAccountType = user.getAccountType();
+			String name = "";
+			String surname = "";
+			int age = 0;
+			switch (userAccountType) {
+				case "ADMIN": {
+					Admin admin = findAdmin(username);
+					if (admin != null) {
+						name = admin.getName();
+						surname = admin.getSurname();
+						age = admin.getAge();
+					} else {
+						logger.logWarning("Coudln't get user details '" + username + "' because user doesn't exist!", UserDAO.class);
+						throw new UserDoesntExistException("Coudln't get user details '" + username + "' because user doesn't exist!");
+					}
+					break;
 				}
-				break;
-			}
-			case "DOCTOR": {
-				Doctor doctor = findDoctor(username);
-				if (doctor != null) {
-					name = doctor.getName();
-					surname = doctor.getSurname();
-					age = doctor.getAge();
-					String specialization = doctor.getSpecialization();
-					userDetails.put("specialization", String.valueOf(specialization));//it's special case when we do it
-				} else {
-					logger.logWarning("Coudln't get user details '" + username + "' because user doesn't exist!", UserDAO.class);
-					throw new UserDoesntExistException("Coudln't get user details '" + username + "' because user doesn't exist!");
+				case "DOCTOR": {
+					Doctor doctor = findDoctor(username);
+					if (doctor != null) {
+						name = doctor.getName();
+						surname = doctor.getSurname();
+						age = doctor.getAge();
+						String specialization = doctor.getSpecialization();
+						userDetails.put("specialization", String.valueOf(specialization));//it's special case when we do it
+					} else {
+						logger.logWarning("Coudln't get user details '" + username + "' because user doesn't exist!", UserDAO.class);
+						throw new UserDoesntExistException("Coudln't get user details '" + username + "' because user doesn't exist!");
+					}
+					break;
 				}
-				break;
-			}
-			case "PATIENT": {
-				Patient patient = findPatient(username);
-				if (patient != null) {
-					name = patient.getName();
-					surname = patient.getSurname();
-					age = patient.getAge();
-				} else {
-					logger.logWarning("Coudln't get user details '" + username + "' because user doesn't exist!", UserDAO.class);
-					throw new UserDoesntExistException("Coudln't get user details '" + username + "' because user doesn't exist!");
+				case "PATIENT": {
+					Patient patient = findPatient(username);
+					if (patient != null) {
+						name = patient.getName();
+						surname = patient.getSurname();
+						age = patient.getAge();
+					} else {
+						logger.logWarning("Coudln't get user details '" + username + "' because user doesn't exist!", UserDAO.class);
+						throw new UserDoesntExistException("Coudln't get user details '" + username + "' because user doesn't exist!");
+					}
+					break;
 				}
-				break;
-			}
-			case "TECHNICIAN": {
-				Technician technician = findTechnician(username);
-				if (technician != null) {
-					name = technician.getName();
-					surname = technician.getSurname();
-					age = technician.getAge();
-				} else {
-					logger.logWarning("Coudln't get user details '" + username + "' because user doesn't exist!", UserDAO.class);
-					throw new UserDoesntExistException("Coudln't get user details '" + username + "' because user doesn't exist!");
+				case "TECHNICIAN": {
+					Technician technician = findTechnician(username);
+					if (technician != null) {
+						name = technician.getName();
+						surname = technician.getSurname();
+						age = technician.getAge();
+					} else {
+						logger.logWarning("Coudln't get user details '" + username + "' because user doesn't exist!", UserDAO.class);
+						throw new UserDoesntExistException("Coudln't get user details '" + username + "' because user doesn't exist!");
+					}
+					break;
 				}
-				break;
 			}
+			userDetails.put("username", username);
+			userDetails.put("name", name);
+			userDetails.put("surname", surname);
+			userDetails.put("age", String.valueOf(age));
+			userDetails.put("accountType", userAccountType);
+			logger.logInfo("Successfuly found user details for user: " + username, UserDAO.class);
+			return userDetails;
+		} else {
+			logger.logWarning("Coudln't get user details '" + username + "' because user doesn't exist in Users!", UserDAO.class);
+			throw new UserDoesntExistException("Coudln't get user details '" + username + "' because user doesn't exist!");
 		}
-		userDetails.put("username", username);
-		userDetails.put("name", name);
-		userDetails.put("surname", surname);
-		userDetails.put("age", String.valueOf(age));
-		userDetails.put("accountType", userAccountType);
-		logger.logInfo("Successfuly found user details for user: " + username, UserDAO.class);
-		return userDetails;
 	}
 
 	/**

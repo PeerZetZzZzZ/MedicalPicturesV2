@@ -67,7 +67,7 @@ public class UserSecurityManager {
 				return ResultCodes.OPERATION_SUCCEED;
 			} catch (AuthenticationException ex) {
 				logger.logWarning("Login failed for username '" + username + "'.Authentication failed!", UserSecurityManager.class);
-				return ResultCodes.USER_ALREADY_LOGGED;
+				return ResultCodes.USER_UNAOTHRIZED;
 			}
 		} else {
 			logger.logWarning("Login failed for username " + username + ". User is already logged", UserSecurityManager.class);
