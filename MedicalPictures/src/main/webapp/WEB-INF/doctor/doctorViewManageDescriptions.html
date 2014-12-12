@@ -44,6 +44,9 @@
     .icon-bar .item b {
       color: red;
     }
+    .top-bar .name h1 a {
+      color: orange;
+    }
     td {
       border-top: solid 1px #f00;
       border-right: solid 1px #f00;
@@ -66,7 +69,7 @@
   <nav class="top-bar" data-topbar role="navigation">
     <ul class="title-area">
       <li class="name">
-        <h1>{{appName}}</h1>
+        <h1><a href="/MedicalPictures/DoctorViewManageDescriptions">{{appName}}</a></h1>
       </li>
       <li class="toggle-topbar menu-icon">
         <a href="#">{{'MENU'| translate}}</a>
@@ -212,8 +215,8 @@
                       <ul class="breadcrumbs"  ng-show="selectedPicture.definedPictureDescriptionId != undefined" >
                         <li><a ng-click="selectedPicture.definedPictureDescriptionId=undefined">{{'REMOVE_DEFINED_PICTURE_DESCRIPTION' |translate}}</a></li>
                       </ul>
-                      <div align="right">
-                        <a ng-show="selectedPicture.pictureDescription !='' " class="button small" ng-click="savePictureDescription(selectedPicture)">{{'SAVE_DESCRIPTION'|translate}}</a>
+                      <div align="right" ng-show="selectedPicture.pictureDescription !=='' && selectedPicture.pictureDescription !== undefined">
+                        <a  class="button small" ng-click="savePictureDescription(selectedPicture)">{{'SAVE_DESCRIPTION'|translate}}</a>
                       </div>
                     </div>
                     <a class="exit-off-canvas"></a>

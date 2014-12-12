@@ -116,6 +116,7 @@ MedicalPictures.config(function($translateProvider) {
     'BODY_PART_TOO_LONG':'Body part description too long!',
     'PICTURE_TYPE_TOO_LONG':'Picture type is too long!',
     'USERNAME_TOO_LONG':'Username is too long!',
+    'SUCCESSFULLY_REMOVED_PICTURE':'Deletion succeed!'
   });
   $translateProvider.translations('pl', {
     'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -233,6 +234,7 @@ MedicalPictures.config(function($translateProvider) {
     'BODY_PART_TOO_LONG':'Opis części ciała jest za długi!',
     'PICTURE_TYPE_TOO_LONG':'Typ zdjęcia jest za długi!',
     'USERNAME_TOO_LONG':'Nazwa użytkownika jest za długa!',
+    'SUCCESSFULLY_REMOVED_PICTURE':'Usuwanie zakończone sukcesem'
 
   });
   $translateProvider.preferredLanguage('pl');

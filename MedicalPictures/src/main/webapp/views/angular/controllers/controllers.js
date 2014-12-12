@@ -989,6 +989,10 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
                 $translate('PICTURES_LIST_IS_EMPTY').then(function(translation) {
                   showAlertMessageWarning(translation);
                 });
+              } else{
+                $translate('SUCCESSFULLY_REMOVED_PICTURE').then(function(translation) {
+                  showAlertMessageSuccess(translation);
+                });
               }
             }).
             error(function(data, status, headers, config) {
