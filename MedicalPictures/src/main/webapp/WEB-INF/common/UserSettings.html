@@ -9,7 +9,7 @@
   <script src="./views/angular/angular-file-upload.js"></script>
   <script src="./views/angular/controllers/controllers.js"></script>
   <script src="./views/angular/controllers/internationalization.js"></script>
-  <title>{{'ADMIN_VIEW_HEAD_NAME'| translate}}</title>
+  <title>{{'SETTINGS_VIEW_HEAD_NAME'| translate}}</title>
   <meta content="" charset="UTF-8">
   <style type="text/css">
     .panel {
@@ -97,17 +97,33 @@
       </ul>
     </section>
   </nav>
-      <div class="row">
-            <div class="large-2 columns"><br></div>
-            <div class="large-8 columns" align="center">
-                <div id="alertMessageDiv">
-                    <div data-alert class="alert-box success radius" >
-                        <a href="#" class="close">&times;</a>
-                  </div>
-                </div>
-            </div>
-            <div class="large-2 columns"><br></div>
+  <br>
+  <div class="row">
+    <div class="large-2 columns">
+      <br>
+    </div>
+    <div class="large-8 columns" align="center">
+      <h2>{{'MANAGE_YOUR_SETTINGS' | translate}}</h2>
+    </div>
+    <div class="large-2 columns">
+      <br>
+    </div>
+  </div>
+  <div class="row">
+    <div class="large-2 columns">
+      <br>
+    </div>
+    <div class="large-8 columns" align="center">
+      <div id="alertMessageDiv">
+        <div data-alert class="alert-box success radius">
+          <a href="#" class="close">&times;</a>
         </div>
+      </div>
+    </div>
+    <div class="large-2 columns">
+      <br>
+    </div>
+  </div>
   <br>
 
   <div ng-show="loggedUser != undefined">
@@ -172,24 +188,41 @@
           <dd class="accordion-navigation">
             <a href="#panel1" align="center">{{'CHANGE_PASSWORD' |translate}}</a>
             <div id="panel1" class="content active">
-              <dl class="tabs" data-tab>
-                <label>{{'NEW_PASSWORD' | translate}}</label>
-                <input type="password" ng-model="loggedUser.password1"></input>
-                <div ng-show="loggedUser.password1 != undefined && loggedUser.password1 != ''">
-                  <label>{{'NEW_PASSWORD_AGAIN' | translate}}</label>
-                  <input type="password" ng-model="loggedUser.password2" required></input>
-                </div>
-                <h7 ng-show="(loggedUser.password2 != loggedUser.password1) && loggedUser.password1!=undefined">{{'PASSWORDS_ARE_DIFFERENT' | translate}}</h7>
-                <div ng-show="(loggedUser.password2 === loggedUser.password1) && loggedUser.password1!=undefined">
-                  <input type="checkbox" id="checkbox1" ng-model="loggedUser.changePassword">
-                  <label for="checkbox1">{{'CHANGE_MY_PASSWORD' | translate}}</label>
-                </div>
-              </dl>
+              <form name="passwordForm">
+                <dl class="tabs" data-tab>
+                  <label>{{'NEW_PASSWORD' | translate}}</label>
+                  <input type="password" name="password" ng-minlength="minPasswordLength" ng-maxlength="maxPasswordLength" ng-model="loggedUser.password1"></input>
+                  <div ng-show="loggedUser.password1 != undefined && loggedUser.password1 != ''">
+                    <label>{{'NEW_PASSWORD_AGAIN' | translate}}</label>
+                    <input type="password" ng-model="loggedUser.password2" required></input>
+                  </div>
+                  <h7 ng-show="(loggedUser.password2 != loggedUser.password1) && loggedUser.password1!=undefined">{{'PASSWORDS_ARE_DIFFERENT' | translate}}</h7>
+                  <h7 ng-show="passwordForm.password.$error.minlength">{{'PASSWORD_TOO_SHORT' | translate}}</h7>
+                  <h7 ng-show="passwordForm.password.$error.maxlength">{{'PASSWORD_TOO_LONG' | translate}}</h7>
+                  <div ng-show="(loggedUser.password2 === loggedUser.password1) && loggedUser.password1!=undefined">
+                    <input type="checkbox" id="checkbox1" ng-model="loggedUser.changePassword">
+                    <label for="checkbox1">{{'CHANGE_MY_PASSWORD' | translate}}</label>
+                  </div>
+                </dl>
             </div>
+            </form>
           </dd>
         </dl>
       </div>
       <div class="large-3 columns">
+        <br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-4 columns">
+        <br>
+      </div>
+      <div class="large-4 columns">
+        <label>{{'APPLICATION_LANGUAGE' | translate }}</label>
+        <select ng-options="language for language in languages" ng-model="selectedLanguage" ng-init="selectedLanguage = existingUserLanguage">
+        </select>
+      </div>
+      <div class="large-4 columns">
         <br>
       </div>
     </div>

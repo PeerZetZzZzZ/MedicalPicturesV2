@@ -122,9 +122,9 @@ public class MedicalPicturesCommonResource {
 	public String getLoggedUser() {
 		try {
 			securityManager.checkUserPermissionToAnyContent();
-			String username = securityManager.getLoggedUsername();
-			logger.logInfo("Returned logged user: " + username, MedicalPicturesCommonResource.class);
-			return userJsonFactory.getLoggedUser(username);
+			Map<String,String> loggedUserDetails = securityManager.getLoggedUsername();
+			logger.logInfo("Returned logged user: " +loggedUserDetails.get("username"), MedicalPicturesCommonResource.class);
+			return userJsonFactory.getLoggedUser(loggedUserDetails);
 		} catch (UserNotPermitted ex) {
 			logger.logError("User not permitted to access /getLoggedUser !", MedicalPicturesCommonResource.class, ex);
 			return jsonFactory.notUserLogged();

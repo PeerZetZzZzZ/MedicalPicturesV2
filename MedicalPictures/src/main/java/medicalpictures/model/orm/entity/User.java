@@ -30,6 +30,24 @@ public class User {
     @Column(length = 15)
     private String accountType;
 
+    @Column(length = 2)
+    private String chosenLanguage;
+
+    public String getChosenLanguage() {
+        return chosenLanguage;
+    }
+
+    public void setChosenLanguage(String chosenLanguage) {
+        this.chosenLanguage = chosenLanguage;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public void setUsername(String username) {
         this.username = username;
@@ -55,10 +73,11 @@ public class User {
         return accountType;
     }
 
-    public User(String username, String password, String accountType) {
+    public User(String username, String password, String accountType,String chosenLanguage) {
         this.username = username;
         this.password = password;
         this.accountType = accountType;
+        this.chosenLanguage = chosenLanguage;
     }
 
     public User() {

@@ -20,11 +20,13 @@ var MedicalPictures = angular.module('MedicalPictures', ['angularFileUpload', 'p
   ACCOUNT_TYPES: ['ADMIN', 'DOCTOR', 'PATIENT', 'TECHNICIAN']
 });
 /* LoginView Controller */
-MedicalPictures.controller('LoginController', function($scope, $http, $window, $translate, $location, MedicalPicturesGlobal) {
+MedicalPictures.controller('LoginController', function($scope, $http, $window, $translate, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
+  $scope.languages = ['pl', 'en'];
   $scope.minPasswordLength = MedicalPicturesGlobal.MIN_PASSWORD_LENGTH;
   $scope.maxPasswordLength = MedicalPicturesGlobal.MAX_PASSWORD_LENGTH;
   $scope.maxUsernameLength = MedicalPicturesGlobal.MAX_USERNAME_LENGTH;
+  $translate.use('en');
   $scope.password = "";
   $scope.username = ""; //we share this username globally to later can print in in other windows
   $scope.userAlreadyLogged = ""; //it contain the name of user which couldn't log because of already being logged
@@ -34,6 +36,9 @@ MedicalPictures.controller('LoginController', function($scope, $http, $window, $
 	 The solution was 2:
 	 - have 1 alert already in HTML code ( not dynamically loaded)
 	 - have 1 alert already in HTML and hide it. I made it  */
+  $scope.languageChanged = function(newLanguage) {
+    $translate.use(newLanguage);
+  }
   $scope.loginClicked = function() {
     if (!angular.isUndefined($scope.username) && !angular.isUndefined($scope.password)) {
       $http({
@@ -158,9 +163,11 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
     $scope.loggedUsername = data.username;
+    $translate.use(data.applicationLanguage);
   }).
   error(function(data, status, headers, config) {
     $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+      $translate.use('en');
       showAlertMessageError(translation, data.username);
     });
     console.log(status);
@@ -322,7 +329,7 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
       !angular.isUndefined($scope.editingAge) && !angular.isUndefined($scope.editingName) &&
       !angular.isUndefined($scope.editingSurname) && !angular.isUndefined($scope.editingSelectedAccountType)) {
       var allValuesArePresent = true;
-      if ($scope.editingSelectedAccountType === "DOCTOR" && ($scope.editingSpecialization === undefined || $scope.editingSpecialization ==='')) {
+      if ($scope.editingSelectedAccountType === "DOCTOR" && ($scope.editingSpecialization === undefined || $scope.editingSpecialization === '')) {
         allValuesArePresent = false; //specialization is undefined
       }
       if (allValuesArePresent) {
@@ -411,9 +418,11 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
 });
 MedicalPictures.controller('AdminViewAddUserController', function($scope, $translate, $location, $http, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
+  $scope.applicationLanguages = ['pl', 'en'];
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
     $scope.loggedUsername = data.username;
+    $translate.use(data.applicationLanguage);
   }).
   error(function(data, status, headers, config) {
     console.log(status);
@@ -437,7 +446,7 @@ MedicalPictures.controller('AdminViewAddUserController', function($scope, $trans
       !angular.isUndefined($scope.age) && !angular.isUndefined($scope.name) &&
       !angular.isUndefined($scope.surname) && !angular.isUndefined($scope.selectedAccountType)) {
       var allValuesArePresent = true;
-      if ($scope.selectedAccountType === "DOCTOR" && ($scope.specialization === undefined || $scope.specialization ==='')) {
+      if ($scope.selectedAccountType === "DOCTOR" && ($scope.specialization === undefined || $scope.specialization === '')) {
         allValuesArePresent = false; //specialization is undefined
       }
       if (allValuesArePresent) {
@@ -701,7 +710,7 @@ MedicalPictures.controller('AdminViewManageBodyPartsController', function($scope
 
 });
 /* TechnicianView Controllers */
-MedicalPictures.controller('TechnicianViewAddPicturesController', function($scope, $http, $translate, FileUploader, MedicalPicturesGlobal) {
+MedicalPictures.controller('TechnicianViewAddPicturesController', function($scope, $http, $translate, $translateProvider, FileUploader, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.accountTypes = MedicalPicturesGlobal.ACCOUNT_TYPES;
   $scope.allPatients = [];
@@ -873,7 +882,7 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
 
   console.info('uploader', uploader);
 });
-MedicalPictures.controller('TechnicianViewManagePicturesController', function($scope, $http, $translate, MedicalPicturesGlobal) {
+MedicalPictures.controller('TechnicianViewManagePicturesController', function($scope, $http, $translateProvider, $translate, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.pictures = [];
   $scope.allBodyParts = [];
@@ -989,7 +998,7 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
                 $translate('PICTURES_LIST_IS_EMPTY').then(function(translation) {
                   showAlertMessageWarning(translation);
                 });
-              } else{
+              } else {
                 $translate('SUCCESSFULLY_REMOVED_PICTURE').then(function(translation) {
                   showAlertMessageSuccess(translation);
                 });
@@ -1064,7 +1073,7 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
   };
 });
 /* Doctor Section */
-MedicalPictures.controller('DoctorViewManageDescriptionsController', function($scope, $http, $translate, MedicalPicturesGlobal) {
+MedicalPictures.controller('DoctorViewManageDescriptionsController', function($scope, $http, $translateProvider, $translate, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.patients = [];
   $scope.definedPictureDescriptions = [];
@@ -1240,7 +1249,7 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
 });
 /* ****************************************** */
 /* Patient Controller */
-MedicalPictures.controller('PatientViewController', function($scope, $http, MedicalPicturesGlobal) {
+MedicalPictures.controller('PatientViewController', function($scope, $http, $translateProvider, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.patientPictures = [];
   $scope.selectedPicture;
@@ -1365,8 +1374,11 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, Medi
 });
 /* ******************************************** */
 /* UserSettings Controller */
-MedicalPictures.controller('UserSettingsController', function($scope, $http, MedicalPicturesGlobal) {
+MedicalPictures.controller('UserSettingsController', function($scope, $http, $translateProvider, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
+  $scope.languages = ['PL', 'ENG'];
+  $scope.maxPasswordLength = MedicalPicturesGlobal.MAX_PASSWORD_LENGTH;
+  $scope.minPasswordLength = MedicalPicturesGlobal.MIN_PASSWORD_LENGTH;
   $scope.loggedUser;
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
