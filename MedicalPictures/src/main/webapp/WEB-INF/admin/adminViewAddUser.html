@@ -38,6 +38,9 @@
     .icon-bar .item b {
       color: red;
     }
+    select{
+      width:100%;
+    }
   </style>
 </head>
 
@@ -135,7 +138,7 @@
       </div>
       <div class="large-4 columns">
         <label>{{'APPLICATION_LANGUAGE' | translate }}</label>
-        <select ng-options="language  for languages in applicationLanguages" ng-model="selectedLanguage" ng-init="selectedLanguage = applicationLanguages[0]">
+        <select ng-options="language  for language in applicationLanguages" ng-model="selectedLanguage" ng-init="selectedLanguage = applicationLanguages[0]">
         </select>
       </div>
     </div>

@@ -252,6 +252,7 @@ public class UserDAO {
             String name = "";
             String surname = "";
             int age = 0;
+            String chosenLanguage = "";
             switch (userAccountType) {
                 case "ADMIN": {
                     Admin admin = findAdmin(username);
@@ -259,6 +260,7 @@ public class UserDAO {
                         name = admin.getName();
                         surname = admin.getSurname();
                         age = admin.getAge();
+                        chosenLanguage = admin.getUser().getChosenLanguage();
                     } else {
                         logger.logWarning("Coudln't get user details '" + username + "' because user doesn't exist!", UserDAO.class);
                         throw new UserDoesntExistException("Coudln't get user details '" + username + "' because user doesn't exist!");
@@ -271,6 +273,7 @@ public class UserDAO {
                         name = doctor.getName();
                         surname = doctor.getSurname();
                         age = doctor.getAge();
+                        chosenLanguage = doctor.getUser().getChosenLanguage();
                         String specialization = doctor.getSpecialization();
                         userDetails.put("specialization", String.valueOf(specialization));//it's special case when we do it
                     } else {
@@ -285,6 +288,7 @@ public class UserDAO {
                         name = patient.getName();
                         surname = patient.getSurname();
                         age = patient.getAge();
+                        chosenLanguage = patient.getUser().getChosenLanguage();
                     } else {
                         logger.logWarning("Coudln't get user details '" + username + "' because user doesn't exist!", UserDAO.class);
                         throw new UserDoesntExistException("Coudln't get user details '" + username + "' because user doesn't exist!");
@@ -297,6 +301,7 @@ public class UserDAO {
                         name = technician.getName();
                         surname = technician.getSurname();
                         age = technician.getAge();
+                        chosenLanguage = technician.getUser().getChosenLanguage();
                     } else {
                         logger.logWarning("Coudln't get user details '" + username + "' because user doesn't exist!", UserDAO.class);
                         throw new UserDoesntExistException("Coudln't get user details '" + username + "' because user doesn't exist!");
@@ -305,6 +310,7 @@ public class UserDAO {
                 }
             }
             userDetails.put("username", username);
+            userDetails.put("chosenLanguage", chosenLanguage);
             userDetails.put("name", name);
             userDetails.put("surname", surname);
             userDetails.put("age", String.valueOf(age));
@@ -330,6 +336,7 @@ public class UserDAO {
         String accountType = userDetails.get("accountType");
         Integer age = Integer.valueOf(userDetails.get("age"));
         String resetPassword = userDetails.get("resetPassword");
+        String chosenLanguage = userDetails.get("chosenLanguage");
         /* If we change user accountType, it means that we must move him to another table, so we must
          delete him in which he is already */
         Map<String, String> usersToDelete = new HashMap<>();
@@ -344,7 +351,8 @@ public class UserDAO {
                 userToEdit.setAccountType(accountType);
                 accountTypeChanged = true;
             }
-            managerDAO.getEntityManager().persist(userToEdit);
+            userToEdit.setChosenLanguage(chosenLanguage);
+//            managerDAO.getEntityManager().persist(userToEdit);
             if (!accountTypeChanged) {
                 switch (accountType) {
                     case "ADMIN": {

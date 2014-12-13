@@ -6,14 +6,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import medicalpictures.controller.model.rest.MedicalPicturesCommonResource;
 import medicalpictures.model.common.MedicalLogger;
 import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserNotPermitted;
 import medicalpictures.model.security.UserSecurityManager;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  *

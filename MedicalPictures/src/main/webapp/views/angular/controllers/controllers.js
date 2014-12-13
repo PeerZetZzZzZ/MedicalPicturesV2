@@ -152,6 +152,7 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
   $scope.nameRegexpPattern = MedicalPicturesGlobal.NAME_REGEXP_PATTERN;
   $scope.maxNameSurnameLength = MedicalPicturesGlobal.MAX_NAME_SURNAME_LENGTH;
   $scope.maxUsernameLength = MedicalPicturesGlobal.MAX_USERNAME_LENGTH;
+  $scope.applicationLanguages = ['pl', 'en'];
   $scope.editingUsername = "";
   $scope.editingSpecialization = "";
   $scope.editingName = "";
@@ -208,6 +209,7 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
             $scope.editingSurname = data.surname;
             $scope.editingAge = data.age;
             $scope.editingSelectedAccountType = data.accountType;
+            $scope.editingSelectedLanguage = data.chosenLanguage;
             if ($scope.editingSelectedAccountType === 'DOCTOR') {
               $scope.editingSpecialization = data.specialization;
             }
@@ -343,7 +345,8 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
           "surname": $scope.editingSurname,
           "specialization": $scope.editingSpecialization,
           "age": $scope.editingAge.toString(),
-          "resetPassword": resetPassword.toString()
+          "resetPassword": resetPassword.toString(),
+          "chosenLanguage": $scope.editingSelectedLanguage
         };
         $http({
           url: '/MedicalPictures/webresources/MedicalPicturesCommon/editUser',
@@ -462,6 +465,7 @@ MedicalPictures.controller('AdminViewAddUserController', function($scope, $trans
             'age': $scope.age.toString(),
             'name': $scope.name,
             'surname': $scope.surname,
+            'chosenLanguage': $scope.selectedLanguage,
             'accountType': $scope.selectedAccountType,
             'resetPassword': "true"
           }
@@ -520,6 +524,7 @@ MedicalPictures.controller('AdminViewManagePictureTypesController', function($sc
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
     $scope.loggedUsername = data.username;
+    $translate.use(data.applicationLanguage);
   }).
   error(function(data, status, headers, config) {
     $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
@@ -625,6 +630,7 @@ MedicalPictures.controller('AdminViewManageBodyPartsController', function($scope
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
     $scope.loggedUsername = data.username;
+    $translate.use(data.applicationLanguage);
   }).
   error(function(data, status, headers, config) {
     $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
@@ -710,7 +716,7 @@ MedicalPictures.controller('AdminViewManageBodyPartsController', function($scope
 
 });
 /* TechnicianView Controllers */
-MedicalPictures.controller('TechnicianViewAddPicturesController', function($scope, $http, $translate, $translateProvider, FileUploader, MedicalPicturesGlobal) {
+MedicalPictures.controller('TechnicianViewAddPicturesController', function($scope, $http, $translate, FileUploader, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.accountTypes = MedicalPicturesGlobal.ACCOUNT_TYPES;
   $scope.allPatients = [];
@@ -734,6 +740,7 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
     $scope.loggedUsername = data.username;
+    $translate.use(data.applicationLanguage);
   }).
   error(function(data, status, headers, config) {
     $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
@@ -882,7 +889,7 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
 
   console.info('uploader', uploader);
 });
-MedicalPictures.controller('TechnicianViewManagePicturesController', function($scope, $http, $translateProvider, $translate, MedicalPicturesGlobal) {
+MedicalPictures.controller('TechnicianViewManagePicturesController', function($scope, $http, $translate, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.pictures = [];
   $scope.allBodyParts = [];
@@ -891,6 +898,7 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
     $scope.loggedUsername = data.username;
+    $translate.use(data.applicationLanguage);
   }).
   error(function(data, status, headers, config) {
     $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
@@ -1073,7 +1081,7 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
   };
 });
 /* Doctor Section */
-MedicalPictures.controller('DoctorViewManageDescriptionsController', function($scope, $http, $translateProvider, $translate, MedicalPicturesGlobal) {
+MedicalPictures.controller('DoctorViewManageDescriptionsController', function($scope, $http,$translate, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.patients = [];
   $scope.definedPictureDescriptions = [];
@@ -1081,6 +1089,7 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
     $scope.loggedUsername = data.username;
+    $translate.use(data.applicationLanguage);
   }).
   error(function(data, status, headers, config) {
     $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
@@ -1249,7 +1258,7 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
 });
 /* ****************************************** */
 /* Patient Controller */
-MedicalPictures.controller('PatientViewController', function($scope, $http, $translateProvider, MedicalPicturesGlobal) {
+MedicalPictures.controller('PatientViewController', function($scope, $http, $, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.patientPictures = [];
   $scope.selectedPicture;
@@ -1261,6 +1270,7 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, $tra
     switch (data.errorCode) {
       case 0:
         $scope.loggedUsername = data.username;
+        $translate.use(data.applicationLanguage);
         $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getPatientPicturesNames/' + $scope.loggedUsername).
         success(function(data, status, headers, config) {
           switch (data.errorCode) {
@@ -1374,7 +1384,7 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, $tra
 });
 /* ******************************************** */
 /* UserSettings Controller */
-MedicalPictures.controller('UserSettingsController', function($scope, $http, $translateProvider, MedicalPicturesGlobal) {
+MedicalPictures.controller('UserSettingsController', function($scope, $http, $ , MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.languages = ['PL', 'ENG'];
   $scope.maxPasswordLength = MedicalPicturesGlobal.MAX_PASSWORD_LENGTH;
@@ -1385,6 +1395,7 @@ MedicalPictures.controller('UserSettingsController', function($scope, $http, $tr
     switch (data.errorCode) {
       case 0:
         $scope.loggedUsername = data.username;
+        $translate.use(data.applicationLanguage);
         $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getUserInfo/' + $scope.loggedUsername).
         success(function(data, status, headers, config) {
           switch (data.errorCode) {

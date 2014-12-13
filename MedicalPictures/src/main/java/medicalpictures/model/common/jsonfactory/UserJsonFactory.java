@@ -53,6 +53,7 @@ public class UserJsonFactory {
         user.put("accountType", userDetials.get("accountType"));
         user.put("name", userDetials.get("name"));
         user.put("surname", userDetials.get("surname"));
+        user.put("chosenLanguage", userDetials.get("chosenLanguage"));
         user.put("age", Integer.valueOf(userDetials.get("age")));
         if (userDetials.get("accountType").equals(AccountType.DOCTOR.toString())) {
             user.put("specialization", userDetials.get("specialization"));
