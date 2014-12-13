@@ -133,7 +133,7 @@
       </div>
       <div class="large-6 columns">
         <label>{{'USERNAME' | translate}}
-          <input type="text" placeholder="{{'YOUR_USERNAME' | translate}}" ng-model="loggedUser.username">
+          <input type="text" placeholder="{{'YOUR_USERNAME' | translate}}" disabled ng-model="loggedUser.username">
         </label>
       </div>
       <div class="large-3 columns">
@@ -146,7 +146,7 @@
       </div>
       <div class="large-6 columns">
         <label>{{'NAME' | translate}}
-          <input type="text" placeholder="{{'YOUR_NAME' | translate}}" ng-model="loggedUser.name">
+          <input type="text" placeholder="{{'YOUR_NAME' | translate}}"  required ng-model="loggedUser.name">
         </label>
       </div>
       <div class="large-3 columns">
@@ -159,7 +159,7 @@
       </div>
       <div class="large-6 columns">
         <label>{{'SURNAME' | translate}}
-          <input type="text" placeholder="{{'YOUR_SURNAME' | translate}}" ng-model="loggedUser.surname">
+          <input type="text" placeholder="{{'YOUR_SURNAME' | translate}}"  required ng-model="loggedUser.surname">
         </label>
       </div>
       <div class="large-3 columns">
@@ -170,15 +170,15 @@
       <div class="large-3 columns">
         <br>
       </div>
-      <div class="large-6 columns">
-        <label>{{'SURNAME' | translate}}
-          <input type="text" placeholder="{{'YOUR_SURNAME' | translate}}" ng-model="loggedUser.surname">
-        </label>
+      <div class="large-6  columns">
+        <label>{{'AGE' | translate }}</label>
+        <input type="number" placeholder="" ng-model="loggedUser.age" required ng-min="minAge" ng-max="maxAge" />
       </div>
       <div class="large-3 columns">
         <br>
       </div>
     </div>
+    <br>
     <div class="row">
       <div class="large-3 columns">
         <br>
@@ -187,7 +187,7 @@
         <dl class="accordion" data-accordion>
           <dd class="accordion-navigation">
             <a href="#panel1" align="center">{{'CHANGE_PASSWORD' |translate}}</a>
-            <div id="panel1" class="content active">
+            <div id="panel1" class="content">
               <form name="passwordForm">
                 <dl class="tabs" data-tab>
                   <label>{{'NEW_PASSWORD' | translate}}</label>
@@ -213,19 +213,21 @@
         <br>
       </div>
     </div>
+    <br>
     <div class="row">
       <div class="large-4 columns">
         <br>
       </div>
       <div class="large-4 columns">
         <label>{{'APPLICATION_LANGUAGE' | translate }}</label>
-        <select ng-options="language for language in languages" ng-model="selectedLanguage" ng-init="selectedLanguage = existingUserLanguage">
+        <select ng-options="language for language in languages" ng-model="existingUserLanguage">
         </select>
       </div>
       <div class="large-4 columns">
         <br>
       </div>
     </div>
+    <br>
   </div>
   <script src="./views/js/vendor/jquery.js"></script>
   <script src="./views/js/foundation.min.js"></script>

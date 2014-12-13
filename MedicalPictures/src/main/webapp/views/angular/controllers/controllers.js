@@ -1384,17 +1384,21 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, $, M
 });
 /* ******************************************** */
 /* UserSettings Controller */
-MedicalPictures.controller('UserSettingsController', function($scope, $http, $ , MedicalPicturesGlobal) {
+MedicalPictures.controller('UserSettingsController', function($scope, $http, $translate , MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
-  $scope.languages = ['PL', 'ENG'];
+  $scope.languages = ['pl', 'en'];
   $scope.maxPasswordLength = MedicalPicturesGlobal.MAX_PASSWORD_LENGTH;
   $scope.minPasswordLength = MedicalPicturesGlobal.MIN_PASSWORD_LENGTH;
+  $scope.minAge = MedicalPicturesGlobal.MIN_AGE;
+  $scope.maxAge = MedicalPicturesGlobal.MAX_AGE;
   $scope.loggedUser;
+  document.getElementById("alertMessageDiv").style.visibility = "hidden";
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
     switch (data.errorCode) {
       case 0:
         $scope.loggedUsername = data.username;
+        $scope.existingUserLanguage = data.applicationLanguage;
         $translate.use(data.applicationLanguage);
         $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getUserInfo/' + $scope.loggedUsername).
         success(function(data, status, headers, config) {

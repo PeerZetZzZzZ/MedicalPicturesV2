@@ -17,32 +17,33 @@ import medicalpictures.model.security.UserSecurityManager;
  */
 public class Logout extends HttpServlet {
 
-	@EJB
-	UserSecurityManager manager;
+    @EJB
+    UserSecurityManager manager;
 
-	@EJB
-	private MedicalLogger logger;
+    @EJB
+    private MedicalLogger logger;
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			manager.checkUserPermissionToAnyContent();
-			manager.logoutUser();
-			response.sendRedirect("/MedicalPictures/LoginView");
-		} catch (UserNotPermitted ex) {
-			logger.logError("User not permitted to access /Logout !", Logout.class, ex);
-			request.getRequestDispatcher("/WEB-INF/common/NotAuthorizedView.html").forward(request, response);
-		} catch (NoLoggedUserExistsHere ex) {
-			logger.logError("User is not logged - can't access /Logout !", Logout.class, ex);
-			request.getRequestDispatcher("/WEB-INF/common/NotAuthorizedView.html").forward(request, response);
-		}
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            manager.checkUserPermissionToAnyContent();
+            manager.logoutUser();
+            response.sendRedirect("/MedicalPictures/LoginView");
+            request.getRequestDispatcher("/WEB-INF/common/LoginView.html").forward(request, response);
+        } catch (UserNotPermitted ex) {
+            logger.logError("User not permitted to access /Logout !", Logout.class, ex);
+            request.getRequestDispatcher("/WEB-INF/common/NotAuthorizedView.html").forward(request, response);
+        } catch (NoLoggedUserExistsHere ex) {
+            logger.logError("User is not logged - can't access /Logout !", Logout.class, ex);
+            request.getRequestDispatcher("/WEB-INF/common/NotAuthorizedView.html").forward(request, response);
+        }
 
-	}
+    }
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-	}
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+    }
 
 }
