@@ -119,7 +119,9 @@ MedicalPictures.config(function($translateProvider) {
     'SUCCESSFULLY_REMOVED_PICTURE':'Deletion succeed!',
     'SETTINGS_VIEW_HEAD_NAME':'User settings view',
     'MANAGE_YOUR_SETTINGS':'Manage your settings',
-    'APPLICATION_LANGUAGE':'Application\'s language'
+    'APPLICATION_LANGUAGE':'Application\'s language',
+    'SAVE_CHANGES':'Save changes',
+    'SOME_OF_THE_VALUES_ARE_INCORRECT':'There are mistakes in paramaters.Check your configuration!'
   });
   $translateProvider.translations('pl', {
     'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -240,7 +242,9 @@ MedicalPictures.config(function($translateProvider) {
     'SUCCESSFULLY_REMOVED_PICTURE':'Usuwanie zakończone sukcesem',
     'SETTINGS_VIEW_HEAD_NAME':'Panel ustawień użytkownika',
     'MANAGE_YOUR_SETTINGS':'Zarządzaj swoimi ustawieniami',
-    'APPLICATION_LANGUAGE':'Język aplikacji'
+    'APPLICATION_LANGUAGE':'Język aplikacji',
+    'SAVE_CHANGES':'Zapisz zmiany',
+    'SOME_OF_THE_VALUES_ARE_INCORRECT':'Wystąpiły błędy w podanych parametrach. Sprawdź konfigurację!'
   });
   $translateProvider.preferredLanguage('pl');
 });

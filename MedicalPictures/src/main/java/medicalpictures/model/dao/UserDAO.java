@@ -75,7 +75,7 @@ public class UserDAO {
      * @param accountType accountType
      */
     private void addNewUserInUserDB(final String username, final String password, final String accountType, final String chosenLanguage) throws AddToDbFailed {
-        User user = new User(username, password, accountType,chosenLanguage);
+        User user = new User(username, password, accountType, chosenLanguage);
         managerDAO.persistObject(user);
     }
 
@@ -97,7 +97,7 @@ public class UserDAO {
         final String chosenLanguage = userDetails.get("chosenLanguage");
         final String specialization = userDetails.get("specialization");
         if (inUsersDBToo) { //if it's false it means that don't create
-            addNewUserInUserDB(username, password, accountType,chosenLanguage);
+            addNewUserInUserDB(username, password, accountType, chosenLanguage);
         }
         User foundUser = findUser(username);
         if (foundUser != null) {
@@ -548,5 +548,88 @@ public class UserDAO {
         } else {
             throw new UserDoesntExistException(username);
         }
+    }
+
+    /**
+     * Changes the user values from settings, just set by every user.
+     *
+     * @param userChangedValues
+     * @return
+     */
+    public int changeUserValuesFromSettings(Map<String, String> userChangedValues) {
+        String username = userChangedValues.get("username");
+        User user = findUser(username);
+        if (user != null) {
+            user.setChosenLanguage(userChangedValues.get("chosenLanguage"));
+            String name = userChangedValues.get("name");
+            if (userChangedValues.get("passwordChanged").equals("true")) {
+                user.setPassword(passwordGenerator.getPasswordHash(userChangedValues.get("password")));
+            }
+            String surname = userChangedValues.get("surname");
+            int age = Integer.valueOf(userChangedValues.get("age"));
+            String accountType = user.getAccountType();
+            switch (accountType) {
+                case "ADMIN": {
+                    Admin admin = findAdmin(username);
+                    admin.setName(name);
+                    admin.setSurname(surname);
+                    admin.setAge(age);
+//                    try {
+//                        managerDAO.getEntityManager().persist(admin);
+//                    } catch (Exception ex) {
+//                        logger.logError("Persisting failed. Internal server error !", UserDAO.class, ex);
+//                        return ResultCodes.INTERNAL_SERVER_ERROR;
+//                    }
+                    logger.logInfo("User '" + username + "' successfully edited. User account type: !" + accountType + "'.", UserDAO.class);
+                    break;
+                }
+                case "DOCTOR": {
+                    Doctor doctor = findDoctor(username);
+                    doctor.setName(name);
+                    doctor.setSurname(surname);
+                    doctor.setAge(age);
+//                    try {
+//                        managerDAO.getEntityManager().persist(doctor);
+//                    } catch (Exception ex) {
+//                        logger.logError("Persisting failed. Internal server error !", UserDAO.class, ex);
+//                        return ResultCodes.INTERNAL_SERVER_ERROR;
+//                    }
+                    logger.logInfo("User '" + username + "' successfully edited. User account type: !" + accountType + "'.", UserDAO.class);
+                    break;
+                }
+                case "PATIENT": {
+                    Patient patient = findPatient(username);
+                    patient.setName(name);
+                    patient.setSurname(surname);
+                    patient.setAge(age);
+//                    try {
+//                        managerDAO.getEntityManager().persist(patient);
+//                    } catch (Exception ex) {
+//                        logger.logError("Persisting failed. Internal server error !", UserDAO.class, ex);
+//                        return ResultCodes.INTERNAL_SERVER_ERROR;
+//                    }
+                    logger.logInfo("User '" + username + "' successfully edited. User account type: !" + accountType + "'.", UserDAO.class);
+                    break;
+                }
+                case "TECHNICIAN": {
+                    Technician technician = findTechnician(username);
+                    technician.setName(name);
+                    technician.setSurname(surname);
+                    technician.setAge(age);
+//                    try {
+//                        managerDAO.getEntityManager().persist(technician);
+//                    } catch (Exception ex) {
+//                        logger.logError("Persisting failed. Internal server error !", UserDAO.class, ex);
+//                        return ResultCodes.INTERNAL_SERVER_ERROR;
+//                    }
+                    logger.logInfo("User '" + username + "' successfully edited. User account type: !" + accountType + "'.", UserDAO.class);
+                    break;
+                }
+            }
+        } else {
+            logger.logWarning("Couldn't change user values from settings'" + username + "' because user doesn't exist!", UserDAO.class);
+            return ResultCodes.USER_DOESNT_EXIST;
+        }
+        return ResultCodes.OPERATION_SUCCEED;
     }
 }

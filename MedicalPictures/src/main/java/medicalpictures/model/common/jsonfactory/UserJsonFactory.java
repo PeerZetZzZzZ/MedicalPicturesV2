@@ -166,4 +166,33 @@ public class UserJsonFactory {
         resp.put("errorCode", result);
         return resp.toString();
     }
+
+    /**
+     * Decrypts the request and reads user values from settings view.
+     *
+     * @param userChangedSettings
+     * @return
+     * @throws JsonParsingException
+     */
+    public Map<String, String> getUserDetailsFromChangedSettings(String userChangedSettings) throws JsonParsingException {
+        try {
+            JSONObject user = new JSONObject(userChangedSettings);
+            Map<String, String> userValues = new HashMap<>();
+            userValues.put("username", user.getString("username"));
+            userValues.put("name", user.getString("name"));
+            userValues.put("surname", user.getString("surname"));
+            userValues.put("age", String.valueOf(user.getInt("age")));
+            String password = user.getString("password");
+            if (password.equals("")) {//if password is "" it means that passord didn't change and we want to inform about it
+                userValues.put("passwordChanged", String.valueOf("false"));//password didn't change
+            } else {
+                userValues.put("passwordChanged", String.valueOf("true"));//password changed
+                userValues.put("password", password);//value of the new password
+            }
+            userValues.put("chosenLanguage", user.getString("chosenLanguage"));
+            return userValues;
+        } catch (JSONException ex) {
+            throw new JsonParsingException(ex.getMessage());
+        }
+    }
 }

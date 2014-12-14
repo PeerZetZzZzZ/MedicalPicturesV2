@@ -1081,7 +1081,7 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
   };
 });
 /* Doctor Section */
-MedicalPictures.controller('DoctorViewManageDescriptionsController', function($scope, $http,$translate, MedicalPicturesGlobal) {
+MedicalPictures.controller('DoctorViewManageDescriptionsController', function($scope, $http, $translate, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.patients = [];
   $scope.definedPictureDescriptions = [];
@@ -1384,7 +1384,7 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, $, M
 });
 /* ******************************************** */
 /* UserSettings Controller */
-MedicalPictures.controller('UserSettingsController', function($scope, $http, $translate , MedicalPicturesGlobal) {
+MedicalPictures.controller('UserSettingsController', function($scope, $http, $translate, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.languages = ['pl', 'en'];
   $scope.maxPasswordLength = MedicalPicturesGlobal.MAX_PASSWORD_LENGTH;
@@ -1398,14 +1398,19 @@ MedicalPictures.controller('UserSettingsController', function($scope, $http, $tr
     switch (data.errorCode) {
       case 0:
         $scope.loggedUsername = data.username;
-        $scope.existingUserLanguage = data.applicationLanguage;
+        $scope.chosenUserLanguage = data.applicationLanguage;
         $translate.use(data.applicationLanguage);
         $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getUserInfo/' + $scope.loggedUsername).
         success(function(data, status, headers, config) {
           switch (data.errorCode) {
             case 0:
               $scope.loggedUser = data;
-              break;
+              // $scope.originalUsername = data.username;
+              // $scope.originalAge = data.age;
+              // $scope.originalName = data.name;
+              // $scope.originalSurname = data.surname;
+              // $scope.originalApplicationLanguage = data.applicationLanguage;
+              // break;
             case -1: //unauthorized
               break;
             case -4: //not logged
@@ -1434,4 +1439,71 @@ MedicalPictures.controller('UserSettingsController', function($scope, $http, $tr
     });
     console.log(status);
   });
+  $scope.changePasswordChanged = function() {
+    if ($scope.loggedUser.changePassword === true) {
+      $scope.changePasswordChangedFlag = true;
+    } else {
+      if ($scope.valuesChanged != true) {
+        $scope.changePasswordChangedFlag = false;
+      }
+    }
+  }
+  $scope.saveSettingsClicked = function() {
+    var userValuesToSave;
+    if (!angular.isUndefined($scope.loggedUser.username) && !angular.isUndefined($scope.loggedUser.surname) && !angular.isUndefined($scope.loggedUser.name) && !angular.isUndefined($scope.loggedUser.age)) {
+      if ($scope.loggedUser.changePassword === true && (($scope.loggedUser.password2 === $scope.loggedUser.password1) && $scope.loggedUser.password1 != undefined)) {
+        userValuesToSave = {
+          password: $scope.loggedUser.password1,
+          username: $scope.loggedUser.username,
+          age: $scope.loggedUser.age,
+          name: $scope.loggedUser.name,
+          surname: $scope.loggedUser.surname,
+          chosenLanguage: $scope.chosenUserLanguage
+        };
+      } else { //if user didn't change password, it will be sent as empty value - must be checked on the server side
+        userValuesToSave = {
+          password: '',
+          username: $scope.loggedUser.username,
+          age: $scope.loggedUser.age,
+          name: $scope.loggedUser.name,
+          surname: $scope.loggedUser.surname,
+          chosenLanguage: $scope.chosenUserLanguage
+        };
+      }
+      $http({
+        url: '/MedicalPictures/webresources/MedicalPicturesCommon/changeUserSettings',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: userValuesToSave
+      }).success(function(data, status, headers, config) {
+        switch (data.errorCode) {
+          case 0:
+            $translate('USER_EDITED_SUCCESSFULLY').then(function(translation){
+              showAlertMessageSuccess(translation);
+            });
+            break;
+          case -6:
+            break;
+          case -1: //unauthorized
+            break;
+          case -4: //not logged
+            break;
+          case -99: //internal server error
+            break;
+        }
+      }).
+      error(function(data, status, headers, config) {
+        $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+          showAlertMessageError(translation, "");
+        });
+        console.log(status);
+      });
+    } else{
+      $translate('SOME_OF_THE_VALUES_ARE_INCORRECT').then(function(translation) {
+        showAlertMessageError(translation, "");
+      });
+    }
+  }
 });
