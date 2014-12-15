@@ -18,30 +18,30 @@ import medicalpictures.model.security.UserSecurityManager;
  */
 public class PatientViewManagePictures extends HttpServlet {
 
-	@EJB
-	private UserSecurityManager securityManager;
+    @EJB
+    private UserSecurityManager securityManager;
 
-	@EJB
-	private MedicalLogger logger;
+    @EJB
+    private MedicalLogger logger;
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			securityManager.checkUserPermissionToThisContent(AccountType.PATIENT);
-			request.getRequestDispatcher("/WEB-INF/patient/patientViewManagePictures.html").forward(request, response);
-		} catch (UserNotPermitted ex) {
-			logger.logError("User not permitted to access /PatientViewManagePictures !", PatientViewManagePictures.class, ex);
-			request.getRequestDispatcher("/WEB-INF/common/NotAuthorizedView.html").forward(request, response);
-		} catch (NoLoggedUserExistsHere ex) {
-			logger.logError("User is not logged - can't access /PatientViewManagePictures !", PatientViewManagePictures.class, ex);
-			request.getRequestDispatcher("/WEB-INF/common/NotAuthorizedView.html").forward(request, response);
-		}
-	}	
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            securityManager.checkUserPermissionToThisContent(AccountType.PATIENT);
+            request.getRequestDispatcher("/WEB-INF/patient/patientViewManagePictures.html").forward(request, response);
+        } catch (UserNotPermitted ex) {
+            logger.logError("User not permitted to access /PatientViewManagePictures !", PatientViewManagePictures.class, ex);
+            request.getRequestDispatcher("/WEB-INF/common/NotAuthorizedView.html").forward(request, response);
+        } catch (NoLoggedUserExistsHere ex) {
+            logger.logError("User is not logged - can't access /PatientViewManagePictures !", PatientViewManagePictures.class, ex);
+            request.getRequestDispatcher("/WEB-INF/common/NotAuthorizedView.html").forward(request, response);
+        }
+    }
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-	}
+    }
 }

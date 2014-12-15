@@ -7,19 +7,19 @@ package medicalpictures.model.exception;
  */
 public class UserAlreadyLoggedException extends MedicalPicturesException {
 
-	private String loggedUsername = "";
+    private String loggedUsername = "";
 
-	public UserAlreadyLoggedException(String message, String loggedUsername) {
-		super(message);
-		this.loggedUsername = loggedUsername;
-	}
+    public UserAlreadyLoggedException(String message, String loggedUsername) {
+        super(message);
+        this.loggedUsername = loggedUsername;
+    }
 
-	public String getLoggedUsername() {
-		return loggedUsername;
-	}
+    public String getLoggedUsername() {
+        return loggedUsername;
+    }
 
-	public void setLoggedUsername(String loggedUsername) {
-		this.loggedUsername = loggedUsername;
-	}
+    public void setLoggedUsername(String loggedUsername) {
+        this.loggedUsername = loggedUsername;
+    }
 
 }

@@ -44,12 +44,18 @@ public class UserDAO {
      * @return
      */
     public int addNewUser(Map<String, String> userDetails) {
-        try {
-            addUser(userDetails, true);
-            return ResultCodes.OPERATION_SUCCEED;
-        } catch (AddToDbFailed ex) {
-            logger.logError("Internal server problem while adding new user!", UserDAO.class, ex);
-            return ResultCodes.INTERNAL_SERVER_ERROR;
+        User existingUser = findUser(userDetails.get("username"));
+        if (existingUser == null) {
+            try {
+                addUser(userDetails, true);
+                return ResultCodes.OPERATION_SUCCEED;
+            } catch (AddToDbFailed ex) {
+                logger.logError("Internal server problem while adding new user!", UserDAO.class, ex);
+                return ResultCodes.INTERNAL_SERVER_ERROR;
+            }
+        } else {
+            logger.logWarning("Can't add user with username '" + userDetails.get("username") + "' because user already exists!", UserDAO.class);
+            return ResultCodes.OBJECT_DOESNT_EXIST;
         }
     }
 

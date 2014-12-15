@@ -25,9 +25,9 @@
     .top-bar .name h1 {
       color: orange;
     }
-    select{
-      height:100%;
-      width:100%;
+    select {
+      height: 100%;
+      width: 100%;
     }
   </style>
 </head>
@@ -40,10 +40,10 @@
         <h1>{{appName}}</h1>
       </li>
     </ul>
-      <ul class="right">
-        <select ng-options="language for language in languages" ng-model="selectedLanguage" ng-init="selectedLanguage = 'en'" ng-change="languageChanged(selectedLanguage)">
-        </select>
-      </ul>
+    <ul class="right">
+      <select ng-options="language for language in languages" ng-model="selectedLanguage" ng-init="selectedLanguage = 'en'" ng-change="languageChanged(selectedLanguage)">
+      </select>
+    </ul>
   </nav>
   <form name="loginForm">
     <br>

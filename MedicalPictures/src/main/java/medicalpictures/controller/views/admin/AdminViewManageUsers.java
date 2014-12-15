@@ -18,30 +18,30 @@ import medicalpictures.model.security.UserSecurityManager;
  */
 public class AdminViewManageUsers extends HttpServlet {
 
-	@EJB
-	private UserSecurityManager manager;
+    @EJB
+    private UserSecurityManager manager;
 
-	@EJB
-	private MedicalLogger logger;
+    @EJB
+    private MedicalLogger logger;
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			manager.checkUserPermissionToThisContent(AccountType.ADMIN);
-			request.getRequestDispatcher("/WEB-INF/admin/adminViewManageUsers.html").forward(request, response);
-		} catch (UserNotPermitted ex) {
-			logger.logError("User not permitted to access /AdminViewManageUsers !", AdminViewManageUsers.class, ex);
-			request.getRequestDispatcher("/WEB-INF/common/NotAuthorizedView.html").forward(request, response);
-		} catch (NoLoggedUserExistsHere ex) {
-			logger.logError("User is not logged - can't access /AdminViewManageUsers !", AdminViewManageUsers.class, ex);
-			request.getRequestDispatcher("/WEB-INF/common/NotAuthorizedView.html").forward(request, response);
-		}
-	}
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            manager.checkUserPermissionToThisContent(AccountType.ADMIN);
+            request.getRequestDispatcher("/WEB-INF/admin/adminViewManageUsers.html").forward(request, response);
+        } catch (UserNotPermitted ex) {
+            logger.logError("User not permitted to access /AdminViewManageUsers !", AdminViewManageUsers.class, ex);
+            request.getRequestDispatcher("/WEB-INF/common/NotAuthorizedView.html").forward(request, response);
+        } catch (NoLoggedUserExistsHere ex) {
+            logger.logError("User is not logged - can't access /AdminViewManageUsers !", AdminViewManageUsers.class, ex);
+            request.getRequestDispatcher("/WEB-INF/common/NotAuthorizedView.html").forward(request, response);
+        }
+    }
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-	}
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+    }
 
 }

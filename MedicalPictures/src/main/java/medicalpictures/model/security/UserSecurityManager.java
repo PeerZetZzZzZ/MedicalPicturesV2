@@ -77,6 +77,7 @@ public class UserSecurityManager {
             User loggedUser = userDAO.findUser(username);
             if (loggedUser != null) {
                 session.setAttribute("applicationLanguage", loggedUser.getChosenLanguage());
+                session.setAttribute("accountType", loggedUser.getAccountType());
             }
             logger.logInfo("Successful login for username '" + username + "'!!", UserSecurityManager.class);
             return ResultCodes.OPERATION_SUCCEED;
@@ -183,9 +184,11 @@ public class UserSecurityManager {
             Subject currentUser = SecurityUtils.getSubject();
             String username = currentUser.getSession().getAttribute("username").toString();
             String applicationLanguage = currentUser.getSession().getAttribute("applicationLanguage").toString();
+            String accountType = currentUser.getSession().getAttribute("accountType").toString();
             Map<String, String> userDetails = new HashMap<>();
             userDetails.put("username", username);
             userDetails.put("applicationLanguage", applicationLanguage);
+            userDetails.put("accountType", accountType);
             if (username == null) {
                 throw new NoLoggedUserExistsHere("No logged user here");
             } else {

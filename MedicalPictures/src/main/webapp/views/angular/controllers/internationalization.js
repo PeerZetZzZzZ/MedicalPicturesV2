@@ -100,7 +100,7 @@ MedicalPictures.config(function($translateProvider) {
     'MANAGE_DIAGNOSIS': 'Manage diagnosis',
     'BROWSE_PICTURES_AND_DIAGNOSIS': 'Browse pictures and diagnosis',
     'DOCTOR': 'Doctor\'s diagnosis',
-    'DIAGNOSIS_AUTHOR': 'Diagnosi\'s author',
+    'DIAGNOSIS_AUTHOR': 'Diagnosis author',
     'NO_PICTURE_DESCRIPTIONS_FOUND': 'No descriptions found for this picture.',
     'YOUR_AGE': 'Your age',
     'CHANGE_PASSWORD': 'Change your password',
@@ -129,6 +129,7 @@ MedicalPictures.config(function($translateProvider) {
     'DEFINED_PICTURE_DESCRIPTIONS':'Defined picture descriptions',
     'DEFINED_PICTURE_DESCRIPTION_IS_INCORRECT':'Defined picture description is incorrect!Correct it ',
     'OBJECT_DUPLICATION_ERROR':'Can\'t add object because it already exists in database!',
+    'USER_DUPLICATION_ERROR':'Can\'t add new user because this username is already used!',
   });
   $translateProvider.translations('pl', {
     'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -259,6 +260,7 @@ MedicalPictures.config(function($translateProvider) {
     'DEFINED_PICTURE_DESCRIPTIONS':'Zdefiniowane opisy zdjęć',
     'DEFINED_PICTURE_DESCRIPTION_IS_INCORRECT':'Zdefniowany opis zdjęcia jest niepoprawny. Popraw go - nazwę lub opis!',
     'OBJECT_DUPLICATION_ERROR':'Nie można dodać obiektu, poniważ już istnieje w bazie danych!',
+    'USER_DUPLICATION_ERROR':'Nie można dodać nowego użytkownika, ponieważ ta nazwa użytkownika jest już zajęta!',
   });
   $translateProvider.preferredLanguage('pl');
 });

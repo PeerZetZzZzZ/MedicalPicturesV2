@@ -55,6 +55,9 @@
     .icon-bar .item b {
       color: red;
     }
+    .top-bar .name h1 a {
+      color: orange;
+    }
     td {
       border-top: solid 1px #f00;
       border-right: solid 1px #f00;
@@ -77,7 +80,7 @@
   <nav class="top-bar" data-topbar role="navigation">
     <ul class="title-area">
       <li class="name">
-        <h1>{{appName}}</h1>
+        <h1><a href="{{mainViewSpecifiedByAccountType}}" >{{appName}}</a></h1>
       </li>
       <li class="toggle-topbar menu-icon">
         <a href="#">{{'MENU'| translate}}</a>
@@ -92,7 +95,7 @@
           <a href="/MedicalPictures/UserSettings">{{'SETTINGS'| translate}}</a>
         </li>
         <li class="active">
-          <a href="/MedicalPictures/Logout">{{'LOGOUT'| translate}}</a>
+          <a href="#" ng-click="logoutUser()">{{'LOGOUT'| translate}}</a>
         </li>
       </ul>
     </section>
@@ -220,7 +223,7 @@
       </div>
       <div class="large-4 columns">
         <label>{{'APPLICATION_LANGUAGE' | translate }}</label>
-        <select ng-options="language for language in languages" ng-model="chosenUserLanguage">
+        <select ng-options="language for language in languages" ng-model="chosenUserLanguage" ng-change="valuesChanged=true">
         </select>
       </div>
       <div class="large-4 columns">

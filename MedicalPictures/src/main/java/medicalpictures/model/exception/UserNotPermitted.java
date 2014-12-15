@@ -7,8 +7,8 @@ package medicalpictures.model.exception;
  */
 public class UserNotPermitted extends MedicalPicturesException {
 
-	public UserNotPermitted(String message) {
-		super(message);
-	}
+    public UserNotPermitted(String message) {
+        super(message);
+    }
 
 }

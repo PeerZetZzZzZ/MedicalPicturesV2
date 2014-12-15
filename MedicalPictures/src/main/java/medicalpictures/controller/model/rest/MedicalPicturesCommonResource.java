@@ -4,30 +4,25 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
+import medicalpictures.model.common.MedicalLogger;
+import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.common.jsonfactory.BodyPartJsonFactory;
 import medicalpictures.model.common.jsonfactory.DefinedPictureDescriptionJsonFactory;
 import medicalpictures.model.common.jsonfactory.JsonFactory;
-import medicalpictures.model.common.MedicalLogger;
 import medicalpictures.model.common.jsonfactory.PatientJsonFactory;
 import medicalpictures.model.common.jsonfactory.PictureDescriptionJsonFactory;
 import medicalpictures.model.common.jsonfactory.PictureJsonFactory;
 import medicalpictures.model.common.jsonfactory.PictureTypeJsonFactory;
-import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.common.jsonfactory.UserJsonFactory;
-import medicalpictures.model.enums.AccountType;
-import medicalpictures.model.exception.NoLoggedUserExistsHere;
-import medicalpictures.model.exception.UserNotPermitted;
 import medicalpictures.model.dao.BodyPartDAO;
 import medicalpictures.model.dao.DefinedPictureDescriptionDAO;
 import medicalpictures.model.dao.ManagerDAO;
@@ -35,8 +30,11 @@ import medicalpictures.model.dao.PatientDAO;
 import medicalpictures.model.dao.PictureDAO;
 import medicalpictures.model.dao.PictureTypeDAO;
 import medicalpictures.model.dao.UserDAO;
+import medicalpictures.model.enums.AccountType;
 import medicalpictures.model.exception.JsonParsingException;
+import medicalpictures.model.exception.NoLoggedUserExistsHere;
 import medicalpictures.model.exception.UserDoesntExistException;
+import medicalpictures.model.exception.UserNotPermitted;
 import medicalpictures.model.orm.entity.BodyPart;
 import medicalpictures.model.orm.entity.DefinedPictureDescription;
 import medicalpictures.model.orm.entity.Patient;
@@ -217,7 +215,7 @@ public class MedicalPicturesCommonResource {
     @Produces("application/json")
     public String getUserInfo(@PathParam("username") String username) {
         try {
-            securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+            securityManager.checkUserPermissionToAnyContent();
             Map<String, String> userDetailsMap = userDAO.getUserDetails(username);
             String userInfo = userJsonFactory.getUserDetailsAsJson(userDetailsMap);
             logger.logInfo("Return user info of user '" + username + "' :" + userInfo, MedicalPicturesCommonResource.class);
@@ -468,7 +466,7 @@ public class MedicalPicturesCommonResource {
     @Produces("application/json")
     public String getDefinedPictureDescriptions() {
         try {
-            securityManager.checkUserPermissionToThisContent(AccountType.DOCTOR,AccountType.ADMIN);
+            securityManager.checkUserPermissionToThisContent(AccountType.DOCTOR, AccountType.ADMIN);
             List<DefinedPictureDescription> dpdList = definedPictureDescriptionDAO.getDefinedPictureDescriptions();
             String response = definedPictureDescriptionJsonFactory.getDefinedPictureDescription(dpdList);
             logger.logInfo("Get defined picture descriptions response: " + response, MedicalPicturesCommonResource.class);
@@ -711,4 +709,25 @@ public class MedicalPicturesCommonResource {
         }
     }
 
+    /**
+     * Logouts user from application
+     *
+     * @return
+     */
+    @GET
+    @Path("Logout")
+    @Produces("application/json")
+    public String logoutUser() {
+        try {
+            securityManager.checkUserPermissionToAnyContent();
+            securityManager.logoutUser();
+            return jsonFactory.getOperationResponseByCode(ResultCodes.OPERATION_SUCCEED);
+        } catch (UserNotPermitted ex) {
+            logger.logError("User not permitted to access /Logout !", MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.USER_UNAOTHRIZED);
+        } catch (NoLoggedUserExistsHere ex) {
+            logger.logError("User is not logged - can't access /Logout !", MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.USER_IS_NOT_LOGGED);
+        }
+    }
 }

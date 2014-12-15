@@ -19,46 +19,46 @@ import medicalpictures.model.orm.entity.Picture;
 @Stateless
 public class PatientDAO {
 
-	@EJB
-	private ManagerDAO managerDAO;
+    @EJB
+    private ManagerDAO managerDAO;
 
-	@EJB
-	private UserDAO userDAO;
+    @EJB
+    private UserDAO userDAO;
 
-	@EJB
-	private MedicalLogger logger;
+    @EJB
+    private MedicalLogger logger;
 
-	/**
-	 * Returns all patients in application.
-	 *
-	 * @return
-	 */
-	public List<Patient> getAllPatients() {
-		Query query = managerDAO.getEntityManager().createQuery("SELECT c FROM " + DBNameManager.getPatientTable() + " c", Patient.class);
-		List<Patient> patients = query.getResultList();
-		if (patients == null) {
-			logger.logWarning("No patients found", PatientDAO.class);
-			return new ArrayList<>();
-		} else {
-			return patients;
-		}
+    /**
+     * Returns all patients in application.
+     *
+     * @return
+     */
+    public List<Patient> getAllPatients() {
+        Query query = managerDAO.getEntityManager().createQuery("SELECT c FROM " + DBNameManager.getPatientTable() + " c", Patient.class);
+        List<Patient> patients = query.getResultList();
+        if (patients == null) {
+            logger.logWarning("No patients found", PatientDAO.class);
+            return new ArrayList<>();
+        } else {
+            return patients;
+        }
 
-	}
+    }
 
-	/**
-	 * Returns patient pictures list ( empty if there are no pictures )
-	 *
-	 * @param patientUsername
-	 * @return
-	 */
-	public Set<Picture> getPatientPictures(String patientUsername) {
-		Patient patient = userDAO.findPatient(patientUsername);
-		if (patient != null) {
-			return patient.getPictureList();
-		} else {
-			logger.logWarning("No patient found with username '" + patientUsername + "'.", PatientDAO.class);
-			return new HashSet<>();
-		}
-	}
+    /**
+     * Returns patient pictures list ( empty if there are no pictures )
+     *
+     * @param patientUsername
+     * @return
+     */
+    public Set<Picture> getPatientPictures(String patientUsername) {
+        Patient patient = userDAO.findPatient(patientUsername);
+        if (patient != null) {
+            return patient.getPictureList();
+        } else {
+            logger.logWarning("No patient found with username '" + patientUsername + "'.", PatientDAO.class);
+            return new HashSet<>();
+        }
+    }
 
 }

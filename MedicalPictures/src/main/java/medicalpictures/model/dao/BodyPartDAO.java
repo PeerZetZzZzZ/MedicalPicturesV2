@@ -53,15 +53,21 @@ public class BodyPartDAO {
      * @return
      */
     public int addBodyPart(String bodyPartString) {
-        BodyPart bodyPart = new BodyPart();
-        bodyPart.setBodyPart(bodyPartString);
-        try {
-            managerDAO.persistObject(bodyPart);
-            logger.logInfo("Successfully added body part: " + bodyPartString, BodyPartDAO.class);
-            return ResultCodes.OPERATION_SUCCEED;
-        } catch (AddToDbFailed ex) {
-            logger.logError("Couldn't add body part '" + bodyPartString + "'. Internal server problem!", BodyPartDAO.class, ex);
-            return ResultCodes.INTERNAL_SERVER_ERROR;
+        BodyPart exisingBodyPart = getBodyPartByName(bodyPartString);
+        if (exisingBodyPart == null) {
+            BodyPart bodyPart = new BodyPart();
+            bodyPart.setBodyPart(bodyPartString);
+            try {
+                managerDAO.persistObject(bodyPart);
+                logger.logInfo("Successfully added body part: " + bodyPartString, BodyPartDAO.class);
+                return ResultCodes.OPERATION_SUCCEED;
+            } catch (AddToDbFailed ex) {
+                logger.logError("Couldn't add body part '" + bodyPartString + "'. Internal server problem!", BodyPartDAO.class, ex);
+                return ResultCodes.INTERNAL_SERVER_ERROR;
+            }
+        } else {
+            logger.logWarning("Couldn't add body part '" + bodyPartString + "' because body part already exists!", BodyPartDAO.class);
+            return ResultCodes.OBJECT_ALREADY_EXISTS;
         }
     }
 

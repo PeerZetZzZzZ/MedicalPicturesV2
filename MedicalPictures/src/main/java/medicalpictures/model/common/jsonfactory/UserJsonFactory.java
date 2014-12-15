@@ -147,6 +147,7 @@ public class UserJsonFactory {
     public String getLoggedUser(Map<String, String> loggedUserDetails) {
         JSONObject user = new JSONObject();
         user.put("username", loggedUserDetails.get("username"));
+        user.put("accountType", loggedUserDetails.get("accountType"));
         user.put("applicationLanguage", loggedUserDetails.get("applicationLanguage"));
         user.put("errorCode", ResultCodes.OPERATION_SUCCEED);
         return user.toString();
