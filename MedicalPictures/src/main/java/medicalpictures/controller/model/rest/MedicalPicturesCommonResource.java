@@ -468,8 +468,8 @@ public class MedicalPicturesCommonResource {
     @Produces("application/json")
     public String getDefinedPictureDescriptions() {
         try {
-            securityManager.checkUserPermissionToThisContent(AccountType.DOCTOR);
-            List<DefinedPictureDescription> dpdList = definedPictureDescriptionDAO.getDefinedPictureDescription();
+            securityManager.checkUserPermissionToThisContent(AccountType.DOCTOR,AccountType.ADMIN);
+            List<DefinedPictureDescription> dpdList = definedPictureDescriptionDAO.getDefinedPictureDescriptions();
             String response = definedPictureDescriptionJsonFactory.getDefinedPictureDescription(dpdList);
             logger.logInfo("Get defined picture descriptions response: " + response, MedicalPicturesCommonResource.class);
             return response;
@@ -639,6 +639,28 @@ public class MedicalPicturesCommonResource {
             return jsonFactory.getOperationResponseByCode(ResultCodes.USER_IS_NOT_LOGGED);
         } catch (JsonParsingException ex) {
             logger.logError("/addPictureType: input json parse exception!: " + pictureTypeToAdd, MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.INPUT_JSON_PARSE_ERROR);
+        }
+    }
+
+    @POST
+    @Path("addDefinedPictureDescription")
+    @Produces("application/json")
+    public String addDefinedPictureDescription(String definedPictureDescriptionToAdd) {
+        try {
+            securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+            Map<String, String> dpdValues = definedPictureDescriptionJsonFactory.getDefinedPictureDescriptionToAdd(definedPictureDescriptionToAdd);
+            int result = definedPictureDescriptionDAO.addDefinedPictureDescription(dpdValues);
+            logger.logInfo("Adding defined picture description response: " + result, MedicalPicturesCommonResource.class);
+            return jsonFactory.getOperationResponseByCode(result);
+        } catch (UserNotPermitted ex) {
+            logger.logError("User not permitted to access /addDefinedPictureDescription !", MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.USER_UNAOTHRIZED);
+        } catch (NoLoggedUserExistsHere ex) {
+            logger.logError("User is not logged - can't access /addDefinedPictureDescription !", MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.USER_IS_NOT_LOGGED);
+        } catch (JsonParsingException ex) {
+            logger.logError("/addDefinedPictureDescription : input json parse exception!: " + definedPictureDescriptionToAdd, MedicalPicturesCommonResource.class, ex);
             return jsonFactory.getOperationResponseByCode(ResultCodes.INPUT_JSON_PARSE_ERROR);
         }
     }

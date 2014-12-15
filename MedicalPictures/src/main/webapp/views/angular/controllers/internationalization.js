@@ -121,7 +121,14 @@ MedicalPictures.config(function($translateProvider) {
     'MANAGE_YOUR_SETTINGS':'Manage your settings',
     'APPLICATION_LANGUAGE':'Application\'s language',
     'SAVE_CHANGES':'Save changes',
-    'SOME_OF_THE_VALUES_ARE_INCORRECT':'There are mistakes in paramaters.Check your configuration!'
+    'SOME_OF_THE_VALUES_ARE_INCORRECT':'There are mistakes in paramaters.Check your configuration!',
+    'MANAGE_DEFINFED_PICTURE_DESCRIPTIONS':'Manage defined picture descriptions',
+    'DEFINED_DESCRIPTION_NAME':'Defined description name',
+    'DEFINED_PICTURE_DESCRIPTION_TOO_LONG':'Defined picture description is too long!',
+    'DEFINED_PICTURE_DESCRIPTION_NAME_TOO_LONG':'Defined picture description name is too long',
+    'DEFINED_PICTURE_DESCRIPTIONS':'Defined picture descriptions',
+    'DEFINED_PICTURE_DESCRIPTION_IS_INCORRECT':'Defined picture description is incorrect!Correct it ',
+    'OBJECT_DUPLICATION_ERROR':'Can\'t add object because it already exists in database!',
   });
   $translateProvider.translations('pl', {
     'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -244,7 +251,14 @@ MedicalPictures.config(function($translateProvider) {
     'MANAGE_YOUR_SETTINGS':'Zarządzaj swoimi ustawieniami',
     'APPLICATION_LANGUAGE':'Język aplikacji',
     'SAVE_CHANGES':'Zapisz zmiany',
-    'SOME_OF_THE_VALUES_ARE_INCORRECT':'Wystąpiły błędy w podanych parametrach. Sprawdź konfigurację!'
+    'SOME_OF_THE_VALUES_ARE_INCORRECT':'Wystąpiły błędy w podanych parametrach. Sprawdź konfigurację!',
+    'MANAGE_DEFINFED_PICTURE_DESCRIPTIONS':'Zarządzaj zdefiniowanymi opisami zdjęć',
+    'DEFINED_DESCRIPTION_NAME':'Nazwa zdefiniowanego opisu',
+    'DEFINED_PICTURE_DESCRIPTION_TOO_LONG':'Zdefiniowany opis zdjęcia jest za długi!',
+    'DEFINED_PICTURE_DESCRIPTION_NAME_TOO_LONG':'Nazwa zdefiniowanego opisu zdjęć jest za długa!',
+    'DEFINED_PICTURE_DESCRIPTIONS':'Zdefiniowane opisy zdjęć',
+    'DEFINED_PICTURE_DESCRIPTION_IS_INCORRECT':'Zdefniowany opis zdjęcia jest niepoprawny. Popraw go - nazwę lub opis!',
+    'OBJECT_DUPLICATION_ERROR':'Nie można dodać obiektu, poniważ już istnieje w bazie danych!',
   });
   $translateProvider.preferredLanguage('pl');
 });

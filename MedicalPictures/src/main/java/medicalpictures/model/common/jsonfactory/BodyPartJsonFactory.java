@@ -19,39 +19,39 @@ import org.json.JSONObject;
 @Stateless
 public class BodyPartJsonFactory {
 
-	@EJB
-	private ManagerDAO managerDAO;
+    @EJB
+    private ManagerDAO managerDAO;
 
-	/**
-	 * Returns the list of body parts.
-	 *
-	 * @param bodyParts
-	 * @return
-	 */
-	public String getBodyParts(List<BodyPart> bodyParts) {
-		JSONObject bodyPartsJson = new JSONObject();
-		JSONArray bodyPartsArray = new JSONArray();
-		for (BodyPart bodyPart : bodyParts) {
-			bodyPartsArray.put(bodyPart.getBodyPart());
-		}
-		bodyPartsJson.put("bodyParts", bodyPartsArray);
-		bodyPartsJson.put("errorCode", ResultCodes.OPERATION_SUCCEED);
-		return bodyPartsJson.toString();
-	}
+    /**
+     * Returns the list of body parts.
+     *
+     * @param bodyParts
+     * @return
+     */
+    public String getBodyParts(List<BodyPart> bodyParts) {
+        JSONObject bodyPartsJson = new JSONObject();
+        JSONArray bodyPartsArray = new JSONArray();
+        for (BodyPart bodyPart : bodyParts) {
+            bodyPartsArray.put(bodyPart.getBodyPart());
+        }
+        bodyPartsJson.put("bodyParts", bodyPartsArray);
+        bodyPartsJson.put("errorCode", ResultCodes.OPERATION_SUCCEED);
+        return bodyPartsJson.toString();
+    }
 
-	/**
-	 * Gets the body part to add from client request
-	 *
-	 * @param bodyPart
-	 * @return
-	 * @throws medicalpictures.model.exception.JsonParsingException
-	 */
-	public String getBodyPart(String bodyPart) throws JsonParsingException {
-		try {
-			JSONObject bodyPartJson = new JSONObject(bodyPart);
-			return bodyPartJson.getString("bodyPart");
-		} catch (JSONException ex) {
-			throw new JsonParsingException(ex.getMessage());
-		}
-	}
+    /**
+     * Gets the body part to add from client request
+     *
+     * @param bodyPart
+     * @return
+     * @throws medicalpictures.model.exception.JsonParsingException
+     */
+    public String getBodyPart(String bodyPart) throws JsonParsingException {
+        try {
+            JSONObject bodyPartJson = new JSONObject(bodyPart);
+            return bodyPartJson.getString("bodyPart");
+        } catch (JSONException ex) {
+            throw new JsonParsingException(ex.getMessage());
+        }
+    }
 }

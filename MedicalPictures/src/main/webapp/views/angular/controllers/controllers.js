@@ -9,6 +9,8 @@ var MedicalPictures = angular.module('MedicalPictures', ['angularFileUpload', 'p
   MAX_USERNAME_LENGTH: "100",
   MAX_BODY_PART_LENGTH: "255",
   MAX_PICTURE_TYPE_LENGTH: "255",
+  MAX_DEFINED_PICTURE_DESCRIPTION_NAME_LENGTH: "100",
+  MAX_DEFINED_PICTURE_DESCRIPTION_LENGTH: "1000",
   MIN_LENGTH: "2",
   MIN_AGE: "1",
   MAX_AGE: "150",
@@ -615,6 +617,121 @@ MedicalPictures.controller('AdminViewManagePictureTypesController', function($sc
       });
     } else {
       $translate('PICTURE_TYPE_IS_INCORRECT').then(function(translation) {
+        showAlertMessageWarning(translation);
+      });
+    }
+  };
+
+});
+MedicalPictures.controller('AdminViewManageDefinedPictureDescriptionsController', function($scope, $translate, $location, $http, MedicalPicturesGlobal) {
+  $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
+  $scope.maxDefinedPictureDescriptionNameLength = MedicalPicturesGlobal.MAX_DEFINED_PICTURE_DESCRIPTION_NAME_LENGTH;
+  $scope.maxDefinedPictureDescriptionLength = MedicalPicturesGlobal.MAX_DEFINED_PICTURE_DESCRIPTION_LENGTH;
+  $scope.pictureTypesList = [];
+  $scope.newPictureType = "";
+  $scope.maxPictureTypeLength = MedicalPicturesGlobal.MAX_PICTURE_TYPE_LENGTH;
+  document.getElementById("alertMessageDiv").style.visibility = "hidden";
+  $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
+  success(function(data, status, headers, config) {
+    $scope.loggedUsername = data.username;
+    $translate.use(data.applicationLanguage);
+  }).
+  error(function(data, status, headers, config) {
+    $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+      showAlertMessageError(translation, data.username);
+    });
+    console.log(status);
+  });
+  $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getDefinedPictureDescriptions').
+  success(function(data, status, headers, config) {
+    switch (data.errorCode) {
+      case 0:
+        {
+          $scope.definedPictureDescriptionsList = data.definedPictureDescriptions;
+          break;
+        }
+      case -1: //unauthorized
+        break;
+      case -4: //not logged
+        break;
+      case -3: //json parse
+        $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
+          showAlertMessageError(translation, data.username);
+        });
+        break;
+    }
+  }).error(function(data, status, headers, config) {
+    $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+      showAlertMessageError(translation, data.username);
+    });
+    console.log(status);
+  });
+  $scope.addDefinedPictureDescriptionClicked = function() {
+    if (!angular.isUndefined($scope.newDefinedPictureDescriptionName) && !angular.isUndefined($scope.newDefinedPictureDescription)) {
+      document.getElementById("alertMessageDiv").style.visibility = "hidden";
+      var newDefinedPictureDescription = {
+        'name': $scope.newDefinedPictureDescriptionName,
+        'description': $scope.newDefinedPictureDescription,
+      };
+      $http({
+        url: '/MedicalPictures/webresources/MedicalPicturesCommon/addDefinedPictureDescription',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: newDefinedPictureDescription
+      }).success(function(data, status, headers, config) {
+        switch (data.errorCode) {
+          case 0:
+            $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getDefinedPictureDescriptions').
+            success(function(data, status, headers, config) {
+              switch (data.errorCode) {
+                case 0:
+                  $scope.definedPictureDescriptionsList = data.definedPictureDescriptions;
+                  $translate('PICTURE_TYPE_ADDED_SUCCESSFULLY').then(function(translation) {
+                    showAlertMessageSuccess(translation, $scope.newDefinedPictureDescriptionName);
+                  });
+                  break;
+                case -1: //unauthorized
+                  break;
+                case -4: //not logged
+                  break;
+              }
+            }).
+            error(function(data, status, headers, config) {
+              $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+                showAlertMessageError(translation, "");
+              });
+              console.log(status);
+            });
+            break;
+          case -1: //unauthorized
+            $translate('PICTURE_TYPE_ADDING_FAILED').then(function(translation) {
+              showAlertMessageError(translation, data.pictureType);
+            });
+            break;
+          case -4: //not logged
+            break;
+          case -3: //json parse
+            $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
+              showAlertMessageError(translation, data.username);
+            });
+            break;
+          case -6:
+            $scope.appName="kon";
+            $translate('OBJECT_DUPLICATION_ERROR').then(function(translation) {
+              showAlertMessageError(translation, $scope.newDefinedPictureDescription);
+            });
+            break;
+        }
+      }).error(function(data, status, headers, config) {
+        console.log(status);
+        $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+          showAlertMessageError(translation, "");
+        });
+      });
+    } else {
+      $translate('DEFINED_PICTURE_DESCRIPTION_IS_INCORRECT').then(function(translation) {
         showAlertMessageWarning(translation);
       });
     }
@@ -1480,7 +1597,7 @@ MedicalPictures.controller('UserSettingsController', function($scope, $http, $tr
       }).success(function(data, status, headers, config) {
         switch (data.errorCode) {
           case 0:
-            $translate('USER_EDITED_SUCCESSFULLY').then(function(translation){
+            $translate('USER_EDITED_SUCCESSFULLY').then(function(translation) {
               showAlertMessageSuccess(translation);
             });
             break;
@@ -1500,7 +1617,7 @@ MedicalPictures.controller('UserSettingsController', function($scope, $http, $tr
         });
         console.log(status);
       });
-    } else{
+    } else {
       $translate('SOME_OF_THE_VALUES_ARE_INCORRECT').then(function(translation) {
         showAlertMessageError(translation, "");
       });

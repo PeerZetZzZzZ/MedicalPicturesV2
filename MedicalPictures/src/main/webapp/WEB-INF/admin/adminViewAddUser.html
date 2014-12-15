@@ -38,6 +38,8 @@
     .icon-bar .item b {
       color: red;
     }
+    .icon-bar.four-up .item {
+      height: 16%; }
     select{
       width:100%;
     }
@@ -61,7 +63,7 @@
           <h1> {{'LOGGED_AS'| translate}} <b> {{loggedUsername}}</b></h1>
         </li>
         <li>
-          <a href="#">{{'SETTINGS'| translate}}</a>
+          <a href="/MedicalPictures/UserSettings">{{'SETTINGS'| translate}}</a>
         </li>
         <li class="active">
           <a href="/MedicalPictures/Logout">{{'LOGOUT'| translate}}</a>
@@ -75,7 +77,7 @@
       <br>
     </div>
     <div class="large-10 columns">
-      <div class="icon-bar three-up">
+      <div class="icon-bar four-up">
         <a class="item" href="/MedicalPictures/AdminViewManageUsers">
           <img src="./views/glyphicons/png/glyphicons_024_parents.png">
           <label><b>{{'MANAGE_USERS'| translate}}</b>
@@ -88,6 +90,10 @@
         <a class="item" href="/MedicalPictures/AdminViewManagePictureTypes">
           <img src="./views/glyphicons/png/glyphicons_047_camera_small.png">
           <label>{{'MANAGE_PICTURE_TYPES'| translate}}</label>
+        </a>
+        <a class="item" href="/MedicalPictures/AdminViewManageDefinedPictureDescriptions">
+          <img src="./views/glyphicons/png/glyphicons_138_picture.png">
+          <label>{{'MANAGE_DEFINFED_PICTURE_DESCRIPTIONS'| translate}}</label>
         </a>
       </div>
     </div>
