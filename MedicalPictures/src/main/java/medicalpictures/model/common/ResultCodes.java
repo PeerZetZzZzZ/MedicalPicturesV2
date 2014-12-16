@@ -52,6 +52,6 @@ public class ResultCodes {
      * When user want to add object and the unique constraint doesn't allow to
      * do it.
      */
-    public static int OBJECT_ALREADY_EXISTS = -6;
+    public static int OBJECT_ALREADY_EXISTS = -7;
 
 }

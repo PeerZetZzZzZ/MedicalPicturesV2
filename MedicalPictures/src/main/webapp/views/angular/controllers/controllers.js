@@ -168,16 +168,18 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
-          case -1://user unauthorized
+        case -1: //user unauthorized
+          $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
-          case -4://not logged
+        case -4: //not logged
+          $window.location.href = "/MedicalPictures/LoginView";
           break;
-        }
-      }).
-      error(function(data, status, headers, config) {
-        console.log(status);
-      });
-    };
+      }
+    }).
+    error(function(data, status, headers, config) {
+      console.log(status);
+    });
+  };
   document.getElementById("alertMessageDiv").style.visibility = "hidden";
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
@@ -198,8 +200,10 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
         $scope.usernamesList = data.usernames;
         break;
       case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
         break;
       case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
         break;
       case -3: //json parse
         $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
@@ -234,14 +238,19 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
             break;
           }
         case -1: //unauthorized
+          $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
         case -4: //not logged
+          $window.location.href = "/MedicalPictures/LoginView";
           break;
         case -5: //user doesn't exist
+          $translate('USER_DOESNT_EXISTS').then(function(translation) {
+            showAlertMessageError(translation, $scope.editingUsername);
+          });
           break;
         case -3: //json parse
           $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
-            showAlertMessageError(translation, data.username);
+            showAlertMessageError(translation, '');
           });
           break;
       }
@@ -311,8 +320,10 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
                       break;
                     }
                   case -1: //unauthorized
+                    $window.location.href = "/MedicalPictures/UnauthorizedView";
                     break;
                   case -4: //not logged
+                    $window.location.href = "/MedicalPictures/LoginView";
                     break;
                 }
               }).
@@ -325,12 +336,14 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
               break;
             }
           case -1: //unauthorized
+            $window.location.href = "/MedicalPictures/UnauthorizedView";
             break;
           case -4: //not logged
+            $window.location.href = "/MedicalPictures/LoginView";
             break;
           case -3: //json parse
             $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
-              showAlertMessageError(translation, data.username);
+              showAlertMessageError(translation, '');
             });
             break;
         }
@@ -396,12 +409,14 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
                         break;
                       }
                     case -1: //unauthorized
+                      $window.location.href = "/MedicalPictures/UnauthorizedView";
                       break;
                     case -4: //not logged
+                      $window.location.href = "/MedicalPictures/LoginView";
                       break;
                     case -3: //json parse
                       $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
-                        showAlertMessageError(translation, data.username);
+                        showAlertMessageError(translation, '');
                       });
                       break;
 
@@ -416,16 +431,24 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
                 break;
               }
             case -5: //user doesn't exist
+              $translate('USER_DOESNT_EXISTS').then(function(translation) {
+                showAlertMessageError(translation, $scope.editingUsername);
+              });
               break;
             case -99: //internal server
+              $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+                showAlertMessageError(translation, "");
+              });
               break;
             case -1: //unauthorized
+              $window.location.href = "/MedicalPictures/UnauthorizedView";
               break;
             case -4: //not logged
+              $window.location.href = "/MedicalPictures/LoginView";
               break;
             case -3: //json parse
               $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
-                showAlertMessageError(translation, data.username);
+                showAlertMessageError(translation, '');
               });
               break;
 
@@ -437,7 +460,7 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
     }
   };
 });
-MedicalPictures.controller('AdminViewAddUserController', function($scope, $translate, $location,$window, $http, MedicalPicturesGlobal) {
+MedicalPictures.controller('AdminViewAddUserController', function($scope, $translate, $location, $window, $http, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.applicationLanguages = ['pl', 'en'];
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
@@ -454,9 +477,11 @@ MedicalPictures.controller('AdminViewAddUserController', function($scope, $trans
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
-        case -1://user unauthorized
+        case -1: //user unauthorized
+          $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
-        case -4://not logged
+        case -4: //not logged
+          $window.location.href = "/MedicalPictures/LoginView";
           break;
       }
     }).
@@ -525,15 +550,14 @@ MedicalPictures.controller('AdminViewAddUserController', function($scope, $trans
               });
               break;
             case -1: //unauthorized
-              $translate('USER_ADDING_FAILED').then(function(translation) {
-                showAlertMessageError(translation, data.username);
-              });
+              $window.location.href = "/MedicalPictures/UnauthorizedView";
               break;
             case -4: //not logged
+              $window.location.href = "/MedicalPictures/LoginView";
               break;
             case -3: //json parse
               $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
-                showAlertMessageError(translation, data.username);
+                showAlertMessageError(translation, '');
               });
               break;
             case -6: //already exists
@@ -565,16 +589,18 @@ MedicalPictures.controller('AdminViewManagePictureTypesController', function($sc
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
-          case -1://user unauthorized
+        case -1: //user unauthorized
+          $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
-          case -4://not logged
+        case -4: //not logged
+          $window.location.href = "/MedicalPictures/LoginView";
           break;
-        }
-      }).
-      error(function(data, status, headers, config) {
-        console.log(status);
-      });
-    };
+      }
+    }).
+    error(function(data, status, headers, config) {
+      console.log(status);
+    });
+  };
   document.getElementById("alertMessageDiv").style.visibility = "hidden";
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
@@ -596,12 +622,14 @@ MedicalPictures.controller('AdminViewManagePictureTypesController', function($sc
           break;
         }
       case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
         break;
       case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
         break;
       case -3: //json parse
         $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
-          showAlertMessageError(translation, data.username);
+          showAlertMessageError(translation, '');
         });
         break;
     }
@@ -637,8 +665,10 @@ MedicalPictures.controller('AdminViewManagePictureTypesController', function($sc
                   });
                   break;
                 case -1: //unauthorized
+                  $window.location.href = "/MedicalPictures/UnauthorizedView";
                   break;
                 case -4: //not logged
+                  $window.location.href = "/MedicalPictures/LoginView";
                   break;
               }
             }).
@@ -650,15 +680,14 @@ MedicalPictures.controller('AdminViewManagePictureTypesController', function($sc
             });
             break;
           case -1: //unauthorized
-            $translate('PICTURE_TYPE_ADDING_FAILED').then(function(translation) {
-              showAlertMessageError(translation, data.pictureType);
-            });
+            $window.location.href = "/MedicalPictures/UnauthorizedView";
             break;
           case -4: //not logged
+            $window.location.href = "/MedicalPictures/LoginView";
             break;
           case -3: //json parse
             $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
-              showAlertMessageError(translation, data.username);
+              showAlertMessageError(translation, '');
             });
             break;
           case -6: //already exists
@@ -681,7 +710,7 @@ MedicalPictures.controller('AdminViewManagePictureTypesController', function($sc
   };
 
 });
-MedicalPictures.controller('AdminViewManageDefinedPictureDescriptionsController', function($scope, $translate, $location,$window,  $http, MedicalPicturesGlobal) {
+MedicalPictures.controller('AdminViewManageDefinedPictureDescriptionsController', function($scope, $translate, $location, $window, $http, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.maxDefinedPictureDescriptionNameLength = MedicalPicturesGlobal.MAX_DEFINED_PICTURE_DESCRIPTION_NAME_LENGTH;
   $scope.maxDefinedPictureDescriptionLength = MedicalPicturesGlobal.MAX_DEFINED_PICTURE_DESCRIPTION_LENGTH;
@@ -695,16 +724,18 @@ MedicalPictures.controller('AdminViewManageDefinedPictureDescriptionsController'
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
-          case -1://user unauthorized
+        case -1: //user unauthorized
+          $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
-          case -4://not logged
+        case -4: //not logged
+          $window.location.href = "/MedicalPictures/LoginView";
           break;
-        }
-      }).
-      error(function(data, status, headers, config) {
-        console.log(status);
-      });
-    };
+      }
+    }).
+    error(function(data, status, headers, config) {
+      console.log(status);
+    });
+  };
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
     $scope.loggedUsername = data.username;
@@ -725,12 +756,14 @@ MedicalPictures.controller('AdminViewManageDefinedPictureDescriptionsController'
           break;
         }
       case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
         break;
       case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
         break;
       case -3: //json parse
         $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
-          showAlertMessageError(translation, data.username);
+          showAlertMessageError(translation, '');
         });
         break;
     }
@@ -767,8 +800,10 @@ MedicalPictures.controller('AdminViewManageDefinedPictureDescriptionsController'
                   });
                   break;
                 case -1: //unauthorized
+                  $window.location.href = "/MedicalPictures/UnauthorizedView";
                   break;
                 case -4: //not logged
+                  $window.location.href = "/MedicalPictures/LoginView";
                   break;
               }
             }).
@@ -785,10 +820,11 @@ MedicalPictures.controller('AdminViewManageDefinedPictureDescriptionsController'
             });
             break;
           case -4: //not logged
+            $window.location.href = "/MedicalPictures/LoginView";
             break;
           case -3: //json parse
             $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
-              showAlertMessageError(translation, data.username);
+              showAlertMessageError(translation, '');
             });
             break;
           case -6:
@@ -823,16 +859,18 @@ MedicalPictures.controller('AdminViewManageBodyPartsController', function($scope
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
-          case -1://user unauthorized
+        case -1: //user unauthorized
+          $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
-          case -4://not logged
+        case -4: //not logged
+          $window.location.href = "/MedicalPictures/LoginView";
           break;
-        }
-      }).
-      error(function(data, status, headers, config) {
-        console.log(status);
-      });
-    };
+      }
+    }).
+    error(function(data, status, headers, config) {
+      console.log(status);
+    });
+  };
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
     $scope.loggedUsername = data.username;
@@ -851,8 +889,10 @@ MedicalPictures.controller('AdminViewManageBodyPartsController', function($scope
         $scope.bodyPartsList = data.bodyParts;
         break;
       case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
         break;
       case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
         break;
     }
   }).
@@ -893,17 +933,19 @@ MedicalPictures.controller('AdminViewManageBodyPartsController', function($scope
             });
             break;
           case -1: //unauthorized
+            $window.location.href = "/MedicalPictures/UnauthorizedView";
             break;
           case -4: //not logged
+            $window.location.href = "/MedicalPictures/LoginView";
             break;
           case -3: //json parse
             $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
-              showAlertMessageError(translation, data.username);
+              showAlertMessageError(translation, '');
             });
             break;
           case -99:
-            $translate('BODY_PART_ADDING_FAILED').then(function(translation) {
-              showAlertMessageError(translation, data.bodyPart);
+            $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+              showAlertMessageError(translation, "");
             });
             break;
           case -6: //already exists
@@ -942,16 +984,18 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
-          case -1://user unauthorized
+        case -1: //user unauthorized
+          $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
-          case -4://not logged
+        case -4: //not logged
+          $window.location.href = "/MedicalPictures/LoginView";
           break;
-        }
-      }).
-      error(function(data, status, headers, config) {
-        console.log(status);
-      });
-    };
+      }
+    }).
+    error(function(data, status, headers, config) {
+      console.log(status);
+    });
+  };
   var uploader = $scope.uploader = new FileUploader({
     url: '/MedicalPictures/TechnicianViewAddPictures'
   });
@@ -986,10 +1030,15 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
         }
         break;
       case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
         break;
       case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
         break;
       case -99:
+        $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+          showAlertMessageError(translation, "");
+        });
         break;
 
     }
@@ -1007,10 +1056,15 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
         $scope.allBodyParts = data.bodyParts;
         break;
       case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
         break;
       case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
         break;
       case -99:
+        $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+          showAlertMessageError(translation, "");
+        });
         break;
     }
   }).
@@ -1027,10 +1081,15 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
         $scope.allPictureTypes = data.pictureTypes;
         break;
       case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
         break;
       case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
         break;
       case -99:
+        $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+          showAlertMessageError(translation, "");
+        });
         break;
     }
   }).
@@ -1128,16 +1187,18 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
-          case -1://user unauthorized
+        case -1: //user unauthorized
+          $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
-          case -4://not logged
+        case -4: //not logged
+          $window.location.href = "/MedicalPictures/LoginView";
           break;
-        }
-      }).
-      error(function(data, status, headers, config) {
-        console.log(status);
-      });
-    };
+      }
+    }).
+    error(function(data, status, headers, config) {
+      console.log(status);
+    });
+  };
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
     $scope.loggedUsername = data.username;
@@ -1170,10 +1231,15 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
                 }
                 break;
               case -1: //unauthorized
+                $window.location.href = "/MedicalPictures/UnauthorizedView";
                 break;
               case -4: //not logged
+                $window.location.href = "/MedicalPictures/LoginView";
                 break;
               case -99:
+                $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+                  showAlertMessageError(translation, "");
+                });
                 break;
             }
           }).
@@ -1187,6 +1253,7 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
         case -1: //unauthorized
           break;
         case -4: //not logged
+          $window.location.href = "/MedicalPictures/LoginView";
           break;
         case -99:
           break;
@@ -1263,15 +1330,20 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
             });
             break;
           case -1: //unauthorized
+            $window.location.href = "/MedicalPictures/UnauthorizedView";
             break;
           case -4: //not logged
+            $window.location.href = "/MedicalPictures/LoginView";
             break;
           case -3:
             $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
-              showAlertMessageError(translation, data.username);
+              showAlertMessageError(translation, '');
             });
             break;
           case -99:
+            $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+              showAlertMessageError(translation, "");
+            });
             break;
         }
       }).error(function(data, status, headers, config) {
@@ -1304,15 +1376,20 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
           });
           break;
         case -1: //unauthorized
+          $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
         case -4: //not logged
+          $window.location.href = "/MedicalPictures/LoginView";
           break;
         case -3: //json parse
           $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
-            showAlertMessageError(translation, data.username);
+            showAlertMessageError(translation, '');
           });
           break;
         case -99: //internal server error
+          $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+            showAlertMessageError(translation, "");
+          });
           break;
       }
     }).error(function(data, status, header, config) {
@@ -1324,7 +1401,7 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
   };
 });
 /* Doctor Section */
-MedicalPictures.controller('DoctorViewManageDescriptionsController', function($scope, $http,$window,  $translate, MedicalPicturesGlobal) {
+MedicalPictures.controller('DoctorViewManageDescriptionsController', function($scope, $http, $window, $translate, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.patients = [];
   $scope.definedPictureDescriptions = [];
@@ -1335,16 +1412,18 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
-          case -1://user unauthorized
+        case -1: //user unauthorized
+          $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
-          case -4://not logged
+        case -4: //not logged
+          $window.location.href = "/MedicalPictures/LoginView";
           break;
-        }
-      }).
-      error(function(data, status, headers, config) {
-        console.log(status);
-      });
-    };
+      }
+    }).
+    error(function(data, status, headers, config) {
+      console.log(status);
+    });
+  };
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
     $scope.loggedUsername = data.username;
@@ -1363,10 +1442,15 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
         $scope.definedPictureDescriptions = data.definedPictureDescriptions;
         break;
       case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
         break;
       case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
         break;
       case -99: //internal server error
+        $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+          showAlertMessageError(translation, "");
+        });
         break;
     }
   }).
@@ -1388,10 +1472,15 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
         }
         break;
       case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
         break;
       case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
         break;
       case -99: //internal server error
+        $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+          showAlertMessageError(translation, "");
+        });
         break;
     }
   }).
@@ -1421,10 +1510,15 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
           $scope.selectedPicture = data;
           break;
         case -1: //unauthorized
+          $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
         case -4: //not logged
+          $window.location.href = "/MedicalPictures/LoginView";
           break;
         case -99: //internal server error
+          $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+            showAlertMessageError(translation, "");
+          });
           break;
       }
     }).
@@ -1445,10 +1539,15 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
         case -6:
           break;
         case -1: //unauthorized
+          $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
         case -4: //not logged
+          $window.location.href = "/MedicalPictures/LoginView";
           break;
         case -99: //internal server error
+          $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+            showAlertMessageError(translation, "");
+          });
           break;
       }
     }).
@@ -1491,14 +1590,19 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
         case -6:
           break;
         case -1: //unauthorized
+          $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
         case -4: //not logged
+          $window.location.href = "/MedicalPictures/LoginView";
           break;
         case -99: //internal server error
+          $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+            showAlertMessageError(translation, "");
+          });
           break;
         case -3: //json parse
           $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
-            showAlertMessageError(translation, data.username);
+            showAlertMessageError(translation, '');
           });
           break;
       }
@@ -1530,16 +1634,18 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, $tra
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
-          case -1://user unauthorized
+        case -1: //user unauthorized
+          $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
-          case -4://not logged
+        case -4: //not logged
+          $window.location.href = "/MedicalPictures/LoginView";
           break;
-        }
-      }).
-      error(function(data, status, headers, config) {
-        console.log(status);
-      });
-    };
+      }
+    }).
+    error(function(data, status, headers, config) {
+      console.log(status);
+    });
+  };
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
     switch (data.errorCode) {
@@ -1553,10 +1659,15 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, $tra
               $scope.patientPictures = data.pictures;
               break;
             case -1: //unauthorized
+              $window.location.href = "/MedicalPictures/UnauthorizedView";
               break;
             case -4: //not logged
+              $window.location.href = "/MedicalPictures/LoginView";
               break;
             case -99: //internal server error
+              $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+                showAlertMessageError(translation, "");
+              });
               break;
           }
         }).
@@ -1591,17 +1702,25 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, $tra
               case -6:
                 break;
               case -1: //unauthorized
+                $window.location.href = "/MedicalPictures/UnauthorizedView";
                 break;
               case -4: //not logged
+                $window.location.href = "/MedicalPictures/LoginView";
                 break;
               case -99: //internal server error
+                $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+                  showAlertMessageError(translation, "");
+                });
                 break;
               case -3: //json parse
                 $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
-                  showAlertMessageError(translation, data.username);
+                  showAlertMessageError(translation, '');
                 });
                 break;
               case -1000: //user cannot access not his content
+                $translate('USER_NOT_HAVE_PERMISSIONS_TO_SEE_THIS').then(function(translation) {
+                  showAlertMessageError(translation, $scope.loggedUsername);
+                });
                 break;
             }
           }).
@@ -1612,10 +1731,15 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, $tra
         case -6:
           break;
         case -1: //unauthorized
+          $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
         case -4: //not logged
+          $window.location.href = "/MedicalPictures/LoginView";
           break;
         case -99: //internal server error
+          $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+            showAlertMessageError(translation, "");
+          });
           break;
         case -3: //json parse
           $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
@@ -1638,10 +1762,15 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, $tra
         case -6:
           break;
         case -1: //unauthorized
+          $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
         case -4: //not logged
+          $window.location.href = "/MedicalPictures/LoginView";
           break;
         case -99: //internal server error
+          $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+            showAlertMessageError(translation, "");
+          });
           break;
       }
     }).
@@ -1659,7 +1788,7 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, $tra
 });
 /* ******************************************** */
 /* UserSettings Controller */
-MedicalPictures.controller('UserSettingsController', function($scope, $http, $translate,$window,  MedicalPicturesGlobal) {
+MedicalPictures.controller('UserSettingsController', function($scope, $http, $translate, $window, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.languages = ['pl', 'en'];
   $scope.maxPasswordLength = MedicalPicturesGlobal.MAX_PASSWORD_LENGTH;
@@ -1674,16 +1803,18 @@ MedicalPictures.controller('UserSettingsController', function($scope, $http, $tr
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
-          case -1://user unauthorized
+        case -1: //user unauthorized
+          $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
-          case -4://not logged
+        case -4: //not logged
+          $window.location.href = "/MedicalPictures/LoginView";
           break;
-        }
-      }).
-      error(function(data, status, headers, config) {
-        console.log(status);
-      });
-    };
+      }
+    }).
+    error(function(data, status, headers, config) {
+      console.log(status);
+    });
+  };
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
     switch (data.errorCode) {
@@ -1712,10 +1843,15 @@ MedicalPictures.controller('UserSettingsController', function($scope, $http, $tr
               $scope.loggedUser = data;
               break;
             case -1: //unauthorized
+              $window.location.href = "/MedicalPictures/UnauthorizedView";
               break;
             case -4: //not logged
+              $window.location.href = "/MedicalPictures/LoginView";
               break;
             case -5: //user doesn't exist
+              $translate('USER_DOESNT_EXISTS').then(function(translation) {
+                showAlertMessageError(translation, $scope.loggedUsername);
+              });
               break;
             case -3: //json parse
               $translate('INPUT_JSON_PARSE_PROBLEM').then(function(translation) {
@@ -1787,10 +1923,15 @@ MedicalPictures.controller('UserSettingsController', function($scope, $http, $tr
           case -6:
             break;
           case -1: //unauthorized
+            $window.location.href = "/MedicalPictures/UnauthorizedView";
             break;
           case -4: //not logged
+            $window.location.href = "/MedicalPictures/LoginView";
             break;
           case -99: //internal server error
+            $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
+              showAlertMessageError(translation, "");
+            });
             break;
         }
       }).
@@ -1806,4 +1947,11 @@ MedicalPictures.controller('UserSettingsController', function($scope, $http, $tr
       });
     }
   }
+});
+MedicalPictures.controller('UnauthorizedController', function($scope, $translate, $window) {
+  translate.use('en');
+  $scope.goToLogin = function() {
+    $window.location.href = "/MedicalPictures/LoginView";
+  }
+
 });

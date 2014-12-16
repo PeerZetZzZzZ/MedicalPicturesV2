@@ -78,7 +78,7 @@ MedicalPictures.config(function($translateProvider) {
     'PATIENT': 'Patient',
     'REMOVE': 'Remove',
     'SAVE': 'Save',
-    'ADD_TO_DB_FAILED': 'Updating or adding item failed. Internal error.',
+    'ADD_TO_DB_FAILED': 'Updating/adding/accessing item - failed. Object doesn\'t exist!',
     'SUCCESSFULLY_EDITED_PICTURE': 'Successfully updated picture!',
     'PICTURE_NAME': 'Picture name',
     'ACTIONS': 'Actions',
@@ -130,6 +130,9 @@ MedicalPictures.config(function($translateProvider) {
     'DEFINED_PICTURE_DESCRIPTION_IS_INCORRECT':'Defined picture description is incorrect!Correct it ',
     'OBJECT_DUPLICATION_ERROR':'Can\'t add object because it already exists in database!',
     'USER_DUPLICATION_ERROR':'Can\'t add new user because this username is already used!',
+    'Unauthorized':'Unauthorized',
+    'USER_DOESNT_EXISTS':'The problem occurred. User doesn\'t exist!',
+    'USER_NOT_HAVE_PERMISSIONS_TO_SEE_THIS':'Hey, You have no permissions to see this content!'
   });
   $translateProvider.translations('pl', {
     'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
@@ -209,7 +212,7 @@ MedicalPictures.config(function($translateProvider) {
     'PATIENT': 'Pacjent',
     'REMOVE': 'Usuń',
     'SAVE': 'Zapisz',
-    'ADD_TO_DB_FAILED': 'Aktualizowanie bądź dodawanie nie udane. Błąd wewnętrzny.',
+    'ADD_TO_DB_FAILED': 'Aktualizowanie/dodawanie/dostęp do obiektu - nie udany. Obiekt nie istnieje!',
     'SUCCESSFULLY_EDITED_PICTURE': 'Zaktualizowano zdjęcie!',
     'PICTURE_NAME': 'Zdjęcie',
     'ACTIONS': 'Akcje',
@@ -261,6 +264,9 @@ MedicalPictures.config(function($translateProvider) {
     'DEFINED_PICTURE_DESCRIPTION_IS_INCORRECT':'Zdefniowany opis zdjęcia jest niepoprawny. Popraw go - nazwę lub opis!',
     'OBJECT_DUPLICATION_ERROR':'Nie można dodać obiektu, poniważ już istnieje w bazie danych!',
     'USER_DUPLICATION_ERROR':'Nie można dodać nowego użytkownika, ponieważ ta nazwa użytkownika jest już zajęta!',
+    'Unauthorized':'Nieautoryzowany!',
+    'USER_DOESNT_EXISTS':'Pojawił się problem. Użytkownik nie istnieje!',
+    'USER_NOT_HAVE_PERMISSIONS_TO_SEE_THIS':'Hej, nie masz uprawnień aby dostać się do tego zasobu!'
   });
   $translateProvider.preferredLanguage('pl');
 });
