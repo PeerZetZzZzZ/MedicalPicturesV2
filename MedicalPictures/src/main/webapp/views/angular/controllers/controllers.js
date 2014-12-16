@@ -560,7 +560,7 @@ MedicalPictures.controller('AdminViewAddUserController', function($scope, $trans
                 showAlertMessageError(translation, '');
               });
               break;
-            case -6: //already exists
+            case -7: //already exists
               $translate('USER_DUPLICATION_ERROR').then(function(translation) {
                 showAlertMessageError(translation, $scope.username);
               });
@@ -690,7 +690,7 @@ MedicalPictures.controller('AdminViewManagePictureTypesController', function($sc
               showAlertMessageError(translation, '');
             });
             break;
-          case -6: //already exists
+          case -7: //already exists
             $translate('OBJECT_DUPLICATION_ERROR').then(function(translation) {
               showAlertMessageError(translation, $scope.newPictureType);
             });
@@ -827,7 +827,7 @@ MedicalPictures.controller('AdminViewManageDefinedPictureDescriptionsController'
               showAlertMessageError(translation, '');
             });
             break;
-          case -6:
+          case -7:
             $translate('OBJECT_DUPLICATION_ERROR').then(function(translation) {
               showAlertMessageError(translation, $scope.newDefinedPictureDescription);
             });
@@ -948,7 +948,7 @@ MedicalPictures.controller('AdminViewManageBodyPartsController', function($scope
               showAlertMessageError(translation, "");
             });
             break;
-          case -6: //already exists
+          case -7: //already exists
             $translate('OBJECT_DUPLICATION_ERROR').then(function(translation) {
               showAlertMessageError(translation, $scope.newBodyPart);
             });
@@ -1251,6 +1251,7 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
           });
           break;
         case -1: //unauthorized
+          $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
         case -4: //not logged
           $window.location.href = "/MedicalPictures/LoginView";
@@ -1537,6 +1538,9 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
           window.open(data.pictureData);
           break;
         case -6:
+          $translate('ADD_TO_DB_FAILED').then(function(translation) {
+            showAlertMessageError(translation, picture.pictureName);
+          });
           break;
         case -1: //unauthorized
           $window.location.href = "/MedicalPictures/UnauthorizedView";
@@ -1588,6 +1592,9 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
           });
           break;
         case -6:
+          $translate('ADD_TO_DB_FAILED').then(function(translation) {
+            showAlertMessageError(translation, picture.pictureName);
+          });
           break;
         case -1: //unauthorized
           $window.location.href = "/MedicalPictures/UnauthorizedView";
@@ -1700,6 +1707,9 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, $tra
                 $scope.selectedDescription = $scope.pictureDescriptions[0];
                 break;
               case -6:
+                $translate('ADD_TO_DB_FAILED').then(function(translation) {
+                  showAlertMessageError(translation, picture.pictureName);
+                });
                 break;
               case -1: //unauthorized
                 $window.location.href = "/MedicalPictures/UnauthorizedView";
@@ -1729,6 +1739,9 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, $tra
           });
           break;
         case -6:
+          $translate('ADD_TO_DB_FAILED').then(function(translation) {
+            showAlertMessageError(translation, picture.pictureName);
+          });
           break;
         case -1: //unauthorized
           $window.location.href = "/MedicalPictures/UnauthorizedView";
@@ -1760,6 +1773,9 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, $tra
           window.open(data.pictureData);
           break;
         case -6:
+          $translate('ADD_TO_DB_FAILED').then(function(translation) {
+            showAlertMessageError(translation, picture.pictureName);
+          });
           break;
         case -1: //unauthorized
           $window.location.href = "/MedicalPictures/UnauthorizedView";
@@ -1921,6 +1937,9 @@ MedicalPictures.controller('UserSettingsController', function($scope, $http, $tr
             });
             break;
           case -6:
+            $translate('ADD_TO_DB_FAILED').then(function(translation) {
+              showAlertMessageError(translation, picture.pictureName);
+            });
             break;
           case -1: //unauthorized
             $window.location.href = "/MedicalPictures/UnauthorizedView";
