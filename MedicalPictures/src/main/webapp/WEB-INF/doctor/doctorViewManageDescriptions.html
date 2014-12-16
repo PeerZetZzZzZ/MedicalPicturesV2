@@ -210,12 +210,12 @@
                     </div>
                     <div class="large-7 columns">
                       <label>{{'PICTURE_DESCRIPTION' | translate}}
-                        <textarea placeholder="" ng-change="selectedPicture.changed=true;" ng-readonly="selectedPicture.definedPictureDescriptionId != undefined" ng-model="selectedPicture.pictureDescription"></textarea>
+                        <textarea placeholder="" ng-change="selectedPicture.changed=true" ng-readonly="selectedPicture.definedPictureDescriptionId != undefined" ng-model="selectedPicture.pictureDescription"></textarea>
                       </label>
                       <ul class="breadcrumbs"  ng-show="selectedPicture.definedPictureDescriptionId != undefined" >
                         <li><a ng-click="selectedPicture.definedPictureDescriptionId=undefined">{{'REMOVE_DEFINED_PICTURE_DESCRIPTION' |translate}}</a></li>
                       </ul>
-                      <div align="right" ng-show="selectedPicture.pictureDescription !=='' && selectedPicture.pictureDescription !== undefined">
+                      <div align="right" ng-show="selectedPicture.pictureDescription !=='' && selectedPicture.pictureDescription !== undefined && selectedPicture.changed===true">
                         <a  class="button small" ng-click="savePictureDescription(selectedPicture)">{{'SAVE_DESCRIPTION'|translate}}</a>
                       </div>
                     </div>

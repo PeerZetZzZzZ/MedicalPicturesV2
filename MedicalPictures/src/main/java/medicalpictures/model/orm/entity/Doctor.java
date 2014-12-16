@@ -3,6 +3,7 @@ package medicalpictures.model.orm.entity;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -43,7 +44,7 @@ public class Doctor implements Serializable {
     @Column(length = 100)
     private String specialization;
 
-    @OneToMany(mappedBy = "doctor")
+    @OneToMany(mappedBy = "doctor", cascade=CascadeType.REMOVE)
     private Set<PictureDescription> pictureDescriptions = new HashSet<>();
 
     public String getName() {

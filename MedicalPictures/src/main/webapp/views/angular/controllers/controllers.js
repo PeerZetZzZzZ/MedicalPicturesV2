@@ -168,6 +168,7 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
+          break;
         case -1: //user unauthorized
           $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
@@ -474,9 +475,11 @@ MedicalPictures.controller('AdminViewAddUserController', function($scope, $trans
   $scope.logoutUser = function() {
     $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/Logout').
     success(function(data, status, headers, config) {
+      $scope.appName = "kon";
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
+          break;
         case -1: //user unauthorized
           $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
@@ -538,8 +541,6 @@ MedicalPictures.controller('AdminViewAddUserController', function($scope, $trans
                 $scope.specialization = undefined;
                 $scope.surname = undefined;
                 $translate('USER_ADDED_SUCCESSFULLY').then(function(translation) {
-                  $location.path('/MedicalPictures/AdminViewAddUsers');
-                  $location.replace();
                   showAlertMessageSuccess(translation, data.username);
                 });
                 break;
@@ -589,6 +590,7 @@ MedicalPictures.controller('AdminViewManagePictureTypesController', function($sc
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
+          break;
         case -1: //user unauthorized
           $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
@@ -724,6 +726,7 @@ MedicalPictures.controller('AdminViewManageDefinedPictureDescriptionsController'
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
+          break;
         case -1: //user unauthorized
           $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
@@ -859,6 +862,7 @@ MedicalPictures.controller('AdminViewManageBodyPartsController', function($scope
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
+          break;
         case -1: //user unauthorized
           $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
@@ -984,6 +988,7 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
+          break;
         case -1: //user unauthorized
           $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
@@ -1187,6 +1192,7 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
+          break;
         case -1: //user unauthorized
           $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
@@ -1298,7 +1304,11 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
       }
     }
     var deletePictures;
-    if (picturesToDelete.length === 0) {} else {
+    if (picturesToDelete.length === 0) {
+      $translate('NO_PICTURES_TO_REMOVE_SELECTED').then(function(translation) {
+        showAlertMessageWarning(translation, '');
+      });
+    } else {
       deletePictures = "{pictures:[" + picturesToDelete + "]}";
       $http({
         url: '/MedicalPictures/webresources/MedicalPicturesCommon/deletePictures',
@@ -1413,6 +1423,7 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
+          break;
         case -1: //user unauthorized
           $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
@@ -1509,6 +1520,7 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
       switch (data.errorCode) {
         case 0:
           $scope.selectedPicture = data;
+          $scope.selectedPicture.changed=false;
           break;
         case -1: //unauthorized
           $window.location.href = "/MedicalPictures/UnauthorizedView";
@@ -1590,6 +1602,7 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
           $translate('SUCCESSFULLY_EDITED_PICTURE').then(function(translation) {
             showAlertMessageSuccess(translation, picture.pictureName);
           });
+          $scope.selectedPicture.changed=false;
           break;
         case -6:
           $translate('ADD_TO_DB_FAILED').then(function(translation) {
@@ -1623,6 +1636,7 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
   $scope.setDefinedPictureDescriptionForSelectedPicture = function(definedPictureDescription) {
     $scope.selectedPicture.definedPictureDescriptionId = definedPictureDescription.id;
     $scope.selectedPicture.pictureDescription = definedPictureDescription.pictureDescription;
+    $scope.selectedPicture.changed = true;
   };
 
 });
@@ -1641,6 +1655,7 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, $tra
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
+          break;
         case -1: //user unauthorized
           $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
@@ -1819,6 +1834,7 @@ MedicalPictures.controller('UserSettingsController', function($scope, $http, $tr
       switch (data.errorCode) {
         case 0:
           $window.location.href = "/MedicalPictures/LoginView";
+          break;
         case -1: //user unauthorized
           $window.location.href = "/MedicalPictures/UnauthorizedView";
           break;
@@ -1968,7 +1984,7 @@ MedicalPictures.controller('UserSettingsController', function($scope, $http, $tr
   }
 });
 MedicalPictures.controller('UnauthorizedController', function($scope, $translate, $window) {
-  translate.use('en');
+  $translate.use('en');
   $scope.goToLogin = function() {
     $window.location.href = "/MedicalPictures/LoginView";
   }
