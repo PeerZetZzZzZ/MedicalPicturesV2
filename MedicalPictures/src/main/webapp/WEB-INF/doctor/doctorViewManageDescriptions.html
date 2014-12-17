@@ -61,6 +61,9 @@
       margin: auto;
       display: block;
     }
+    textarea.ng-invalid {
+      border: 2px solid red
+    }
   </style>
 </head>
 
@@ -209,33 +212,36 @@
                       </form>
                     </div>
                     <div class="large-7 columns">
-                      <label>{{'PICTURE_DESCRIPTION' | translate}}
-                        <textarea placeholder="" ng-change="selectedPicture.changed=true" ng-readonly="selectedPicture.definedPictureDescriptionId != undefined" ng-model="selectedPicture.pictureDescription"></textarea>
-                      </label>
-                      <ul class="breadcrumbs"  ng-show="selectedPicture.definedPictureDescriptionId != undefined" >
-                        <li><a ng-click="selectedPicture.definedPictureDescriptionId=undefined">{{'REMOVE_DEFINED_PICTURE_DESCRIPTION' |translate}}</a></li>
-                      </ul>
-                      <div align="right" ng-show="selectedPicture.pictureDescription !=='' && selectedPicture.pictureDescription !== undefined && selectedPicture.changed===true">
-                        <a  class="button small" ng-click="savePictureDescription(selectedPicture)">{{'SAVE_DESCRIPTION'|translate}}</a>
-                      </div>
+                      <form name="descriptionForm">
+                        <label>{{'PICTURE_DESCRIPTION' | translate}}
+                          <textarea placeholder="" name="descriptionArea" ng-change="selectedPicture.changed=true" ng-readonly="selectedPicture.definedPictureDescriptionId != undefined" ng-maxlength="maxDescriptionLength" ng-model="selectedPicture.pictureDescription"></textarea>
+                        </label>
+                        <ul class="breadcrumbs" ng-show="selectedPicture.definedPictureDescriptionId != undefined">
+                          <li><a ng-click="selectedPicture.definedPictureDescriptionId=undefined">{{'REMOVE_DEFINED_PICTURE_DESCRIPTION' |translate}}</a>
+                          </li>
+                        </ul>
+                        <p ng-show="descriptionForm.descriptionArea.$error.maxlength">{{'DEFINED_PICTURE_DESCRIPTION_TOO_LONG'| translate}}</p>
+                        <div align="right" ng-show="selectedPicture.pictureDescription !=='' && selectedPicture.pictureDescription !== undefined && selectedPicture.changed===true">
+                          <a class="button small" ng-click="savePictureDescription(selectedPicture)">{{'SAVE_DESCRIPTION'|translate}}</a>
+                        </div>
+                        <a class="exit-off-canvas"></a>
+                      </form>
                     </div>
-                    <a class="exit-off-canvas"></a>
-                  </div>
-                  <div class="large-1 columns">
-                    <br>
+                    <div class="large-1 columns">
+                      <br>
+                    </div>
                   </div>
                 </div>
-              </div>
             </section>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <script src="./views/js/vendor/jquery.js"></script>
-    <script src="./views/js/foundation.min.js"></script>
-    <script>
-      $(document).foundation();
-    </script>
+      <script src="./views/js/vendor/jquery.js"></script>
+      <script src="./views/js/foundation.min.js"></script>
+      <script>
+        $(document).foundation();
+      </script>
 </body>
 
 </html>

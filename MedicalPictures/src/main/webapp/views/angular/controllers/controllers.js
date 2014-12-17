@@ -1416,6 +1416,7 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.patients = [];
   $scope.definedPictureDescriptions = [];
+  $scope.maxDescriptionLength = MedicalPicturesGlobal.MAX_DEFINED_PICTURE_DESCRIPTION_LENGTH;//its the same as description length
   document.getElementById("alertMessageDiv").style.visibility = "hidden";
   $scope.logoutUser = function() {
     $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/Logout').
