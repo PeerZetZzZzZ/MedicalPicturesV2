@@ -1206,7 +1206,23 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
   $scope.pictures = [];
   $scope.allBodyParts = [];
   $scope.allPictureTypes = [];
+  $scope.selectedBodyPart;
+  $scope.selectedPictureType;
+  $scope.selectedItemForPatient;//when window shows with patients to chose for picture - it is the currently showed window
   document.getElementById("alertMessageDiv").style.visibility = "hidden";
+  $scope.selectItemForPatient = function(item){
+    $scope.selectedItemForPatient=item;
+  };
+  $scope.selectBodyPartForPicture = function(bodyPart){
+    $scope.selectedItemForPatient.selectedBodyPart=bodyPart;
+    $scope.selectedItemForPatient.changed=true;
+    $('.close-reveal-modal').click(); //close the reveal-modal window, small hack
+  };
+  $scope.selectPictureTypeForPicture = function(pictureType){
+    $scope.selectedItemForPatient.selectedPictureType=pictureType;
+    $scope.selectedItemForPatient.changed=true;
+    $('.close-reveal-modal').click(); //close the reveal-modal window, small hack
+  };
   $scope.logoutUser = function() {
     $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/Logout').
     success(function(data, status, headers, config) {

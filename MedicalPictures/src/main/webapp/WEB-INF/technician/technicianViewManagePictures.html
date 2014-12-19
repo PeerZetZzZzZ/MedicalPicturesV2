@@ -177,12 +177,14 @@
                   {{item.technicianUsername+" : "+item.technicianName + " " + item.technicianSurname}}
                 </td>
                 <td>
-                  <select ng-options="pictureType for pictureType in allPictureTypes" ng-change="item.changed=true" ng-model="item.selectedPictureType" ng-init="item.selectedPictureType = item.pictureType" required>
-                  </select>
+                  <a class="info label" data-reveal-id="myModalPictureType" ng-init="item.selectedPictureType=item.pictureType" ng-click="selectItemForPatient(item)">{{item.selectedPictureType}}</a>
+                  <!-- <select ng-options="pictureType for pictureType in allPictureTypes" ng-change="item.changed=true" ng-model="item.selectedPictureType" ng-init="item.selectedPictureType = item.pictureType" required>
+                  </select> -->
                 </td>
                 <td>
-                  <select ng-options="bodyPart for bodyPart in allBodyParts" ng-change="item.changed=true" ng-model="item.selectedBodyPart" ng-init="item.selectedBodyPart = item.bodyPart" required>
-                  </select>
+                  <a class="info label" data-reveal-id="myModalBodyPart" ng-init="item.selectedBodyPart=item.bodyPart" ng-click="selectItemForPatient(item)">{{item.selectedBodyPart}}</a>
+                  <!-- <select ng-options="bodyPart for bodyPart in allBodyParts" ng-change="item.changed=true" ng-model="item.selectedBodyPart" ng-init="item.selectedBodyPart = item.bodyPart" required>
+                  </select> -->
                 </td>
                 <td>
                   {{item.captureTimestamp}}
@@ -210,6 +212,87 @@
     </div class="row">
   </div>
   </div>
+  <div id="myModalBodyPart" class="reveal-modal" data-reveal>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns">
+        <h3><img src="./views/glyphicons/png/glyphicons_352_nameplate.png">
+
+          {{'SELECT_BODY_PART' |translate}}</h3>
+        </div>
+        <div class="large-2 columns">
+          <br>
+        </div>
+      </div>
+      <div class="row">
+        <div class="large-2 columns">
+          <br>
+        </div>
+        <div class="large-8 columns">
+          <div class="panel">
+            <table align="center">
+              <thead>
+                <tr>
+                  <th>{{'BODY_PART' | translate}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="bodyPart in allBodyParts">
+                  <td><a class="info label" ng-click="selectBodyPartForPicture(bodyPart)">{{bodyPart}}</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="large-2 columns">
+          <br>
+        </div>
+      </div>
+      <a class="close-reveal-modal">&#215;</a>
+    </div>
+  <div id="myModalPictureType" class="reveal-modal" data-reveal>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns">
+        <h3><img src="./views/glyphicons/png/glyphicons_352_nameplate.png">
+          {{'SELECT_PICTURE_TYPE' |translate}}</h3>
+        </div>
+        <div class="large-2 columns">
+          <br>
+        </div>
+      </div>
+      <div class="row">
+        <div class="large-2 columns">
+          <br>
+        </div>
+        <div class="large-8 columns">
+          <div class="panel">
+            <table align="center">
+              <thead>
+                <tr>
+                  <th>{{'PICTURE_TYPE' | translate}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="pictureType in allPictureTypes">
+                  <td><a class="info label" ng-click="selectPictureTypeForPicture(pictureType)">{{pictureType}}</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="large-2 columns">
+          <br>
+        </div>
+      </div>
+      <a class="close-reveal-modal">&#215;</a>
+    </div>
   <script src="./views/js/vendor/jquery.js"></script>
   <script src="./views/js/foundation.min.js"></script>
   <script>
