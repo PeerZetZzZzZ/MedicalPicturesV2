@@ -183,6 +183,19 @@
     </div>
   </form>
   <div class="row">
+    <div class="large-2 columns">
+      <br>
+    </div>
+    <div class="large-8 columns">
+      <label>{{'FILTER'|translate}}
+        <input type="text" ng-model="pictureFilter" />
+      </label>
+    </div>
+    <div class="large-2 columns">
+      <br>
+    </div>
+  </div>
+  <div class="row">
     <div class="large-1 columns">
       <br>
     </div>
@@ -200,7 +213,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="dpd in definedPictureDescriptionsList">
+            <tr ng-repeat="dpd in definedPictureDescriptionsList | filter:pictureFilter">
               <td><b><h7 align="center">{{dpd.name}}<h7></b>
               </td>
               <td><b><h7 align="center">{{dpd.pictureDescription}}<h7></b>

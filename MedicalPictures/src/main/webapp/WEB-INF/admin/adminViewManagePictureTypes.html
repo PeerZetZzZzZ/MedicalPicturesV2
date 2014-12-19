@@ -55,7 +55,8 @@
       border: 2px solid red
     }
     .icon-bar.four-up .item {
-      height: 16%; }
+      height: 16%;
+    }
   </style>
 </head>
 
@@ -161,6 +162,19 @@
         <br>
       </div>
     </div>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns">
+        <label>{{'FILTER'|translate}}
+          <input type="text" ng-model="pictureFilter" />
+        </label>
+      </div>
+      <div class="large-2 columns">
+        <br>
+      </div>
+    </div>
   </form>
   <div class="row">
     <div class="large-1 columns">
@@ -177,7 +191,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="picture in pictureTypesList">
+            <tr ng-repeat="picture in pictureTypesList | filter:pictureFilter">
               <td><b><h5 align="center">{{picture}}<h5></b>
               </td>
               <hr>

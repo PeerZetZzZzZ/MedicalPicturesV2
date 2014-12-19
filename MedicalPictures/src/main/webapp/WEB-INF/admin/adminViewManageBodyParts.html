@@ -164,6 +164,19 @@
     </div>
   </form>
   <div class="row">
+    <div class="large-2 columns">
+      <br>
+    </div>
+    <div class="large-8 columns">
+      <label>{{'FILTER'|translate}}
+        <input type="text" ng-model="bodyFilter" />
+      </label>
+    </div>
+    <div class="large-2 columns">
+      <br>
+    </div>
+  </div>
+  <div class="row">
     <div class="large-1 columns">
       <br>
     </div>
@@ -178,7 +191,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="bodyPart in bodyPartsList">
+            <tr ng-repeat="bodyPart in bodyPartsList | filter:bodyFilter">
               <td><b><h5 align="center">{{bodyPart}}<h5></b>
               </td>
               <hr>

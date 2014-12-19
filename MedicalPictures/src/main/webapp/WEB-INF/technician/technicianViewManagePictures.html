@@ -148,6 +148,19 @@
     </div>
     <br>
     <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns">
+        <label>{{'FILTER'|translate}}
+          <input type="text" ng-model="pictureFilter" />
+        </label>
+      </div>
+      <div class="large-2 columns">
+        <br>
+      </div>
+    </div>
+    <div class="row">
       <div class="large-1 columns">
         <br>
       </div>
@@ -167,7 +180,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="item in pictures">
+              <tr ng-repeat="item in pictures| filter:pictureFilter">
                 <td><strong>{{ item.pictureName }}</strong>
                 </td>
                 <td>
@@ -244,15 +257,15 @@
       </div>
       <div class="large-8 columns">
         <div class="panel">
-          <table align="center">
+          <table >
             <thead>
               <tr>
-                <th>{{'BODY_PART' | translate}}</th>
+                <th><h5 align="center">{{'BODY_PART' | translate}}</h5></th>
               </tr>
             </thead>
             <tbody>
               <tr ng-repeat="bodyPart in allBodyParts | filter:searchBodyPart">
-                <td><a class="info label" ng-click="selectBodyPartForPicture(bodyPart)">{{bodyPart}}</a>
+                <td><div align="center"><a  class="info label" ng-click="selectBodyPartForPicture(bodyPart)">{{bodyPart}}</a></div>
                 </td>
               </tr>
             </tbody>
@@ -300,12 +313,12 @@
           <table align="center">
             <thead>
               <tr>
-                <th>{{'PICTURE_TYPE' | translate}}</th>
+                <th><h5 align="center">{{'PICTURE_TYPE' | translate}}</h5></th>
               </tr>
             </thead>
             <tbody>
               <tr ng-repeat="pictureType in allPictureTypes | filter:searchPictureType">
-                <td><a class="info label" ng-click="selectPictureTypeForPicture(pictureType)">{{pictureType}}</a>
+                <td><div align="center"><a class="info label" ng-click="selectPictureTypeForPicture(pictureType)">{{pictureType}}</a></div>
                 </td>
               </tr>
             </tbody>

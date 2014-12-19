@@ -140,9 +140,13 @@ MedicalPictures.config(function($translateProvider) {
     'SELECT_PICTURE_TYPE':'Select picture type',
     'SELECT_BODY_PART':'Select body part',
     'NOT_SELECTED':'not selected',
-    'FILTER':'Filter'
+    'FILTER':'Filter',
+    'PICTURES_TO_UPLOAD':'Pictures to upload',
+    'AMOUNT':'Amount'
   });
   $translateProvider.translations('pl', {
+    'AMOUNT':'Ilość',
+    'PICTURES_TO_UPLOAD':'Zdjęcia do załadowania',
     'FILTER':'Filtr',
     'NOT_SELECTED':'nie wybrano',
     'SELECT_BODY_PART':'Wybierz część ciała',

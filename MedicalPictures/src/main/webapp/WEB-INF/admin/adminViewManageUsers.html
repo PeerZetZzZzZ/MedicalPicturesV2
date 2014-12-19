@@ -162,6 +162,19 @@
   </div>
   <br>
   <div class="row">
+    <div class="large-2 columns">
+      <br>
+    </div>
+    <div class="large-8 columns">
+      <label>{{'FILTER'|translate}}
+        <input type="text" ng-model="userFilter" />
+      </label>
+    </div>
+    <div class="large-2 columns">
+      <br>
+    </div>
+  </div>
+  <div class="row">
     <div class="large-1 columns">
       <br>
     </div>
@@ -185,7 +198,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="user in usernamesList">
+            <tr ng-repeat="user in usernamesList | filter:userFilter">
               <td><b>{{user.username}}</b>
               </td>
               <td><b>{{user.accountType}}</b>
