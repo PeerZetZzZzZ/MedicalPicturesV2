@@ -240,9 +240,22 @@
             <br>
           </div>
           <div class="large-8 columns">
-            <h3><img src="./views/glyphicons/png/glyphicons_352_nameplate.png">
+            <h3 align="center"><img src="./views/glyphicons/png/glyphicons_352_nameplate.png">
 
 							{{ 'SELECT_PATIENT' |translate}}</h3>
+          </div>
+          <div class="large-2 columns">
+            <br>
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-2 columns">
+            <br>
+          </div>
+          <div class="large-8 columns">
+            <label>{{'FILTER'|translate}}
+              <input type="text" ng-model="searchPatient" />
+            </label>
           </div>
           <div class="large-2 columns">
             <br>
@@ -261,7 +274,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="patient in allPatients">
+                  <tr ng-repeat="patient in allPatients | filter:searchPatient">
                     <td><a class="info label" align="center" ng-click="selectPatientForPicture(patient)">{{patient}}</a>
                     </td>
                   </tr>
@@ -281,9 +294,21 @@
             <br>
           </div>
           <div class="large-8 columns">
-            <h3><img src="./views/glyphicons/png/glyphicons_352_nameplate.png">
-
+            <h3 align="center"><img src="./views/glyphicons/png/glyphicons_352_nameplate.png">
 							{{'SELECT_BODY_PART' |translate}}</h3>
+          </div>
+          <div class="large-2 columns">
+            <br>
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-2 columns">
+            <br>
+          </div>
+          <div class="large-8 columns">
+            <label>{{'FILTER'|translate}}
+              <input type="text" ng-model="searchBodyPart" />
+            </label>
           </div>
           <div class="large-2 columns">
             <br>
@@ -302,7 +327,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="bodyPart in allBodyParts">
+                  <tr ng-repeat="bodyPart in allBodyParts | filter:searchBodyPart">
                     <td><a class="info label" ng-click="selectBodyPartForPicture(bodyPart)">{{bodyPart}}</a>
                     </td>
                   </tr>
@@ -322,8 +347,21 @@
             <br>
           </div>
           <div class="large-8 columns">
-            <h3><img src="./views/glyphicons/png/glyphicons_352_nameplate.png">
+            <h3 align="center"><img src="./views/glyphicons/png/glyphicons_352_nameplate.png">
 							{{'SELECT_PICTURE_TYPE' |translate}}</h3>
+          </div>
+          <div class="large-2 columns">
+            <br>
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-2 columns">
+            <br>
+          </div>
+          <div class="large-8 columns">
+            <label>{{'FILTER'|translate}}
+              <input type="text" ng-model="searchPictureType" />
+            </label>
           </div>
           <div class="large-2 columns">
             <br>
@@ -342,7 +380,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="pictureType in allPictureTypes">
+                  <tr ng-repeat="pictureType in allPictureTypes | filter:searchPictureType">
                     <td><a class="info label" ng-click="selectPictureTypeForPicture(pictureType)">{{pictureType}}</a>
                     </td>
                   </tr>

@@ -122,31 +122,31 @@
     </div>
   </div>
   <div ng-show="pictures.length >0">
-  <div class="row">
-    <div class="large-2 columns">
-      <br>
-    </div>
-    <div class="large-8 columns">
-      <div class="icon-bar three-up">
-        <a class="item" href="" ng-click="deletePicturesClicked()">
-          <img src="./views/glyphicons/png/glyphicons_207_remove_2.png">
-          <label>{{'DELETE_PICTURES'| translate}}</label>
-        </a>
-        <a class="item" href="" ng-click="markAllPicturesClicked()">
-          <img src="./views/glyphicons/png/glyphicons_152_check.png">
-          <label>{{'MARK_ALL'| translate}}</label>
-        </a>
-        <a class="item" href="" ng-click="unmarkAllPicturesClicked()">
-          <img src="./views/glyphicons/png/glyphicons_153_unchecked.png">
-          <label>{{'UNMARK_ALL'| translate}}</label>
-        </a>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns">
+        <div class="icon-bar three-up">
+          <a class="item" href="" ng-click="deletePicturesClicked()">
+            <img src="./views/glyphicons/png/glyphicons_207_remove_2.png">
+            <label>{{'DELETE_PICTURES'| translate}}</label>
+          </a>
+          <a class="item" href="" ng-click="markAllPicturesClicked()">
+            <img src="./views/glyphicons/png/glyphicons_152_check.png">
+            <label>{{'MARK_ALL'| translate}}</label>
+          </a>
+          <a class="item" href="" ng-click="unmarkAllPicturesClicked()">
+            <img src="./views/glyphicons/png/glyphicons_153_unchecked.png">
+            <label>{{'UNMARK_ALL'| translate}}</label>
+          </a>
+        </div>
+      </div>
+      <div class="large-2 columns">
+        <br>
       </div>
     </div>
-    <div class="large-2 columns">
-      <br>
-    </div>
-  </div>
-  <br>
+    <br>
     <div class="row">
       <div class="large-1 columns">
         <br>
@@ -218,81 +218,106 @@
         <br>
       </div>
       <div class="large-8 columns">
-        <h3><img src="./views/glyphicons/png/glyphicons_352_nameplate.png">
-
+        <h3 align="center"><img src="./views/glyphicons/png/glyphicons_352_nameplate.png">
           {{'SELECT_BODY_PART' |translate}}</h3>
-        </div>
-        <div class="large-2 columns">
-          <br>
-        </div>
       </div>
-      <div class="row">
-        <div class="large-2 columns">
-          <br>
-        </div>
-        <div class="large-8 columns">
-          <div class="panel">
-            <table align="center">
-              <thead>
-                <tr>
-                  <th>{{'BODY_PART' | translate}}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="bodyPart in allBodyParts">
-                  <td><a class="info label" ng-click="selectBodyPartForPicture(bodyPart)">{{bodyPart}}</a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="large-2 columns">
-          <br>
-        </div>
+      <div class="large-2 columns">
+        <br>
       </div>
-      <a class="close-reveal-modal">&#215;</a>
     </div>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns">
+        <label>{{'FILTER'|translate}}
+          <input type="text" ng-model="searchBodyPart" />
+        </label>
+      </div>
+      <div class="large-2 columns">
+        <br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns">
+        <div class="panel">
+          <table align="center">
+            <thead>
+              <tr>
+                <th>{{'BODY_PART' | translate}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="bodyPart in allBodyParts | filter:searchBodyPart">
+                <td><a class="info label" ng-click="selectBodyPartForPicture(bodyPart)">{{bodyPart}}</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="large-2 columns">
+        <br>
+      </div>
+    </div>
+    <a class="close-reveal-modal">&#215;</a>
+  </div>
   <div id="myModalPictureType" class="reveal-modal" data-reveal>
     <div class="row">
       <div class="large-2 columns">
         <br>
       </div>
       <div class="large-8 columns">
-        <h3><img src="./views/glyphicons/png/glyphicons_352_nameplate.png">
+        <h3 align="center"><img src="./views/glyphicons/png/glyphicons_352_nameplate.png">
           {{'SELECT_PICTURE_TYPE' |translate}}</h3>
-        </div>
-        <div class="large-2 columns">
-          <br>
-        </div>
       </div>
-      <div class="row">
-        <div class="large-2 columns">
-          <br>
-        </div>
-        <div class="large-8 columns">
-          <div class="panel">
-            <table align="center">
-              <thead>
-                <tr>
-                  <th>{{'PICTURE_TYPE' | translate}}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="pictureType in allPictureTypes">
-                  <td><a class="info label" ng-click="selectPictureTypeForPicture(pictureType)">{{pictureType}}</a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="large-2 columns">
-          <br>
-        </div>
+      <div class="large-2 columns">
+        <br>
       </div>
-      <a class="close-reveal-modal">&#215;</a>
     </div>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns">
+        <label>{{'FILTER'|translate}}
+          <input type="text" ng-model="searchPictureType" />
+        </label>
+      </div>
+      <div class="large-2 columns">
+        <br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns">
+        <div class="panel">
+          <table align="center">
+            <thead>
+              <tr>
+                <th>{{'PICTURE_TYPE' | translate}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="pictureType in allPictureTypes | filter:searchPictureType">
+                <td><a class="info label" ng-click="selectPictureTypeForPicture(pictureType)">{{pictureType}}</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="large-2 columns">
+        <br>
+      </div>
+    </div>
+    <a class="close-reveal-modal">&#215;</a>
+  </div>
   <script src="./views/js/vendor/jquery.js"></script>
   <script src="./views/js/foundation.min.js"></script>
   <script>

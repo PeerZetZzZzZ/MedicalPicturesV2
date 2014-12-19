@@ -139,10 +139,11 @@ MedicalPictures.config(function($translateProvider) {
     'SELECT_PATIENT':'Select the patient',
     'SELECT_PICTURE_TYPE':'Wybierz typ zdjęcia',
     'SELECT_BODY_PART':'Select body part',
-    'NOT_SELECTED':'not selected'
-
+    'NOT_SELECTED':'not selected',
+    'FILTER':'Filter'
   });
   $translateProvider.translations('pl', {
+    'FILTER':'Filtr',
     'NOT_SELECTED':'nie wybrano',
     'SELECT_BODY_PART':'Wybierz część ciała',
     'SELECT_PICTURE_TYPE':'Wybierz typ zdjęcia',
