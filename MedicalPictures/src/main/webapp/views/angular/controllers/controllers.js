@@ -982,6 +982,10 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
   $scope.selectedPatient;
   $scope.selectedBodyPart;
   $scope.selectedPictureType;
+  $scope.selectedItemForPatient;//when window shows with patients to chose for picture - it is the currently showed window
+  $translate('NOT_SELECTED').then(function(translation) {
+    $scope.notSelected= translation;//its the translation of sentence when user didn't select patient pictureType or bodyPart
+  });
   $scope.logoutUser = function() {
     $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/Logout').
     success(function(data, status, headers, config) {
@@ -1106,23 +1110,24 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
   });
   $scope.uploadPictures = function() {
     var i = 0;
+    $scope.appName= '\''+$scope.notSelected.toString()+'\'';
     var flagOfUpload = true;
     for (i = 0; i < uploader.queue.length; i++) {
-      if (angular.isUndefined(uploader.queue[i].selectedPatient) && uploader.queue[i].selectedPatient !== '') {
+      if (angular.isUndefined(uploader.queue[i].selectedPatient) && uploader.queue[i].selectedPatient !== '' || uploader.queue[i].selectedPatient === $scope.notSelected) {
         var fileName = uploader.queue[i].file.name;
         $translate('NO_PATIENT_SELECTED_FOR_FILE').then(function(translation) {
           showAlertMessageError(translation, fileName);
         });
         flagOfUpload = false;
         break;
-      } else if (angular.isUndefined(uploader.queue[i].selectedBodyPart) && uploader.queue[i].selectedBodyPart !== '') {
+      } else if (angular.isUndefined(uploader.queue[i].selectedBodyPart) && uploader.queue[i].selectedBodyPart !== '' || uploader.queue[i].selectedBodyPart === $scope.notSelected) {
         var fileName = uploader.queue[i].file.name;
         $translate('NO_BODY_PART_SELECTED_FOR_FILE').then(function(translation) {
           showAlertMessageError(translation, fileName);
         });
         flagOfUpload = false;
         break;
-      } else if (angular.isUndefined(uploader.queue[i].selectedPictureType) && uploader.queue[i].selectedPictureType !== '') {
+      } else if (angular.isUndefined(uploader.queue[i].selectedPictureType) && uploader.queue[i].selectedPictureType !== ''|| uploader.queue[i].selectedPictureType === $scope.notSelected) {
         var fileName = uploader.queue[i].file.name;
         $translate('NO_PICTURE_TYPE_SELECTED_FOR_FILE').then(function(translation) {
           showAlertMessageError(translation, fileName);
@@ -1179,6 +1184,22 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
   };
 
   console.info('uploader', uploader);
+  $scope.selectItemForPatient = function(item){
+    $scope.selectedItemForPatient=item;
+  };
+  $scope.selectPatientForPicture = function(patient){
+    $scope.selectedItemForPatient.selectedPatient=patient;
+    $('.close-reveal-modal').click(); //close the reveal-modal window, small hack
+  };
+  $scope.selectBodyPartForPicture = function(bodyPart){
+    $scope.selectedItemForPatient.selectedBodyPart=bodyPart;
+    $('.close-reveal-modal').click(); //close the reveal-modal window, small hack
+  };
+  $scope.selectPictureTypeForPicture = function(pictureType){
+    $scope.selectedItemForPatient.selectedPictureType=pictureType;
+    $('.close-reveal-modal').click(); //close the reveal-modal window, small hack
+  };
+
 });
 MedicalPictures.controller('TechnicianViewManagePicturesController', function($scope, $http, $translate, $window, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;

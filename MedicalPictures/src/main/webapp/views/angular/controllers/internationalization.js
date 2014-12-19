@@ -133,9 +133,22 @@ MedicalPictures.config(function($translateProvider) {
     'USER_DUPLICATION_ERROR':'Can\'t add new user because this username is already used!',
     'Unauthorized':'Unauthorized',
     'USER_DOESNT_EXISTS':'The problem occurred. User doesn\'t exist!',
-    'USER_NOT_HAVE_PERMISSIONS_TO_SEE_THIS':'Hey, You have no permissions to see this content!'
+    'USER_NOT_HAVE_PERMISSIONS_TO_SEE_THIS':'Hey, You have no permissions to see this content!',
+    'PREVIEW':'Preview',
+    'SIZE':'Size',
+    'SELECT_PATIENT':'Select the patient',
+    'SELECT_PICTURE_TYPE':'Wybierz typ zdjęcia',
+    'SELECT_BODY_PART':'Select body part',
+    'NOT_SELECTED':'not selected'
+
   });
   $translateProvider.translations('pl', {
+    'NOT_SELECTED':'nie wybrano',
+    'SELECT_BODY_PART':'Wybierz część ciała',
+    'SELECT_PICTURE_TYPE':'Wybierz typ zdjęcia',
+    'SELECT_PATIENT':'Wybierz pacjenta',
+    'PREVIEW':'Podgląd',
+    'SIZE':'Rozmiar',
     'LOGIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Logowania',
     'ADMIN_VIEW_HEAD_NAME': 'MedicalPictures Panel Administratora',
     'DOCTOR_VIEW_HEAD_NAME': 'MedicalPictures Panel Doktora',

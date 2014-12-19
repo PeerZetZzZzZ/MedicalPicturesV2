@@ -67,6 +67,7 @@
     td a {
       margin: auto;
       display: block;
+      word-wrap: break-word;
     }
     .sub-nav a {
       color: black;
@@ -113,7 +114,8 @@
         </a>
         <a class="item" href="/MedicalPictures/TechnicianViewAddPictures">
           <img src="./views/glyphicons/png/glyphicons_011_camera.png">
-          <label><b>{{'ADD_NEW_PICTURES'| translate}}</b></label>
+          <label><b>{{'ADD_NEW_PICTURES'| translate}}</b>
+          </label>
         </a>
       </div>
     </div>
@@ -130,7 +132,7 @@
       <div ng-show="uploader.isHTML5">
         <!-- 3. nv-file-over uploader="link" over-class="className" -->
         <div class="well my-drop-zone" nv-file-over="" uploader="uploader">
-          <h5 align="center"> {{'DROP_PICTURES_HERE' |translate}} </h5>
+          <h5 align="center"> {{'DROP_PICTURES_HERE'|translate}} </h5>
         </div>
       </div>
     </div>
@@ -154,7 +156,7 @@
     </div>
   </div>
   <br>
-  <div ng-show="uploader.queue.length >0">
+  <div ng-show="uploader.queue.length > 0">
     <div class="row">
       <div class="large-1 columns">
         <br>
@@ -163,70 +165,203 @@
         <div class="row">
           <div class="large-7 columns">
             <h3>Zdjęcia do załadowania</h3>
-            <p>Ilość: {{ uploader.queue.length }}</p>
+            <p>Ilość: {{ uploader.queue.length}}</p>
           </div>
           <div class="large-3 columns">
             <a href="#" class="button" ng-click="uploadPictures()">Załaduj</a>
           </div>
         </div>
-
-        <div class="panel">
-          <table>
-            <thead>
-              <tr>
-                <th width="50%">Preview</th>
-                <th width="50%">Name</th>
-                <th ng-show="uploader.isHTML5">Size</th>
-                <th ng-show="uploader.isHTML5">Patient</th>
-                <th>Picture Type</th>
-                <th>Body Part</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="item in uploader.queue">
-                <td>
-                  <div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
-                </td>
-                <td><strong>{{ item.file.name }}</strong>
-                </td>
-                <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024|number:2 }} kB</td>
-                <td>
-                  <select ng-options="patient for patient in allPatients" ng-model="item.selectedPatient" ng-init="selectedPatient = allPatients[0]" required>
-                  </select>
-                </td>
-                <td>
-                  <select ng-options="pictureType for pictureType in allPictureTypes" ng-model="item.selectedPictureType" ng-init="selectedPictureType = allPictureTypes[0]" required>
-                  </select>
-                </td>
-                <td>
-                  <select ng-options="bodyPart for bodyPart in allBodyParts" ng-model="item.selectedBodyPart" ng-init="selectedBodyPart = allBodyParts[0]" required>
-                  </select>
-                </td>
-                <td nowrap>
-                  <div data-magellan-expedition="fixed">
-                    <dl class="sub-nav">
-                      <dd data-magellan-arrival="build"><span class="error label"><a ng-click="item.remove()" href="#build"
-                                        ng-disabled="item.isReady || item.isUploading || item.isSuccess">{{'REMOVE'|translate}}</a></span>
-                      </dd>
-                    </dl>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
       <div class="large-1 columns">
         <br>
       </div>
-    </div class="row">
-  </div>
-  <script src="./views/js/vendor/jquery.js"></script>
-  <script src="./views/js/foundation.min.js"></script>
-  <script>
-    $(document).foundation();
-  </script>
+    </div>
+    <div class="row">
+      <div class="large-1 columns">
+        <br>
+      </div>
+      <div class="large-10 columns">
+          <div class="panel">
+            <table>
+              <thead>
+                <tr>
+                  <th width="50%">{{'PREVIEW' | translate}}</th>
+                  <th width="50%">{{'NAME' | translate}}</th>
+                  <th ng-show="uploader.isHTML5">{{'SIZE' | translate}}</th>
+                  <th ng-show="uploader.isHTML5">{{'PATIENT' |translate}}</th>
+                  <th>{{'PICTURE_TYPE' | translate}}</th>
+                  <th>{{'BODY_PART' | translate}}</th>
+                  <th>{{'ACTIONS' | translate}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="item in uploader.queue">
+                  <td>
+                    <div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
+                  </td>
+                  <td><strong>{{ item.file.name}}</strong>
+                  </td>
+                  <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size / 1024|number:2 }} kB</td>
+                  <td>
+                    <!-- <select ng-options="patient for patient in allPatients" ng-model="item.selectedPatient" ng-init="selectedPatient = allPatients[0]" required>
+										</select> -->
+                    <a class="info label" data-reveal-id="myModalPatient" ng-init="item.selectedPatient=notSelected" ng-click="selectItemForPatient(item)">{{item.selectedPatient}}</a>
+                  </td>
+                  <td>
+                    <a class="info label" data-reveal-id="myModalPictureType" ng-init="item.selectedPictureType=notSelected" ng-click="selectItemForPatient(item)">{{item.selectedPictureType}}</a>
+                    <!-- <select ng-options="pictureType for pictureType in allPictureTypes" ng-model="item.selectedPictureType" ng-init="selectedPictureType = allPictureTypes[0]" required>
+										</select> -->
+                  </td>
+                  <td>
+                    <a class="info label" data-reveal-id="myModalBodyPart" ng-init="item.selectedBodyPart=notSelected" ng-click="selectItemForPatient(item)">{{item.selectedBodyPart}}</a>
+                    <!-- <select ng-options="bodyPart for bodyPart in allBodyParts" ng-model="item.selectedBodyPart" ng-init="selectedBodyPart = allBodyParts[0]" required>
+										</select> -->
+                  </td>
+                  <td nowrap>
+                    <div data-magellan-expedition="fixed">
+                      <dl class="sub-nav">
+                        <dd data-magellan-arrival="build"><span class="error label"><a ng-click="item.remove()" href="#build" ng-disabled="item.isReady || item.isUploading || item.isSuccess">{{'REMOVE'|translate}}</a></span>
+                        </dd>
+                      </dl>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="large-1 columns">
+          <br>
+        </div>
+      </div>
+      <div id="myModalPatient" class="reveal-modal" data-reveal>
+        <div class="row">
+          <div class="large-2 columns">
+            <br>
+          </div>
+          <div class="large-8 columns">
+            <h3><img src="./views/glyphicons/png/glyphicons_352_nameplate.png">
+
+							{{ 'SELECT_PATIENT' |translate}}</h3>
+          </div>
+          <div class="large-2 columns">
+            <br>
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-2 columns">
+            <br>
+          </div>
+          <div class="large-8 columns">
+            <div class="panel">
+              <table align="center">
+                <thead>
+                  <tr>
+                    <th>{{'PATIENT' | translate}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="patient in allPatients">
+                    <td><a class="info label" align="center" ng-click="selectPatientForPicture(patient)">{{patient}}</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="large-2 columns">
+            <br>
+          </div>
+        </div>
+        <a class="close-reveal-modal">&#215;</a>
+      </div>
+      <div id="myModalBodyPart" class="reveal-modal" data-reveal>
+        <div class="row">
+          <div class="large-2 columns">
+            <br>
+          </div>
+          <div class="large-8 columns">
+            <h3><img src="./views/glyphicons/png/glyphicons_352_nameplate.png">
+
+							{{'SELECT_BODY_PART' |translate}}</h3>
+          </div>
+          <div class="large-2 columns">
+            <br>
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-2 columns">
+            <br>
+          </div>
+          <div class="large-8 columns">
+            <div class="panel">
+              <table align="center">
+                <thead>
+                  <tr>
+                    <th>{{'BODY_PART' | translate}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="bodyPart in allBodyParts">
+                    <td><a class="info label" ng-click="selectBodyPartForPicture(bodyPart)">{{bodyPart}}</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="large-2 columns">
+            <br>
+          </div>
+        </div>
+        <a class="close-reveal-modal">&#215;</a>
+      </div>
+      <div id="myModalPictureType" class="reveal-modal" data-reveal>
+        <div class="row">
+          <div class="large-2 columns">
+            <br>
+          </div>
+          <div class="large-8 columns">
+            <h3><img src="./views/glyphicons/png/glyphicons_352_nameplate.png">
+							{{'SELECT_PICTURE_TYPE' |translate}}</h3>
+          </div>
+          <div class="large-2 columns">
+            <br>
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-2 columns">
+            <br>
+          </div>
+          <div class="large-8 columns">
+            <div class="panel">
+              <table align="center">
+                <thead>
+                  <tr>
+                    <th>{{'PICTURE_TYPE' | translate}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="pictureType in allPictureTypes">
+                    <td><a class="info label" ng-click="selectPictureTypeForPicture(pictureType)">{{pictureType}}</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="large-2 columns">
+            <br>
+          </div>
+        </div>
+        <a class="close-reveal-modal">&#215;</a>
+      </div>
+    </div>
+    <script src="./views/js/vendor/jquery.js"></script>
+    <script src="./views/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
 </body>
 
 </html>
