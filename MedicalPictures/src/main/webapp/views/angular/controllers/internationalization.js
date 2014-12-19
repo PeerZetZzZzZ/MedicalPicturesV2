@@ -137,7 +137,7 @@ MedicalPictures.config(function($translateProvider) {
     'PREVIEW':'Preview',
     'SIZE':'Size',
     'SELECT_PATIENT':'Select the patient',
-    'SELECT_PICTURE_TYPE':'Wybierz typ zdjęcia',
+    'SELECT_PICTURE_TYPE':'Select picture type',
     'SELECT_BODY_PART':'Select body part',
     'NOT_SELECTED':'not selected',
     'FILTER':'Filter'
