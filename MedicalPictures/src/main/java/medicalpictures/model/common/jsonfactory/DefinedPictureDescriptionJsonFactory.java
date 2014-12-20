@@ -58,4 +58,30 @@ public class DefinedPictureDescriptionJsonFactory {
             throw new JsonParsingException(ex.getMessage());
         }
     }
+
+    /**
+     * Decrypts the request from the client and gets the values to edit defined
+     * picture description.
+     *
+     * @param editingDpdValues
+     * @return
+     * @throws JsonParsingException
+     */
+    public Map<String, String> getEditingDefinedPictureDescriptionValues(String editingDpdValues) throws JsonParsingException {
+        try {
+            JSONObject editingPictureType = new JSONObject(editingDpdValues);
+            String oldDefinedPictureDescription = editingPictureType.getString("oldDefinedPictureDescription");
+            String oldDefinedPictureDescriptionName = editingPictureType.getString("oldDefinedPictureDescriptionName");
+            String newDefinedPictureDescription = editingPictureType.getString("newDefinedPictureDescription");
+            String newDefinedPictureDescriptionName = editingPictureType.getString("newDefinedPictureDescriptionName");
+            Map<String, String> valuesMap = new HashMap<>();
+            valuesMap.put("oldDefinedPictureDescription", oldDefinedPictureDescription);
+            valuesMap.put("newDefinedPictureDescription", newDefinedPictureDescription);
+            valuesMap.put("oldDefinedPictureDescriptionName", oldDefinedPictureDescriptionName);
+            valuesMap.put("newDefinedPictureDescriptionName", newDefinedPictureDescriptionName);
+            return valuesMap;
+        } catch (JSONException ex) {
+            throw new JsonParsingException(ex.getMessage());
+        }
+    }
 }

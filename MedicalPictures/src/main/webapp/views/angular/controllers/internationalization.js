@@ -151,9 +151,19 @@ MedicalPictures.config(function($translateProvider) {
     'SELECTED_PICTURE_TYPE':'Selected picture type:',
     'SUCCESSFULLY_REMOVED_PICTURE_TYPE':'Successfully removed picture type!',
     'CANT_REMOVE_PICTURE_TYPE_ALREADY_USED':'Can\'t remove picture type, because it\'s already used by some pictures!',
-    'SUCCESSFULLY_UPDATED_PICTURE_TYPE':'Successfully updated picture type!'
+    'SUCCESSFULLY_UPDATED_PICTURE_TYPE':'Successfully updated picture type!',
+    'SUCCESSFULLY_REMOVED_DPD':'Successfully removed defined picture description!',
+    'CANT_REMOVE_DPD_ALREADY_USED':'Can\'t remove defined picture description, because it\'s already used by some pictures!',
+    'SUCCESSFULLY_UPDATED_DPD':'Successfully updated defined picture description!',
+    'DPD_ADDED_SUCCESSFULLY':'Defined picture description successfully added!',
+    'DPD_ADDING_FAILED':'Defined picture description adding failed...'
   });
   $translateProvider.translations('pl', {
+    'DPD_ADDING_FAILED':'Zdefiniowany opis zdjęć nie został dodany...',
+    'DPD_ADDED_SUCCESSFULLY':'Dodano zdefiniowany opis zdjęć!',
+    'SUCCESSFULLY_UPDATED_DPD':'Zaktualizowano zdefiniowany opis zdjęć!',
+    'CANT_REMOVE_DPD_ALREADY_USED':'Nie można usunąć wybranego zdefiniowanego opisu zdjęć, bo jest już użyty do opisu zdjęć!',
+    'SUCCESSFULLY_REMOVED_DPD':'Usunięto zdefiniowany opis zdjęcia!',
     'SUCCESSFULLY_UPDATED_PICTURE_TYPE':'Zaktualizowano typ zdjęcia!',
     'CANT_REMOVE_PICTURE_TYPE_ALREADY_USED':'Nie można usunąć wybranego typu zdjęć, bo jest już użyty do opisu zdjęć!',
     'SUCCESSFULLY_REMOVED_PICTURE_TYPE':'Usunięto typ zdjęcia!',

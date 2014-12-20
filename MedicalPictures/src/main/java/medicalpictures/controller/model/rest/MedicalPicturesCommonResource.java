@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -787,8 +785,9 @@ public class MedicalPicturesCommonResource {
             return jsonFactory.getOperationResponseByCode(ResultCodes.INPUT_JSON_PARSE_ERROR);
         }
     }
+
     /**
-     * Removes the body part.
+     * Removes the picture type.
      *
      * @param pictureTypeToRemove
      * @return
@@ -813,7 +812,7 @@ public class MedicalPicturesCommonResource {
     }
 
     /**
-     * Updates the body part.
+     * Updates the picture type.
      *
      * @param editingPictureTypeValues
      * @return
@@ -837,6 +836,60 @@ public class MedicalPicturesCommonResource {
             return jsonFactory.getOperationResponseByCode(ResultCodes.USER_IS_NOT_LOGGED);
         } catch (JsonParsingException ex) {
             logger.logError("/updatePictureType: input json parse exception!: " + editingPictureTypeValues, MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.INPUT_JSON_PARSE_ERROR);
+        }
+    }
+
+    /**
+     * Removes the defined picture description.
+     *
+     * @param definedPictureDescriptionToRemove
+     * @return
+     */
+    @GET
+    @Path("removeDefinedPictureDescription/{definedPictureDescriptionName}")
+    @Produces("application/json")
+    public String removeDefinedPictureDescription(@PathParam("definedPictureDescriptionName") String definedPictureDescriptionToRemove) {
+        try {
+            securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+            int result = definedPictureDescriptionDAO.removeDefinedPictureDescription(definedPictureDescriptionToRemove);
+            String response = jsonFactory.getOperationResponseByCode(result);
+            logger.logInfo("Remove defined picture description response: " + response, MedicalPicturesCommonResource.class);
+            return response;
+        } catch (UserNotPermitted ex) {
+            logger.logError("User not permitted to access /removedDefinedPictureDescription/{definedPictureDescriptionName !", MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.USER_UNAOTHRIZED);
+        } catch (NoLoggedUserExistsHere ex) {
+            logger.logError("User is not logged - can't access /removedDefinedPictureDescription/{definedPictureDescriptionName !", MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.USER_IS_NOT_LOGGED);
+        }
+    }
+
+    /**
+     * Updates the body part.
+     *
+     * @param editingDpdValues
+     * @return
+     */
+    @POST
+    @Path("updateDefinedPictureDescription")
+    @Produces("application/json")
+    public String updateDefinedPictureDescription(String editingDpdValues) {
+        try {
+            securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+            Map<String, String> editingValues = definedPictureDescriptionJsonFactory.getEditingDefinedPictureDescriptionValues(editingDpdValues);
+            int result = definedPictureDescriptionDAO.updateDefinedPictureDescription(editingValues);
+            String response = jsonFactory.getOperationResponseByCode(result);
+            logger.logInfo("Update defined picture description response: " + response, MedicalPicturesCommonResource.class);
+            return response;
+        } catch (UserNotPermitted ex) {
+            logger.logError("User not permitted to access /updateDefinedPictureDescription !", MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.USER_UNAOTHRIZED);
+        } catch (NoLoggedUserExistsHere ex) {
+            logger.logError("User is not logged - can't access /updateDefinedPictureDescription !", MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.USER_IS_NOT_LOGGED);
+        } catch (JsonParsingException ex) {
+            logger.logError("/updateDefinedPictureDescription: input json parse exception!: " + editingDpdValues, MedicalPicturesCommonResource.class, ex);
             return jsonFactory.getOperationResponseByCode(ResultCodes.INPUT_JSON_PARSE_ERROR);
         }
     }

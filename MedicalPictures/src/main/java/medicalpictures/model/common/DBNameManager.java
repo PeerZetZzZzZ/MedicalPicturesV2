@@ -24,6 +24,11 @@ public class DBNameManager {
     private static final String ACCOUNT_TYPE_TABLE_TABLE_NAME = "AccountType";
     private static final String DOCTOR_PICTURE_TABLE_TABLE_NAME = "DoctorPicture";
     private static final String DEFINED_PICTURE_DESCRIPTION_TABLE_NAME = "DefinedPictureDescription";
+    private static final String PICTURE_DESCRIPTION_TABLE_NAME = "PictureDescription";
+
+    public static String getPictureDescriptionTableName() {
+        return PICTURE_DESCRIPTION_TABLE_NAME;
+    }
 
     public static String getDefinedPictureDescriptionTableName() {
         return DEFINED_PICTURE_DESCRIPTION_TABLE_NAME;

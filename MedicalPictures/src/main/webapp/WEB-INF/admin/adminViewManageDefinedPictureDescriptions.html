@@ -160,7 +160,7 @@
             <input type="text" ng-model="newDefinedPictureDescriptionName" name="newDefinedPictureDescriptionName" required ng-maxlength="maxDefinedPictureDescriptionNameLength" placeholder="{{'DEFINED_DESCRIPTION_NAME' | translate}}">
           </div>
           <div class="small-3 columns">
-            <a ng-click="addDefinedPictureDescriptionClicked()"  class="button postfix">{{'ADD'|translate}}</a>
+            <a ng-click="addDefinedPictureDescriptionClicked()" class="button postfix">{{'ADD'|translate}}</a>
           </div>
         </div>
       </div>
@@ -214,9 +214,9 @@
           </thead>
           <tbody>
             <tr ng-repeat="dpd in definedPictureDescriptionsList | filter:pictureFilter">
-              <td><b><h7 align="center">{{dpd.name}}<h7></b>
+              <td><b><div align="center"><a data-reveal-id="myModalDefinedPictureDescription" class="info label" ng-click="editDefinedPictureDescriptionClicked(dpd)" >{{dpd.name}}</a><div></b>
               </td>
-              <td><b><h7 align="center">{{dpd.pictureDescription}}<h7></b>
+              <td><b><div align="center"><a data-reveal-id="myModalDefinedPictureDescription" class="info label" ng-click="editDefinedPictureDescriptionClicked(dpd)" >{{dpd.pictureDescription}}</a><div></b>
               </td>
               <hr>
             </tr>
@@ -228,11 +228,103 @@
       <br>
     </div>
   </div>
-  <script src="./views/js/vendor/jquery.js"></script>
-  <script src="./views/js/foundation.min.js"></script>
-  <script>
-    $(document).foundation();
-  </script>
+  <div id="myModalDefinedPictureDescription" class="reveal-modal" data-reveal>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns">
+        <h3 align="center">{{'SELECTED_PICTURE_TYPE' | translate}}
+          {{selectedPictureType}}</h3>
+      </div>
+      <div class="large-2 columns">
+        <br>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns">
+        <div align="center">
+          <a class="button" ng-click="removeDefinedPictureDescription()">{{'REMOVE'|translate}}</a>
+        </div>
+      </div>
+      <div class="large-2 columns">
+        <br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns">
+        <dl class="accordion" data-accordion>
+          <dd class="accordion-navigation">
+            <a href="#panel1" align="center">{{'EDIT' |translate}}</a>
+            <div id="panel1" class="content">
+              <form name="pictureForm">
+                <div class="row">
+                  <div class="large-3 columns">
+                    <br>
+                  </div>
+                  <div class="large-6 columns">
+                    <label>{{'DEFINED_PICTURE_DESCRIPTION' | translate}}
+                    </label>
+                      <textarea placeholder="" name="dpdEditingArea" required ng-maxlength="maxDefinedPictureDescriptionLength" ng-model="editingDefinedPictureDescription"></textarea>
+                  </div>
+                  <div class="large-3 columns">
+                    <br>
+                  </div>
+                </div>
+                <br>
+                <div class="row">
+                  <div class="large-3 columns">
+                    <br>
+                  </div>
+                  <div class="large-6 columns">
+                    <div class="row collapse postfix-round">
+                      <div class="small-9 columns">
+                        <input type="text" ng-model="editingDefinedPictureDescriptionName" name="editingDefinedPictureDescriptionName" required ng-maxlength="maxDefinedPictureDescriptionNameLength" placeholder="{{'DEFINED_DESCRIPTION_NAME' | translate}}">
+                      </div>
+                      <div class="small-3 columns">
+                        <a ng-click="saveDefinedPictureDescriptionClicked()" ng-show="((editingDefinedPictureDescription != selectedDpd.pictureDescription) || (editingDefinedPictureDescriptionName != selectedDpd.name)) && (editingDefinedPictureDescriptionName!==undefined) && (editingDefinedPictureDescription !== undefined) "  class="button postfix">{{'SAVE'|translate}}</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="large-3 columns">
+                    <br>
+                  </div>
+                </div>
+                <br>
+                <div class="row">
+                  <div class="large-2 columns">
+                    <br>
+                  </div>
+                  <div class="large-8 columns" align="center">
+                    <p ng-show="pictureForm.dpdEditingArea.$error.maxlength">{{'DEFINED_PICTURE_DESCRIPTION_TOO_LONG'| translate}}</p>
+                    <p ng-show="pictureForm.editingDefinedPictureDescriptionName.$error.maxlength">{{'DEFINED_PICTURE_DESCRIPTION_NAME_TOO_LONG'| translate}}</p>
+                  </div>
+                  <div class="large-2 columns">
+                    <br>
+                  </div>
+                </div>
+              </form>
+          </dd>
+        </dl>
+        </div>
+        <div class="large-2 columns">
+          <br>
+        </div>
+      </div>
+      <a class="close-reveal-modal">&#215;</a>
+    </div>
+    <script src="./views/js/vendor/jquery.js"></script>
+    <script src="./views/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
 </body>
 
 </html>

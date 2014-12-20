@@ -5,13 +5,12 @@ import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.NoResultException;
 import medicalpictures.model.common.DBNameManager;
 import medicalpictures.model.common.MedicalLogger;
 import medicalpictures.model.common.ResultCodes;
-import medicalpictures.model.exception.AddToDbFailed;
-import medicalpictures.model.orm.entity.BodyPart;
 import medicalpictures.model.orm.entity.DefinedPictureDescription;
+import medicalpictures.model.orm.entity.PictureDescription;
+import medicalpictures.model.orm.entity.PictureType;
 
 /**
  *
@@ -76,6 +75,12 @@ public class DefinedPictureDescriptionDAO {
         }
     }
 
+    /**
+     * Adds the defined picture description.
+     *
+     * @param dpdValues
+     * @return
+     */
     public int addDefinedPictureDescription(Map<String, String> dpdValues) {
         DefinedPictureDescription dpd = getDefinedPictureDesriptionByName(dpdValues.get("name"));
         if (dpd == null) {
@@ -86,6 +91,53 @@ public class DefinedPictureDescriptionDAO {
         } else {
             logger.logWarning("Couldn't add defined picture description. Defined picture description with name '" + dpdValues.get("name") + "' already exists!", DefinedPictureDescriptionDAO.class);
             return ResultCodes.OBJECT_ALREADY_EXISTS;
+        }
+    }
+
+    /**
+     * Removes the defined picture description if it's not used to describe any
+     * existing.
+     *
+     * @param definedPictureDescriptionToRemove
+     * @return
+     */
+    public int removeDefinedPictureDescription(String definedPictureDescriptionToRemove) {
+        try {
+            PictureDescription dpd = (PictureDescription) managerDAO.getEntityManager().createQuery("SELECT u FROM " + DBNameManager.getPictureDescriptionTableName() + " u WHERE u.definedPictureDescription.descriptionName LIKE :definedPictureDescriptionName").
+                    setParameter("definedPictureDescriptionName", definedPictureDescriptionToRemove).getSingleResult();
+            return ResultCodes.OBJECT_ALREADY_EXISTS;//object is already used by some pictures - can't delete
+        } catch (Exception ex) {
+            DefinedPictureDescription dpd = getDefinedPictureDesriptionByName(definedPictureDescriptionToRemove);
+            managerDAO.getEntityManager().remove(dpd);
+            logger.logError("Successfully removed defined picture description'" + definedPictureDescriptionToRemove + "' !", DefinedPictureDescriptionDAO.class, ex);
+            return ResultCodes.OPERATION_SUCCEED;
+        }
+    }
+
+    /**
+     * Updates the existing defined picture description.
+     *
+     * @param editingValues
+     * @return
+     */
+    public int updateDefinedPictureDescription(Map<String, String> editingValues) {
+        String oldDpd = editingValues.get("oldDefinedPictureDescription");
+        String newDpd = editingValues.get("newDefinedPictureDescription");
+        String oldDpdName = editingValues.get("oldDefinedPictureDescriptionName");
+        String newDpdName = editingValues.get("newDefinedPictureDescriptionName");
+        DefinedPictureDescription existingDpd = getDefinedPictureDesriptionByName(oldDpdName);
+        if (existingDpd != null) {
+            if (!oldDpd.equals(newDpd)) {//if description changed
+                existingDpd.setPictureDescription(newDpd);
+            }
+            if (!oldDpdName.equals(newDpdName)) {
+                existingDpd.setDescriptionName(newDpdName);
+            }
+            logger.logInfo("Successfully updated defined picture description'" + oldDpdName + "' to '" + newDpdName + "'. Description '" + oldDpd + "' to '" + newDpd + "' !", DefinedPictureDescriptionDAO.class);
+            return ResultCodes.OPERATION_SUCCEED;
+        } else {
+            logger.logInfo("Can't edit picture type '" + oldDpdName + ", because it doesn't exist!", DefinedPictureDescriptionDAO.class);
+            return ResultCodes.OBJECT_DOESNT_EXIST;
         }
     }
 }
