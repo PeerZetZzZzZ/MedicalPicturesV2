@@ -107,8 +107,10 @@
       <br>
     </div>
     <div class="large-8 columns">
-      <h3><img src="./views/glyphicons/png/glyphicons_006_user_add.png" >
-                {{'ADDING_NEW_USER' |translate}}</h3>
+      <div align="center">
+        <h3><img src="./views/glyphicons/png/glyphicons_006_user_add.png" >
+          {{'ADDING_NEW_USER' |translate}}</h3>
+      </div>
     </div>
     <div class="large-2 columns">
       <br>
@@ -129,7 +131,7 @@
       </div>
       <div class="large-6 columns">
         <label>{{'SURNAME' |translate }}</label>
-        <input type="text" placeholder="" ng-model="surname" required ng-pattern="nameRegexpPattern" />
+        <input type="text" placeholder="" ng-model="surname" required  ng-maxlength="maxNameSurnameLength" ng-pattern="nameRegexpPattern" />
       </div>
     </div>
     <div class="row">
@@ -151,7 +153,7 @@
     <div class="row">
       <div ng-show="selectedAccountType==='DOCTOR'" class="large-12 columns">
         <label>{{'SPECIALIZATION' |translate }}</label>
-        <input type="text" placeholder="" ng-model="specialization" required ng-pattern="nameRegexpPattern" />
+        <input type="text" placeholder="" ng-model="specialization" required  ng-maxlength="maxNameSurnameLength" ng-pattern="nameRegexpPattern" />
       </div>
     </div>
     </div>

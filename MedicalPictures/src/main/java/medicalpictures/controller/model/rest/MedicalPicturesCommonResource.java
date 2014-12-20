@@ -380,7 +380,7 @@ public class MedicalPicturesCommonResource {
             Picture picture = pictureDAO.getPictureById(pictureId);
             if (picture != null) {
                 String pictureDetails = pictureJsonFactory.getPictureDetailsWithThumbnail(picture);
-                logger.logInfo("Retriving picture and thumbnail for '" + pictureId + "' successful!", MedicalPicturesCommonResource.class);
+                logger.logInfo("Retriving picture and thumbnail for '" + pictureId + "' successful!. Response: " + pictureDetails, MedicalPicturesCommonResource.class);
                 return pictureDetails;
             } else {
                 String result = jsonFactory.getOperationResponseByCode(ResultCodes.OBJECT_DOESNT_EXIST);
@@ -400,6 +400,12 @@ public class MedicalPicturesCommonResource {
 
     }
 
+    /**
+     * Returns the full picture data of the given picture.
+     *
+     * @param pictureId
+     * @return
+     */
     @GET
     @Path("getFullPictureData/{pictureId}")
     @Produces("application/json")
@@ -440,6 +446,7 @@ public class MedicalPicturesCommonResource {
     public String savePictureDescription(String pictureDescriptionDetails) {
         try {
             securityManager.checkUserPermissionToThisContent(AccountType.DOCTOR);
+            System.out.println("Co dostalem: "+pictureDescriptionDetails);
             Map<String, String> pictureDescriptionDetailsMap = pictureJsonFactory.getSavePictureDescription(pictureDescriptionDetails);
             String response = pictureDAO.savePictureOrUpdateDescription(pictureDescriptionDetailsMap);
             logger.logInfo("Save picture description response: " + response, MedicalPicturesCommonResource.class);
@@ -540,7 +547,6 @@ public class MedicalPicturesCommonResource {
         }
     }
 
-    //adminViewDeleteUsers
     /**
      * Removes users from application.
      *
@@ -568,7 +574,6 @@ public class MedicalPicturesCommonResource {
         }
     }
 
-    //adminViewEditUser
     /**
      * Edits the user.
      *
@@ -597,6 +602,12 @@ public class MedicalPicturesCommonResource {
         }
     }
 
+    /**
+     * Adds the body part.
+     *
+     * @param bodyPartToAdd
+     * @return
+     */
     @POST
     @Path("addBodyPart")
     @Produces("application/json")
@@ -619,6 +630,12 @@ public class MedicalPicturesCommonResource {
         }
     }
 
+    /**
+     * Adds the picture type.
+     *
+     * @param pictureTypeToAdd
+     * @return
+     */
     @POST
     @Path("addPictureType")
     @Produces("application/json")
@@ -641,6 +658,12 @@ public class MedicalPicturesCommonResource {
         }
     }
 
+    /**
+     * Adds the defined picture description
+     *
+     * @param definedPictureDescriptionToAdd
+     * @return
+     */
     @POST
     @Path("addDefinedPictureDescription")
     @Produces("application/json")
@@ -663,6 +686,12 @@ public class MedicalPicturesCommonResource {
         }
     }
 
+    /**
+     * Logins the user.
+     *
+     * @param userToLogin
+     * @return
+     */
     @POST
     @Path("loginUser")
     @Produces("application/json")
@@ -688,6 +717,12 @@ public class MedicalPicturesCommonResource {
         }
     }
 
+    /**
+     * Changes user settings.
+     *
+     * @param userChangedSettings
+     * @return
+     */
     @POST
     @Path("changeUserSettings")
     @Produces("application/json")

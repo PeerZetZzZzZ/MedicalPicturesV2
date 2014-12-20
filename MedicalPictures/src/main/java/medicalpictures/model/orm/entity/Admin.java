@@ -11,6 +11,7 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 /**
+ * Is the admin who manages the application.
  *
  * @author PeerZet
  */

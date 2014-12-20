@@ -251,11 +251,11 @@
       <div class="row">
         <div class="large-6 columns">
           <label>{{'NAME' | translate}}</label>
-          <input type="text" placeholder="" ng-model="editingName" required ng-pattern="nameRegexpPattern" />
+          <input type="text" placeholder="" ng-model="editingName" ng-maxlength="maxNameSurnameLength" required ng-pattern="nameRegexpPattern" />
         </div>
         <div class="large-6 columns">
           <label>{{'SURNAME' |translate }}</label>
-          <input type="text" placeholder="" ng-model="editingSurname" required ng-pattern="nameRegexpPattern" />
+          <input type="text" placeholder="" ng-model="editingSurname" ng-maxlength="maxNameSurnameLength" required ng-pattern="nameRegexpPattern" />
         </div>
       </div>
       <div class="row">
@@ -277,7 +277,7 @@
       <div class="row" ng-show="editingSelectedAccountType==='DOCTOR' ">
         <div class="large-12 columns">
           <label>{{'SPECIALIZATION' | translate }}</label>
-          <input type="text" placeholder="" ng-model="editingSpecialization" required ng-pattern="nameRegexpPattern" />
+          <input type="text" placeholder="" ng-model="editingSpecialization" ng-maxlength="maxNameSurnameLength" required ng-pattern="nameRegexpPattern" />
         </div>
       </div>
       <div class="row">

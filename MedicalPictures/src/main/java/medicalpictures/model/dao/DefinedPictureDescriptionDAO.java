@@ -10,7 +10,6 @@ import medicalpictures.model.common.MedicalLogger;
 import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.orm.entity.DefinedPictureDescription;
 import medicalpictures.model.orm.entity.PictureDescription;
-import medicalpictures.model.orm.entity.PictureType;
 
 /**
  *
@@ -131,7 +130,13 @@ public class DefinedPictureDescriptionDAO {
                 existingDpd.setPictureDescription(newDpd);
             }
             if (!oldDpdName.equals(newDpdName)) {
-                existingDpd.setDescriptionName(newDpdName);
+                DefinedPictureDescription duplicateDpd = getDefinedPictureDesriptionByName(newDpdName);
+                if (duplicateDpd == null) {
+                    existingDpd.setDescriptionName(newDpdName);
+                } else {
+                    logger.logInfo("Can't edit picture type '" + oldDpdName + ", because new value is already used!", DefinedPictureDescriptionDAO.class);
+                    return ResultCodes.OBJECT_ALREADY_EXISTS;
+                }
             }
             logger.logInfo("Successfully updated defined picture description'" + oldDpdName + "' to '" + newDpdName + "'. Description '" + oldDpd + "' to '" + newDpd + "' !", DefinedPictureDescriptionDAO.class);
             return ResultCodes.OPERATION_SUCCEED;
@@ -139,5 +144,6 @@ public class DefinedPictureDescriptionDAO {
             logger.logInfo("Can't edit picture type '" + oldDpdName + ", because it doesn't exist!", DefinedPictureDescriptionDAO.class);
             return ResultCodes.OBJECT_DOESNT_EXIST;
         }
+
     }
 }

@@ -21,9 +21,6 @@ import org.json.JSONObject;
 @Stateless
 public class BodyPartJsonFactory {
 
-    @EJB
-    private ManagerDAO managerDAO;
-
     /**
      * Returns the list of body parts.
      *

@@ -41,10 +41,10 @@ public class Doctor implements Serializable {
     @NotNull
     private int age;
 
-    @Column(length = 100)
+    @Column(length = 255)
     private String specialization;
 
-    @OneToMany(mappedBy = "doctor", cascade=CascadeType.REMOVE)
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.REMOVE)
     private Set<PictureDescription> pictureDescriptions = new HashSet<>();
 
     public String getName() {

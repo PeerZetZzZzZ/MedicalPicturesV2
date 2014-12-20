@@ -10,7 +10,6 @@ import medicalpictures.model.common.DBNameManager;
 import medicalpictures.model.common.MedicalLogger;
 import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.exception.AddToDbFailed;
-import medicalpictures.model.orm.entity.BodyPart;
 import medicalpictures.model.orm.entity.Picture;
 import medicalpictures.model.orm.entity.PictureType;
 
@@ -115,14 +114,20 @@ public class PictureTypeDAO {
     public int updatePictureType(Map<String, String> editingValues) {
         String oldPictureType = editingValues.get("oldPictureType");
         String newPictureType = editingValues.get("newPictureType");
-        PictureType existingPictureType = getPictureTypeByName(oldPictureType);
-        if (existingPictureType != null) {
-            existingPictureType.setPictureType(newPictureType);
-            logger.logInfo("Successfully updated picture type'" + oldPictureType + "' to '" + newPictureType + "' !", PictureTypeDAO.class);
-            return ResultCodes.OPERATION_SUCCEED;
+        PictureType duplicatePictureType = getPictureTypeByName(newPictureType);
+        if (duplicatePictureType == null) {
+            PictureType existingPictureType = getPictureTypeByName(oldPictureType);
+            if (existingPictureType != null) {
+                existingPictureType.setPictureType(newPictureType);
+                logger.logInfo("Successfully updated picture type'" + oldPictureType + "' to '" + newPictureType + "' !", PictureTypeDAO.class);
+                return ResultCodes.OPERATION_SUCCEED;
+            } else {
+                logger.logInfo("Can't edit picture type '" + oldPictureType + ", because it doesn't exist!", PictureTypeDAO.class);
+                return ResultCodes.OBJECT_DOESNT_EXIST;
+            }
         } else {
-            logger.logInfo("Can't edit picture type '" + oldPictureType + ", because it doesn't exist!", PictureTypeDAO.class);
-            return ResultCodes.OBJECT_DOESNT_EXIST;
+            logger.logInfo("Can't edit picture type '" + oldPictureType + ", because new value is already used!", PictureTypeDAO.class);
+            return ResultCodes.OBJECT_ALREADY_EXISTS;
         }
     }
 }

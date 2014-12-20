@@ -39,7 +39,6 @@ public class AdminViewManageBodyParts extends HttpServlet {
         }
     }
 
-    //addBodyPart
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

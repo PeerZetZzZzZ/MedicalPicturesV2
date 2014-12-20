@@ -232,7 +232,7 @@ MedicalPictures.config(function($translateProvider) {
     'USER_EDITED_SUCCESSFULLY': 'Dane użytkownika zostały zaktualizowane.',
     'PICTURE_TYPES': 'Typy zdjęć',
     'PICTURE_TYPE': 'Typ zdjęcia',
-    'ADD_NEW_BODY_PART': 'Dodaj część ciała',
+    'ADD_NEW_BODY_PART': 'Dodaj nową część ciała',
     'ADD_NEW_PICTURE_TYPE': 'Dodaj nowy typ zdjęć',
     'ADD': 'Dodaj',
     'PICTURE_TYPE_ADDED_SUCCESSFULLY': 'Typ zdjęcia został dodany!',

@@ -13,8 +13,7 @@ import medicalpictures.model.exception.AddToDbFailed;
 @Stateful
 public class ManagerDAO {
 
-//    @PersistenceContext(type = javax.persistence.PersistenceContextType.EXTENDED)
-    @PersistenceContext(unitName="MedicalPictures")
+    @PersistenceContext(unitName = "MedicalPictures")
     private EntityManager em;
 
     public EntityManager getEntityManager() {

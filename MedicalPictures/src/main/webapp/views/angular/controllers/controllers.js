@@ -184,8 +184,18 @@ MedicalPictures.controller('AdminViewManageUsersController', function($scope, $h
   document.getElementById("alertMessageDiv").style.visibility = "hidden";
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
-    $scope.loggedUsername = data.username;
-    $translate.use(data.applicationLanguage);
+    switch (data.errorCode) {
+      case 0:
+        $scope.loggedUsername = data.username;
+        $translate.use(data.applicationLanguage);
+        break;
+      case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
+        break;
+      case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
+        break;
+    }
   }).
   error(function(data, status, headers, config) {
     $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
@@ -466,8 +476,18 @@ MedicalPictures.controller('AdminViewAddUserController', function($scope, $trans
   $scope.applicationLanguages = ['pl', 'en'];
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
-    $scope.loggedUsername = data.username;
-    $translate.use(data.applicationLanguage);
+    switch (data.errorCode) {
+      case 0:
+        $scope.loggedUsername = data.username;
+        $translate.use(data.applicationLanguage);
+        break;
+      case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
+        break;
+      case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
+        break;
+    }
   }).
   error(function(data, status, headers, config) {
     console.log(status);
@@ -607,8 +627,18 @@ MedicalPictures.controller('AdminViewManagePictureTypesController', function($sc
   document.getElementById("alertMessageDiv").style.visibility = "hidden";
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
-    $scope.loggedUsername = data.username;
-    $translate.use(data.applicationLanguage);
+    switch (data.errorCode) {
+      case 0:
+        $scope.loggedUsername = data.username;
+        $translate.use(data.applicationLanguage);
+        break;
+      case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
+        break;
+      case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
+        break;
+    }
   }).
   error(function(data, status, headers, config) {
     $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
@@ -665,6 +695,7 @@ MedicalPictures.controller('AdminViewManagePictureTypesController', function($sc
             $translate('PICTURE_TYPE_ADDED_SUCCESSFULLY').then(function(translation) {
               showAlertMessageSuccess(translation, data.bodyPart);
             });
+            $scope.newPictureType = undefined;
             break;
           case -1: //unauthorized
             $window.location.href = "/MedicalPictures/UnauthorizedView";
@@ -770,6 +801,11 @@ MedicalPictures.controller('AdminViewManagePictureTypesController', function($sc
             });
             $('.close-reveal-modal').click(); //close the reveal-modal window, small
             break;
+          case -7: //object already exists
+            $translate('OBJECT_DUPLICATION_ERROR').then(function(translation) {
+              showAlertMessageError(translation, $scope.editingPictureType);
+            });
+            $('.close-reveal-modal').click(); //close the reveal-modal window, small
         };
       }).
       error(function(data, status, headers, config) {
@@ -811,8 +847,18 @@ MedicalPictures.controller('AdminViewManageDefinedPictureDescriptionsController'
   };
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
-    $scope.loggedUsername = data.username;
-    $translate.use(data.applicationLanguage);
+    switch (data.errorCode) {
+      case 0:
+        $scope.loggedUsername = data.username;
+        $translate.use(data.applicationLanguage);
+        break;
+      case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
+        break;
+      case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
+        break;
+    }
   }).
   error(function(data, status, headers, config) {
     $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
@@ -929,8 +975,8 @@ MedicalPictures.controller('AdminViewManageDefinedPictureDescriptionsController'
           $window.location.href = "/MedicalPictures/LoginView";
           break;
         case -7: //object already exists - body part is used by some pictures, cant delete
-          $translate('CANT_REMOVE_DPD_ALREADY_USED').then(function(translation) {
-            showAlertMessageError(translation, $scope.selectedDpd.name);
+          $translate('OBJECT_DUPLICATION_ERROR').then(function(translation) {
+            showAlertMessageError(translation, $scope.newDefinedPictureDescriptionName);
           });
           $('.close-reveal-modal').click(); //close the reveal-modal window, small
           break;
@@ -983,6 +1029,11 @@ MedicalPictures.controller('AdminViewManageDefinedPictureDescriptionsController'
           });
           $('.close-reveal-modal').click(); //close the reveal-modal window, small
           break;
+        case -7: //object already exists
+          $translate('OBJECT_DUPLICATION_ERROR').then(function(translation) {
+            showAlertMessageError(translation, $scope.editingDefinedPictureDescriptionName);
+          });
+          $('.close-reveal-modal').click(); //close the reveal-modal window, small
       };
     }).
     error(function(data, status, headers, config) {
@@ -1046,8 +1097,18 @@ MedicalPictures.controller('AdminViewManageBodyPartsController', function($scope
   $scope.getAllBodyPartsFunction();
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
-    $scope.loggedUsername = data.username;
-    $translate.use(data.applicationLanguage);
+    switch (data.errorCode) {
+      case 0:
+        $scope.loggedUsername = data.username;
+        $translate.use(data.applicationLanguage);
+        break;
+      case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
+        break;
+      case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
+        break;
+    }
   }).
   error(function(data, status, headers, config) {
     $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
@@ -1075,6 +1136,7 @@ MedicalPictures.controller('AdminViewManageBodyPartsController', function($scope
             $translate('BODY_PART_ADDED_SUCCESSFULLY').then(function(translation) {
               showAlertMessageSuccess(translation, data.bodyPart);
             });
+            $scope.newBodyPart = undefined;
             break;
           case -1: //unauthorized
             $window.location.href = "/MedicalPictures/UnauthorizedView";
@@ -1185,6 +1247,11 @@ MedicalPictures.controller('AdminViewManageBodyPartsController', function($scope
             });
             $('.close-reveal-modal').click(); //close the reveal-modal window, small
             break;
+          case -7: //object already exists
+            $translate('OBJECT_DUPLICATION_ERROR').then(function(translation) {
+              showAlertMessageError(translation, $scope.editingBodyPart);
+            });
+            $('.close-reveal-modal').click(); //close the reveal-modal window, small
         };
       }).
       error(function(data, status, headers, config) {
@@ -1244,8 +1311,18 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
   document.getElementById("alertMessageDiv").style.visibility = "hidden";
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
-    $scope.loggedUsername = data.username;
-    $translate.use(data.applicationLanguage);
+    switch (data.errorCode) {
+      case 0:
+        $scope.loggedUsername = data.username;
+        $translate.use(data.applicationLanguage);
+        break;
+      case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
+        break;
+      case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
+        break;
+    }
   }).
   error(function(data, status, headers, config) {
     $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
@@ -1469,8 +1546,18 @@ MedicalPictures.controller('TechnicianViewManagePicturesController', function($s
   };
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
-    $scope.loggedUsername = data.username;
-    $translate.use(data.applicationLanguage);
+    switch (data.errorCode) {
+      case 0:
+        $scope.loggedUsername = data.username;
+        $translate.use(data.applicationLanguage);
+        break;
+      case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
+        break;
+      case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
+        break;
+    }
   }).
   error(function(data, status, headers, config) {
     $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
@@ -1701,8 +1788,18 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
   };
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
-    $scope.loggedUsername = data.username;
-    $translate.use(data.applicationLanguage);
+    switch (data.errorCode) {
+      case 0:
+        $scope.loggedUsername = data.username;
+        $translate.use(data.applicationLanguage);
+        break;
+      case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
+        break;
+      case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
+        break;
+    }
   }).
   error(function(data, status, headers, config) {
     $translate('INTERNAL_PROBLEM_OCCURRED').then(function(translation) {
@@ -1963,6 +2060,12 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, $tra
           console.log(status);
         });
         break;
+      case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
+        break;
+      case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
+        break;
     }
   }).
   error(function(data, status, headers, config) {
@@ -2085,10 +2188,13 @@ MedicalPictures.controller('PatientViewController', function($scope, $http, $tra
 MedicalPictures.controller('UserSettingsController', function($scope, $http, $translate, $window, MedicalPicturesGlobal) {
   $scope.appName = MedicalPicturesGlobal.GLOBAL_APP_NAME;
   $scope.languages = ['pl', 'en'];
-  $scope.maxPasswordLength = MedicalPicturesGlobal.MAX_PASSWORD_LENGTH;
   $scope.minPasswordLength = MedicalPicturesGlobal.MIN_PASSWORD_LENGTH;
+  $scope.maxPasswordLength = MedicalPicturesGlobal.MAX_PASSWORD_LENGTH;
   $scope.minAge = MedicalPicturesGlobal.MIN_AGE;
   $scope.maxAge = MedicalPicturesGlobal.MAX_AGE;
+  $scope.nameRegexpPattern = MedicalPicturesGlobal.NAME_REGEXP_PATTERN;
+  $scope.maxNameSurnameLength = MedicalPicturesGlobal.MAX_NAME_SURNAME_LENGTH;
+  $scope.maxUsernameLength = MedicalPicturesGlobal.MAX_USERNAME_LENGTH;
   $scope.loggedUser;
   document.getElementById("alertMessageDiv").style.visibility = "hidden";
   $scope.logoutUser = function() {
@@ -2161,6 +2267,12 @@ MedicalPictures.controller('UserSettingsController', function($scope, $http, $tr
           });
           console.log(status);
         });
+        break;
+      case -1: //unauthorized
+        $window.location.href = "/MedicalPictures/UnauthorizedView";
+        break;
+      case -4: //not logged
+        $window.location.href = "/MedicalPictures/LoginView";
         break;
     }
   }).

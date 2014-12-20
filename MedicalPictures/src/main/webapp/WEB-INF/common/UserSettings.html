@@ -149,7 +149,7 @@
       </div>
       <div class="large-6 columns">
         <label>{{'NAME' | translate}}
-          <input type="text" placeholder="{{'YOUR_NAME' | translate}}" ng-change="valuesChanged=true" required ng-model="loggedUser.name">
+          <input type="text" placeholder="{{'YOUR_NAME' | translate}}" ng-pattern="nameRegexpPattern" ng-maxlength="maxNameSurnameLength" ng-change="valuesChanged=true" required ng-model="loggedUser.name">
         </label>
       </div>
       <div class="large-3 columns">
@@ -162,7 +162,7 @@
       </div>
       <div class="large-6 columns">
         <label>{{'SURNAME' | translate}}
-          <input type="text" placeholder="{{'YOUR_SURNAME' | translate}}" ng-change="valuesChanged=true" required ng-model="loggedUser.surname">
+          <input type="text" placeholder="{{'YOUR_SURNAME' | translate}}" ng-pattern="nameRegexpPattern" ng-maxlength="maxNameSurnameLength"  ng-change="valuesChanged=true" required ng-model="loggedUser.surname">
         </label>
       </div>
       <div class="large-3 columns">

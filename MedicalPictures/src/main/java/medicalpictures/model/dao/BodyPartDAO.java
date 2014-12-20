@@ -119,14 +119,20 @@ public class BodyPartDAO {
     public int updateBodyPart(Map<String, String> editingValues) {
         String oldBodyPart = editingValues.get("oldBodyPart");
         String newBodyPart = editingValues.get("newBodyPart");
-        BodyPart existingBodyPart = getBodyPartByName(oldBodyPart);
-        if (existingBodyPart != null) {
-            existingBodyPart.setBodyPart(newBodyPart);
-            logger.logInfo("Successfully updated body part '" + oldBodyPart + "' to '" + newBodyPart + "' !", BodyPartDAO.class);
-            return ResultCodes.OPERATION_SUCCEED;
+        BodyPart duplicateBodyPart = getBodyPartByName(newBodyPart);//we check if the body part which will be changed does not exist
+        if (duplicateBodyPart == null) {
+            BodyPart existingBodyPart = getBodyPartByName(oldBodyPart);
+            if (existingBodyPart != null) {
+                existingBodyPart.setBodyPart(newBodyPart);
+                logger.logInfo("Successfully updated body part '" + oldBodyPart + "' to '" + newBodyPart + "' !", BodyPartDAO.class);
+                return ResultCodes.OPERATION_SUCCEED;
+            } else {
+                logger.logInfo("Can't edit body part '" + oldBodyPart + ", because it doesn't exist!", BodyPartDAO.class);
+                return ResultCodes.OBJECT_DOESNT_EXIST;
+            }
         } else {
-            logger.logInfo("Can't edit body part '" + oldBodyPart + ", because it doesn't exist!", BodyPartDAO.class);
-            return ResultCodes.OBJECT_DOESNT_EXIST;
+            logger.logInfo("Can't edit body part '" + oldBodyPart + ", because new value is already used!", BodyPartDAO.class);
+            return ResultCodes.OBJECT_ALREADY_EXISTS;
         }
     }
 }

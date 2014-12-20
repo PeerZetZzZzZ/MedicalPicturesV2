@@ -37,16 +37,16 @@ public class MedicalLogger {
         try {
             if (!logFile.exists()) {
                 logFile.createNewFile();
-                LOG.info("Created log file: " + logFileName + ". Log file path: " + logFile.getAbsolutePath());
+                LOG.log(Level.INFO, "Created log file: {0}. Log file path: {1}", new Object[]{logFileName, logFile.getAbsolutePath()});
                 logOutput = new PrintWriter(new FileWriter(logFile, true));
-                LOG.info("Created writer for log file: " + logFileName);
+                LOG.log(Level.INFO, "Created writer for log file: {0}", logFileName);
                 logFileCreated = true;//successfully craeted log file
             } else {
                 logOutput = new PrintWriter(new FileWriter(logFile, true));
                 logFileCreated = true;
             }
         } catch (IOException ex) {
-            LOG.info("ERROR! Couldn't create log file: " + logFileName);
+            LOG.log(Level.INFO, "ERROR! Couldn''t create log file: {0}", logFileName);
             logFileCreated = false;//creation failed
             Logger.getLogger(MedicalLogger.class.getName()).log(Level.SEVERE, null, ex);
         }

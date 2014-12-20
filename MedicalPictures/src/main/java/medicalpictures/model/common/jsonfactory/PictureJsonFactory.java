@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.xml.bind.DatatypeConverter;
 import medicalpictures.model.common.ResultCodes;
@@ -47,16 +46,16 @@ public class PictureJsonFactory {
             singlePicture.put("patientName", picture.getPatient().getName());
             singlePicture.put("patientSurname", picture.getPatient().getSurname());
             singlePicture.put("patientUsername", picture.getPatient().getUser().getUsername());
-			if(picture.getTechnician()!=null){
-				singlePicture.put("technicianName", picture.getTechnician().getName());
-				singlePicture.put("technicianSurname", picture.getTechnician().getSurname());
-				singlePicture.put("technicianUsername", picture.getTechnician().getUser().getUsername());
-			} else{
-				singlePicture.put("technicianName", "no data");
-				singlePicture.put("technicianSurname", "no data");
-				singlePicture.put("technicianUsername", "no data");
-				
-			}
+            if (picture.getTechnician() != null) {
+                singlePicture.put("technicianName", picture.getTechnician().getName());
+                singlePicture.put("technicianSurname", picture.getTechnician().getSurname());
+                singlePicture.put("technicianUsername", picture.getTechnician().getUser().getUsername());
+            } else {
+                singlePicture.put("technicianName", "no data");
+                singlePicture.put("technicianSurname", "no data");
+                singlePicture.put("technicianUsername", "no data");
+
+            }
             picturesArray.put(singlePicture);
         }
         picturesList.put("pictures", picturesArray);

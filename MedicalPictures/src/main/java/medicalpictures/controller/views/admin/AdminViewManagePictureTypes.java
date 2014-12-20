@@ -39,7 +39,6 @@ public class AdminViewManagePictureTypes extends HttpServlet {
         }
     }
 
-	//addPictureType
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
