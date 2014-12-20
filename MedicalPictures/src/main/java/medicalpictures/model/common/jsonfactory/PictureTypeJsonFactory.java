@@ -1,6 +1,8 @@
 package medicalpictures.model.common.jsonfactory;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.Stateless;
 import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.exception.JsonParsingException;
@@ -46,6 +48,28 @@ public class PictureTypeJsonFactory {
         try {
             JSONObject pictureTypeJson = new JSONObject(pictureType);
             return pictureTypeJson.getString("pictureType");
+        } catch (JSONException ex) {
+            throw new JsonParsingException(ex.getMessage());
+        }
+    }
+
+    /**
+     * Decrypts the request from the client and gets the values needed to edit
+     * the picture type.
+     *
+     * @param editingPictureTypeValues
+     * @return
+     * @throws JsonParsingException
+     */
+    public Map<String, String> getEditingPictureTypeValues(String editingPictureTypeValues) throws JsonParsingException {
+        try {
+            JSONObject editingPictureType = new JSONObject(editingPictureTypeValues);
+            String oldPictureType = editingPictureType.getString("oldPictureType");
+            String newPictureType = editingPictureType.getString("newPictureType");
+            Map<String, String> valuesMap = new HashMap<>();
+            valuesMap.put("oldPictureType", oldPictureType);
+            valuesMap.put("newPictureType", newPictureType);
+            return valuesMap;
         } catch (JSONException ex) {
             throw new JsonParsingException(ex.getMessage());
         }

@@ -1,6 +1,8 @@
 package medicalpictures.model.common.jsonfactory;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import medicalpictures.model.common.ResultCodes;
@@ -50,6 +52,27 @@ public class BodyPartJsonFactory {
         try {
             JSONObject bodyPartJson = new JSONObject(bodyPart);
             return bodyPartJson.getString("bodyPart");
+        } catch (JSONException ex) {
+            throw new JsonParsingException(ex.getMessage());
+        }
+    }
+
+    /**
+     * Decrypts the request from client and reads the body part to edit.
+     *
+     * @param editingBodyPartValues
+     * @return
+     * @throws JsonParsingException
+     */
+    public Map<String, String> getEditingBodyPartValues(String editingBodyPartValues) throws JsonParsingException {
+        try {
+            JSONObject editingBodyPart = new JSONObject(editingBodyPartValues);
+            String oldBodyPart = editingBodyPart.getString("oldBodyPart");
+            String newBodyPart = editingBodyPart.getString("newBodyPart");
+            Map<String, String> valuesMap = new HashMap<>();
+            valuesMap.put("oldBodyPart", oldBodyPart);
+            valuesMap.put("newBodyPart", newBodyPart);
+            return valuesMap;
         } catch (JSONException ex) {
             throw new JsonParsingException(ex.getMessage());
         }

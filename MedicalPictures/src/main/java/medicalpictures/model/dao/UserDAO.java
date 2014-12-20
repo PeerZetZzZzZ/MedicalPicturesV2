@@ -638,4 +638,5 @@ public class UserDAO {
 		}
 		return ResultCodes.OPERATION_SUCCEED;
 	}
+
 }

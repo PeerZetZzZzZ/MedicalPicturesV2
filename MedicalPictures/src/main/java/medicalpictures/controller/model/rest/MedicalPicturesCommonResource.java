@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -696,6 +698,7 @@ public class MedicalPicturesCommonResource {
             securityManager.checkUserPermissionToAnyContent();
             Map<String, String> userChangedValues = userJsonFactory.getUserDetailsFromChangedSettings(userChangedSettings);
             int result = userDAO.changeUserValuesFromSettings(userChangedValues);
+            logger.logInfo("Change user settings response: " + result, MedicalPicturesCommonResource.class);
             return jsonFactory.getOperationResponseByCode(result);
         } catch (UserNotPermitted ex) {
             logger.logError("User not permitted to access /changeUserSettings !", MedicalPicturesCommonResource.class, ex);
@@ -728,6 +731,113 @@ public class MedicalPicturesCommonResource {
         } catch (NoLoggedUserExistsHere ex) {
             logger.logError("User is not logged - can't access /Logout !", MedicalPicturesCommonResource.class, ex);
             return jsonFactory.getOperationResponseByCode(ResultCodes.USER_IS_NOT_LOGGED);
+        }
+    }
+
+    /**
+     * Removes the body part.
+     *
+     * @param bodyPartToRemove
+     * @return
+     */
+    @GET
+    @Path("removeBodyPart/{bodyPart}")
+    @Produces("application/json")
+    public String removeBodyPart(@PathParam("bodyPart") String bodyPartToRemove) {
+        try {
+            securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+            int result = bodyPartDAO.removeBodyPart(bodyPartToRemove);
+            String response = jsonFactory.getOperationResponseByCode(result);
+            logger.logInfo("Remove body part response: " + response, MedicalPicturesCommonResource.class);
+            return response;
+        } catch (UserNotPermitted ex) {
+            logger.logError("User not permitted to access /removeBodyPart/{bodyPart}!", MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.USER_UNAOTHRIZED);
+        } catch (NoLoggedUserExistsHere ex) {
+            logger.logError("User is not logged - can't access /removeBodyPart/{bodyPart} !", MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.USER_IS_NOT_LOGGED);
+        }
+    }
+
+    /**
+     * Updates the body part.
+     *
+     * @param editingBodyPartValues
+     * @return
+     */
+    @POST
+    @Path("updateBodyPart")
+    @Produces("application/json")
+    public String updateBodyPart(String editingBodyPartValues) {
+        try {
+            securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+            Map<String, String> editingValues = bodyPartJsonFactory.getEditingBodyPartValues(editingBodyPartValues);
+            int result = bodyPartDAO.updateBodyPart(editingValues);
+            String response = jsonFactory.getOperationResponseByCode(result);
+            logger.logInfo("Update body part response: " + response, MedicalPicturesCommonResource.class);
+            return response;
+        } catch (UserNotPermitted ex) {
+            logger.logError("User not permitted to access /updateBodyPart !", MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.USER_UNAOTHRIZED);
+        } catch (NoLoggedUserExistsHere ex) {
+            logger.logError("User is not logged - can't access /updateBodyPart !", MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.USER_IS_NOT_LOGGED);
+        } catch (JsonParsingException ex) {
+            logger.logError("/updateBodyPart: input json parse exception!: " + editingBodyPartValues, MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.INPUT_JSON_PARSE_ERROR);
+        }
+    }
+    /**
+     * Removes the body part.
+     *
+     * @param pictureTypeToRemove
+     * @return
+     */
+    @GET
+    @Path("removePictureType/{pictureType}")
+    @Produces("application/json")
+    public String removePictureType(@PathParam("pictureType") String pictureTypeToRemove) {
+        try {
+            securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+            int result = pictureTypeDAO.removePictureType(pictureTypeToRemove);
+            String response = jsonFactory.getOperationResponseByCode(result);
+            logger.logInfo("Remove picture type response: " + response, MedicalPicturesCommonResource.class);
+            return response;
+        } catch (UserNotPermitted ex) {
+            logger.logError("User not permitted to access /removePictureType/{pictureType} !", MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.USER_UNAOTHRIZED);
+        } catch (NoLoggedUserExistsHere ex) {
+            logger.logError("User is not logged - can't access /removePictureType/{pictureType} !", MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.USER_IS_NOT_LOGGED);
+        }
+    }
+
+    /**
+     * Updates the body part.
+     *
+     * @param editingPictureTypeValues
+     * @return
+     */
+    @POST
+    @Path("updatePictureType")
+    @Produces("application/json")
+    public String updatePictureType(String editingPictureTypeValues) {
+        try {
+            securityManager.checkUserPermissionToThisContent(AccountType.ADMIN);
+            Map<String, String> editingValues = pictureTypeJsonFactory.getEditingPictureTypeValues(editingPictureTypeValues);
+            int result = pictureTypeDAO.updatePictureType(editingValues);
+            String response = jsonFactory.getOperationResponseByCode(result);
+            logger.logInfo("Update picture type response: " + response, MedicalPicturesCommonResource.class);
+            return response;
+        } catch (UserNotPermitted ex) {
+            logger.logError("User not permitted to access /updatePictureType!", MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.USER_UNAOTHRIZED);
+        } catch (NoLoggedUserExistsHere ex) {
+            logger.logError("User is not logged - can't access /updatePictureType !", MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.USER_IS_NOT_LOGGED);
+        } catch (JsonParsingException ex) {
+            logger.logError("/updatePictureType: input json parse exception!: " + editingPictureTypeValues, MedicalPicturesCommonResource.class, ex);
+            return jsonFactory.getOperationResponseByCode(ResultCodes.INPUT_JSON_PARSE_ERROR);
         }
     }
 }

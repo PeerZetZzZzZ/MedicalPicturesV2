@@ -2,6 +2,7 @@ package medicalpictures.model.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
@@ -10,6 +11,7 @@ import medicalpictures.model.common.MedicalLogger;
 import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.exception.AddToDbFailed;
 import medicalpictures.model.orm.entity.BodyPart;
+import medicalpictures.model.orm.entity.Picture;
 
 /**
  * Responsible for operations on BodyPart table.
@@ -86,6 +88,45 @@ public class BodyPartDAO {
         } catch (Exception ex) {
             logger.logWarning("Couldn't find body part entity: " + name, BodyPartDAO.class);
             return null;//in any case of failure
+        }
+    }
+
+    /**
+     * Removes the body part only when it's not already used by some pictures.
+     *
+     * @param bodyPartToRemove
+     * @return
+     */
+    public int removeBodyPart(String bodyPartToRemove) {
+        try {
+            Picture picture = (Picture) managerDAO.getEntityManager().createQuery("SELECT u FROM " + DBNameManager.getPictureTable() + " u WHERE u.bodyPart.bodyPart LIKE :bodyPart").
+                    setParameter("bodyPart", bodyPartToRemove).getSingleResult();
+            return ResultCodes.OBJECT_ALREADY_EXISTS;//object is already used by some pictures - can't delete
+        } catch (Exception ex) {
+            BodyPart bodyPart = getBodyPartByName(bodyPartToRemove);
+            managerDAO.getEntityManager().remove(bodyPart);
+            logger.logError("Successfully removed body part '" + bodyPartToRemove + "' !", BodyPartDAO.class, ex);
+            return ResultCodes.OPERATION_SUCCEED;
+        }
+    }
+
+    /**
+     * Updates the body part.
+     *
+     * @param editingValues
+     * @return
+     */
+    public int updateBodyPart(Map<String, String> editingValues) {
+        String oldBodyPart = editingValues.get("oldBodyPart");
+        String newBodyPart = editingValues.get("newBodyPart");
+        BodyPart existingBodyPart = getBodyPartByName(oldBodyPart);
+        if (existingBodyPart != null) {
+            existingBodyPart.setBodyPart(newBodyPart);
+            logger.logInfo("Successfully updated body part '" + oldBodyPart + "' to '" + newBodyPart + "' !", BodyPartDAO.class);
+            return ResultCodes.OPERATION_SUCCEED;
+        } else {
+            logger.logInfo("Can't edit body part '" + oldBodyPart + ", because it doesn't exist!", BodyPartDAO.class);
+            return ResultCodes.OBJECT_DOESNT_EXIST;
         }
     }
 }

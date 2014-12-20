@@ -41,6 +41,23 @@
     input.ng-invalid {
       border: 2px solid red
     }
+    .accordion .accordion-navigation > a,
+    .accordion dd > a {
+      background: #F79F81;
+    }
+    .accordion .accordion-navigation.active > a,
+    .accordion dd.active > a {
+      background: pink;
+    }
+    .accordion .accordion-navigation > .content.active,
+    .accordion dd > .content.active {
+      display: block;
+      background: pink;
+    }
+    .accordion .accordion-navigation > a:hover,
+    .accordion dd > a:hover {
+      background: #F79F81;
+    }
     td {
       border-top: solid 2px #F79F81;
       border-right: solid 2px #F79F81;
@@ -56,7 +73,8 @@
       display: block;
     }
     .icon-bar.four-up .item {
-      height: 16%; }
+      height: 16%;
+    }
   </style>
 </head>
 
@@ -111,9 +129,9 @@
         </a>
       </div>
     </div>
-  <div class="large-1 columns">
-    <br>
-  </div>
+    <div class="large-1 columns">
+      <br>
+    </div>
   </div>
   <br>
   <form name="bodyForm">
@@ -192,7 +210,7 @@
           </thead>
           <tbody>
             <tr ng-repeat="bodyPart in bodyPartsList | filter:bodyFilter">
-              <td><b><h5 align="center">{{bodyPart}}<h5></b>
+              <td><b><div align="center"><a data-reveal-id="myModalBodyPart" class="info label" ng-click="editBodyPartClicked(bodyPart)" >{{bodyPart}}</a><div></b>
               </td>
               <hr>
             </tr>
@@ -204,7 +222,62 @@
       <br>
     </div>
   </div>
-
+  <div id="myModalBodyPart" class="reveal-modal" data-reveal>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns">
+        <h3 align="center">{{'SELECTED_BODY_PART' | translate}}
+          {{selectedBodyPart}}</h3>
+      </div>
+      <div class="large-2 columns">
+        <br>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns">
+        <div align="center">
+          <a class="button" ng-click="removeBodyPart()">{{'REMOVE'|translate}}</a>
+        </div>
+      </div>
+      <div class="large-2 columns">
+        <br>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-2 columns">
+        <br>
+      </div>
+      <div class="large-8 columns">
+        <dl class="accordion" data-accordion>
+          <dd class="accordion-navigation">
+            <a href="#panel1" align="center">{{'EDIT' |translate}}</a>
+            <div id="panel1" class="content">
+              <form name="editingBodyForm">
+                <dl class="tabs" data-tab>
+                  <label>{{'BODY_PART' | translate}}</label>
+                  <input type="text" name="editingBodyPart" ng-model="editingBodyPart" required ng-maxlength="maxBodyPartLength">
+                  <p align="center" ng-show="editingBodyForm.editingBodyPart.$error.maxlength">{{'BODY_PART_TOO_LONG'| translate}}</p>
+                  <div align="center">
+                    <a ng-show="(editingBodyPart !== selectedBodyPart) && editingBodyPart!==undefined" ng-click="saveEditedBodyPart()" class="button">{{'SAVE' | translate}}</a>
+                  </div>
+                </dl>
+            </div>
+            </form>
+          </dd>
+        </dl>
+      </div>
+      <div class="large-2 columns">
+        <br>
+      </div>
+    </div>
+    <a class="close-reveal-modal">&#215;</a>
+  </div>
   <script src="./views/js/vendor/jquery.js"></script>
   <script src="./views/js/foundation.min.js"></script>
   <script>

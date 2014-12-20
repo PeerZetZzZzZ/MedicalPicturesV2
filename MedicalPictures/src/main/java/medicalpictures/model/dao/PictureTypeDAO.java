@@ -2,6 +2,7 @@ package medicalpictures.model.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
@@ -9,6 +10,8 @@ import medicalpictures.model.common.DBNameManager;
 import medicalpictures.model.common.MedicalLogger;
 import medicalpictures.model.common.ResultCodes;
 import medicalpictures.model.exception.AddToDbFailed;
+import medicalpictures.model.orm.entity.BodyPart;
+import medicalpictures.model.orm.entity.Picture;
 import medicalpictures.model.orm.entity.PictureType;
 
 /**
@@ -80,6 +83,46 @@ public class PictureTypeDAO {
             logger.logError("Couldn't find PictureType entity: " + pictureTypeName, PictureTypeDAO.class, ex);
             return null;//in any case of failure
 
+        }
+    }
+
+    /**
+     * Removes the picture type if it's not currently used to describe any
+     * existing picture.
+     *
+     * @param pictureTypeToRemove
+     * @return
+     */
+    public int removePictureType(String pictureTypeToRemove) {
+        try {
+            Picture picture = (Picture) managerDAO.getEntityManager().createQuery("SELECT u FROM " + DBNameManager.getPictureTable() + " u WHERE u.pictureType.pictureType LIKE :pictureType").
+                    setParameter("pictureType", pictureTypeToRemove).getSingleResult();
+            return ResultCodes.OBJECT_ALREADY_EXISTS;//object is already used by some pictures - can't delete
+        } catch (Exception ex) {
+            PictureType pictureType = getPictureTypeByName(pictureTypeToRemove);
+            managerDAO.getEntityManager().remove(pictureType);
+            logger.logError("Successfully removed picture type '" + pictureTypeToRemove + "' !", PictureDAO.class, ex);
+            return ResultCodes.OPERATION_SUCCEED;
+        }
+    }
+
+    /**
+     * Updates the existing picture type.
+     *
+     * @param editingValues
+     * @return
+     */
+    public int updatePictureType(Map<String, String> editingValues) {
+        String oldPictureType = editingValues.get("oldPictureType");
+        String newPictureType = editingValues.get("newPictureType");
+        PictureType existingPictureType = getPictureTypeByName(oldPictureType);
+        if (existingPictureType != null) {
+            existingPictureType.setPictureType(newPictureType);
+            logger.logInfo("Successfully updated picture type'" + oldPictureType + "' to '" + newPictureType + "' !", PictureTypeDAO.class);
+            return ResultCodes.OPERATION_SUCCEED;
+        } else {
+            logger.logInfo("Can't edit picture type '" + oldPictureType + ", because it doesn't exist!", PictureTypeDAO.class);
+            return ResultCodes.OBJECT_DOESNT_EXIST;
         }
     }
 }

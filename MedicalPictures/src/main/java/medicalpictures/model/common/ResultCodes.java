@@ -18,7 +18,7 @@ public class ResultCodes {
      */
     public static int OPERATION_SUCCEED = 0;
     /**
-     * When internal server problem occurred
+     * When internal server problem occurred.
      */
     public static int INTERNAL_SERVER_ERROR = -99;
     /**
@@ -40,7 +40,7 @@ public class ResultCodes {
 
     /**
      * When object doesn't exist for example GROUP ( except USER, it has own
-     * code )
+     * code ).
      */
     public static int OBJECT_DOESNT_EXIST = -6;
     /**

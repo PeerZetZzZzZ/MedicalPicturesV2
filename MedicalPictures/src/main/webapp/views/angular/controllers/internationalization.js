@@ -142,9 +142,27 @@ MedicalPictures.config(function($translateProvider) {
     'NOT_SELECTED':'not selected',
     'FILTER':'Filter',
     'PICTURES_TO_UPLOAD':'Pictures to upload',
-    'AMOUNT':'Amount'
+    'AMOUNT':'Amount',
+    'SELECTED_BODY_PART':'Selected body part:',
+    'SUCCESSFULLY_REMOVED_BODY_PART':'Successfully removed body part!',
+    'CANT_REMOVE_BODY_PART_ALREADY_USED':'Can\'t remove body part, because it\'s already used by some pictures!',
+    'DIDNT_UPDATE_BECAUSE_NO_CHANGES':'Item has not been updated, because didn\'t change.',
+    'SUCCESSFULLY_UPDATED_BODY_PART':'Successfully updated body part!',
+    'SELECTED_PICTURE_TYPE':'Selected picture type:',
+    'SUCCESSFULLY_REMOVED_PICTURE_TYPE':'Successfully removed picture type!',
+    'CANT_REMOVE_PICTURE_TYPE_ALREADY_USED':'Can\'t remove picture type, because it\'s already used by some pictures!',
+    'SUCCESSFULLY_UPDATED_PICTURE_TYPE':'Successfully updated picture type!'
   });
   $translateProvider.translations('pl', {
+    'SUCCESSFULLY_UPDATED_PICTURE_TYPE':'Zaktualizowano typ zdjęcia!',
+    'CANT_REMOVE_PICTURE_TYPE_ALREADY_USED':'Nie można usunąć wybranego typu zdjęć, bo jest już użyty do opisu zdjęć!',
+    'SUCCESSFULLY_REMOVED_PICTURE_TYPE':'Usunięto typ zdjęcia!',
+    'SELECTED_PICTURE_TYPE':'Wybrany typ zdjęcia:',
+    'SUCCESSFULLY_UPDATED_BODY_PART':'Zaktualizowano część ciała!',
+    'DIDNT_UPDATE_BECAUSE_NO_CHANGES':'Element nie został zaktualizowany, bo nie zmienił się.',
+    'CANT_REMOVE_BODY_PART_ALREADY_USED':'Nie można usunąć wybranej części ciała, bo jest już używana do opisu zdjęć!',
+    'SUCCESSFULLY_REMOVED_BODY_PART':'Usunięto część ciała!',
+    'SELECTED_BODY_PART':'Wybrana część ciała:',
     'AMOUNT':'Ilość',
     'PICTURES_TO_UPLOAD':'Zdjęcia do załadowania',
     'FILTER':'Filtr',
