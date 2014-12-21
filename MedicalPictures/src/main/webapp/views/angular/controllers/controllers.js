@@ -1457,7 +1457,7 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
   uploader.onBeforeUploadItem = function(item) {
     document.getElementById("alertMessageDiv").style.visibility = "hidden";
     console.info('onBeforeUploadItem', item);
-    var pictureData = '{\'patient\':\'' + item.selectedPatient + '\', \'pictureName\':' + item.file.name + ',\'bodyPart\':\'' + item.selectedBodyPart + '\',\'pictureType\':\'' + item.selectedPictureType + '\'}';
+    var pictureData = '{\'patient\':\'' + item.selectedPatient + '\', \'pictureName\':\'' + item.file.name + '\',\'bodyPart\':\'' + item.selectedBodyPart + '\',\'pictureType\':\'' + item.selectedPictureType + '\'}';
     item.file.name = pictureData;
   };
   uploader.onProgressItem = function(fileItem, progress) {
@@ -1936,17 +1936,20 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
   };
   $scope.savePictureDescription = function(picture) {
     var pictureDescription;
+    var pictureShouldBeRefreshed = false;//if picture gets first description from doctor - should be refreshed after adding description
     if (!angular.isUndefined(picture.definedPictureDescriptionId)) {
       if (picture.pictureDescriptionId !== '') { //if we update description , not add new
         pictureDescription = '{pictureId:\'' + picture.pictureId + '\', pictureDescriptionId:\'' + picture.pictureDescriptionId + '\',pictureDescription:\'\',definedPictureDescriptionId:\'' + picture.definedPictureDescriptionId + '\'}';
-      } else {
+    } else {
         pictureDescription = '{pictureId:\'' + picture.pictureId + '\', pictureDescriptionId:\'\',pictureDescription:\'\',definedPictureDescriptionId:\'' + picture.definedPictureDescriptionId + '\'}';
+        pictureShouldBeRefreshed = true;
       }
     } else {
       if (picture.pictureDescriptionId !== '') {
         pictureDescription = '{pictureId:\'' + picture.pictureId + '\',pictureDescriptionId:\'' + picture.pictureDescriptionId + '\',pictureDescription:\'' + picture.pictureDescription + '\',definedPictureDescriptionId:\'\'}';
       } else {
         pictureDescription = '{pictureId:\'' + picture.pictureId + '\',pictureDescriptionId:\'\',pictureDescription:\'' + picture.pictureDescription + '\',definedPictureDescriptionId:\'\'}';
+        pictureShouldBeRefreshed = true;
       }
     }
     $http({
@@ -1963,6 +1966,10 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
             showAlertMessageSuccess(translation, picture.pictureName);
           });
           $scope.selectedPicture.changed = false;
+          if(pictureShouldBeRefreshed){
+            $scope.getPatientPictureWithThumbnail(picture);
+            $scope.appName = "dupa";
+          };
           break;
         case -6:
           $translate('ADD_TO_DB_FAILED').then(function(translation) {

@@ -50,6 +50,7 @@ public class JsonFactory {
      * @return json as JSONObject
      */
     public JSONObject decryptRequest(String request) {
+        System.out.println(request);
         return new JSONObject(request);
     }
 
