@@ -21,13 +21,6 @@ public class JsonFactory {
 
     @EJB
     private MedicalLogger logger;
-    /**
-     * Return the JSON read from request.
-     *
-     * @param request
-     * @return JSON
-     */
-    private static final Logger LOG = Logger.getLogger(JsonFactory.class.getName());
 
     public JSONObject decryptRequest(HttpServletRequest request) {
         StringBuilder jb = new StringBuilder();
@@ -38,7 +31,6 @@ public class JsonFactory {
                 jb.append(line);
             }
         } catch (Exception e) { /*report an error*/ }
-        System.out.println(jb.toString());
         JSONObject jsonObject = new JSONObject(jb.toString());
         return jsonObject;
     }
@@ -50,7 +42,6 @@ public class JsonFactory {
      * @return json as JSONObject
      */
     public JSONObject decryptRequest(String request) {
-        System.out.println(request);
         return new JSONObject(request);
     }
 

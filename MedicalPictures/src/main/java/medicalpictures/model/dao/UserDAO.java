@@ -225,6 +225,9 @@ public class UserDAO {
                 case "TECHNICIAN": {
                     Technician technician = findTechnician(username);
                     if (technician != null) {
+                        for (Picture picture : technician.getPictureMadeList()) {
+                            picture.setTechnician(null);
+                        }
                         managerDAO.getEntityManager().remove(technician);
                         logger.logInfo("Successfully removed user '" + username + "'", UserDAO.class);
                     } else {
@@ -362,7 +365,6 @@ public class UserDAO {
                 accountTypeChanged = true;
             }
             userToEdit.setChosenLanguage(chosenLanguage);
-//            managerDAO.getEntityManager().persist(userToEdit);
             if (!accountTypeChanged) {
                 switch (accountType) {
                     case "ADMIN": {

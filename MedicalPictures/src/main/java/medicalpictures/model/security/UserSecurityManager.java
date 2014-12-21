@@ -123,10 +123,8 @@ public class UserSecurityManager {
             currentUser.checkRole(requriedRole.toString());
             return ContentPermissions.USER_ALLOWED;
         } catch (IllegalStateException | InvalidSessionException ex) {
-            System.out.println(ex.getMessage());
             return ContentPermissions.USER_ISNT_LOGGED;
         } catch (AuthorizationException | NullPointerException ex) {
-            System.out.println(ex.getMessage());
             return ContentPermissions.USER_NOT_ALLOWED;
         }
     }
@@ -151,7 +149,6 @@ public class UserSecurityManager {
                 }
             }
         } catch (IllegalStateException | InvalidSessionException ex) {
-            System.out.println(ex.getMessage());
             throw new UserNotPermitted(username + ": is not permitted to see any content.");
         } catch (AuthorizationException | NullPointerException ex) {
             throw new NoLoggedUserExistsHere("There is no logged user! Can't check specified user permission.");

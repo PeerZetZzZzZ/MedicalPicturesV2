@@ -519,10 +519,10 @@ MedicalPictures.controller('AdminViewAddUserController', function($scope, $trans
   $scope.nameRegexpPattern = MedicalPicturesGlobal.NAME_REGEXP_PATTERN;
   $scope.maxNameSurnameLength = MedicalPicturesGlobal.MAX_NAME_SURNAME_LENGTH;
   $scope.maxUsernameLength = MedicalPicturesGlobal.MAX_USERNAME_LENGTH;
-  $scope.username = "a@a.pl";
-  $scope.age = 1;
-  $scope.name = "name";
-  $scope.surname = "surname";
+  $scope.username;
+  $scope.age;
+  $scope.name;
+  $scope.surname;
   $scope.accountType = "ADMIN";
   $scope.accountTypes = MedicalPicturesGlobal.ACCOUNT_TYPES;
   $scope.addUserClicked = function() {
@@ -975,8 +975,8 @@ MedicalPictures.controller('AdminViewManageDefinedPictureDescriptionsController'
           $window.location.href = "/MedicalPictures/LoginView";
           break;
         case -7: //object already exists - body part is used by some pictures, cant delete
-          $translate('OBJECT_DUPLICATION_ERROR').then(function(translation) {
-            showAlertMessageError(translation, $scope.newDefinedPictureDescriptionName);
+          $translate('CANT_REMOVE_DPD_ALREADY_USED').then(function(translation) {
+            showAlertMessageError(translation, $scope.editingDefinedPictureDescriptionName);
           });
           $('.close-reveal-modal').click(); //close the reveal-modal window, small
           break;
@@ -1936,11 +1936,11 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
   };
   $scope.savePictureDescription = function(picture) {
     var pictureDescription;
-    var pictureShouldBeRefreshed = false;//if picture gets first description from doctor - should be refreshed after adding description
+    var pictureShouldBeRefreshed = false; //if picture gets first description from doctor - should be refreshed after adding description
     if (!angular.isUndefined(picture.definedPictureDescriptionId)) {
       if (picture.pictureDescriptionId !== '') { //if we update description , not add new
         pictureDescription = '{pictureId:\'' + picture.pictureId + '\', pictureDescriptionId:\'' + picture.pictureDescriptionId + '\',pictureDescription:\'\',definedPictureDescriptionId:\'' + picture.definedPictureDescriptionId + '\'}';
-    } else {
+      } else {
         pictureDescription = '{pictureId:\'' + picture.pictureId + '\', pictureDescriptionId:\'\',pictureDescription:\'\',definedPictureDescriptionId:\'' + picture.definedPictureDescriptionId + '\'}';
         pictureShouldBeRefreshed = true;
       }
@@ -1966,7 +1966,7 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
             showAlertMessageSuccess(translation, picture.pictureName);
           });
           $scope.selectedPicture.changed = false;
-          if(pictureShouldBeRefreshed){
+          if (pictureShouldBeRefreshed) {
             $scope.getPatientPictureWithThumbnail(picture);
             $scope.appName = "dupa";
           };
@@ -2333,6 +2333,7 @@ MedicalPictures.controller('UserSettingsController', function($scope, $http, $tr
             $translate('USER_EDITED_SUCCESSFULLY').then(function(translation) {
               showAlertMessageSuccess(translation);
             });
+            $scope.valuesChanged = false;
             break;
           case -6:
             $translate('ADD_TO_DB_FAILED').then(function(translation) {

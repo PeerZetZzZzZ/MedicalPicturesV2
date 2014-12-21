@@ -446,7 +446,6 @@ public class MedicalPicturesCommonResource {
     public String savePictureDescription(String pictureDescriptionDetails) {
         try {
             securityManager.checkUserPermissionToThisContent(AccountType.DOCTOR);
-            System.out.println("Co dostalem: "+pictureDescriptionDetails);
             Map<String, String> pictureDescriptionDetailsMap = pictureJsonFactory.getSavePictureDescription(pictureDescriptionDetails);
             String response = pictureDAO.savePictureOrUpdateDescription(pictureDescriptionDetailsMap);
             logger.logInfo("Save picture description response: " + response, MedicalPicturesCommonResource.class);
