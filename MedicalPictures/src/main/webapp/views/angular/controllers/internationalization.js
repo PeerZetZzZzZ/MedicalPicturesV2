@@ -158,9 +158,11 @@ MedicalPictures.config(function($translateProvider) {
     'USERS_LIST':'Users list',
     'DPD_LIST':'Defined picture descriptions list',
     'BODY_PART_LIST':'Body parts list',
-    'PICTURE_TYPE_LIST':'Picture types list'
+    'PICTURE_TYPE_LIST':'Picture types list',
+    'SELECTED_DPD':'Selected defined picture description: '
   });
   $translateProvider.translations('pl', {
+    'SELECTED_DPD':'Wybrany zdefiniowany opis zdjęć: ',
     'PICTURE_TYPE_LIST':'Lista typów zdjęć',
     'BODY_PART_LIST':'Lista części ciała',
     'DPD_LIST':'Lista zdefiniowanych opisów zdjęć',

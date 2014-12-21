@@ -1094,7 +1094,6 @@ MedicalPictures.controller('AdminViewManageBodyPartsController', function($scope
       console.log(status);
     });
   };
-  $scope.getAllBodyPartsFunction();
   $http.get('/MedicalPictures/webresources/MedicalPicturesCommon/getLoggedUser').
   success(function(data, status, headers, config) {
     switch (data.errorCode) {
@@ -1116,6 +1115,7 @@ MedicalPictures.controller('AdminViewManageBodyPartsController', function($scope
     });
     console.log(status);
   });
+  $scope.getAllBodyPartsFunction();
   $scope.addBodyPartClicked = function() {
     if (!angular.isUndefined($scope.newBodyPart) && $scope.newBodyPart !== '') {
       document.getElementById("alertMessageDiv").style.visibility = "hidden";

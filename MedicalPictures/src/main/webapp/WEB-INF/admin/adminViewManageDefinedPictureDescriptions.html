@@ -12,6 +12,23 @@
   <title>{{'ADMIN_VIEW_HEAD_NAME'| translate}}</title>
   <meta content="" charset="UTF-8">
   <style type="text/css">
+        .accordion .accordion-navigation > a,
+    .accordion dd > a {
+      background: #F79F81;
+    }
+    .accordion .accordion-navigation.active > a,
+    .accordion dd.active > a {
+      background: pink;
+    }
+    .accordion .accordion-navigation > .content.active,
+    .accordion dd > .content.active {
+      display: block;
+      background: pink;
+    }
+    .accordion .accordion-navigation > a:hover,
+    .accordion dd > a:hover {
+      background: #F79F81;
+    }
     .panel {
       overflow: scroll;
       max-height: 400px;
@@ -63,6 +80,7 @@
     .icon-bar.four-up .item {
       height:100%;
     }
+    
   </style>
 </head>
 
@@ -230,9 +248,9 @@
           </thead>
           <tbody>
             <tr ng-repeat="dpd in definedPictureDescriptionsList | filter:pictureFilter">
-              <td><b><div align="center"><a data-reveal-id="myModalDefinedPictureDescription" class="info label" ng-click="editDefinedPictureDescriptionClicked(dpd)" >{{dpd.name}}</a><div></b>
+              <td><div align="center"><b><a data-reveal-id="myModalDefinedPictureDescription" class="info label" ng-click="editDefinedPictureDescriptionClicked(dpd)" >{{dpd.name}}</a></b><div>
               </td>
-              <td><b><div align="center"><a data-reveal-id="myModalDefinedPictureDescription" class="info label" ng-click="editDefinedPictureDescriptionClicked(dpd)" >{{dpd.pictureDescription}}</a><div></b>
+              <td><div align="center"><b><a data-reveal-id="myModalDefinedPictureDescription" class="info label" ng-click="editDefinedPictureDescriptionClicked(dpd)" >{{dpd.pictureDescription}}</a></b><div>
               </td>
               <hr>
             </tr>
@@ -250,8 +268,8 @@
         <br>
       </div>
       <div class="large-8 columns">
-        <h3 align="center">{{'SELECTED_PICTURE_TYPE' | translate}}
-          {{selectedPictureType}}</h3>
+        <h3 align="center">{{'SELECTED_DPD' | translate}}
+          {{selectedDpd.name}}</h3>
       </div>
       <div class="large-2 columns">
         <br>

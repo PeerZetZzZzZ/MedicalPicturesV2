@@ -189,15 +189,15 @@
       <div class="large-6 columns">
         <dl class="accordion" data-accordion>
           <dd class="accordion-navigation">
-            <a href="#panel1" align="center">{{'CHANGE_PASSWORD' |translate}}</a>
+            <a href="#panel1">{{'CHANGE_PASSWORD' |translate}}</a>
             <div id="panel1" class="content">
               <form name="passwordForm">
                 <dl class="tabs" data-tab>
                   <label>{{'NEW_PASSWORD' | translate}}</label>
-                  <input type="password" name="password" ng-minlength="minPasswordLength" ng-maxlength="maxPasswordLength" ng-model="loggedUser.password1"></input>
+                  <input type="password" name="password" ng-minlength="minPasswordLength" ng-maxlength="maxPasswordLength" ng-model="loggedUser.password1">
                   <div ng-show="loggedUser.password1 != undefined && loggedUser.password1 != ''">
                     <label>{{'NEW_PASSWORD_AGAIN' | translate}}</label>
-                    <input type="password" ng-model="loggedUser.password2" required></input>
+                    <input type="password" ng-model="loggedUser.password2" required>
                   </div>
                   <h7 ng-show="(loggedUser.password2 != loggedUser.password1) && loggedUser.password1!=undefined">{{'PASSWORDS_ARE_DIFFERENT' | translate}}</h7>
                   <h7 ng-show="passwordForm.password.$error.minlength">{{'PASSWORD_TOO_SHORT' | translate}}</h7>
@@ -207,8 +207,8 @@
                     <label for="checkbox1">{{'CHANGE_MY_PASSWORD' | translate}}</label>
                   </div>
                 </dl>
-            </div>
             </form>
+            </div>
           </dd>
         </dl>
       </div>
