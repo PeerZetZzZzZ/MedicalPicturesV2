@@ -3,7 +3,7 @@
 var MedicalPictures = angular.module('MedicalPictures', ['angularFileUpload', 'pascalprecht.translate']).constant('MedicalPicturesGlobal', {
   GLOBAL_APP_NAME: "MedicalPictures ver.1.0",
   MIN_PASSWORD_LENGTH: "3",
-  MAX_PASSWORD_LENGTH: "30",
+  MAX_PASSWORD_LENGTH: "511",//255 + 255 + -
   MAX_NAME_SURNAME_LENGTH: "255",
   MAX_PICTURE_DESCRIPTION_LENGTH: "1000",
   MAX_USERNAME_LENGTH: "100",
@@ -1305,7 +1305,8 @@ MedicalPictures.controller('TechnicianViewAddPicturesController', function($scop
     name: 'imageFilter',
     fn: function(item /*{File|FileLikeObject}*/ , options) {
       var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-      return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+      console.log(type);
+      return '|jpg|png|jpeg|bmp|gif|tiff|x-panasonic-raw|dicom|'.indexOf(type) !== -1;
     }
   });
   document.getElementById("alertMessageDiv").style.visibility = "hidden";
@@ -1968,7 +1969,6 @@ MedicalPictures.controller('DoctorViewManageDescriptionsController', function($s
           $scope.selectedPicture.changed = false;
           if (pictureShouldBeRefreshed) {
             $scope.getPatientPictureWithThumbnail(picture);
-            $scope.appName = "dupa";
           };
           break;
         case -6:

@@ -1,4 +1,4 @@
-package medicalpictures.controller.model.rest;
+package medicalpictures.rest;
 
 import java.io.IOException;
 import java.util.List;
@@ -752,7 +752,7 @@ public class MedicalPicturesCommonResource {
     @GET
     @Path("Logout")
     @Produces("application/json")
-    public String logoutUser() {
+    public String logoutUser() throws NoLoggedUserExistsHere {
         try {
             securityManager.checkUserPermissionToAnyContent();
             securityManager.logoutUser();

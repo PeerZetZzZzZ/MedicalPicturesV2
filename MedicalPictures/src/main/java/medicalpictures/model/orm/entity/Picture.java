@@ -45,7 +45,7 @@ public class Picture implements Serializable {
     @OneToMany(mappedBy = "picture", cascade = CascadeType.ALL)
     private Set<PictureDescription> pictureDescriptions = new HashSet<>();
 
-    @Column(length = 100)
+    @Column(length = 500)
     private String pictureName;
 
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")

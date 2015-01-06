@@ -90,7 +90,6 @@ MedicalPictures.config(function($translateProvider) {
     'TECHNICIAN_NAME': 'Technician\'s name',
     'TECHNICIAN_SURNAME': 'Technician\'s surname',
     'TECHNICIAN_USERNAME': 'Technician\'s username',
-    'CAPTURE_DATE': 'Capture date',
     'PATIENT_AGE': 'Patient\'s age',
     'PICTURE_DESCRIPTION': 'Picture\'s description',
     'REMOVE_DEFINED_PICTURE_DESCRIPTION': 'Remove defined picture description',
@@ -116,10 +115,10 @@ MedicalPictures.config(function($translateProvider) {
     'PICTURE_TYPE_TOO_LONG':'Picture type is too long!',
     'USERNAME_TOO_LONG':'Username is too long!',
     'SUCCESSFULLY_REMOVED_PICTURE':'Deletion succeed!',
-    'SETTINGS_VIEW_HEAD_NAME':'User settings view',
     'MANAGE_YOUR_SETTINGS':'Manage your settings',
     'APPLICATION_LANGUAGE':'Application\'s language',
     'SAVE_CHANGES':'Save changes',
+    'DOCTOR_DIAGNOSIS': 'Doctor\'s diagnosis',
     'SOME_OF_THE_VALUES_ARE_INCORRECT':'There are mistakes in paramaters.Check your configuration!',
     'MANAGE_DEFINFED_PICTURE_DESCRIPTIONS':'Manage defined picture descriptions',
     'DEFINED_DESCRIPTION_NAME':'Defined description name',
@@ -159,9 +158,11 @@ MedicalPictures.config(function($translateProvider) {
     'DPD_LIST':'Defined picture descriptions list',
     'BODY_PART_LIST':'Body parts list',
     'PICTURE_TYPE_LIST':'Picture types list',
-    'SELECTED_DPD':'Selected defined picture description: '
+    'SELECTED_DPD':'Selected defined picture description: ',
+    'FILE_NAME':'File name'
   });
   $translateProvider.translations('pl', {
+    'FILE_NAME':'Nazwa pliku',
     'SELECTED_DPD':'Wybrany zdefiniowany opis zdjęć: ',
     'PICTURE_TYPE_LIST':'Lista typów zdjęć',
     'BODY_PART_LIST':'Lista części ciała',
@@ -279,7 +280,6 @@ MedicalPictures.config(function($translateProvider) {
     'TECHNICIAN_NAME': 'Imię technika',
     'TECHNICIAN_SURNAME': 'Nazwisko technika',
     'TECHNICIAN_USERNAME': 'Nazwa użytkownika technika',
-    'CAPTURE_DATE': 'Data wykonania',
     'PATIENT_AGE': 'Wiek pacjenta',
     'PICTURE_DESCRIPTION': 'Opis zdjęcia',
     'REMOVE_DEFINED_PICTURE_DESCRIPTION': 'Usuń zdefiniowany opis zdjęcia',
@@ -305,7 +305,6 @@ MedicalPictures.config(function($translateProvider) {
     'PICTURE_TYPE_TOO_LONG':'Typ zdjęcia jest za długi!',
     'USERNAME_TOO_LONG':'Nazwa użytkownika jest za długa!',
     'SUCCESSFULLY_REMOVED_PICTURE':'Usuwanie zakończone sukcesem',
-    'SETTINGS_VIEW_HEAD_NAME':'Panel ustawień użytkownika',
     'MANAGE_YOUR_SETTINGS':'Zarządzaj swoimi ustawieniami',
     'APPLICATION_LANGUAGE':'Język aplikacji',
     'SAVE_CHANGES':'Zapisz zmiany',

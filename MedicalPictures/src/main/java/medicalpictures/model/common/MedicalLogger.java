@@ -81,24 +81,6 @@ public class MedicalLogger {
         }
     }
 
-    public void logWarning(String message, Class infoClass, Throwable ex) {
-        if (logFileCreated) {
-            DateTime now = new DateTime();
-            String warningMessage = "[" + now.toString() + "]" + "[" + infoClass.getName() + "]" + "[WARNING] " + message;
-            logOutput.println(warningMessage);
-            logOutput.println("[" + now.toString() + "]" + "[" + infoClass.getName() + "]" + "[STACKTRACE] ");
-            logOutput.println("");
-            logOutput.flush();
-            for (StackTraceElement element : ex.getStackTrace()) {
-                logOutput.println("   " + element.toString());
-            }
-            logOutput.flush();
-            logOutput.println("");
-            logOutput.flush();
-            LOG.info(warningMessage);
-        }
-    }
-
     public void logWarning(String message, Class infoClass) {
         if (logFileCreated) {
             DateTime now = new DateTime();

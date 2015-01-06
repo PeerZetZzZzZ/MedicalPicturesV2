@@ -66,14 +66,14 @@ public class UserSecurityManager {
         String password = userDetails.get("password");
         Subject currentUser = SecurityUtils.getSubject();
         currentUser.getSession().getId();
-        if (currentUser.isAuthenticated()) {
-            currentUser.logout();
+        if (currentUser.isAuthenticated()) {//if user is already logged
+            currentUser.logout();//logout user
         }
         UsernamePasswordToken token = new UsernamePasswordToken(username, passwordGeneartor.getPasswordHash(password));
         try {
-            Session session = currentUser.getSession();
+            Session session = currentUser.getSession();//get session of the current user
             session.setAttribute("username", username);
-            currentUser.login(token);
+            currentUser.login(token);//try to login
             User loggedUser = userDAO.findUser(username);
             if (loggedUser != null) {
                 session.setAttribute("applicationLanguage", loggedUser.getChosenLanguage());
